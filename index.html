@@ -361,6 +361,54 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .toast.err{border-left:3px solid var(--red)}
 @keyframes slideIn{from{transform:translateX(120%);opacity:0}to{transform:translateX(0);opacity:1}}
 
+/* COMPONENTES DEL ÍNDICE */
+.constituents-panel{
+  background:var(--card);border:1px solid var(--border);border-radius:12px;
+  margin-top:20px;overflow:hidden;
+}
+.constituents-header{
+  padding:14px 20px;display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid var(--border);cursor:pointer;user-select:none;
+}
+.constituents-header:hover{background:rgba(255,255,255,.02)}
+.constituents-title{font-size:.85rem;font-weight:600;display:flex;align-items:center;gap:8px}
+.constituents-header-right{display:flex;align-items:center;gap:10px}
+.btn-load-quotes{
+  padding:5px 12px;border-radius:6px;font-size:.75rem;font-weight:600;
+  background:rgba(37,99,235,.12);border:1px solid var(--accent);color:var(--accent);
+  cursor:pointer;font-family:var(--font);transition:.15s;
+}
+.btn-load-quotes:hover{background:rgba(37,99,235,.22)}
+.btn-load-quotes:disabled{opacity:.5;cursor:not-allowed}
+.chevron{transition:transform .2s;font-size:.75rem;color:var(--text3)}
+.chevron.open{transform:rotate(180deg)}
+.constituents-body{display:none;padding:16px 20px}
+.constituents-body.open{display:block}
+.constituents-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;
+}
+.constituent-card{
+  background:var(--bg2);border:1px solid var(--border);border-radius:8px;
+  padding:10px 12px;display:flex;align-items:center;gap:10px;
+  cursor:pointer;transition:.15s;
+}
+.constituent-card:hover{border-color:var(--accent);background:rgba(37,99,235,.06)}
+.c-ticker{
+  font-size:.75rem;font-weight:700;padding:3px 7px;border-radius:5px;
+  background:var(--card2);color:var(--accent);font-family:monospace;letter-spacing:.5px;
+  flex-shrink:0;min-width:52px;text-align:center;
+}
+.c-info{flex:1;min-width:0}
+.c-name{font-size:.78rem;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.c-weight{font-size:.7rem;color:var(--text3)}
+.c-price{text-align:right;flex-shrink:0}
+.c-price-val{font-size:.8rem;font-weight:600;font-variant-numeric:tabular-nums;display:block}
+.c-price-chg{font-size:.7rem;font-weight:600}
+.c-price-chg.up{color:var(--green)}
+.c-price-chg.dn{color:var(--red)}
+.constituents-note{font-size:.75rem;color:var(--text3);margin-bottom:12px}
+.const-loading{text-align:center;padding:20px;color:var(--text3);font-size:.82rem}
+
 /* RESPONSIVE */
 @media(max-width:600px){
   nav{padding:0 14px}
@@ -443,6 +491,24 @@ tr:hover td{background:rgba(255,255,255,.02)}
         </div>
         <div id="mainChart"></div>
         <div class="index-selector" id="indexSelector"></div>
+      </div>
+
+      <!-- PANEL COMPONENTES -->
+      <div class="constituents-panel" id="constituentsPanel">
+        <div class="constituents-header" onclick="toggleConstituents()">
+          <div class="constituents-title">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            <span id="constituentsTitle">Componentes del Índice</span>
+          </div>
+          <div class="constituents-header-right">
+            <button class="btn-load-quotes" id="btnLoadQuotes" onclick="event.stopPropagation();loadConstituentQuotes()">⚡ Cargar cotizaciones</button>
+            <span class="chevron" id="chevron">▼</span>
+          </div>
+        </div>
+        <div class="constituents-body" id="constituentsBody">
+          <p class="constituents-note" id="constituentsNote"></p>
+          <div class="constituents-grid" id="constituentsGrid"></div>
+        </div>
       </div>
     </div>
 
@@ -1015,6 +1081,7 @@ function selectIndex(symbol) {
     b.classList.toggle('active', b.textContent === INDEX_MAP[symbol]?.name);
   });
   loadHistorical(symbol, _currentPeriod);
+  renderConstituents(symbol);
 }
 
 function setPeriod(period) {
@@ -1399,6 +1466,334 @@ async function deleteInvestor(username) {
     loadAdminData();
   } catch (e) {
     toast(e.message, 'err');
+  }
+}
+
+// ================================================================
+// COMPONENTES DE ÍNDICES
+// ================================================================
+const CONSTITUENTS = {
+  '^GSPC': {
+    label: 'S&P 500 — Top 20 componentes',
+    items: [
+      { ticker:'AAPL',  name:'Apple',              weight:7.2, sector:'Tecnología' },
+      { ticker:'MSFT',  name:'Microsoft',          weight:6.5, sector:'Tecnología' },
+      { ticker:'NVDA',  name:'NVIDIA',             weight:5.8, sector:'Tecnología' },
+      { ticker:'AMZN',  name:'Amazon',             weight:3.8, sector:'Consumo' },
+      { ticker:'GOOGL', name:'Alphabet',           weight:3.5, sector:'Tecnología' },
+      { ticker:'META',  name:'Meta Platforms',     weight:2.8, sector:'Tecnología' },
+      { ticker:'TSLA',  name:'Tesla',              weight:1.9, sector:'Consumo' },
+      { ticker:'BRK-B', name:'Berkshire Hathaway', weight:1.7, sector:'Finanzas' },
+      { ticker:'AVGO',  name:'Broadcom',           weight:1.6, sector:'Tecnología' },
+      { ticker:'JPM',   name:'JPMorgan Chase',     weight:1.5, sector:'Finanzas' },
+      { ticker:'LLY',   name:'Eli Lilly',          weight:1.4, sector:'Salud' },
+      { ticker:'V',     name:'Visa',               weight:1.3, sector:'Finanzas' },
+      { ticker:'UNH',   name:'UnitedHealth',       weight:1.2, sector:'Salud' },
+      { ticker:'XOM',   name:'ExxonMobil',         weight:1.1, sector:'Energía' },
+      { ticker:'MA',    name:'Mastercard',         weight:1.0, sector:'Finanzas' },
+      { ticker:'JNJ',   name:'Johnson & Johnson',  weight:0.9, sector:'Salud' },
+      { ticker:'PG',    name:'Procter & Gamble',   weight:0.9, sector:'Consumo' },
+      { ticker:'HD',    name:'Home Depot',         weight:0.8, sector:'Consumo' },
+      { ticker:'MRK',   name:'Merck',              weight:0.8, sector:'Salud' },
+      { ticker:'COST',  name:'Costco',             weight:0.8, sector:'Consumo' },
+    ]
+  },
+  '^IXIC': {
+    label: 'NASDAQ-100 — Top 20 componentes',
+    items: [
+      { ticker:'AAPL',  name:'Apple',              weight:11.5, sector:'Tecnología' },
+      { ticker:'MSFT',  name:'Microsoft',          weight:9.8,  sector:'Tecnología' },
+      { ticker:'NVDA',  name:'NVIDIA',             weight:8.2,  sector:'Tecnología' },
+      { ticker:'AMZN',  name:'Amazon',             weight:5.1,  sector:'Consumo' },
+      { ticker:'META',  name:'Meta Platforms',     weight:4.8,  sector:'Tecnología' },
+      { ticker:'GOOGL', name:'Alphabet',           weight:4.5,  sector:'Tecnología' },
+      { ticker:'TSLA',  name:'Tesla',              weight:3.2,  sector:'Consumo' },
+      { ticker:'AVGO',  name:'Broadcom',           weight:2.8,  sector:'Tecnología' },
+      { ticker:'NFLX',  name:'Netflix',            weight:1.8,  sector:'Consumo' },
+      { ticker:'ADBE',  name:'Adobe',              weight:1.5,  sector:'Tecnología' },
+      { ticker:'AMD',   name:'AMD',                weight:1.4,  sector:'Tecnología' },
+      { ticker:'QCOM',  name:'Qualcomm',           weight:1.2,  sector:'Tecnología' },
+      { ticker:'CSCO',  name:'Cisco',              weight:1.2,  sector:'Tecnología' },
+      { ticker:'AMAT',  name:'Applied Materials',  weight:1.1,  sector:'Tecnología' },
+      { ticker:'TXN',   name:'Texas Instruments',  weight:1.0,  sector:'Tecnología' },
+      { ticker:'AMGN',  name:'Amgen',              weight:0.9,  sector:'Salud' },
+      { ticker:'INTC',  name:'Intel',              weight:0.8,  sector:'Tecnología' },
+      { ticker:'MU',    name:'Micron Technology',  weight:0.8,  sector:'Tecnología' },
+      { ticker:'INTU',  name:'Intuit',             weight:0.8,  sector:'Tecnología' },
+      { ticker:'PYPL',  name:'PayPal',             weight:0.6,  sector:'Finanzas' },
+    ]
+  },
+  '^DJI': {
+    label: 'Dow Jones — Los 30 componentes',
+    items: [
+      { ticker:'AAPL',  name:'Apple',              weight:12.1, sector:'Tecnología' },
+      { ticker:'UNH',   name:'UnitedHealth',       weight:9.8,  sector:'Salud' },
+      { ticker:'GS',    name:'Goldman Sachs',      weight:7.2,  sector:'Finanzas' },
+      { ticker:'MSFT',  name:'Microsoft',          weight:6.5,  sector:'Tecnología' },
+      { ticker:'HD',    name:'Home Depot',         weight:5.8,  sector:'Consumo' },
+      { ticker:'CAT',   name:'Caterpillar',        weight:5.4,  sector:'Industrial' },
+      { ticker:'SHW',   name:'Sherwin-Williams',   weight:5.1,  sector:'Materiales' },
+      { ticker:'MCD',   name:"McDonald's",         weight:4.8,  sector:'Consumo' },
+      { ticker:'AMGN',  name:'Amgen',              weight:4.5,  sector:'Salud' },
+      { ticker:'V',     name:'Visa',               weight:4.2,  sector:'Finanzas' },
+      { ticker:'CRM',   name:'Salesforce',         weight:3.8,  sector:'Tecnología' },
+      { ticker:'AXP',   name:'American Express',   weight:3.5,  sector:'Finanzas' },
+      { ticker:'TRV',   name:'Travelers Cos.',     weight:3.2,  sector:'Finanzas' },
+      { ticker:'JPM',   name:'JPMorgan Chase',     weight:2.9,  sector:'Finanzas' },
+      { ticker:'IBM',   name:'IBM',                weight:2.7,  sector:'Tecnología' },
+      { ticker:'HON',   name:'Honeywell',          weight:2.5,  sector:'Industrial' },
+      { ticker:'MMM',   name:'3M',                 weight:2.3,  sector:'Industrial' },
+      { ticker:'BA',    name:'Boeing',             weight:2.1,  sector:'Industrial' },
+      { ticker:'JNJ',   name:'Johnson & Johnson',  weight:1.9,  sector:'Salud' },
+      { ticker:'MRK',   name:'Merck',              weight:1.8,  sector:'Salud' },
+      { ticker:'NKE',   name:'Nike',               weight:1.7,  sector:'Consumo' },
+      { ticker:'PG',    name:'Procter & Gamble',   weight:1.6,  sector:'Consumo' },
+      { ticker:'WMT',   name:'Walmart',            weight:1.5,  sector:'Consumo' },
+      { ticker:'DIS',   name:'Walt Disney',        weight:1.4,  sector:'Consumo' },
+      { ticker:'CVX',   name:'Chevron',            weight:1.3,  sector:'Energía' },
+      { ticker:'KO',    name:'Coca-Cola',          weight:1.2,  sector:'Consumo' },
+      { ticker:'CSCO',  name:'Cisco',              weight:1.1,  sector:'Tecnología' },
+      { ticker:'DOW',   name:'Dow Inc.',           weight:0.9,  sector:'Materiales' },
+      { ticker:'VZ',    name:'Verizon',            weight:0.8,  sector:'Telecomunicaciones' },
+      { ticker:'INTC',  name:'Intel',              weight:0.7,  sector:'Tecnología' },
+    ]
+  },
+  '^IBEX': {
+    label: 'IBEX 35 — Principales componentes',
+    items: [
+      { ticker:'ITX.MC',  name:'Inditex',          weight:14.5, sector:'Consumo' },
+      { ticker:'IBE.MC',  name:'Iberdrola',        weight:13.2, sector:'Utilities' },
+      { ticker:'SAN.MC',  name:'Santander',        weight:8.5,  sector:'Finanzas' },
+      { ticker:'BBVA.MC', name:'BBVA',             weight:8.1,  sector:'Finanzas' },
+      { ticker:'FER.MC',  name:'Ferrovial',        weight:5.2,  sector:'Industrial' },
+      { ticker:'CLNX.MC', name:'Cellnex',          weight:4.8,  sector:'Telecomunicaciones' },
+      { ticker:'REP.MC',  name:'Repsol',           weight:4.2,  sector:'Energía' },
+      { ticker:'AMS.MC',  name:'Amadeus IT',       weight:4.1,  sector:'Tecnología' },
+      { ticker:'AENA.MC', name:'AENA',             weight:3.8,  sector:'Industrial' },
+      { ticker:'TEF.MC',  name:'Telefónica',       weight:3.5,  sector:'Telecomunicaciones' },
+      { ticker:'CABK.MC', name:'CaixaBank',        weight:3.2,  sector:'Finanzas' },
+      { ticker:'ACS.MC',  name:'ACS',              weight:2.9,  sector:'Industrial' },
+      { ticker:'NTGY.MC', name:'Naturgy',          weight:2.6,  sector:'Utilities' },
+      { ticker:'ELE.MC',  name:'Endesa',           weight:2.4,  sector:'Utilities' },
+      { ticker:'MTS.MC',  name:'ArcelorMittal',    weight:2.1,  sector:'Materiales' },
+      { ticker:'BKT.MC',  name:'Bankinter',        weight:1.8,  sector:'Finanzas' },
+      { ticker:'GRF.MC',  name:'Grifols',          weight:1.6,  sector:'Salud' },
+      { ticker:'IAG.MC',  name:'IAG',              weight:1.5,  sector:'Industrial' },
+      { ticker:'ENG.MC',  name:'Enagás',           weight:1.4,  sector:'Utilities' },
+      { ticker:'MEL.MC',  name:'Meliá Hotels',     weight:1.0,  sector:'Consumo' },
+      { ticker:'MAP.MC',  name:'Mapfre',           weight:0.9,  sector:'Finanzas' },
+      { ticker:'IDR.MC',  name:'Indra',            weight:0.9,  sector:'Tecnología' },
+      { ticker:'RED.MC',  name:'Redeia',           weight:0.8,  sector:'Utilities' },
+      { ticker:'SCYR.MC', name:'Sacyr',            weight:0.7,  sector:'Industrial' },
+      { ticker:'SLR.MC',  name:'Solaria',          weight:0.6,  sector:'Utilities' },
+    ]
+  },
+  '^GDAXI': {
+    label: 'DAX 40 — Top 20 componentes',
+    items: [
+      { ticker:'SAP.DE',   name:'SAP',                weight:14.2, sector:'Tecnología' },
+      { ticker:'SIE.DE',   name:'Siemens',             weight:7.8,  sector:'Industrial' },
+      { ticker:'ALV.DE',   name:'Allianz',             weight:6.5,  sector:'Finanzas' },
+      { ticker:'DTE.DE',   name:'Deutsche Telekom',    weight:5.2,  sector:'Telecomunicaciones' },
+      { ticker:'MUV2.DE',  name:'Munich Re',           weight:5.0,  sector:'Finanzas' },
+      { ticker:'BMW.DE',   name:'BMW',                 weight:3.8,  sector:'Consumo' },
+      { ticker:'RHM.DE',   name:'Rheinmetall',         weight:3.5,  sector:'Industrial' },
+      { ticker:'MBG.DE',   name:'Mercedes-Benz',       weight:3.2,  sector:'Consumo' },
+      { ticker:'AIR.DE',   name:'Airbus',              weight:3.0,  sector:'Industrial' },
+      { ticker:'BAYN.DE',  name:'Bayer',               weight:2.8,  sector:'Salud' },
+      { ticker:'BAS.DE',   name:'BASF',                weight:2.5,  sector:'Materiales' },
+      { ticker:'VOW3.DE',  name:'Volkswagen',          weight:2.2,  sector:'Consumo' },
+      { ticker:'DB1.DE',   name:'Deutsche Börse',      weight:2.0,  sector:'Finanzas' },
+      { ticker:'IFX.DE',   name:'Infineon',            weight:1.9,  sector:'Tecnología' },
+      { ticker:'SHL.DE',   name:'Siemens Healthineers',weight:1.8,  sector:'Salud' },
+      { ticker:'ADS.DE',   name:'Adidas',              weight:1.7,  sector:'Consumo' },
+      { ticker:'DBK.DE',   name:'Deutsche Bank',       weight:1.6,  sector:'Finanzas' },
+      { ticker:'HEI.DE',   name:'Heidelberg Materials',weight:1.4,  sector:'Materiales' },
+      { ticker:'RWE.DE',   name:'RWE',                 weight:1.3,  sector:'Utilities' },
+      { ticker:'EOAN.DE',  name:'E.ON',                weight:1.2,  sector:'Utilities' },
+    ]
+  },
+  '^N225': {
+    label: 'Nikkei 225 — Top 20 componentes',
+    items: [
+      { ticker:'7203.T',  name:'Toyota Motor',          weight:8.2,  sector:'Consumo' },
+      { ticker:'9984.T',  name:'SoftBank Group',        weight:6.5,  sector:'Tecnología' },
+      { ticker:'6758.T',  name:'Sony Group',            weight:5.8,  sector:'Tecnología' },
+      { ticker:'8306.T',  name:'MUFG',                  weight:4.2,  sector:'Finanzas' },
+      { ticker:'8035.T',  name:'Tokyo Electron',        weight:3.9,  sector:'Tecnología' },
+      { ticker:'6861.T',  name:'Keyence',               weight:3.5,  sector:'Tecnología' },
+      { ticker:'6954.T',  name:'Fanuc',                 weight:3.1,  sector:'Industrial' },
+      { ticker:'7741.T',  name:'Hoya',                  weight:2.8,  sector:'Salud' },
+      { ticker:'9433.T',  name:'KDDI',                  weight:2.5,  sector:'Telecomunicaciones' },
+      { ticker:'4519.T',  name:'Chugai Pharmaceutical', weight:2.2,  sector:'Salud' },
+      { ticker:'8316.T',  name:'SMFG',                  weight:2.0,  sector:'Finanzas' },
+      { ticker:'9432.T',  name:'NTT',                   weight:1.9,  sector:'Telecomunicaciones' },
+      { ticker:'6367.T',  name:'Daikin Industries',     weight:1.8,  sector:'Industrial' },
+      { ticker:'7267.T',  name:'Honda Motor',           weight:1.7,  sector:'Consumo' },
+      { ticker:'6501.T',  name:'Hitachi',               weight:1.6,  sector:'Industrial' },
+      { ticker:'4502.T',  name:'Takeda Pharmaceutical', weight:1.4,  sector:'Salud' },
+      { ticker:'9022.T',  name:'Central Japan Railway', weight:1.3,  sector:'Industrial' },
+      { ticker:'3382.T',  name:'Seven & I Holdings',    weight:1.2,  sector:'Consumo' },
+      { ticker:'6098.T',  name:'Recruit Holdings',      weight:1.1,  sector:'Tecnología' },
+      { ticker:'8766.T',  name:'Tokio Marine',          weight:1.0,  sector:'Finanzas' },
+    ]
+  },
+  '^HSI': {
+    label: 'Hang Seng — Top 20 componentes',
+    items: [
+      { ticker:'0700.HK', name:'Tencent',              weight:10.8, sector:'Tecnología' },
+      { ticker:'9988.HK', name:'Alibaba',              weight:8.5,  sector:'Consumo' },
+      { ticker:'0005.HK', name:'HSBC Holdings',        weight:7.2,  sector:'Finanzas' },
+      { ticker:'1299.HK', name:'AIA Group',            weight:6.1,  sector:'Finanzas' },
+      { ticker:'0939.HK', name:'CCB',                  weight:5.4,  sector:'Finanzas' },
+      { ticker:'1398.HK', name:'ICBC',                 weight:4.8,  sector:'Finanzas' },
+      { ticker:'2318.HK', name:'Ping An Insurance',    weight:4.2,  sector:'Finanzas' },
+      { ticker:'3690.HK', name:'Meituan',              weight:4.0,  sector:'Consumo' },
+      { ticker:'0388.HK', name:'HK Exchanges',         weight:3.5,  sector:'Finanzas' },
+      { ticker:'9618.HK', name:'JD.com',               weight:3.2,  sector:'Consumo' },
+      { ticker:'1810.HK', name:'Xiaomi',               weight:2.9,  sector:'Tecnología' },
+      { ticker:'0011.HK', name:'Hang Seng Bank',       weight:2.5,  sector:'Finanzas' },
+      { ticker:'0016.HK', name:'Sun Hung Kai Prop.',   weight:2.2,  sector:'Inmobiliario' },
+      { ticker:'0001.HK', name:'CK Hutchison',         weight:2.0,  sector:'Consumo' },
+      { ticker:'0002.HK', name:'CLP Holdings',         weight:1.8,  sector:'Utilities' },
+      { ticker:'0175.HK', name:'Geely Automobile',     weight:1.6,  sector:'Consumo' },
+      { ticker:'0267.HK', name:'CITIC',                weight:1.5,  sector:'Finanzas' },
+      { ticker:'2269.HK', name:'WuXi Biologics',       weight:1.4,  sector:'Salud' },
+      { ticker:'0003.HK', name:'HK & China Gas',       weight:1.2,  sector:'Utilities' },
+      { ticker:'9999.HK', name:'NetEase',              weight:1.1,  sector:'Tecnología' },
+    ]
+  },
+  '^STOXX50E': {
+    label: 'Euro Stoxx 50 — Top 20 componentes',
+    items: [
+      { ticker:'ASML.AS', name:'ASML',               weight:8.5,  sector:'Tecnología' },
+      { ticker:'MC.PA',   name:'LVMH',               weight:7.2,  sector:'Consumo' },
+      { ticker:'SAP.DE',  name:'SAP',                weight:6.8,  sector:'Tecnología' },
+      { ticker:'SAN.PA',  name:'Sanofi',             weight:4.5,  sector:'Salud' },
+      { ticker:'OR.PA',   name:"L'Oréal",            weight:4.2,  sector:'Consumo' },
+      { ticker:'TTE.PA',  name:'TotalEnergies',      weight:3.9,  sector:'Energía' },
+      { ticker:'SIE.DE',  name:'Siemens',            weight:3.8,  sector:'Industrial' },
+      { ticker:'AIR.PA',  name:'Airbus',             weight:3.5,  sector:'Industrial' },
+      { ticker:'ALV.DE',  name:'Allianz',            weight:3.2,  sector:'Finanzas' },
+      { ticker:'BNP.PA',  name:'BNP Paribas',        weight:2.8,  sector:'Finanzas' },
+      { ticker:'MUV2.DE', name:'Munich Re',          weight:2.5,  sector:'Finanzas' },
+      { ticker:'IBE.MC',  name:'Iberdrola',          weight:2.4,  sector:'Utilities' },
+      { ticker:'ITX.MC',  name:'Inditex',            weight:2.2,  sector:'Consumo' },
+      { ticker:'ENEL.MI', name:'Enel',               weight:2.0,  sector:'Utilities' },
+      { ticker:'ABI.BR',  name:'AB InBev',           weight:1.9,  sector:'Consumo' },
+      { ticker:'RMS.PA',  name:'Hermès',             weight:1.8,  sector:'Consumo' },
+      { ticker:'DG.PA',   name:'Vinci',              weight:1.7,  sector:'Industrial' },
+      { ticker:'INGA.AS', name:'ING Group',          weight:1.6,  sector:'Finanzas' },
+      { ticker:'CS.PA',   name:'AXA',                weight:1.5,  sector:'Finanzas' },
+      { ticker:'ENI.MI',  name:'ENI',                weight:1.4,  sector:'Energía' },
+    ]
+  },
+  'URTH': {
+    label: 'MSCI World ETF (URTH) — Top 20 holdings',
+    items: [
+      { ticker:'AAPL',  name:'Apple',               weight:4.8,  sector:'Tecnología' },
+      { ticker:'MSFT',  name:'Microsoft',           weight:4.2,  sector:'Tecnología' },
+      { ticker:'NVDA',  name:'NVIDIA',              weight:3.5,  sector:'Tecnología' },
+      { ticker:'AMZN',  name:'Amazon',              weight:2.5,  sector:'Consumo' },
+      { ticker:'META',  name:'Meta Platforms',      weight:1.9,  sector:'Tecnología' },
+      { ticker:'GOOGL', name:'Alphabet',            weight:1.8,  sector:'Tecnología' },
+      { ticker:'TSLA',  name:'Tesla',               weight:1.3,  sector:'Consumo' },
+      { ticker:'JPM',   name:'JPMorgan Chase',      weight:1.0,  sector:'Finanzas' },
+      { ticker:'AVGO',  name:'Broadcom',            weight:0.9,  sector:'Tecnología' },
+      { ticker:'LLY',   name:'Eli Lilly',           weight:0.8,  sector:'Salud' },
+      { ticker:'ASML',  name:'ASML (ADR)',          weight:0.8,  sector:'Tecnología' },
+      { ticker:'NVO',   name:'Novo Nordisk (ADR)',  weight:0.7,  sector:'Salud' },
+      { ticker:'V',     name:'Visa',                weight:0.7,  sector:'Finanzas' },
+      { ticker:'UNH',   name:'UnitedHealth',        weight:0.7,  sector:'Salud' },
+      { ticker:'XOM',   name:'ExxonMobil',          weight:0.6,  sector:'Energía' },
+      { ticker:'MA',    name:'Mastercard',          weight:0.6,  sector:'Finanzas' },
+      { ticker:'JNJ',   name:'Johnson & Johnson',   weight:0.5,  sector:'Salud' },
+      { ticker:'PG',    name:'Procter & Gamble',    weight:0.5,  sector:'Consumo' },
+      { ticker:'HD',    name:'Home Depot',          weight:0.5,  sector:'Consumo' },
+      { ticker:'COST',  name:'Costco',              weight:0.4,  sector:'Consumo' },
+    ]
+  },
+};
+
+let _constituentOpen = false;
+
+function toggleConstituents() {
+  _constituentOpen = !_constituentOpen;
+  const body = document.getElementById('constituentsBody');
+  const chev = document.getElementById('chevron');
+  body.classList.toggle('open', _constituentOpen);
+  chev.classList.toggle('open', _constituentOpen);
+}
+
+function renderConstituents(symbol) {
+  const cfg = CONSTITUENTS[symbol];
+  const panel = document.getElementById('constituentsPanel');
+  if (!cfg || !panel) return;
+
+  document.getElementById('constituentsTitle').textContent = cfg.label;
+  document.getElementById('constituentsNote').textContent =
+    'Haz clic en "Cargar cotizaciones" para obtener precios en tiempo real.';
+
+  const btn = document.getElementById('btnLoadQuotes');
+  if (btn) { btn.textContent = '⚡ Cargar cotizaciones'; btn.disabled = false; }
+
+  const grid = document.getElementById('constituentsGrid');
+  grid.innerHTML = cfg.items.map(c => {
+    const id = c.ticker.replace(/[^a-zA-Z0-9]/g, '-');
+    const label = c.ticker.includes('.') ? c.ticker.split('.')[0] : c.ticker;
+    return `
+      <div class="constituent-card" data-ticker="${c.ticker}">
+        <span class="c-ticker">${label}</span>
+        <div class="c-info">
+          <div class="c-name">${c.name}</div>
+          <div class="c-weight">${c.sector} · ${c.weight}%</div>
+        </div>
+        <div class="c-price">
+          <span class="c-price-val" id="cpv-${id}">—</span>
+          <span class="c-price-chg" id="cpc-${id}"></span>
+        </div>
+      </div>`;
+  }).join('');
+
+  // Always show panel open when switching index
+  const body = document.getElementById('constituentsBody');
+  const chev = document.getElementById('chevron');
+  body.classList.add('open');
+  chev.classList.add('open');
+  _constituentOpen = true;
+}
+
+async function loadConstituentQuotes() {
+  const cfg = CONSTITUENTS[_currentSymbol];
+  if (!cfg) return;
+
+  const btn = document.getElementById('btnLoadQuotes');
+  if (btn) { btn.textContent = '⏳ Cargando...'; btn.disabled = true; }
+
+  const tickers = cfg.items.map(c => c.ticker).join(',');
+  try {
+    const res = await fetch(`${API_BASE}/quotes?symbols=${encodeURIComponent(tickers)}`);
+    const data = await res.json();
+
+    (data.quotes || []).forEach(q => {
+      const id = q.symbol.replace(/[^a-zA-Z0-9]/g, '-');
+      const valEl = document.getElementById(`cpv-${id}`);
+      const chgEl = document.getElementById(`cpc-${id}`);
+      if (valEl) valEl.textContent = q.price != null
+        ? q.price.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+        : '—';
+      if (chgEl) {
+        const sign = q.changePct >= 0 ? '+' : '';
+        chgEl.textContent = q.changePct != null ? `${sign}${q.changePct.toFixed(2)}%` : '';
+        chgEl.className = 'c-price-chg ' + (q.changePct >= 0 ? 'up' : 'dn');
+      }
+    });
+
+    if (btn) btn.textContent = '✓ Actualizado';
+    setTimeout(() => { if (btn) { btn.textContent = '⚡ Cargar cotizaciones'; btn.disabled = false; } }, 3000);
+  } catch (e) {
+    toast('Error cargando cotizaciones', 'err');
+    if (btn) { btn.textContent = '⚡ Cargar cotizaciones'; btn.disabled = false; }
   }
 }
 
