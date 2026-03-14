@@ -727,7 +727,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
   <div class="nav-logo">
     <div class="nav-logo-dot"></div>
     Agencia de Valores
-    <span class="nav-version">v1.9.0</span>
+    <span class="nav-version">v1.9.1</span>
   </div>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="showSection('Mercados')">Mercados</button>
@@ -1385,6 +1385,18 @@ async function loadFavoritesFromServer() {
         updateTicker(_marketData);
       }
     }
+    // Restaura preferencia de tipo de gráfico guardada en servidor
+    if (data.chartType && (data.chartType === 'line' || data.chartType === 'candle')
+        && data.chartType !== _chartType) {
+      _chartType = data.chartType;
+      localStorage.setItem('AV_CHART_TYPE', _chartType);
+      _syncChartTypeUI();
+      // Si el gráfico ya estaba abierto, aplica el cambio inmediatamente
+      if (_chart) {
+        _applySeriesType();
+        loadHistorical(_currentSymbol, _currentPeriod);
+      }
+    }
   } catch (e) {
     console.warn('Favoritos no sincronizados con servidor:', e.message);
   }
@@ -1400,6 +1412,20 @@ async function saveFavoritesToServer() {
     });
   } catch (e) {
     console.warn('Error guardando favoritos en servidor:', e.message);
+  }
+}
+
+// Guarda solo el tipo de gráfico en MongoDB (sin tocar los símbolos)
+async function saveChartTypeToServer() {
+  if (!_session) return;
+  try {
+    await fetch(`${API_BASE}/favorites`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey() },
+      body: JSON.stringify({ username: _session.username, chartType: _chartType })
+    });
+  } catch (e) {
+    console.warn('Error guardando tipo de gráfico:', e.message);
   }
 }
 
@@ -1961,6 +1987,8 @@ function setChartType(type) {
     _applySeriesType();
     loadHistorical(_currentSymbol, _currentPeriod);
   }
+  // Persiste en MongoDB si hay sesión activa
+  saveChartTypeToServer();
 }
 
 // ── Sincroniza botones toggle con el estado actual ────────────────

@@ -14,22 +14,28 @@ module.exports = async (req, res) => {
       const { username } = req.query;
       if (!username) return res.status(400).json({ error: 'username requerido' });
       const doc = await col.findOne({ username });
-      return res.status(200).json({ symbols: doc?.symbols || [] });
+      return res.status(200).json({
+        symbols:   doc?.symbols   || [],
+        chartType: doc?.chartType || null,
+      });
     }
 
     // POST /api/favorites  body: { username, symbols: [...] }  → guarda favoritos
     if (req.method === 'POST') {
       if (!requireRole(req, res, 'investor')) return;
-      const { username, symbols } = req.body || {};
+      const { username, symbols, chartType } = req.body || {};
       if (!username) return res.status(400).json({ error: 'username requerido' });
-      if (!Array.isArray(symbols)) return res.status(400).json({ error: 'symbols debe ser un array' });
 
-      await col.updateOne(
-        { username },
-        { $set: { symbols, updatedAt: new Date() } },
-        { upsert: true }
-      );
-      return res.status(200).json({ ok: true, saved: symbols.length });
+      const update = { updatedAt: new Date() };
+      if (Array.isArray(symbols))                         update.symbols   = symbols;
+      if (chartType === 'line' || chartType === 'candle') update.chartType = chartType;
+
+      if (Object.keys(update).length === 1) {
+        return res.status(400).json({ error: 'Nada que actualizar' });
+      }
+
+      await col.updateOne({ username }, { $set: update }, { upsert: true });
+      return res.status(200).json({ ok: true, saved: update.symbols?.length ?? 0 });
     }
 
     return res.status(405).json({ error: 'Método no permitido' });
