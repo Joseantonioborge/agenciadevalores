@@ -893,11 +893,17 @@ function onLogin() {
   document.getElementById('tabPortal').style.display = 'block';
   if (u.role === 'admin') document.getElementById('tabAdmin').style.display = 'block';
   toast('Bienvenido, ' + u.name, 'ok');
+  // Cargar favoritos del servidor para este usuario
+  loadFavoritesFromServer();
 }
 
 function logout() {
   _session = null;
   localStorage.removeItem('AV_SESSION');
+  // Limpiar favoritos al cerrar sesión (son personales, no del dispositivo)
+  _favorites = new Set();
+  localStorage.removeItem('AV_FAVORITES');
+  if (_marketData.length) { renderIndexCards(_marketData); updateTicker(_marketData); }
   document.getElementById('userBadge').style.display = 'none';
   document.getElementById('btnLogin').style.display = 'block';
   document.getElementById('btnLogout').style.display = 'none';
@@ -934,6 +940,40 @@ function fmtPct(n) { return (n >= 0 ? '+' : '') + n.toFixed(2) + '%'; }
 // ================================================================
 // FAVORITOS
 // ================================================================
+async function loadFavoritesFromServer() {
+  if (!_session) return;
+  try {
+    const res = await fetch(`${API_BASE}/favorites?username=${encodeURIComponent(_session.username)}`, {
+      headers: { 'x-api-key': apiKey() }
+    });
+    if (!res.ok) return;
+    const data = await res.json();
+    if (Array.isArray(data.symbols)) {
+      _favorites = new Set(data.symbols);
+      localStorage.setItem('AV_FAVORITES', JSON.stringify(data.symbols));
+      if (_marketData.length) {
+        renderIndexCards(_marketData);
+        updateTicker(_marketData);
+      }
+    }
+  } catch (e) {
+    console.warn('Favoritos no sincronizados con servidor:', e.message);
+  }
+}
+
+async function saveFavoritesToServer() {
+  if (!_session) return;
+  try {
+    await fetch(`${API_BASE}/favorites`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey() },
+      body: JSON.stringify({ username: _session.username, symbols: [..._favorites] })
+    });
+  } catch (e) {
+    console.warn('Error guardando favoritos en servidor:', e.message);
+  }
+}
+
 function toggleFavorite(key) {
   if (_favorites.has(key)) {
     _favorites.delete(key);
@@ -945,6 +985,7 @@ function toggleFavorite(key) {
     renderIndexCards(_marketData);
     updateTicker(_marketData);
   }
+  saveFavoritesToServer();
 }
 
 function buildSkeletonCards() {
