@@ -296,6 +296,74 @@ main{padding-top:60px}
 }
 .btn-cancel-sel:hover{color:var(--text1);border-color:var(--text3)}
 
+/* ── Investor Tab Row ── */
+.inv-tab-row{
+  display:flex;gap:4px;margin-bottom:28px;
+  border-bottom:1px solid var(--border);padding-bottom:0;
+}
+.inv-tab{
+  padding:10px 20px;border:none;background:transparent;cursor:pointer;
+  font-size:.88rem;font-weight:500;color:var(--text3);font-family:var(--font);
+  border-bottom:2px solid transparent;margin-bottom:-1px;
+  transition:color .15s,border-color .15s;
+}
+.inv-tab:hover{color:var(--text2)}
+.inv-tab.active{color:var(--text);border-bottom-color:var(--accent)}
+
+/* ── News Feed ── */
+.news-filter-row{
+  display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;
+}
+.news-filter{
+  padding:6px 14px;border-radius:20px;border:1px solid var(--border);
+  background:transparent;color:var(--text2);font-size:.8rem;font-weight:500;
+  cursor:pointer;font-family:var(--font);transition:all .15s;
+}
+.news-filter:hover{border-color:var(--text3);color:var(--text)}
+.news-filter.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.news-grid{display:flex;flex-direction:column;gap:12px}
+.news-card{
+  background:var(--bg2);border:1px solid var(--border);border-radius:12px;
+  padding:16px 18px;transition:border-color .2s;
+}
+.news-card:hover{border-color:rgba(37,99,235,.4)}
+.news-card-top{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.news-badge{
+  font-size:.65rem;font-weight:700;padding:2px 8px;border-radius:10px;
+  white-space:nowrap;flex-shrink:0;
+}
+.news-badge.oportunidad{background:rgba(16,185,129,.15);color:var(--green);border:1px solid rgba(16,185,129,.3)}
+.news-badge.riesgo{background:rgba(239,68,68,.12);color:var(--red);border:1px solid rgba(239,68,68,.3)}
+.news-badge.tendencia{background:rgba(37,99,235,.12);color:var(--accent);border:1px solid rgba(37,99,235,.3)}
+.news-badge-icon{margin-right:3px}
+.news-card-title{font-size:.9rem;font-weight:600;color:var(--text);line-height:1.4;margin-bottom:6px}
+.news-card-summary{font-size:.8rem;color:var(--text2);line-height:1.55;
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.news-card-meta{
+  display:flex;align-items:center;gap:12px;margin-top:10px;
+  font-size:.72rem;color:var(--text3);
+}
+.news-card-meta .news-source{font-weight:500;color:var(--text2)}
+.news-card-meta .news-index{
+  background:var(--card);border:1px solid var(--border);border-radius:4px;
+  padding:1px 6px;font-size:.65rem;font-weight:600;color:var(--accent);
+}
+.news-loading{
+  text-align:center;padding:40px;color:var(--text3);font-size:.85rem;
+}
+.news-loading .news-spinner{
+  display:inline-block;width:20px;height:20px;border-radius:50%;
+  border:2px solid var(--border);border-top-color:var(--accent);
+  animation:spin .7s linear infinite;margin-bottom:10px;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.news-empty{
+  text-align:center;padding:40px 24px;
+  background:var(--bg2);border:1px dashed var(--border);border-radius:12px;
+}
+.news-empty .news-empty-icon{font-size:2rem;margin-bottom:10px}
+.news-empty p{color:var(--text2);font-size:.88rem}
+
 /* ===== MERCADOS ===== */
 #secMercados{padding:32px 24px 48px}
 .section-header{margin-bottom:28px}
@@ -642,7 +710,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
   <div class="nav-logo">
     <div class="nav-logo-dot"></div>
     Agencia de Valores
-    <span class="nav-version">v1.7.0</span>
+    <span class="nav-version">v1.8.0</span>
   </div>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="showSection('Mercados')">Mercados</button>
@@ -744,44 +812,67 @@ tr:hover td{background:rgba(255,255,255,.02)}
 
   <!-- ── VISTA INVERSOR (solo cuando hay sesión de investor) ── -->
   <div id="investorDash">
-    <div class="inv-greeting">
-      <div class="inv-greeting-left">
-        <h2>Hola, <span id="invName">Inversor</span> 👋</h2>
-        <p class="inv-sub">Tu resumen de mercado personalizado</p>
-      </div>
-      <div class="inv-date-badge" id="invDateBadge"></div>
+
+    <!-- ── Pestañas ── -->
+    <div class="inv-tab-row">
+      <button class="inv-tab active" id="invTabMercados" onclick="switchInvTab('mercados')">📊 Mis Mercados</button>
+      <button class="inv-tab" id="invTabAnalisis" onclick="switchInvTab('analisis')">📰 Análisis</button>
     </div>
 
-    <!-- KPIs (visibles solo con favoritos y fuera del modo edición) -->
-    <div class="kpi-row" id="kpiRow" style="display:none">
-      <!-- Generado por renderInvestorDashboard() -->
-    </div>
-
-    <!-- Cabecera de mercados: título + botón Editar (contenido dinámico) -->
-    <div class="inv-mkts-header" id="invMktsHeader">
-      <!-- Renderizado por renderInvestorDashboard() -->
-    </div>
-
-    <!-- Grid de favoritos (vista normal) -->
-    <div class="indices-grid" id="favGrid" style="display:none">
-      <!-- Generado por renderInvestorDashboard() -->
-    </div>
-
-    <!-- Selector de mercados (vista configuración / edición) -->
-    <div id="marketSelector" style="display:none">
-      <div class="mkt-sel-intro" id="mktSelIntro">
-        <!-- Generado dinámicamente: mensaje distinto en "setup" vs "editar" -->
+    <!-- ── Contenido: Mis Mercados ── -->
+    <div id="invMercadosContent">
+      <div class="inv-greeting">
+        <div class="inv-greeting-left">
+          <h2>Hola, <span id="invName">Inversor</span> 👋</h2>
+          <p class="inv-sub">Tu resumen de mercado personalizado</p>
+        </div>
+        <div class="inv-date-badge" id="invDateBadge"></div>
       </div>
-      <div class="mkt-sel-grid" id="mktSelGrid">
-        <!-- Tiles generados por renderMarketSelector() -->
+
+      <!-- KPIs (visibles solo con favoritos y fuera del modo edición) -->
+      <div class="kpi-row" id="kpiRow" style="display:none">
+        <!-- Generado por renderInvestorDashboard() -->
       </div>
-      <div class="mkt-sel-actions">
-        <button class="btn-cancel-sel" id="btnCancelSel" onclick="closeMarketEditor()" style="display:none">Cancelar</button>
-        <button class="btn-save-mkt" id="btnSaveMkt" onclick="saveMarketSelection()">
-          Añadir a mi dashboard
-        </button>
+
+      <!-- Cabecera de mercados: título + botón Editar (contenido dinámico) -->
+      <div class="inv-mkts-header" id="invMktsHeader">
+        <!-- Renderizado por renderInvestorDashboard() -->
       </div>
-    </div>
+
+      <!-- Grid de favoritos (vista normal) -->
+      <div class="indices-grid" id="favGrid" style="display:none">
+        <!-- Generado por renderInvestorDashboard() -->
+      </div>
+
+      <!-- Selector de mercados (vista configuración / edición) -->
+      <div id="marketSelector" style="display:none">
+        <div class="mkt-sel-intro" id="mktSelIntro">
+          <!-- Generado dinámicamente: mensaje distinto en "setup" vs "editar" -->
+        </div>
+        <div class="mkt-sel-grid" id="mktSelGrid">
+          <!-- Tiles generados por renderMarketSelector() -->
+        </div>
+        <div class="mkt-sel-actions">
+          <button class="btn-cancel-sel" id="btnCancelSel" onclick="closeMarketEditor()" style="display:none">Cancelar</button>
+          <button class="btn-save-mkt" id="btnSaveMkt" onclick="saveMarketSelection()">
+            Añadir a mi dashboard
+          </button>
+        </div>
+      </div>
+    </div><!-- /invMercadosContent -->
+
+    <!-- ── Contenido: Análisis / Noticias ── -->
+    <div id="invAnalisisPanel" style="display:none">
+      <div class="news-filter-row">
+        <button class="news-filter active" id="nfTodos"        onclick="filterNews('todos')">Todos</button>
+        <button class="news-filter"        id="nfOportunidad"  onclick="filterNews('oportunidad')">🟢 Oportunidades</button>
+        <button class="news-filter"        id="nfRiesgo"       onclick="filterNews('riesgo')">🔴 Riesgos</button>
+        <button class="news-filter"        id="nfTendencia"    onclick="filterNews('tendencia')">🔵 Tendencias</button>
+      </div>
+      <div id="newsFeed">
+        <!-- Generado por renderNewsFeed() -->
+      </div>
+    </div><!-- /invAnalisisPanel -->
 
   </div>
 
@@ -1076,6 +1167,9 @@ let _marketData = [];
 let _favorites = new Set(JSON.parse(localStorage.getItem('AV_FAVORITES') || '[]'));
 let _editingMarkets = false;   // true cuando el selector de mercados está abierto
 let _pendingFavs   = new Set(); // selección temporal durante la edición
+let _invTab        = 'mercados'; // 'mercados' | 'analisis'
+let _newsData      = [];         // artículos del feed de noticias cargados
+let _newsFilter    = 'todos';    // categoría activa: todos|oportunidad|riesgo|tendencia
 let _currentSymbol = '^GSPC';
 let _currentPeriod = '3mo';
 let _chart = null;
@@ -1205,6 +1299,10 @@ function logout() {
   localStorage.removeItem('AV_SESSION');
   _favorites = new Set();
   localStorage.removeItem('AV_FAVORITES');
+  // Reset análisis tab state
+  _invTab     = 'mercados';
+  _newsData   = [];
+  _newsFilter = 'todos';
   if (_marketData.length) { renderMainSection(_marketData); updateTicker(_marketData); }
   document.getElementById('userBadge').style.display = 'none';
   document.getElementById('btnLogin').style.display = 'block';
@@ -1582,6 +1680,134 @@ function togglePendingFav(key) {
   // Activa/desactiva botón guardar
   const btnSave = document.getElementById('btnSaveMkt');
   if (btnSave) btnSave.disabled = _pendingFavs.size === 0;
+}
+
+// ================================================================
+// INVESTOR DASHBOARD — ANÁLISIS / NOTICIAS
+// ================================================================
+function switchInvTab(tab) {
+  _invTab = tab;
+  // Actualiza botones de pestaña
+  document.getElementById('invTabMercados').classList.toggle('active', tab === 'mercados');
+  document.getElementById('invTabAnalisis').classList.toggle('active', tab === 'analisis');
+  // Muestra/oculta contenido
+  document.getElementById('invMercadosContent').style.display = tab === 'mercados' ? 'block' : 'none';
+  document.getElementById('invAnalisisPanel').style.display   = tab === 'analisis'  ? 'block' : 'none';
+  // Carga noticias si es la primera vez que se abre la pestaña
+  if (tab === 'analisis' && _newsData.length === 0) {
+    loadInvestorNews();
+  }
+}
+
+async function loadInvestorNews() {
+  // Muestra spinner
+  document.getElementById('newsFeed').innerHTML = `
+    <div class="news-loading">
+      <div class="news-spinner"></div>
+      <div>Cargando análisis de mercado...</div>
+    </div>`;
+
+  // Usa los favoritos del inversor como símbolos, o todos si no tiene
+  const symbols = _favorites.size > 0 ? [..._favorites] : Object.values({
+    sp500:'sp500', nasdaq:'nasdaq', ibex35:'ibex35', dax40:'dax40',
+    nikkei225:'nikkei225', hangseng:'hangseng', eurostoxx50:'eurostoxx50', msciworld:'msciworld', dowjones:'dowjones',
+  });
+
+  try {
+    const res = await fetch(
+      `${API_BASE}/news?symbols=${encodeURIComponent(symbols.join(','))}`,
+      { headers: { 'x-api-key': apiKey() }, signal: AbortSignal.timeout(20000) }
+    );
+    if (!res.ok) throw new Error('Error ' + res.status);
+    const data = await res.json();
+    _newsData = data.articles || [];
+    renderNewsFeed(_newsData);
+  } catch (e) {
+    document.getElementById('newsFeed').innerHTML = `
+      <div class="news-empty">
+        <div class="news-empty-icon">⚠️</div>
+        <p>No se pudieron cargar las noticias en este momento.</p>
+        <p style="margin-top:6px;font-size:.78rem;color:var(--text3)">${e.message}</p>
+        <button onclick="loadInvestorNews()" style="
+          margin-top:14px;padding:7px 18px;border-radius:6px;font-size:.8rem;font-weight:500;
+          background:var(--accent);color:#fff;border:none;cursor:pointer;font-family:var(--font);
+        ">Reintentar</button>
+      </div>`;
+  }
+}
+
+function filterNews(category) {
+  _newsFilter = category;
+  // Actualiza botones de filtro
+  ['todos','oportunidad','riesgo','tendencia'].forEach(c => {
+    const btn = document.getElementById('nf' + c.charAt(0).toUpperCase() + c.slice(1));
+    if (btn) btn.classList.toggle('active', c === category);
+  });
+  // Renderiza con el filtro aplicado
+  renderNewsFeed(_newsData);
+}
+
+const NEWS_INDEX_LABELS = {
+  sp500:'S&P 500', nasdaq:'NASDAQ', dowjones:'Dow Jones', ibex35:'IBEX 35',
+  dax40:'DAX 40', nikkei225:'Nikkei 225', hangseng:'Hang Seng',
+  eurostoxx50:'Euro Stoxx 50', msciworld:'MSCI World',
+};
+
+const NEWS_BADGE_LABELS = {
+  oportunidad: '🟢 Oportunidad',
+  riesgo:      '🔴 Riesgo',
+  tendencia:   '🔵 Tendencia',
+};
+
+function renderNewsFeed(articles) {
+  const feed = document.getElementById('newsFeed');
+  if (!articles || articles.length === 0) {
+    feed.innerHTML = `
+      <div class="news-empty">
+        <div class="news-empty-icon">📭</div>
+        <p>No hay noticias disponibles en este momento.</p>
+      </div>`;
+    return;
+  }
+
+  const filtered = _newsFilter === 'todos'
+    ? articles
+    : articles.filter(a => a.category === _newsFilter);
+
+  if (filtered.length === 0) {
+    feed.innerHTML = `
+      <div class="news-empty">
+        <div class="news-empty-icon">🔍</div>
+        <p>No hay noticias en la categoría <strong>${_newsFilter}</strong> en este momento.</p>
+      </div>`;
+    return;
+  }
+
+  feed.innerHTML = `<div class="news-grid">${filtered.map(a => {
+    const dateStr = a.pubDate
+      ? new Date(a.pubDate).toLocaleString('es-ES', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' })
+      : '';
+    const indexLabel = NEWS_INDEX_LABELS[a.indexKey] || a.indexKey || '';
+    const badgeLabel = NEWS_BADGE_LABELS[a.category] || a.category;
+    return `
+    <div class="news-card">
+      <div class="news-card-top">
+        <span class="news-badge ${a.category}">${badgeLabel}</span>
+        ${indexLabel ? `<span class="news-card-meta" style="margin-top:0"><span class="news-index">${indexLabel}</span></span>` : ''}
+      </div>
+      <div class="news-card-title">${escapeHtml(a.title)}</div>
+      ${a.summary ? `<div class="news-card-summary">${escapeHtml(a.summary)}</div>` : ''}
+      <div class="news-card-meta">
+        <span class="news-source">${escapeHtml(a.source || 'Yahoo Finance')}</span>
+        ${dateStr ? `<span>${dateStr}</span>` : ''}
+      </div>
+    </div>`;
+  }).join('')}</div>`;
+}
+
+function escapeHtml(str) {
+  if (!str) return '';
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
 async function loadMarketData() {
