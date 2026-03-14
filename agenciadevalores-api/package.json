@@ -1,0 +1,11 @@
+{
+  "name": "agenciadevalores-api",
+  "version": "1.0.0",
+  "description": "API serverless para Agencia de Valores — datos de mercado, autenticación e inversores",
+  "dependencies": {
+    "mongodb": "^6.3.0"
+  },
+  "engines": {
+    "node": "20.x"
+  }
+}
