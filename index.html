@@ -180,6 +180,54 @@ main{padding-top:60px}
 .btn-fav.active{color:var(--yellow)}
 .index-card.fav{border-color:rgba(245,158,11,.4);box-shadow:0 0 0 1px rgba(245,158,11,.15)}
 
+/* ===== INVESTOR DASHBOARD ===== */
+#investorDash{display:none}
+.inv-greeting{
+  display:flex;align-items:flex-end;justify-content:space-between;
+  margin-bottom:28px;flex-wrap:wrap;gap:10px;
+}
+.inv-greeting-left h2{font-size:1.55rem;font-weight:700;margin-bottom:2px}
+.inv-greeting-left .inv-sub{font-size:.9rem;color:var(--text2)}
+.inv-date-badge{
+  font-size:.75rem;color:var(--text3);background:var(--bg2);
+  border:1px solid var(--border);border-radius:6px;padding:5px 10px;
+}
+.kpi-row{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+  gap:14px;margin-bottom:32px;
+}
+.kpi-card{
+  background:var(--bg2);border:1px solid var(--border);border-radius:12px;
+  padding:18px 20px;display:flex;flex-direction:column;gap:6px;
+  transition:border-color .2s;
+}
+.kpi-card:hover{border-color:rgba(37,99,235,.4)}
+.kpi-card.accent{border-left:3px solid var(--accent)}
+.kpi-card.green{border-left:3px solid var(--green)}
+.kpi-card.red{border-left:3px solid var(--red)}
+.kpi-card.yellow{border-left:3px solid var(--yellow)}
+.kpi-icon{font-size:1.1rem;margin-bottom:2px}
+.kpi-label{font-size:.68rem;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.8px}
+.kpi-value{font-size:1.55rem;font-weight:700;color:var(--text1);line-height:1.1}
+.kpi-sub{font-size:.78rem;color:var(--text2)}
+.kpi-value.up{color:var(--green)}
+.kpi-value.dn{color:var(--red)}
+.inv-section-title{
+  font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:1px;
+  color:var(--text3);margin-bottom:16px;display:flex;align-items:center;gap:8px;
+}
+.inv-section-title::after{
+  content:'';flex:1;height:1px;background:var(--border);
+}
+.inv-no-favs{
+  background:var(--bg2);border:1px dashed var(--border);border-radius:12px;
+  padding:40px 24px;text-align:center;
+}
+.inv-no-favs .no-fav-icon{font-size:2.2rem;margin-bottom:12px}
+.inv-no-favs p{color:var(--text2);font-size:.9rem;margin-bottom:6px}
+.inv-no-favs small{color:var(--text3);font-size:.8rem}
+
 /* ===== MERCADOS ===== */
 #secMercados{padding:32px 24px 48px}
 .section-header{margin-bottom:28px}
@@ -526,7 +574,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
   <div class="nav-logo">
     <div class="nav-logo-dot"></div>
     Agencia de Valores
-    <span class="nav-version">v1.5.0</span>
+    <span class="nav-version">v1.6.0</span>
   </div>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="showSection('Mercados')">Mercados</button>
@@ -625,18 +673,45 @@ tr:hover td{background:rgba(255,255,255,.02)}
 
 <!-- MERCADOS -->
 <section class="section active" id="secMercados">
-  <div class="section-header">
-    <h1 class="section-title">Mercados Globales</h1>
-    <p class="section-sub">Principales índices bursátiles en tiempo real</p>
-    <div class="refresh-info">
-      <div class="live-dot"></div>
-      <span>Actualización automática cada 60 segundos</span>
-      <span id="lastUpdate" style="margin-left:8px;color:var(--text3)"></span>
+
+  <!-- ── VISTA INVERSOR (solo cuando hay sesión de investor) ── -->
+  <div id="investorDash">
+    <div class="inv-greeting">
+      <div class="inv-greeting-left">
+        <h2>Hola, <span id="invName">Inversor</span> 👋</h2>
+        <p class="inv-sub">Tu resumen de mercado personalizado</p>
+      </div>
+      <div class="inv-date-badge" id="invDateBadge"></div>
+    </div>
+
+    <!-- KPIs -->
+    <div class="kpi-row" id="kpiRow">
+      <!-- Generado por renderInvestorDashboard() -->
+    </div>
+
+    <!-- Mercados favoritos -->
+    <div class="inv-section-title">★ &nbsp;Mis Mercados</div>
+    <div class="indices-grid" id="favGrid">
+      <!-- Generado por renderInvestorDashboard() -->
     </div>
   </div>
-  <div class="indices-grid" id="indicesGrid">
-    <!-- Cards generadas por JS -->
+
+  <!-- ── VISTA PÚBLICA (sin sesión o admin) ── -->
+  <div id="publicDash">
+    <div class="section-header">
+      <h1 class="section-title">Mercados Globales</h1>
+      <p class="section-sub">Principales índices bursátiles en tiempo real</p>
+      <div class="refresh-info">
+        <div class="live-dot"></div>
+        <span>Actualización automática cada 60 segundos</span>
+        <span id="lastUpdate" style="margin-left:8px;color:var(--text3)"></span>
+      </div>
+    </div>
+    <div class="indices-grid" id="indicesGrid">
+      <!-- Cards generadas por JS -->
+    </div>
   </div>
+
 </section>
 
 <!-- ANÁLISIS -->
@@ -1027,6 +1102,8 @@ function onLogin() {
   document.getElementById('btnLogin').style.display = 'none';
   document.getElementById('btnLogout').style.display = 'none'; // sustituido por botón en panel
   if (u.role === 'admin') document.getElementById('tabAdmin').style.display = 'block';
+  // Activa vista personalizada si es inversor
+  if (_marketData.length) renderMainSection(_marketData);
   toast('Bienvenido, ' + u.name, 'ok');
   loadFavoritesFromServer();
 }
@@ -1037,7 +1114,7 @@ function logout() {
   localStorage.removeItem('AV_SESSION');
   _favorites = new Set();
   localStorage.removeItem('AV_FAVORITES');
-  if (_marketData.length) { renderIndexCards(_marketData); updateTicker(_marketData); }
+  if (_marketData.length) { renderMainSection(_marketData); updateTicker(_marketData); }
   document.getElementById('userBadge').style.display = 'none';
   document.getElementById('btnLogin').style.display = 'block';
   document.getElementById('tabAdmin').style.display = 'none';
@@ -1084,7 +1161,7 @@ async function loadFavoritesFromServer() {
       _favorites = new Set(data.symbols);
       localStorage.setItem('AV_FAVORITES', JSON.stringify(data.symbols));
       if (_marketData.length) {
-        renderIndexCards(_marketData);
+        renderMainSection(_marketData);
         updateTicker(_marketData);
       }
     }
@@ -1114,7 +1191,7 @@ function toggleFavorite(key) {
   }
   localStorage.setItem('AV_FAVORITES', JSON.stringify([..._favorites]));
   if (_marketData.length) {
-    renderIndexCards(_marketData);
+    renderMainSection(_marketData);
     updateTicker(_marketData);
   }
   saveFavoritesToServer();
@@ -1210,6 +1287,138 @@ function drawSparkline(canvas, d) {
   ctx.fill();
 }
 
+// ================================================================
+// INVESTOR DASHBOARD
+// ================================================================
+function renderMainSection(data) {
+  const isInvestor = _session && _session.role === 'investor';
+  document.getElementById('publicDash').style.display   = isInvestor ? 'none'  : 'block';
+  document.getElementById('investorDash').style.display = isInvestor ? 'block' : 'none';
+  if (isInvestor) {
+    renderInvestorDashboard(data);
+  } else {
+    renderIndexCards(data);
+  }
+}
+
+function renderInvestorDashboard(data) {
+  // Actualiza saludo y fecha
+  document.getElementById('invName').textContent = _session.name.split(' ')[0];
+  document.getElementById('invDateBadge').textContent =
+    new Date().toLocaleDateString('es-ES', { weekday:'long', day:'numeric', month:'long' });
+
+  // Filtra por favoritos (si tiene alguno usa favoritos, si no muestra todos)
+  const hasFavs = _favorites.size > 0;
+  const favData  = hasFavs
+    ? data.filter(d => _favorites.has(d.key))
+    : data;
+
+  // ── KPIs ──────────────────────────────────────────────────────
+  const kpiRow = document.getElementById('kpiRow');
+  if (!favData.length) {
+    kpiRow.innerHTML = '';
+  } else {
+    const avgChg   = favData.reduce((s, d) => s + d.changePct, 0) / favData.length;
+    const best     = favData.reduce((a, b) => a.changePct > b.changePct ? a : b);
+    const worst    = favData.reduce((a, b) => a.changePct < b.changePct ? a : b);
+    const positive = favData.filter(d => d.changePct > 0).length;
+    const openMkts = favData.filter(d => d.marketState === 'REGULAR').length;
+
+    const avgUp  = avgChg >= 0;
+    const kpis = [
+      {
+        color: avgUp ? 'green' : 'red',
+        icon: avgUp ? '📈' : '📉',
+        label: 'Rendimiento medio',
+        value: `${avgUp ? '+' : ''}${avgChg.toFixed(2)}%`,
+        valueClass: avgUp ? 'up' : 'dn',
+        sub: `Promedio de ${favData.length} mercado${favData.length !== 1 ? 's' : ''}`
+      },
+      {
+        color: 'accent',
+        icon: '🏆',
+        label: 'Mejor hoy',
+        value: best.name,
+        valueClass: 'up',
+        sub: `${best.changePct >= 0 ? '+' : ''}${best.changePct.toFixed(2)}%`
+      },
+      {
+        color: 'red',
+        icon: '⚠️',
+        label: 'Peor hoy',
+        value: worst.name,
+        valueClass: 'dn',
+        sub: `${worst.changePct.toFixed(2)}%`
+      },
+      {
+        color: 'yellow',
+        icon: '🟢',
+        label: 'En positivo',
+        value: `${positive} / ${favData.length}`,
+        valueClass: '',
+        sub: `${openMkts} mercado${openMkts !== 1 ? 's' : ''} abierto${openMkts !== 1 ? 's' : ''}`
+      }
+    ];
+
+    kpiRow.innerHTML = kpis.map(k => `
+      <div class="kpi-card ${k.color}">
+        <div class="kpi-icon">${k.icon}</div>
+        <div class="kpi-label">${k.label}</div>
+        <div class="kpi-value ${k.valueClass}" style="font-size:${k.value.length > 8 ? '1.1rem' : '1.45rem'}">${k.value}</div>
+        <div class="kpi-sub">${k.sub}</div>
+      </div>`).join('');
+  }
+
+  // ── Tarjetas de mercados favoritos ────────────────────────────
+  const favGrid = document.getElementById('favGrid');
+  if (!hasFavs) {
+    favGrid.innerHTML = `
+      <div class="inv-no-favs" style="grid-column:1/-1">
+        <div class="no-fav-icon">⭐</div>
+        <p>Todavía no tienes mercados favoritos</p>
+        <small>Pulsa el icono ☆ en cualquier tarjeta de mercado para añadirlo a tu dashboard personalizado</small>
+      </div>`;
+    return;
+  }
+
+  // Reutiliza la plantilla de renderIndexCards para las cards favoritas
+  favGrid.innerHTML = favData.map(d => {
+    const up = d.changePct >= 0;
+    const changeClass = Math.abs(d.changePct) < 0.01 ? 'flat' : (up ? 'up' : 'dn');
+    const isOpen = d.marketState === 'REGULAR';
+    return `
+    <div class="index-card fav" onclick="openAnalysis('${d.symbol}')">
+      <button class="btn-fav active"
+        onclick="event.stopPropagation();toggleFavorite('${d.key}')"
+        title="Quitar de favoritos">★</button>
+      <span class="market-badge ${isOpen ? 'open' : 'closed'}">${isOpen ? '● Abierto' : '● Cerrado'}</span>
+      <div class="card-top">
+        <div>
+          <div class="card-name">${d.name}</div>
+        </div>
+        <span class="card-region">${d.region}</span>
+      </div>
+      <div class="card-price">${fmt(d.price)}</div>
+      <div class="card-change ${changeClass}">
+        ${up ? '▲' : '▼'} ${Math.abs(d.changePct).toFixed(2)}%
+        <span style="opacity:.7;font-size:.8em">(${up ? '+' : ''}${fmt(d.change)})</span>
+      </div>
+      <div class="card-meta">
+        <span><b>H</b> ${fmt(d.dayHigh)}</span>
+        <span><b>L</b> ${fmt(d.dayLow)}</span>
+        <span><b>Prev</b> ${fmt(d.prevClose)}</span>
+      </div>
+      <div class="card-sparkline"><canvas id="spark_inv_${d.key}" height="48"></canvas></div>
+    </div>`;
+  }).join('');
+
+  // Sparklines para las cards favoritas
+  favData.forEach(d => {
+    const cv = document.getElementById('spark_inv_' + d.key);
+    if (cv) drawSparkline(cv, d);
+  });
+}
+
 async function loadMarketData() {
   if (_marketData.length === 0) buildSkeletonCards();
   try {
@@ -1217,7 +1426,7 @@ async function loadMarketData() {
     const json = await res.json();
     if (json.data && json.data.length) {
       _marketData = json.data;
-      renderIndexCards(_marketData);
+      renderMainSection(_marketData);
       updateTicker(_marketData);
       document.getElementById('lastUpdate').textContent =
         'Última actualización: ' + new Date().toLocaleTimeString('es-ES');
