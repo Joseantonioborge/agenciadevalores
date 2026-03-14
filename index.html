@@ -53,7 +53,87 @@ nav{
   padding:7px 14px;border-radius:6px;font-size:.8rem;font-weight:500;
   background:transparent;color:var(--text2);border:1px solid var(--border);cursor:pointer;
 }
-#userBadge{font-size:.82rem;color:var(--text2)}
+/* USER BADGE BUTTON */
+#userBadge{
+  display:none;align-items:center;gap:7px;cursor:pointer;user-select:none;
+  background:rgba(37,99,235,.1);border:1px solid rgba(37,99,235,.25);
+  border-radius:20px;padding:5px 11px 5px 6px;
+  color:var(--text);font-size:.8rem;font-weight:500;
+  transition:background .15s,border-color .15s;
+}
+#userBadge:hover{background:rgba(37,99,235,.2);border-color:rgba(37,99,235,.45)}
+#userBadge.open{background:rgba(37,99,235,.22);border-color:var(--accent)}
+.ub-avatar{
+  width:22px;height:22px;border-radius:50%;
+  background:var(--accent);color:#fff;
+  font-size:.65rem;font-weight:700;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+}
+.ub-name{max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ub-chevron{font-size:.6rem;color:var(--text3);transition:transform .2s;flex-shrink:0}
+#userBadge.open .ub-chevron{transform:rotate(180deg)}
+
+/* PORTAL PANEL (drawer lateral derecho) */
+.portal-backdrop{
+  position:fixed;inset:0;z-index:149;
+  background:rgba(0,0,0,.45);backdrop-filter:blur(3px);
+  opacity:0;pointer-events:none;transition:opacity .25s;
+}
+.portal-backdrop.open{opacity:1;pointer-events:all}
+#portalPanel{
+  position:fixed;top:60px;right:0;
+  width:min(500px,100vw);
+  height:calc(100vh - 60px - 36px);
+  background:var(--bg2);border-left:1px solid var(--border);
+  z-index:150;overflow-y:auto;
+  transform:translateX(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);
+  display:flex;flex-direction:column;
+}
+#portalPanel.open{transform:translateX(0)}
+.pp-header{
+  padding:18px 20px 16px;
+  display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid var(--border);flex-shrink:0;
+  background:var(--card);position:sticky;top:0;z-index:1;
+}
+.pp-title{font-size:.9rem;font-weight:700;display:flex;align-items:center;gap:8px}
+.pp-close{
+  background:none;border:none;color:var(--text3);cursor:pointer;
+  font-size:1.1rem;padding:4px 6px;border-radius:5px;line-height:1;
+  transition:color .15s,background .15s;
+}
+.pp-close:hover{color:var(--text);background:rgba(255,255,255,.06)}
+.pp-body{padding:20px;display:flex;flex-direction:column;gap:16px;flex:1}
+.pp-profile{
+  background:var(--card);border:1px solid var(--border);border-radius:12px;
+  padding:18px 20px;display:flex;align-items:center;gap:14px;
+}
+.pp-avatar{
+  width:48px;height:48px;border-radius:50%;
+  background:linear-gradient(135deg,var(--accent),#7c3aed);
+  color:#fff;font-size:1.3rem;font-weight:700;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.pp-user-info{flex:1;min-width:0}
+.pp-user-name{font-size:.95rem;font-weight:700;margin-bottom:2px}
+.pp-user-email{font-size:.75rem;color:var(--text3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pp-role-badge{
+  font-size:.65rem;font-weight:600;padding:2px 8px;border-radius:10px;
+  background:rgba(37,99,235,.15);color:var(--accent);border:1px solid rgba(37,99,235,.3);
+  white-space:nowrap;
+}
+.pp-card{
+  background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 18px;
+}
+.pp-card-title{
+  font-size:.75rem;font-weight:700;color:var(--text3);
+  letter-spacing:.5px;text-transform:uppercase;margin-bottom:12px;
+  display:flex;align-items:center;gap:6px;
+}
+.pp-mkt-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pp-mkt-item{background:var(--bg2);border-radius:8px;padding:10px 12px}
+.pp-mkt-label{font-size:.68rem;color:var(--text3);margin-bottom:3px}
+.pp-mkt-val{font-size:.85rem;font-weight:700}
 
 /* MAIN */
 main{padding-top:60px}
@@ -446,22 +526,102 @@ tr:hover td{background:rgba(255,255,255,.02)}
   <div class="nav-logo">
     <div class="nav-logo-dot"></div>
     Agencia de Valores
-    <span class="nav-version">v1.4.0</span>
+    <span class="nav-version">v1.5.0</span>
   </div>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="showSection('Mercados')">Mercados</button>
     <button class="nav-tab" onclick="showSection('Analisis')">Análisis</button>
-    <button class="nav-tab" id="tabPortal" onclick="requireAuth('Portal')" style="display:none">Portal</button>
     <button class="nav-tab" id="tabAdmin" onclick="requireAuth('Admin')" style="display:none">Admin</button>
   </div>
   <div class="nav-right">
     <div class="nav-time" id="navTime"></div>
-    <span class="nav-time" id="userBadge" style="display:none"></span>
+    <button id="userBadge" onclick="togglePortalPanel()" aria-label="Mi portal">
+      <span class="ub-avatar" id="ubAvatar">?</span>
+      <span class="ub-name" id="ubName"></span>
+      <span class="ub-chevron">▾</span>
+    </button>
     <button id="btnLogin" onclick="openLoginModal()">Acceder</button>
     <button id="btnLogout" style="display:none" onclick="logout()">Cerrar sesión</button>
   </div>
 </nav>
 
+
+<!-- PORTAL BACKDROP -->
+<div class="portal-backdrop" id="portalBackdrop" onclick="closePortalPanel()"></div>
+
+<!-- PORTAL PANEL (drawer lateral) -->
+<div id="portalPanel">
+  <div class="pp-header">
+    <div class="pp-title">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      Mi Portal
+    </div>
+    <button class="pp-close" onclick="closePortalPanel()" title="Cerrar">✕</button>
+  </div>
+  <div class="pp-body">
+
+    <!-- Perfil -->
+    <div class="pp-profile">
+      <div class="pp-avatar" id="portalAvatar">?</div>
+      <div class="pp-user-info">
+        <div class="pp-user-name" id="portalName">—</div>
+        <div class="pp-user-email" id="portalEmail">—</div>
+      </div>
+      <span class="pp-role-badge" id="portalRoleBadge">Inversor</span>
+    </div>
+
+    <!-- Resumen de mercado -->
+    <div class="pp-card">
+      <div class="pp-card-title">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Resumen del Mercado
+      </div>
+      <div id="portalMarketSummary" class="pp-mkt-grid">
+        <div class="pp-mkt-item"><div class="pp-mkt-label">Cargando...</div></div>
+      </div>
+    </div>
+
+    <!-- Watchlist -->
+    <div class="pp-card">
+      <div class="pp-card-title">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+        Mi Watchlist
+      </div>
+      <div id="watchlistItems">
+        <div class="watchlist-item"><span class="wl-name" style="color:var(--text3)">Cargando...</span></div>
+      </div>
+    </div>
+
+    <!-- Cambiar contraseña -->
+    <div class="pp-card">
+      <div class="pp-card-title">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        Cambiar Contraseña
+      </div>
+      <div class="form-group">
+        <label class="form-label">Contraseña actual</label>
+        <input class="form-input" type="password" id="cpOld" placeholder="••••••••">
+      </div>
+      <div class="form-group" style="margin-top:10px">
+        <label class="form-label">Nueva contraseña</label>
+        <input class="form-input" type="password" id="cpNew" placeholder="••••••••">
+      </div>
+      <button class="btn-primary" onclick="changePassword()" style="margin-top:12px;width:100%">Actualizar contraseña</button>
+    </div>
+
+    <!-- Cerrar sesión -->
+    <button onclick="logout()" style="
+      background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);
+      color:var(--red);border-radius:8px;padding:10px;width:100%;
+      cursor:pointer;font-size:.82rem;font-weight:600;font-family:var(--font);
+      transition:background .15s;margin-bottom:8px;
+    " onmouseover="this.style.background='rgba(239,68,68,.2)'"
+       onmouseout="this.style.background='rgba(239,68,68,.1)'">
+      Cerrar sesión
+    </button>
+
+  </div>
+</div>
 
 <!-- MERCADOS -->
 <section class="section active" id="secMercados">
@@ -598,54 +758,6 @@ tr:hover td{background:rgba(255,255,255,.02)}
   </div>
 </section>
 
-<!-- PORTAL INVERSOR -->
-<section class="section" id="secPortal">
-  <div class="portal-grid">
-    <div class="portal-sidebar">
-      <div class="profile-card">
-        <div class="profile-avatar" id="portalAvatar">?</div>
-        <div class="profile-name" id="portalName">—</div>
-        <div class="profile-email" id="portalEmail">—</div>
-        <div class="profile-role">Inversor</div>
-      </div>
-      <div class="watchlist-card">
-        <div class="watchlist-title">
-          <span>Mi Watchlist</span>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
-        </div>
-        <div id="watchlistItems">
-          <div class="watchlist-item"><span class="wl-name" style="color:var(--text3)">Cargando...</span></div>
-        </div>
-      </div>
-    </div>
-    <div class="portal-main">
-      <div class="portal-header">
-        <div>
-          <div class="portal-greeting" id="portalGreeting">Bienvenido</div>
-          <div class="portal-date" id="portalDate"></div>
-        </div>
-      </div>
-      <div class="admin-card" style="grid-column:span 2">
-        <div class="admin-card-title">Resumen del Mercado Global</div>
-        <div id="portalMarketSummary" style="font-size:.85rem;color:var(--text2);line-height:1.8">
-          Cargando datos de mercado...
-        </div>
-      </div>
-      <div class="admin-card">
-        <div class="admin-card-title">Cambiar Contraseña</div>
-        <div class="form-group">
-          <label class="form-label">Contraseña actual</label>
-          <input class="form-input" type="password" id="cpOld" placeholder="••••••••">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Nueva contraseña</label>
-          <input class="form-input" type="password" id="cpNew" placeholder="••••••••">
-        </div>
-        <button class="btn-primary" onclick="changePassword()" style="margin-top:4px">Actualizar</button>
-      </div>
-    </div>
-  </div>
-</section>
 
 <!-- ADMIN -->
 <section class="section" id="secAdmin">
@@ -825,13 +937,35 @@ function showSection(name) {
   document.getElementById('sec' + name).classList.add('active');
   event && event.currentTarget && event.currentTarget.classList.add('active');
   if (name === 'Analisis' && !_chart) initChart();
-  if (name === 'Portal') renderPortal();
   if (name === 'Admin') loadAdminData();
+  closePortalPanel();
 }
 
 function requireAuth(name) {
   if (!_session) { openLoginModal(); return; }
   showSection(name);
+}
+
+// ================================================================
+// PORTAL PANEL
+// ================================================================
+function togglePortalPanel() {
+  const panel = document.getElementById('portalPanel');
+  panel.classList.contains('open') ? closePortalPanel() : openPortalPanel();
+}
+
+function openPortalPanel() {
+  if (!_session) { openLoginModal(); return; }
+  document.getElementById('portalPanel').classList.add('open');
+  document.getElementById('portalBackdrop').classList.add('open');
+  document.getElementById('userBadge').classList.add('open');
+  renderPortal();
+}
+
+function closePortalPanel() {
+  document.getElementById('portalPanel').classList.remove('open');
+  document.getElementById('portalBackdrop').classList.remove('open');
+  document.getElementById('userBadge').classList.remove('open');
 }
 
 function updateTime() {
@@ -886,28 +1020,26 @@ async function doLogin() {
 
 function onLogin() {
   const u = _session;
-  document.getElementById('userBadge').textContent = u.name;
-  document.getElementById('userBadge').style.display = 'block';
+  // Pill badge: avatar inicial + nombre
+  document.getElementById('ubAvatar').textContent = u.name.charAt(0).toUpperCase();
+  document.getElementById('ubName').textContent = u.name.split(' ')[0];
+  document.getElementById('userBadge').style.display = 'flex';
   document.getElementById('btnLogin').style.display = 'none';
-  document.getElementById('btnLogout').style.display = 'block';
-  document.getElementById('tabPortal').style.display = 'block';
+  document.getElementById('btnLogout').style.display = 'none'; // sustituido por botón en panel
   if (u.role === 'admin') document.getElementById('tabAdmin').style.display = 'block';
   toast('Bienvenido, ' + u.name, 'ok');
-  // Cargar favoritos del servidor para este usuario
   loadFavoritesFromServer();
 }
 
 function logout() {
+  closePortalPanel();
   _session = null;
   localStorage.removeItem('AV_SESSION');
-  // Limpiar favoritos al cerrar sesión (son personales, no del dispositivo)
   _favorites = new Set();
   localStorage.removeItem('AV_FAVORITES');
   if (_marketData.length) { renderIndexCards(_marketData); updateTicker(_marketData); }
   document.getElementById('userBadge').style.display = 'none';
   document.getElementById('btnLogin').style.display = 'block';
-  document.getElementById('btnLogout').style.display = 'none';
-  document.getElementById('tabPortal').style.display = 'none';
   document.getElementById('tabAdmin').style.display = 'none';
   showSection('Mercados');
   toast('Sesión cerrada', 'ok');
@@ -1303,8 +1435,8 @@ function renderPortal() {
   document.getElementById('portalAvatar').textContent = u.name.charAt(0).toUpperCase();
   document.getElementById('portalName').textContent = u.name;
   document.getElementById('portalEmail').textContent = u.email || '';
-  document.getElementById('portalGreeting').textContent = getGreeting() + ', ' + u.name.split(' ')[0];
-  document.getElementById('portalDate').textContent = new Date().toLocaleDateString('es-ES', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+  const roleBadge = document.getElementById('portalRoleBadge');
+  if (roleBadge) roleBadge.textContent = u.role === 'admin' ? 'Administrador' : 'Inversor';
 
   // Watchlist
   const wl = u.watchlist || [];
@@ -1329,20 +1461,26 @@ function renderPortal() {
 function updatePortalMarketSummary() {
   const el = document.getElementById('portalMarketSummary');
   if (!el || !_marketData.length) return;
-  const up = _marketData.filter(d => d.changePct > 0).length;
-  const dn = _marketData.filter(d => d.changePct < 0).length;
-  const best = _marketData.reduce((a, b) => a.changePct > b.changePct ? a : b);
+  const up   = _marketData.filter(d => d.changePct > 0).length;
+  const dn   = _marketData.filter(d => d.changePct < 0).length;
+  const best  = _marketData.reduce((a, b) => a.changePct > b.changePct ? a : b);
   const worst = _marketData.reduce((a, b) => a.changePct < b.changePct ? a : b);
   el.innerHTML = `
-    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px">
-      <div><div style="color:var(--text3);font-size:.75rem;margin-bottom:4px">Sesión actual</div>
-        <div style="font-weight:700;color:var(--text)">${up} al alza · ${dn} a la baja</div></div>
-      <div><div style="color:var(--text3);font-size:.75rem;margin-bottom:4px">Mejor desempeño</div>
-        <div style="font-weight:700;color:var(--green)">${best.name} ${fmtPct(best.changePct)}</div></div>
-      <div><div style="color:var(--text3);font-size:.75rem;margin-bottom:4px">Peor desempeño</div>
-        <div style="font-weight:700;color:var(--red)">${worst.name} ${fmtPct(worst.changePct)}</div></div>
-      <div><div style="color:var(--text3);font-size:.75rem;margin-bottom:4px">Última actualización</div>
-        <div style="font-weight:700;color:var(--text)">${new Date().toLocaleTimeString('es-ES')}</div></div>
+    <div class="pp-mkt-item">
+      <div class="pp-mkt-label">Sesión actual</div>
+      <div class="pp-mkt-val">${up} ▲ · ${dn} ▼</div>
+    </div>
+    <div class="pp-mkt-item">
+      <div class="pp-mkt-label">Mejor</div>
+      <div class="pp-mkt-val" style="color:var(--green)">${best.name}<br><span style="font-size:.75rem">${fmtPct(best.changePct)}</span></div>
+    </div>
+    <div class="pp-mkt-item">
+      <div class="pp-mkt-label">Peor</div>
+      <div class="pp-mkt-val" style="color:var(--red)">${worst.name}<br><span style="font-size:.75rem">${fmtPct(worst.changePct)}</span></div>
+    </div>
+    <div class="pp-mkt-item">
+      <div class="pp-mkt-label">Actualizado</div>
+      <div class="pp-mkt-val" style="font-size:.75rem">${new Date().toLocaleTimeString('es-ES')}</div>
     </div>`;
 }
 
