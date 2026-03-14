@@ -228,6 +228,74 @@ main{padding-top:60px}
 .inv-no-favs p{color:var(--text2);font-size:.9rem;margin-bottom:6px}
 .inv-no-favs small{color:var(--text3);font-size:.8rem}
 
+/* ── Market selector ── */
+.inv-mkts-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:16px;gap:12px;
+}
+.inv-mkts-header .inv-section-title{margin-bottom:0;flex:1}
+.btn-edit-mkt{
+  font-size:.72rem;font-weight:500;color:var(--text3);
+  background:transparent;border:1px solid var(--border);border-radius:6px;
+  padding:5px 11px;cursor:pointer;transition:all .15s;white-space:nowrap;
+}
+.btn-edit-mkt:hover{color:var(--text1);border-color:var(--text3)}
+.mkt-sel-intro{
+  background:linear-gradient(135deg,rgba(37,99,235,.08),rgba(37,99,235,.03));
+  border:1px solid rgba(37,99,235,.2);border-radius:12px;
+  padding:20px 22px;margin-bottom:24px;
+}
+.mkt-sel-intro h3{font-size:1rem;font-weight:700;margin-bottom:4px}
+.mkt-sel-intro p{font-size:.82rem;color:var(--text2)}
+.mkt-sel-count{
+  display:inline-block;margin-left:8px;font-size:.72rem;
+  background:var(--accent);color:#fff;border-radius:10px;padding:1px 7px;
+}
+.mkt-sel-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(155px,1fr));
+  gap:10px;margin-bottom:22px;
+}
+.mkt-sel-tile{
+  background:var(--bg2);border:2px solid var(--border);border-radius:10px;
+  padding:14px 14px 12px;cursor:pointer;transition:all .18s;position:relative;
+  user-select:none;
+}
+.mkt-sel-tile:hover{border-color:rgba(37,99,235,.5);transform:translateY(-1px)}
+.mkt-sel-tile.selected{
+  border-color:var(--accent);background:rgba(37,99,235,.09);
+}
+.mkt-sel-check{
+  position:absolute;top:9px;right:9px;
+  width:18px;height:18px;border-radius:50%;border:2px solid var(--border);
+  background:transparent;display:flex;align-items:center;justify-content:center;
+  font-size:.65rem;color:#fff;transition:all .15s;
+}
+.mkt-sel-tile.selected .mkt-sel-check{
+  background:var(--accent);border-color:var(--accent);
+}
+.mkt-sel-tile-name{font-size:.85rem;font-weight:700;padding-right:22px;margin-bottom:2px}
+.mkt-sel-tile-region{font-size:.68rem;color:var(--text3);margin-bottom:8px}
+.mkt-sel-tile-price{font-size:.82rem;font-weight:600;color:var(--text1)}
+.mkt-sel-tile-chg{font-size:.75rem;margin-left:4px}
+.mkt-sel-actions{
+  display:flex;gap:10px;justify-content:flex-end;
+  padding-top:18px;border-top:1px solid var(--border);
+}
+.btn-save-mkt{
+  background:var(--accent);color:#fff;border:none;border-radius:8px;
+  padding:10px 26px;font-size:.88rem;font-weight:600;cursor:pointer;
+  transition:background .15s;
+}
+.btn-save-mkt:hover{background:#1d4ed8}
+.btn-save-mkt:disabled{opacity:.5;cursor:not-allowed}
+.btn-cancel-sel{
+  background:transparent;color:var(--text2);border:1px solid var(--border);
+  border-radius:8px;padding:10px 18px;font-size:.88rem;cursor:pointer;
+  transition:all .15s;
+}
+.btn-cancel-sel:hover{color:var(--text1);border-color:var(--text3)}
+
 /* ===== MERCADOS ===== */
 #secMercados{padding:32px 24px 48px}
 .section-header{margin-bottom:28px}
@@ -574,7 +642,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
   <div class="nav-logo">
     <div class="nav-logo-dot"></div>
     Agencia de Valores
-    <span class="nav-version">v1.6.0</span>
+    <span class="nav-version">v1.7.0</span>
   </div>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="showSection('Mercados')">Mercados</button>
@@ -684,16 +752,37 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <div class="inv-date-badge" id="invDateBadge"></div>
     </div>
 
-    <!-- KPIs -->
-    <div class="kpi-row" id="kpiRow">
+    <!-- KPIs (visibles solo con favoritos y fuera del modo edición) -->
+    <div class="kpi-row" id="kpiRow" style="display:none">
       <!-- Generado por renderInvestorDashboard() -->
     </div>
 
-    <!-- Mercados favoritos -->
-    <div class="inv-section-title">★ &nbsp;Mis Mercados</div>
-    <div class="indices-grid" id="favGrid">
+    <!-- Cabecera de mercados: título + botón Editar (contenido dinámico) -->
+    <div class="inv-mkts-header" id="invMktsHeader">
+      <!-- Renderizado por renderInvestorDashboard() -->
+    </div>
+
+    <!-- Grid de favoritos (vista normal) -->
+    <div class="indices-grid" id="favGrid" style="display:none">
       <!-- Generado por renderInvestorDashboard() -->
     </div>
+
+    <!-- Selector de mercados (vista configuración / edición) -->
+    <div id="marketSelector" style="display:none">
+      <div class="mkt-sel-intro" id="mktSelIntro">
+        <!-- Generado dinámicamente: mensaje distinto en "setup" vs "editar" -->
+      </div>
+      <div class="mkt-sel-grid" id="mktSelGrid">
+        <!-- Tiles generados por renderMarketSelector() -->
+      </div>
+      <div class="mkt-sel-actions">
+        <button class="btn-cancel-sel" id="btnCancelSel" onclick="closeMarketEditor()" style="display:none">Cancelar</button>
+        <button class="btn-save-mkt" id="btnSaveMkt" onclick="saveMarketSelection()">
+          Añadir a mi dashboard
+        </button>
+      </div>
+    </div>
+
   </div>
 
   <!-- ── VISTA PÚBLICA (sin sesión o admin) ── -->
@@ -985,6 +1074,8 @@ const API_KEY_ADMIN    = '8bb695a1e2adb8530351d9acbfddacf29dcd30f38da2a0d88d9d5c
 let _session = null;
 let _marketData = [];
 let _favorites = new Set(JSON.parse(localStorage.getItem('AV_FAVORITES') || '[]'));
+let _editingMarkets = false;   // true cuando el selector de mercados está abierto
+let _pendingFavs   = new Set(); // selección temporal durante la edición
 let _currentSymbol = '^GSPC';
 let _currentPeriod = '3mo';
 let _chart = null;
@@ -1302,87 +1393,117 @@ function renderMainSection(data) {
 }
 
 function renderInvestorDashboard(data) {
-  // Actualiza saludo y fecha
+  // ── Saludo y fecha ────────────────────────────────────────────
   document.getElementById('invName').textContent = _session.name.split(' ')[0];
   document.getElementById('invDateBadge').textContent =
     new Date().toLocaleDateString('es-ES', { weekday:'long', day:'numeric', month:'long' });
 
-  // Filtra por favoritos (si tiene alguno usa favoritos, si no muestra todos)
   const hasFavs = _favorites.size > 0;
-  const favData  = hasFavs
-    ? data.filter(d => _favorites.has(d.key))
-    : data;
+  const showingSelector = _editingMarkets || !hasFavs;
 
-  // ── KPIs ──────────────────────────────────────────────────────
+  // ── KPIs (solo cuando hay favoritos Y no estamos editando) ────
   const kpiRow = document.getElementById('kpiRow');
-  if (!favData.length) {
-    kpiRow.innerHTML = '';
+  if (hasFavs && !_editingMarkets) {
+    const favData = data.filter(d => _favorites.has(d.key));
+    if (favData.length) {
+      const avgChg   = favData.reduce((s, d) => s + d.changePct, 0) / favData.length;
+      const best     = favData.reduce((a, b) => a.changePct > b.changePct ? a : b);
+      const worst    = favData.reduce((a, b) => a.changePct < b.changePct ? a : b);
+      const positive = favData.filter(d => d.changePct > 0).length;
+      const openMkts = favData.filter(d => d.marketState === 'REGULAR').length;
+      const avgUp    = avgChg >= 0;
+      kpiRow.style.display = 'grid';
+      kpiRow.innerHTML = [
+        { color: avgUp?'green':'red', icon: avgUp?'📈':'📉',
+          label:'Rendimiento medio',
+          value:`${avgUp?'+':''}${avgChg.toFixed(2)}%`, cls: avgUp?'up':'dn',
+          sub:`Promedio de ${favData.length} mercado${favData.length!==1?'s':''}` },
+        { color:'accent', icon:'🏆', label:'Mejor hoy',
+          value: best.name, cls:'up',
+          sub:`${best.changePct>=0?'+':''}${best.changePct.toFixed(2)}%` },
+        { color:'red', icon:'⚠️', label:'Peor hoy',
+          value: worst.name, cls:'dn',
+          sub:`${worst.changePct.toFixed(2)}%` },
+        { color:'yellow', icon:'🟢', label:'En positivo',
+          value:`${positive} / ${favData.length}`, cls:'',
+          sub:`${openMkts} mercado${openMkts!==1?'s':''} abierto${openMkts!==1?'s':''}` }
+      ].map(k => `
+        <div class="kpi-card ${k.color}">
+          <div class="kpi-icon">${k.icon}</div>
+          <div class="kpi-label">${k.label}</div>
+          <div class="kpi-value ${k.cls}" style="font-size:${k.value.length>8?'1.1rem':'1.45rem'}">${k.value}</div>
+          <div class="kpi-sub">${k.sub}</div>
+        </div>`).join('');
+    }
   } else {
-    const avgChg   = favData.reduce((s, d) => s + d.changePct, 0) / favData.length;
-    const best     = favData.reduce((a, b) => a.changePct > b.changePct ? a : b);
-    const worst    = favData.reduce((a, b) => a.changePct < b.changePct ? a : b);
-    const positive = favData.filter(d => d.changePct > 0).length;
-    const openMkts = favData.filter(d => d.marketState === 'REGULAR').length;
-
-    const avgUp  = avgChg >= 0;
-    const kpis = [
-      {
-        color: avgUp ? 'green' : 'red',
-        icon: avgUp ? '📈' : '📉',
-        label: 'Rendimiento medio',
-        value: `${avgUp ? '+' : ''}${avgChg.toFixed(2)}%`,
-        valueClass: avgUp ? 'up' : 'dn',
-        sub: `Promedio de ${favData.length} mercado${favData.length !== 1 ? 's' : ''}`
-      },
-      {
-        color: 'accent',
-        icon: '🏆',
-        label: 'Mejor hoy',
-        value: best.name,
-        valueClass: 'up',
-        sub: `${best.changePct >= 0 ? '+' : ''}${best.changePct.toFixed(2)}%`
-      },
-      {
-        color: 'red',
-        icon: '⚠️',
-        label: 'Peor hoy',
-        value: worst.name,
-        valueClass: 'dn',
-        sub: `${worst.changePct.toFixed(2)}%`
-      },
-      {
-        color: 'yellow',
-        icon: '🟢',
-        label: 'En positivo',
-        value: `${positive} / ${favData.length}`,
-        valueClass: '',
-        sub: `${openMkts} mercado${openMkts !== 1 ? 's' : ''} abierto${openMkts !== 1 ? 's' : ''}`
-      }
-    ];
-
-    kpiRow.innerHTML = kpis.map(k => `
-      <div class="kpi-card ${k.color}">
-        <div class="kpi-icon">${k.icon}</div>
-        <div class="kpi-label">${k.label}</div>
-        <div class="kpi-value ${k.valueClass}" style="font-size:${k.value.length > 8 ? '1.1rem' : '1.45rem'}">${k.value}</div>
-        <div class="kpi-sub">${k.sub}</div>
-      </div>`).join('');
+    kpiRow.style.display = 'none';
   }
 
-  // ── Tarjetas de mercados favoritos ────────────────────────────
-  const favGrid = document.getElementById('favGrid');
-  if (!hasFavs) {
-    favGrid.innerHTML = `
-      <div class="inv-no-favs" style="grid-column:1/-1">
-        <div class="no-fav-icon">⭐</div>
-        <p>Todavía no tienes mercados favoritos</p>
-        <small>Pulsa el icono ☆ en cualquier tarjeta de mercado para añadirlo a tu dashboard personalizado</small>
-      </div>`;
-    return;
+  // ── Cabecera dinámica ─────────────────────────────────────────
+  const hdr = document.getElementById('invMktsHeader');
+  if (_editingMarkets) {
+    hdr.innerHTML = `
+      <div class="inv-section-title" style="margin-bottom:0">
+        ✏️ &nbsp;Editar selección de mercados
+      </div>
+      <button class="btn-cancel-sel" onclick="closeMarketEditor()">✕ Cancelar</button>`;
+  } else if (hasFavs) {
+    hdr.innerHTML = `
+      <div class="inv-section-title" style="margin-bottom:0">★ &nbsp;Mis Mercados</div>
+      <button class="btn-edit-mkt" onclick="openMarketEditor()">✏️ Editar selección</button>`;
+  } else {
+    hdr.innerHTML = `
+      <div class="inv-section-title" style="margin-bottom:0">Elige tus mercados</div>`;
   }
 
-  // Reutiliza la plantilla de renderIndexCards para las cards favoritas
-  favGrid.innerHTML = favData.map(d => {
+  // ── Mostrar grid favoritos vs selector ────────────────────────
+  document.getElementById('favGrid').style.display       = showingSelector ? 'none' : 'grid';
+  document.getElementById('marketSelector').style.display = showingSelector ? 'block' : 'none';
+
+  if (showingSelector) {
+    // Botón cancelar solo cuando hay favoritos previos (no en primer setup)
+    document.getElementById('btnCancelSel').style.display = hasFavs ? 'inline-block' : 'none';
+    // Texto del botón guardar
+    document.getElementById('btnSaveMkt').textContent =
+      hasFavs ? 'Guardar cambios' : 'Añadir a mi dashboard';
+    renderMarketSelector(data);
+  } else {
+    renderFavGrid(data.filter(d => _favorites.has(d.key)));
+  }
+}
+
+function renderMarketSelector(data) {
+  // Intro text
+  const hasFavs = _favorites.size > 0;
+  document.getElementById('mktSelIntro').innerHTML = hasFavs
+    ? `<h3>Modifica tu selección <span class="mkt-sel-count" id="mktSelCount">${_pendingFavs.size}</span></h3>
+       <p>Activa o desactiva los mercados que quieres ver en tu dashboard</p>`
+    : `<h3>Configura tu dashboard</h3>
+       <p>Selecciona los mercados que quieres seguir. Puedes cambiarlos en cualquier momento.</p>`;
+
+  // Tiles
+  document.getElementById('mktSelGrid').innerHTML = data.map(d => {
+    const sel = _pendingFavs.has(d.key);
+    const up  = d.changePct >= 0;
+    return `
+    <div class="mkt-sel-tile${sel ? ' selected' : ''}" id="mktTile_${d.key}"
+         onclick="togglePendingFav('${d.key}')">
+      <div class="mkt-sel-check">${sel ? '✓' : ''}</div>
+      <div class="mkt-sel-tile-name">${d.name}</div>
+      <div class="mkt-sel-tile-region">${d.region}</div>
+      <div class="mkt-sel-tile-price">
+        ${fmt(d.price)}
+        <span class="mkt-sel-tile-chg ${up ? 'up' : 'dn'}">
+          ${up ? '+' : ''}${d.changePct.toFixed(2)}%
+        </span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderFavGrid(favData) {
+  const grid = document.getElementById('favGrid');
+  grid.innerHTML = favData.map(d => {
     const up = d.changePct >= 0;
     const changeClass = Math.abs(d.changePct) < 0.01 ? 'flat' : (up ? 'up' : 'dn');
     const isOpen = d.marketState === 'REGULAR';
@@ -1393,9 +1514,7 @@ function renderInvestorDashboard(data) {
         title="Quitar de favoritos">★</button>
       <span class="market-badge ${isOpen ? 'open' : 'closed'}">${isOpen ? '● Abierto' : '● Cerrado'}</span>
       <div class="card-top">
-        <div>
-          <div class="card-name">${d.name}</div>
-        </div>
+        <div><div class="card-name">${d.name}</div></div>
         <span class="card-region">${d.region}</span>
       </div>
       <div class="card-price">${fmt(d.price)}</div>
@@ -1411,12 +1530,58 @@ function renderInvestorDashboard(data) {
       <div class="card-sparkline"><canvas id="spark_inv_${d.key}" height="48"></canvas></div>
     </div>`;
   }).join('');
-
-  // Sparklines para las cards favoritas
   favData.forEach(d => {
     const cv = document.getElementById('spark_inv_' + d.key);
     if (cv) drawSparkline(cv, d);
   });
+}
+
+// ── Funciones de edición de mercados ─────────────────────────────
+function openMarketEditor() {
+  _editingMarkets = true;
+  _pendingFavs = new Set(_favorites); // copia de la selección actual
+  renderInvestorDashboard(_marketData);
+}
+
+function closeMarketEditor() {
+  _editingMarkets = false;
+  _pendingFavs = new Set();
+  renderInvestorDashboard(_marketData);
+}
+
+async function saveMarketSelection() {
+  if (_pendingFavs.size === 0) {
+    toast('Selecciona al menos un mercado', 'err');
+    return;
+  }
+  _favorites = new Set(_pendingFavs);
+  _editingMarkets = false;
+  _pendingFavs = new Set();
+  localStorage.setItem('AV_FAVORITES', JSON.stringify([..._favorites]));
+  renderMainSection(_marketData);
+  updateTicker(_marketData);
+  saveFavoritesToServer();
+  toast('Selección guardada ✓', 'ok');
+}
+
+function togglePendingFav(key) {
+  if (_pendingFavs.has(key)) {
+    _pendingFavs.delete(key);
+  } else {
+    _pendingFavs.add(key);
+  }
+  // Actualiza solo el tile afectado (sin re-renderizar todo)
+  const tile = document.getElementById('mktTile_' + key);
+  if (tile) {
+    tile.classList.toggle('selected', _pendingFavs.has(key));
+    tile.querySelector('.mkt-sel-check').textContent = _pendingFavs.has(key) ? '✓' : '';
+  }
+  // Actualiza contador
+  const countEl = document.getElementById('mktSelCount');
+  if (countEl) countEl.textContent = _pendingFavs.size;
+  // Activa/desactiva botón guardar
+  const btnSave = document.getElementById('btnSaveMkt');
+  if (btnSave) btnSave.disabled = _pendingFavs.size === 0;
 }
 
 async function loadMarketData() {
