@@ -440,6 +440,23 @@ main{padding-top:60px}
 }
 .period-tab:hover{color:var(--text);background:var(--card2)}
 .period-tab.active{color:var(--text);background:var(--accent)}
+
+/* ── Chart type toggle ── */
+.chart-controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+.chart-type-toggle{
+  display:flex;background:var(--bg2);
+  border:1px solid var(--border);border-radius:8px;padding:3px;gap:2px;
+}
+.chart-type-btn{
+  padding:5px 13px;border:none;border-radius:5px;cursor:pointer;
+  font-size:.78rem;font-weight:500;font-family:var(--font);
+  color:var(--text3);background:transparent;transition:all .15s;white-space:nowrap;
+}
+.chart-type-btn:hover{color:var(--text2)}
+.chart-type-btn.active{
+  background:var(--card2);color:var(--text);
+  box-shadow:0 1px 4px rgba(0,0,0,.35);
+}
 #mainChart{height:380px}
 .index-selector{
   display:flex;flex-wrap:wrap;gap:8px;padding:16px 20px;border-top:1px solid var(--border);
@@ -710,7 +727,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
   <div class="nav-logo">
     <div class="nav-logo-dot"></div>
     Agencia de Valores
-    <span class="nav-version">v1.8.0</span>
+    <span class="nav-version">v1.9.0</span>
   </div>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="showSection('Mercados')">Mercados</button>
@@ -913,13 +930,21 @@ tr:hover td{background:rgba(255,255,255,.02)}
               <span class="card-change flat" id="chartChange">—</span>
             </div>
           </div>
-          <div class="period-tabs">
-            <button class="period-tab active" onclick="setPeriod('1d')">1D</button>
-            <button class="period-tab" onclick="setPeriod('5d')">5D</button>
-            <button class="period-tab" onclick="setPeriod('1mo')">1M</button>
-            <button class="period-tab" onclick="setPeriod('3mo')">3M</button>
-            <button class="period-tab" onclick="setPeriod('6mo')">6M</button>
-            <button class="period-tab" onclick="setPeriod('1y')">1A</button>
+          <div class="chart-controls">
+            <div class="chart-type-toggle">
+              <button class="chart-type-btn" id="chartTypeLine"
+                onclick="setChartType('line')" title="Gráfico de línea / área">📈 Línea</button>
+              <button class="chart-type-btn" id="chartTypeCandle"
+                onclick="setChartType('candle')" title="Gráfico de velas japonesas">🕯 Velas</button>
+            </div>
+            <div class="period-tabs">
+              <button class="period-tab active" onclick="setPeriod('1d')">1D</button>
+              <button class="period-tab" onclick="setPeriod('5d')">5D</button>
+              <button class="period-tab" onclick="setPeriod('1mo')">1M</button>
+              <button class="period-tab" onclick="setPeriod('3mo')">3M</button>
+              <button class="period-tab" onclick="setPeriod('6mo')">6M</button>
+              <button class="period-tab" onclick="setPeriod('1y')">1A</button>
+            </div>
           </div>
         </div>
         <div id="mainChart"></div>
@@ -1176,8 +1201,10 @@ let _newsData      = [];         // artículos del feed de noticias cargados
 let _newsFilter    = 'todos';    // categoría activa: todos|oportunidad|riesgo|tendencia
 let _currentSymbol = '^GSPC';
 let _currentPeriod = '3mo';
+let _chartType     = localStorage.getItem('AV_CHART_TYPE') || 'line'; // 'line' | 'candle'
 let _chart = null;
-let _lineSeries = null;
+let _activeSeries = null;   // área (line) o candlestick activo
+let _lineSeries = null;     // alias para compatibilidad
 let _refreshInterval = null;
 
 const INDEX_MAP = {
@@ -1878,12 +1905,9 @@ function initChart() {
     timeScale: { borderColor: '#2a3050', timeVisible: true },
   });
 
-  _lineSeries = _chart.addAreaSeries({
-    lineColor: '#2563EB',
-    topColor: 'rgba(37,99,235,.25)',
-    bottomColor: 'rgba(37,99,235,.02)',
-    lineWidth: 2,
-  });
+  // Aplica el tipo de serie guardado
+  _applySeriesType();
+  _syncChartTypeUI();
 
   // Index selector buttons
   const sel = document.getElementById('indexSelector');
@@ -1896,6 +1920,55 @@ function initChart() {
   });
 
   loadHistorical(_currentSymbol, _currentPeriod);
+}
+
+// ── Crea la serie según _chartType ────────────────────────────────
+function _applySeriesType() {
+  if (!_chart) return;
+  // Elimina la serie activa anterior
+  if (_activeSeries) {
+    try { _chart.removeSeries(_activeSeries); } catch (_) {}
+    _activeSeries = null;
+    _lineSeries   = null;
+  }
+  if (_chartType === 'candle') {
+    _activeSeries = _chart.addCandlestickSeries({
+      upColor:         '#10B981',
+      downColor:       '#EF4444',
+      borderUpColor:   '#10B981',
+      borderDownColor: '#EF4444',
+      wickUpColor:     '#10B981',
+      wickDownColor:   '#EF4444',
+    });
+  } else {
+    _activeSeries = _chart.addAreaSeries({
+      lineColor:   '#2563EB',
+      topColor:    'rgba(37,99,235,.25)',
+      bottomColor: 'rgba(37,99,235,.02)',
+      lineWidth:   2,
+    });
+  }
+  _lineSeries = _activeSeries; // alias para compatibilidad
+}
+
+// ── Cambia el tipo de gráfico y recarga datos ─────────────────────
+function setChartType(type) {
+  if (_chartType === type) return;
+  _chartType = type;
+  localStorage.setItem('AV_CHART_TYPE', type);
+  _syncChartTypeUI();
+  if (_chart) {
+    _applySeriesType();
+    loadHistorical(_currentSymbol, _currentPeriod);
+  }
+}
+
+// ── Sincroniza botones toggle con el estado actual ────────────────
+function _syncChartTypeUI() {
+  const btnLine   = document.getElementById('chartTypeLine');
+  const btnCandle = document.getElementById('chartTypeCandle');
+  if (btnLine)   btnLine.classList.toggle('active',   _chartType === 'line');
+  if (btnCandle) btnCandle.classList.toggle('active', _chartType === 'candle');
 }
 
 function openAnalysis(symbol) {
@@ -1942,14 +2015,25 @@ async function loadHistorical(symbol, period) {
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const data = await res.json();
 
-    // Datos para el chart
-    const chartData = data.ohlcv
-      .filter(d => d.close !== null && d.time)
-      .map(d => ({ time: d.time, value: d.close }));
-
-    if (_lineSeries && chartData.length) {
-      _lineSeries.setData(chartData);
-      _chart.timeScale().fitContent();
+    // Datos para el chart según tipo seleccionado
+    if (_activeSeries && data.ohlcv.length) {
+      if (_chartType === 'candle') {
+        const candleData = data.ohlcv
+          .filter(d => d.close !== null && d.open !== null && d.high !== null && d.low !== null && d.time)
+          .map(d => ({ time: d.time, open: d.open, high: d.high, low: d.low, close: d.close }));
+        if (candleData.length) {
+          _activeSeries.setData(candleData);
+          _chart.timeScale().fitContent();
+        }
+      } else {
+        const lineData = data.ohlcv
+          .filter(d => d.close !== null && d.time)
+          .map(d => ({ time: d.time, value: d.close }));
+        if (lineData.length) {
+          _activeSeries.setData(lineData);
+          _chart.timeScale().fitContent();
+        }
+      }
     }
 
     // Header
