@@ -718,6 +718,105 @@ tr:hover td{background:rgba(255,255,255,.02)}
   .indices-grid{grid-template-columns:1fr}
   .section-title{font-size:1.3rem}
 }
+
+/* ================================================================
+   MIS CARTERAS
+   ================================================================ */
+.cart-kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+.cart-kpi-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;transition:.2s}
+.cart-kpi-card:hover{border-color:rgba(37,99,235,.3);transform:translateY(-1px)}
+.cart-kpi-icon{font-size:1.35rem;margin-bottom:4px}
+.cart-kpi-label{font-size:.7rem;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;font-weight:500}
+.cart-kpi-value{font-size:1.15rem;font-weight:700;color:var(--text)}
+.cart-kpi-sub{font-size:.7rem;color:var(--text3);margin-top:2px}
+.cart-kpi-up{color:var(--green)!important}.cart-kpi-down{color:var(--red)!important}.cart-kpi-flat{color:var(--text2)!important}
+
+.cart-charts-row{display:grid;grid-template-columns:260px 1fr;gap:12px;margin-bottom:16px}
+.cart-chart-box{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px}
+.cart-chart-title{font-size:.72rem;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px}
+.cart-donut-wrap{display:flex;align-items:center;gap:14px}
+.cart-donut-legend{flex:1;display:flex;flex-direction:column;gap:6px}
+.cart-legend-item{display:flex;align-items:center;gap:8px;font-size:.78rem}
+.cart-legend-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.cart-legend-pct{margin-left:auto;font-size:.72rem;color:var(--text3);font-family:monospace}
+.cart-empty-chart{font-size:.8rem;color:var(--text3);text-align:center;padding:24px 0}
+
+.cart-perf-list{display:flex;flex-direction:column;gap:10px}
+.cart-perf-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.cart-perf-name{font-size:.82rem;display:flex;align-items:center;gap:7px}
+.cart-color-badge{width:9px;height:9px;border-radius:3px;flex-shrink:0}
+.cart-perf-pct{font-size:.78rem;font-weight:700;font-family:monospace;padding:2px 7px;border-radius:5px}
+.cart-perf-pct.up{color:var(--green);background:rgba(16,185,129,.12)}
+.cart-perf-pct.down{color:var(--red);background:rgba(239,68,68,.12)}
+.cart-perf-pct.flat{color:var(--text3);background:rgba(255,255,255,.06)}
+.cart-perf-bar-track{height:5px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden}
+.cart-perf-bar-fill{height:100%;border-radius:3px;transition:width .5s ease}
+
+.cart-list{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+.cart-card{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;transition:border-color .2s}
+.cart-card:hover{border-color:rgba(37,99,235,.3)}
+.cart-card-header{display:flex;align-items:center;gap:12px;padding:16px 18px;cursor:pointer;transition:background .15s;user-select:none}
+.cart-card-header:hover{background:rgba(255,255,255,.02)}
+.cart-card-dot{width:12px;height:12px;border-radius:4px;flex-shrink:0}
+.cart-card-name{font-weight:700;font-size:.95rem;flex:1}
+.cart-card-meta{font-size:.75rem;color:var(--text3)}
+.cart-card-pct{font-size:.82rem;font-weight:700;font-family:monospace;padding:3px 8px;border-radius:6px}
+.cart-card-pct.up{color:var(--green);background:rgba(16,185,129,.12)}
+.cart-card-pct.down{color:var(--red);background:rgba(239,68,68,.12)}
+.cart-card-pct.flat{color:var(--text3);background:rgba(255,255,255,.06)}
+.cart-card-val{font-size:.9rem;font-weight:700;font-family:monospace;min-width:110px;text-align:right}
+.cart-card-actions{display:flex;gap:4px}
+.cart-card-btn{background:none;border:1px solid var(--border);color:var(--text3);cursor:pointer;border-radius:7px;padding:5px 9px;font-size:.78rem;transition:all .15s;line-height:1}
+.cart-card-btn:hover{color:var(--text);border-color:rgba(37,99,235,.4)}
+.cart-card-btn.del:hover{color:var(--red);border-color:var(--red)}
+.cart-card-chevron{color:var(--text3);font-size:.72rem;transition:transform .2s;margin-left:2px}
+.cart-card-body{padding:0 18px 14px;border-top:1px solid var(--border);display:none}
+.cart-card-body.open{display:block}
+
+.cart-activos-table{width:100%;border-collapse:collapse;margin-top:10px}
+.cart-activos-table th{font-size:.68rem;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;padding:5px 8px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap}
+.cart-activos-table td{font-size:.8rem;padding:8px;border-bottom:1px solid rgba(255,255,255,.04)}
+.cart-activos-table tr:last-child td{border-bottom:none}
+.cart-activos-table td:first-child{font-weight:700;font-family:monospace}
+.cart-tipo-badge{font-size:.63rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:2px 5px;border-radius:4px;background:rgba(37,99,235,.15);color:var(--accent)}
+.cart-activo-pl{font-weight:700;font-family:monospace;font-size:.78rem}
+.cart-activo-pl.up{color:var(--green)}.cart-activo-pl.down{color:var(--red)}.cart-activo-pl.flat{color:var(--text3)}
+
+.cart-add-activo-btn{margin-top:10px;background:none;border:1px dashed var(--border);color:var(--text3);cursor:pointer;border-radius:8px;padding:8px 14px;font-size:.8rem;width:100%;text-align:left;transition:all .15s;font-family:var(--font)}
+.cart-add-activo-btn:hover{color:var(--accent);border-color:rgba(37,99,235,.4);background:rgba(37,99,235,.05)}
+.cart-fab{display:flex;justify-content:flex-end;margin-top:4px}
+.cart-new-btn{display:inline-flex;align-items:center;gap:7px;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:10px 20px;font-size:.85rem;font-weight:600;cursor:pointer;box-shadow:0 4px 12px rgba(37,99,235,.3);transition:.2s;font-family:var(--font)}
+.cart-new-btn:hover{background:var(--accent2);box-shadow:0 6px 18px rgba(37,99,235,.4)}
+.cart-empty{text-align:center;padding:56px 20px;color:var(--text2)}
+.cart-empty-icon{font-size:3rem;margin-bottom:14px}
+.cart-empty-title{font-size:1.15rem;font-weight:700;color:var(--text);margin-bottom:8px}
+.cart-empty-sub{font-size:.85rem;margin-bottom:22px}
+.cart-loading{text-align:center;padding:40px;color:var(--text2);font-size:.9rem}
+.cart-spinner{width:26px;height:26px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 12px}
+
+/* Modales de carteras */
+.cart-color-picker{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+.cart-color-swatch{width:26px;height:26px;border-radius:7px;cursor:pointer;border:3px solid transparent;transition:border-color .15s,transform .15s}
+.cart-color-swatch:hover{transform:scale(1.12)}
+.cart-color-swatch.selected{border-color:#fff}
+.cart-input-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.cart-field{margin-bottom:14px}
+.cart-field label{display:block;font-size:.75rem;font-weight:500;color:var(--text2);margin-bottom:5px}
+.cart-input{width:100%;padding:9px 12px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:.88rem;font-family:var(--font);outline:none;transition:.15s;box-sizing:border-box}
+.cart-input:focus{border-color:var(--accent)}
+.cart-modal-msg{font-size:.78rem;color:var(--text2);min-height:16px;margin-top:8px}
+.cart-modal-footer{display:flex;gap:8px;margin-top:16px}
+.cart-modal-save{flex:1;padding:10px;background:var(--accent);color:#fff;border:none;border-radius:8px;font-size:.88rem;font-weight:600;cursor:pointer;transition:.15s;font-family:var(--font)}
+.cart-modal-save:hover{background:var(--accent2)}
+.cart-modal-cancel{padding:10px 18px;background:none;border:1px solid var(--border);color:var(--text2);border-radius:8px;font-size:.88rem;font-weight:600;cursor:pointer;transition:.15s;font-family:var(--font)}
+.cart-modal-cancel:hover{color:var(--text);border-color:var(--text2)}
+
+@media(max-width:768px){
+  .cart-kpi-row{grid-template-columns:repeat(2,1fr)}
+  .cart-charts-row{grid-template-columns:1fr}
+  .cart-input-grid{grid-template-columns:1fr}
+  .cart-card-val{display:none}
+}
 </style>
 </head>
 <body>
@@ -727,7 +826,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
   <div class="nav-logo">
     <div class="nav-logo-dot"></div>
     Agencia de Valores
-    <span class="nav-version">v1.9.1</span>
+    <span class="nav-version">v2.0.0</span>
   </div>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="showSection('Mercados')">Mercados</button>
@@ -836,6 +935,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
     <div class="inv-tab-row">
       <button class="inv-tab active" id="invTabMercados" onclick="switchInvTab('mercados')">📊 Mis Mercados</button>
       <button class="inv-tab" id="invTabAnalisis" onclick="switchInvTab('analisis')">📰 Análisis</button>
+      <button class="inv-tab" id="invTabCarteras" onclick="switchInvTab('carteras')">💼 Mis Carteras</button>
     </div>
 
     <!-- ── Contenido: Mis Mercados ── -->
@@ -892,6 +992,11 @@ tr:hover td{background:rgba(255,255,255,.02)}
         <!-- Generado por renderNewsFeed() -->
       </div>
     </div><!-- /invAnalisisPanel -->
+
+    <!-- ── Contenido: Mis Carteras ── -->
+    <div id="invCarterasPanel" style="display:none">
+      <!-- Renderizado por renderCarteras() -->
+    </div><!-- /invCarterasPanel -->
 
   </div>
 
@@ -1096,6 +1201,96 @@ tr:hover td{background:rgba(255,255,255,.02)}
 
 </main>
 
+<!-- MODAL NUEVA CARTERA -->
+<div class="modal-overlay" id="modalCartera">
+  <div class="modal" style="max-width:440px">
+    <button class="modal-close" onclick="closeCarteraModal()">✕</button>
+    <h2 class="modal-title" id="cartModalTitle">Nueva Cartera</h2>
+    <p class="modal-sub">Define un nombre y color para identificar tu cartera</p>
+    <input type="hidden" id="cartModalId">
+    <div class="cart-field">
+      <label>Nombre de la cartera</label>
+      <input class="cart-input" id="cartModalNombre" type="text" placeholder="Ej: Cartera Growth, Mi Portfolio…" autocomplete="off">
+    </div>
+    <div class="cart-field">
+      <label>Color identificativo</label>
+      <div class="cart-color-picker" id="cartColorPicker"></div>
+    </div>
+    <div class="cart-modal-msg" id="cartModalMsg"></div>
+    <div class="cart-modal-footer">
+      <button class="cart-modal-cancel" onclick="closeCarteraModal()">Cancelar</button>
+      <button class="cart-modal-save" onclick="saveCartera()">Guardar cartera</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL NUEVO ACTIVO -->
+<div class="modal-overlay" id="modalActivo">
+  <div class="modal" style="max-width:520px">
+    <button class="modal-close" onclick="closeActivoModal()">✕</button>
+    <h2 class="modal-title" id="activoModalTitle">Añadir Activo</h2>
+    <p class="modal-sub">Introduce los datos del activo que tienes en cartera</p>
+    <input type="hidden" id="activoModalCarteraId">
+    <input type="hidden" id="activoModalId">
+    <div class="cart-input-grid">
+      <div class="cart-field">
+        <label>Ticker / Símbolo</label>
+        <input class="cart-input" id="activoTicker" type="text" placeholder="AAPL, MSFT, BTC…" autocomplete="off">
+      </div>
+      <div class="cart-field">
+        <label>Nombre del activo</label>
+        <input class="cart-input" id="activoNombre" type="text" placeholder="Apple Inc., Bitcoin…" autocomplete="off">
+      </div>
+    </div>
+    <div class="cart-input-grid">
+      <div class="cart-field">
+        <label>Tipo de activo</label>
+        <select class="cart-input" id="activoTipo">
+          <option value="accion">Acción</option>
+          <option value="etf">ETF</option>
+          <option value="fondo">Fondo</option>
+          <option value="crypto">Crypto</option>
+          <option value="bono">Bono</option>
+          <option value="otro">Otro</option>
+        </select>
+      </div>
+      <div class="cart-field">
+        <label>Divisa</label>
+        <select class="cart-input" id="activoDivisa">
+          <option value="EUR">EUR €</option>
+          <option value="USD">USD $</option>
+          <option value="GBP">GBP £</option>
+        </select>
+      </div>
+    </div>
+    <div class="cart-input-grid">
+      <div class="cart-field">
+        <label>Cantidad (nº unidades)</label>
+        <input class="cart-input" id="activoCantidad" type="number" placeholder="10, 0.5…" min="0" step="any">
+      </div>
+      <div class="cart-field">
+        <label>Fecha de compra</label>
+        <input class="cart-input" id="activoFecha" type="date">
+      </div>
+    </div>
+    <div class="cart-input-grid">
+      <div class="cart-field">
+        <label>Precio medio de compra</label>
+        <input class="cart-input" id="activoPrecioCompra" type="number" placeholder="150.00" min="0" step="any">
+      </div>
+      <div class="cart-field">
+        <label>Precio actual de mercado</label>
+        <input class="cart-input" id="activoPrecioActual" type="number" placeholder="185.00" min="0" step="any">
+      </div>
+    </div>
+    <div class="cart-modal-msg" id="activoModalMsg"></div>
+    <div class="cart-modal-footer">
+      <button class="cart-modal-cancel" onclick="closeActivoModal()">Cancelar</button>
+      <button class="cart-modal-save" onclick="saveActivo()">Guardar activo</button>
+    </div>
+  </div>
+</div>
+
 <!-- LOGIN MODAL -->
 <div class="modal-overlay" id="modalLogin">
   <div class="modal">
@@ -1196,7 +1391,10 @@ let _marketData = [];
 let _favorites = new Set(JSON.parse(localStorage.getItem('AV_FAVORITES') || '[]'));
 let _editingMarkets = false;   // true cuando el selector de mercados está abierto
 let _pendingFavs   = new Set(); // selección temporal durante la edición
-let _invTab        = 'mercados'; // 'mercados' | 'analisis'
+let _invTab        = 'mercados'; // 'mercados' | 'analisis' | 'carteras'
+let _carteras      = [];         // carteras del inversor cargadas desde MongoDB
+let _carterasLoaded = false;     // flag: ya se cargó al menos una vez
+let _cartModalColor = '#2563EB'; // color seleccionado en el modal de cartera
 let _newsData      = [];         // artículos del feed de noticias cargados
 let _newsFilter    = 'todos';    // categoría activa: todos|oportunidad|riesgo|tendencia
 let _currentSymbol = '^GSPC';
@@ -1330,10 +1528,12 @@ function logout() {
   localStorage.removeItem('AV_SESSION');
   _favorites = new Set();
   localStorage.removeItem('AV_FAVORITES');
-  // Reset análisis tab state
-  _invTab     = 'mercados';
-  _newsData   = [];
-  _newsFilter = 'todos';
+  // Reset tab state
+  _invTab          = 'mercados';
+  _newsData        = [];
+  _newsFilter      = 'todos';
+  _carteras        = [];
+  _carterasLoaded  = false;
   if (_marketData.length) { renderMainSection(_marketData); updateTicker(_marketData); }
   document.getElementById('userBadge').style.display = 'none';
   document.getElementById('btnLogin').style.display = 'block';
@@ -1747,13 +1947,15 @@ function switchInvTab(tab) {
   // Actualiza botones de pestaña
   document.getElementById('invTabMercados').classList.toggle('active', tab === 'mercados');
   document.getElementById('invTabAnalisis').classList.toggle('active', tab === 'analisis');
+  document.getElementById('invTabCarteras').classList.toggle('active', tab === 'carteras');
   // Muestra/oculta contenido
   document.getElementById('invMercadosContent').style.display = tab === 'mercados' ? 'block' : 'none';
   document.getElementById('invAnalisisPanel').style.display   = tab === 'analisis'  ? 'block' : 'none';
-  // Carga noticias si es la primera vez que se abre la pestaña
-  if (tab === 'analisis' && _newsData.length === 0) {
-    loadInvestorNews();
-  }
+  document.getElementById('invCarterasPanel').style.display   = tab === 'carteras'  ? 'block' : 'none';
+  // Carga noticias la primera vez que se abre la pestaña
+  if (tab === 'analisis' && _newsData.length === 0) loadInvestorNews();
+  // Carga carteras la primera vez que se abre la pestaña
+  if (tab === 'carteras' && !_carterasLoaded) loadCarteras();
 }
 
 async function loadInvestorNews() {
@@ -2757,6 +2959,493 @@ function toast(msg, type = 'ok') {
   document.body.appendChild(t);
   setTimeout(() => t.remove(), 3500);
 }
+
+// ================================================================
+// MIS CARTERAS
+// ================================================================
+const CARTERA_COLORS = ['#2563EB','#10B981','#8B5CF6','#F59E0B','#EF4444','#EC4899','#06B6D4','#84CC16'];
+const TIPO_COLORS   = { accion:'#2563EB', etf:'#10B981', fondo:'#8B5CF6', crypto:'#F59E0B', bono:'#94a3b8', otro:'#64748b' };
+const TIPO_LABELS   = { accion:'Acción', etf:'ETF', fondo:'Fondo', crypto:'Crypto', bono:'Bono', otro:'Otro' };
+const DIVISA_SYM    = { EUR:'€', USD:'$', GBP:'£' };
+
+function _calcCartera(activos) {
+  let invertido = 0, actual = 0;
+  (activos || []).forEach(a => {
+    const q = parseFloat(a.cantidad) || 0;
+    invertido += q * (parseFloat(a.precioCompra) || 0);
+    actual    += q * (parseFloat(a.precioActual) || 0);
+  });
+  const ganancia = actual - invertido;
+  const pct = invertido > 0 ? (ganancia / invertido * 100) : 0;
+  return { invertido, actual, ganancia, pct };
+}
+
+async function loadCarteras() {
+  if (!_session) return;
+  const panel = document.getElementById('invCarterasPanel');
+  if (panel) panel.innerHTML = '<div class="cart-loading"><div class="cart-spinner"></div><p>Cargando carteras…</p></div>';
+  try {
+    const res = await fetch(`${API_BASE}/carteras?username=${encodeURIComponent(_session.username)}`, {
+      headers: { 'x-api-key': apiKey() }
+    });
+    if (!res.ok) throw new Error('Error ' + res.status);
+    const data = await res.json();
+    _carteras = data.carteras || [];
+  } catch (e) {
+    _carteras = [];
+  }
+  _carterasLoaded = true;
+  renderCarteras();
+}
+
+function renderCarteras() {
+  const panel = document.getElementById('invCarterasPanel');
+  if (!panel) return;
+
+  if (!_carterasLoaded) {
+    panel.innerHTML = '<div class="cart-loading"><div class="cart-spinner"></div><p>Cargando carteras…</p></div>';
+    return;
+  }
+
+  if (_carteras.length === 0) {
+    panel.innerHTML = `
+      <div class="cart-empty">
+        <div class="cart-empty-icon">💼</div>
+        <div class="cart-empty-title">Aún no tienes carteras</div>
+        <div class="cart-empty-sub">Crea tu primera cartera y añade los activos que tienes contratados<br>para seguir su evolución de un vistazo</div>
+        <button class="cart-new-btn" onclick="openCarteraModal()">+ Crear mi primera cartera</button>
+      </div>`;
+    return;
+  }
+
+  // Totales globales
+  let totalInvertido = 0, totalActual = 0, totalActivos = 0;
+  _carteras.forEach(c => {
+    const calc = _calcCartera(c.activos);
+    totalInvertido += calc.invertido;
+    totalActual    += calc.actual;
+    totalActivos   += (c.activos || []).length;
+  });
+  const totalGanancia = totalActual - totalInvertido;
+  const totalPct = totalInvertido > 0 ? (totalGanancia / totalInvertido * 100) : 0;
+  const pctCls = totalPct > 0 ? 'up' : totalPct < 0 ? 'down' : 'flat';
+
+  // Mejor cartera
+  let bestCartera = null, bestPct = -Infinity;
+  _carteras.forEach(c => { const p = _calcCartera(c.activos).pct; if (p > bestPct) { bestPct = p; bestCartera = c; } });
+
+  // Datos donut (por tipo de activo, valor actual)
+  const tipoMap = {};
+  _carteras.forEach(c => {
+    (c.activos || []).forEach(a => {
+      const v = (parseFloat(a.cantidad) || 0) * (parseFloat(a.precioActual) || 0);
+      tipoMap[a.tipo] = (tipoMap[a.tipo] || 0) + v;
+    });
+  });
+  const donutTotal = Object.values(tipoMap).reduce((s, v) => s + v, 0);
+  const donutSegs  = Object.entries(tipoMap)
+    .map(([tipo, val]) => ({ label: TIPO_LABELS[tipo] || tipo, value: val, color: TIPO_COLORS[tipo] || '#64748b', pct: donutTotal > 0 ? val / donutTotal * 100 : 0 }))
+    .sort((a, b) => b.value - a.value);
+
+  // Máximo abs de rentabilidad para escalar barras
+  const maxAbsPct = Math.max(..._carteras.map(c => Math.abs(_calcCartera(c.activos).pct)), 1);
+
+  const fmtEur = n => '€' + (n || 0).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const fmtPct = (p, s) => (s || '') + Math.abs(p).toFixed(2) + '%';
+
+  panel.innerHTML = `
+    <!-- ── KPIs ── -->
+    <div class="cart-kpi-row">
+      <div class="cart-kpi-card">
+        <div class="cart-kpi-icon">💰</div>
+        <div class="cart-kpi-label">Total Invertido</div>
+        <div class="cart-kpi-value">${fmtEur(totalInvertido)}</div>
+        <div class="cart-kpi-sub">${_carteras.length} cartera${_carteras.length !== 1 ? 's' : ''}</div>
+      </div>
+      <div class="cart-kpi-card">
+        <div class="cart-kpi-icon">📈</div>
+        <div class="cart-kpi-label">Valor Actual</div>
+        <div class="cart-kpi-value">${fmtEur(totalActual)}</div>
+        <div class="cart-kpi-sub">${totalActivos} activo${totalActivos !== 1 ? 's' : ''} en cartera</div>
+      </div>
+      <div class="cart-kpi-card">
+        <div class="cart-kpi-icon">${totalPct >= 0 ? '🟢' : '🔴'}</div>
+        <div class="cart-kpi-label">Rentabilidad Global</div>
+        <div class="cart-kpi-value cart-kpi-${pctCls}">${totalPct >= 0 ? '+' : ''}${totalPct.toFixed(2)}%</div>
+        <div class="cart-kpi-sub">${totalGanancia >= 0 ? '+' : ''}${fmtEur(totalGanancia)}</div>
+      </div>
+      <div class="cart-kpi-card">
+        <div class="cart-kpi-icon">🏆</div>
+        <div class="cart-kpi-label">Mejor Cartera</div>
+        <div class="cart-kpi-value" style="font-size:.95rem;line-height:1.2">${bestCartera ? bestCartera.nombre : '—'}</div>
+        <div class="cart-kpi-sub">${bestCartera ? (bestPct >= 0 ? '+' : '') + bestPct.toFixed(2) + '%' : '—'}</div>
+      </div>
+    </div>
+
+    <!-- ── Gráficos ── -->
+    <div class="cart-charts-row">
+      <div class="cart-chart-box">
+        <div class="cart-chart-title">Distribución por tipo de activo</div>
+        ${donutSegs.length > 0 ? `
+          <div class="cart-donut-wrap">
+            <canvas id="cartDonutCanvas" width="130" height="130"></canvas>
+            <div class="cart-donut-legend">
+              ${donutSegs.map(s => `
+                <div class="cart-legend-item">
+                  <span class="cart-legend-dot" style="background:${s.color}"></span>
+                  <span>${s.label}</span>
+                  <span class="cart-legend-pct">${s.pct.toFixed(1)}%</span>
+                </div>`).join('')}
+            </div>
+          </div>` : '<div class="cart-empty-chart">Añade activos para ver la distribución</div>'}
+      </div>
+      <div class="cart-chart-box">
+        <div class="cart-chart-title">Rentabilidad por cartera</div>
+        <div class="cart-perf-list">
+          ${_carteras.map(c => {
+            const calc = _calcCartera(c.activos);
+            const cls  = calc.pct > 0 ? 'up' : calc.pct < 0 ? 'down' : 'flat';
+            const sign = calc.pct > 0 ? '+' : '';
+            const barW = Math.min(Math.abs(calc.pct) / maxAbsPct * 100, 100);
+            return `
+              <div class="cart-perf-item">
+                <div class="cart-perf-top">
+                  <div class="cart-perf-name">
+                    <span class="cart-color-badge" style="background:${c.color}"></span>
+                    ${c.nombre}
+                  </div>
+                  <span class="cart-perf-pct ${cls}">${sign}${calc.pct.toFixed(2)}%</span>
+                </div>
+                <div class="cart-perf-bar-track">
+                  <div class="cart-perf-bar-fill" style="width:${barW}%;background:${calc.pct >= 0 ? 'var(--green)' : 'var(--red)'}"></div>
+                </div>
+              </div>`;
+          }).join('')}
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Lista de carteras ── -->
+    <div class="cart-list">
+      ${_carteras.map(c => _renderCarteraCard(c)).join('')}
+    </div>
+
+    <!-- FAB -->
+    <div class="cart-fab">
+      <button class="cart-new-btn" onclick="openCarteraModal()">+ Nueva Cartera</button>
+    </div>`;
+
+  // Dibuja donut tras render
+  if (donutSegs.length > 0) {
+    setTimeout(() => {
+      const cv = document.getElementById('cartDonutCanvas');
+      if (cv) _drawDonut(cv, donutSegs);
+    }, 30);
+  }
+}
+
+function _renderCarteraCard(c) {
+  const activos = c.activos || [];
+  const calc = _calcCartera(activos);
+  const cls  = calc.pct > 0 ? 'up' : calc.pct < 0 ? 'down' : 'flat';
+  const sign = calc.pct > 0 ? '+' : '';
+  const sym  = DIVISA_SYM;
+
+  const rows = activos.map(a => {
+    const q  = parseFloat(a.cantidad) || 0;
+    const pc = parseFloat(a.precioCompra) || 0;
+    const pa = parseFloat(a.precioActual) || 0;
+    const s  = sym[a.divisa] || '';
+    const val = q * pa;
+    const inv = q * pc;
+    const pl  = inv > 0 ? (val - inv) / inv * 100 : 0;
+    const plCls = pl > 0 ? 'up' : pl < 0 ? 'down' : 'flat';
+    const fmt2 = n => s + n.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    return `<tr>
+      <td>${a.ticker || '—'}</td>
+      <td>${a.nombre || '—'}</td>
+      <td><span class="cart-tipo-badge">${TIPO_LABELS[a.tipo] || a.tipo}</span></td>
+      <td>${q.toLocaleString('es-ES')}</td>
+      <td>${fmt2(pc)}</td>
+      <td>${fmt2(pa)}</td>
+      <td>${fmt2(val)}</td>
+      <td><span class="cart-activo-pl ${plCls}">${pl > 0 ? '+' : ''}${pl.toFixed(2)}%</span></td>
+      <td>
+        <button class="cart-card-btn" onclick="openActivoModal('${c.id}','${a.id}')" title="Editar">✏️</button>
+        <button class="cart-card-btn del" onclick="deleteActivo('${c.id}','${a.id}')" title="Eliminar">✕</button>
+      </td>
+    </tr>`;
+  }).join('');
+
+  return `
+    <div class="cart-card" id="cartCard_${c.id}">
+      <div class="cart-card-header" onclick="toggleCarteraExpand('${c.id}')">
+        <span class="cart-card-dot" style="background:${c.color}"></span>
+        <span class="cart-card-name">${c.nombre}</span>
+        <span class="cart-card-meta">${activos.length} activo${activos.length !== 1 ? 's' : ''}</span>
+        <span class="cart-card-pct ${cls}">${sign}${calc.pct.toFixed(2)}%</span>
+        <span class="cart-card-val">€${calc.actual.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+        <div class="cart-card-actions" onclick="event.stopPropagation()">
+          <button class="cart-card-btn" onclick="openCarteraModal('${c.id}')" title="Editar cartera">✏️</button>
+          <button class="cart-card-btn del" onclick="deleteCartera('${c.id}')" title="Eliminar cartera">🗑️</button>
+        </div>
+        <span class="cart-card-chevron" id="cartChevron_${c.id}">▼</span>
+      </div>
+      <div class="cart-card-body" id="cartBody_${c.id}">
+        ${activos.length > 0 ? `
+          <div style="overflow-x:auto">
+            <table class="cart-activos-table">
+              <thead><tr>
+                <th>Ticker</th><th>Nombre</th><th>Tipo</th><th>Cantidad</th>
+                <th>Precio compra</th><th>Precio actual</th><th>Valor</th><th>P&amp;L</th><th></th>
+              </tr></thead>
+              <tbody>${rows}</tbody>
+            </table>
+          </div>` : `<p style="color:var(--text3);font-size:.83rem;margin:12px 0">Sin activos aún. Añade el primero.</p>`}
+        <button class="cart-add-activo-btn" onclick="openActivoModal('${c.id}')">+ Añadir activo</button>
+      </div>
+    </div>`;
+}
+
+function toggleCarteraExpand(id) {
+  const body    = document.getElementById('cartBody_' + id);
+  const chevron = document.getElementById('cartChevron_' + id);
+  if (!body) return;
+  const open = body.classList.toggle('open');
+  if (chevron) chevron.style.transform = open ? 'rotate(180deg)' : '';
+}
+
+function _drawDonut(canvas, segs) {
+  const ctx = canvas.getContext('2d');
+  const w = canvas.width, h = canvas.height;
+  ctx.clearRect(0, 0, w, h);
+  const cx = w / 2, cy = h / 2, r = Math.min(w, h) / 2 - 3;
+  const total = segs.reduce((s, g) => s + g.value, 0);
+  if (total === 0) return;
+  let angle = -Math.PI / 2;
+  segs.forEach(seg => {
+    const sweep = (seg.value / total) * 2 * Math.PI;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.arc(cx, cy, r, angle, angle + sweep);
+    ctx.closePath();
+    ctx.fillStyle = seg.color;
+    ctx.fill();
+    angle += sweep;
+  });
+  // Hole
+  ctx.beginPath();
+  ctx.arc(cx, cy, r * 0.56, 0, 2 * Math.PI);
+  ctx.fillStyle = '#1a1f35'; // --card
+  ctx.fill();
+}
+
+// ── Modal Cartera ────────────────────────────────────────────────
+function openCarteraModal(carteraId) {
+  const titleEl  = document.getElementById('cartModalTitle');
+  const idEl     = document.getElementById('cartModalId');
+  const nombreEl = document.getElementById('cartModalNombre');
+  document.getElementById('cartModalMsg').textContent = '';
+
+  if (carteraId) {
+    const c = _carteras.find(x => x.id === carteraId);
+    if (!c) return;
+    titleEl.textContent  = 'Editar Cartera';
+    idEl.value           = c.id;
+    nombreEl.value        = c.nombre;
+    _cartModalColor       = c.color || CARTERA_COLORS[0];
+  } else {
+    titleEl.textContent  = 'Nueva Cartera';
+    idEl.value           = '';
+    nombreEl.value        = '';
+    _cartModalColor       = CARTERA_COLORS[_carteras.length % CARTERA_COLORS.length];
+  }
+  _renderColorPicker();
+  document.getElementById('modalCartera').classList.add('show');
+  nombreEl.focus();
+}
+
+function closeCarteraModal() {
+  document.getElementById('modalCartera').classList.remove('show');
+}
+
+function _renderColorPicker() {
+  document.getElementById('cartColorPicker').innerHTML = CARTERA_COLORS.map(c =>
+    `<div class="cart-color-swatch${c === _cartModalColor ? ' selected' : ''}" style="background:${c}" onclick="selectCarteraColor('${c}')"></div>`
+  ).join('');
+}
+
+function selectCarteraColor(color) {
+  _cartModalColor = color;
+  _renderColorPicker();
+}
+
+async function saveCartera() {
+  const id     = document.getElementById('cartModalId').value;
+  const nombre = document.getElementById('cartModalNombre').value.trim();
+  const msgEl  = document.getElementById('cartModalMsg');
+  if (!nombre) { msgEl.textContent = '⚠️ Introduce un nombre para la cartera'; return; }
+
+  const existing = id ? _carteras.find(c => c.id === id) : null;
+  const cartera  = { id: id || undefined, nombre, color: _cartModalColor, activos: existing?.activos || [] };
+
+  msgEl.textContent = 'Guardando…';
+  try {
+    const res = await fetch(`${API_BASE}/carteras`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey() },
+      body: JSON.stringify({ username: _session.username, cartera }),
+    });
+    if (!res.ok) throw new Error('Error ' + res.status);
+    const data = await res.json();
+    const idx = _carteras.findIndex(c => c.id === data.cartera.id);
+    if (idx >= 0) _carteras[idx] = data.cartera;
+    else          _carteras.push(data.cartera);
+    closeCarteraModal();
+    renderCarteras();
+    toast('Cartera guardada', 'ok');
+  } catch (e) {
+    msgEl.textContent = '❌ Error al guardar. Inténtalo de nuevo.';
+  }
+}
+
+async function deleteCartera(id) {
+  if (!confirm('¿Eliminar esta cartera y todos sus activos?')) return;
+  try {
+    const res = await fetch(
+      `${API_BASE}/carteras?username=${encodeURIComponent(_session.username)}&carteraId=${id}`,
+      { method: 'DELETE', headers: { 'x-api-key': apiKey() } }
+    );
+    if (!res.ok) throw new Error('Error ' + res.status);
+    _carteras = _carteras.filter(c => c.id !== id);
+    renderCarteras();
+    toast('Cartera eliminada', 'ok');
+  } catch (e) {
+    toast('Error al eliminar', 'err');
+  }
+}
+
+// ── Modal Activo ─────────────────────────────────────────────────
+function openActivoModal(carteraId, activoId) {
+  document.getElementById('activoModalCarteraId').value = carteraId;
+  document.getElementById('activoModalMsg').textContent = '';
+
+  if (activoId) {
+    const cartera = _carteras.find(c => c.id === carteraId);
+    const activo  = cartera?.activos?.find(a => a.id === activoId);
+    if (!activo) return;
+    document.getElementById('activoModalTitle').textContent   = 'Editar Activo';
+    document.getElementById('activoModalId').value            = activoId;
+    document.getElementById('activoTicker').value             = activo.ticker || '';
+    document.getElementById('activoNombre').value             = activo.nombre || '';
+    document.getElementById('activoTipo').value               = activo.tipo || 'accion';
+    document.getElementById('activoDivisa').value             = activo.divisa || 'EUR';
+    document.getElementById('activoCantidad').value           = activo.cantidad || '';
+    document.getElementById('activoFecha').value              = activo.fechaCompra || '';
+    document.getElementById('activoPrecioCompra').value       = activo.precioCompra || '';
+    document.getElementById('activoPrecioActual').value       = activo.precioActual || '';
+  } else {
+    document.getElementById('activoModalTitle').textContent   = 'Añadir Activo';
+    document.getElementById('activoModalId').value            = '';
+    document.getElementById('activoTicker').value             = '';
+    document.getElementById('activoNombre').value             = '';
+    document.getElementById('activoTipo').value               = 'accion';
+    document.getElementById('activoDivisa').value             = 'EUR';
+    document.getElementById('activoCantidad').value           = '';
+    document.getElementById('activoFecha').value              = '';
+    document.getElementById('activoPrecioCompra').value       = '';
+    document.getElementById('activoPrecioActual').value       = '';
+  }
+  document.getElementById('modalActivo').classList.add('show');
+  document.getElementById('activoTicker').focus();
+}
+
+function closeActivoModal() {
+  document.getElementById('modalActivo').classList.remove('show');
+}
+
+async function saveActivo() {
+  const carteraId    = document.getElementById('activoModalCarteraId').value;
+  const activoId     = document.getElementById('activoModalId').value;
+  const ticker       = document.getElementById('activoTicker').value.trim().toUpperCase();
+  const nombre       = document.getElementById('activoNombre').value.trim();
+  const tipo         = document.getElementById('activoTipo').value;
+  const divisa       = document.getElementById('activoDivisa').value;
+  const cantidad     = parseFloat(document.getElementById('activoCantidad').value);
+  const fechaCompra  = document.getElementById('activoFecha').value;
+  const precioCompra = parseFloat(document.getElementById('activoPrecioCompra').value);
+  const precioActual = parseFloat(document.getElementById('activoPrecioActual').value);
+  const msgEl        = document.getElementById('activoModalMsg');
+
+  if (!nombre)                           { msgEl.textContent = '⚠️ Introduce el nombre del activo'; return; }
+  if (isNaN(cantidad) || cantidad <= 0)  { msgEl.textContent = '⚠️ Introduce una cantidad válida'; return; }
+  if (isNaN(precioCompra) || precioCompra <= 0) { msgEl.textContent = '⚠️ Introduce el precio de compra'; return; }
+  if (isNaN(precioActual) || precioActual <= 0) { msgEl.textContent = '⚠️ Introduce el precio actual'; return; }
+
+  const cartera = _carteras.find(c => c.id === carteraId);
+  if (!cartera) return;
+
+  const activo = { id: activoId || undefined, ticker, nombre, tipo, divisa, cantidad, fechaCompra, precioCompra, precioActual };
+  const updActivos = activoId
+    ? (cartera.activos || []).map(a => a.id === activoId ? { ...a, ...activo } : a)
+    : [...(cartera.activos || []), activo];
+  const updCartera = { ...cartera, activos: updActivos };
+
+  msgEl.textContent = 'Guardando…';
+  try {
+    const res = await fetch(`${API_BASE}/carteras`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey() },
+      body: JSON.stringify({ username: _session.username, cartera: updCartera }),
+    });
+    if (!res.ok) throw new Error('Error ' + res.status);
+    const data = await res.json();
+    const idx = _carteras.findIndex(c => c.id === carteraId);
+    if (idx >= 0) _carteras[idx] = data.cartera;
+    closeActivoModal();
+    renderCarteras();
+    // Reabrir la cartera editada
+    setTimeout(() => {
+      const body = document.getElementById('cartBody_' + carteraId);
+      const chev = document.getElementById('cartChevron_' + carteraId);
+      if (body) { body.classList.add('open'); if (chev) chev.style.transform = 'rotate(180deg)'; }
+    }, 40);
+    toast('Activo guardado', 'ok');
+  } catch (e) {
+    msgEl.textContent = '❌ Error al guardar. Inténtalo de nuevo.';
+  }
+}
+
+async function deleteActivo(carteraId, activoId) {
+  if (!confirm('¿Eliminar este activo?')) return;
+  const cartera = _carteras.find(c => c.id === carteraId);
+  if (!cartera) return;
+  const updCartera = { ...cartera, activos: (cartera.activos || []).filter(a => a.id !== activoId) };
+  try {
+    const res = await fetch(`${API_BASE}/carteras`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey() },
+      body: JSON.stringify({ username: _session.username, cartera: updCartera }),
+    });
+    if (!res.ok) throw new Error();
+    const data = await res.json();
+    const idx = _carteras.findIndex(c => c.id === carteraId);
+    if (idx >= 0) _carteras[idx] = data.cartera;
+    renderCarteras();
+    setTimeout(() => {
+      const body = document.getElementById('cartBody_' + carteraId);
+      const chev = document.getElementById('cartChevron_' + carteraId);
+      if (body) { body.classList.add('open'); if (chev) chev.style.transform = 'rotate(180deg)'; }
+    }, 40);
+    toast('Activo eliminado', 'ok');
+  } catch {
+    toast('Error al eliminar', 'err');
+  }
+}
+
+// Click-fuera cierra modales de carteras
+document.getElementById('modalCartera').addEventListener('click', e => { if (e.target === e.currentTarget) closeCarteraModal(); });
+document.getElementById('modalActivo').addEventListener('click',  e => { if (e.target === e.currentTarget) closeActivoModal(); });
 
 // ================================================================
 // INIT
