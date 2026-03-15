@@ -1019,9 +1019,21 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .cart-report-btn:active{transform:scale(.98)}
 
 /* ===== COMPARADOR DE FONDOS ===== */
-.fondos-topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px}
+.fondos-topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:10px}
 .fondos-title{font-size:1.2rem;font-weight:700;color:var(--text)}
 .fondos-src-badge{font-size:.72rem;color:var(--text3);background:var(--card);border:1px solid var(--border);border-radius:6px;padding:4px 12px}
+/* Origen pills */
+.fondos-origen-bar{display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.fondos-origen-pill{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:20px;border:1.5px solid var(--border);background:var(--card);color:var(--text2);font-size:.78rem;font-weight:600;cursor:pointer;transition:.18s;font-family:var(--font)}
+.fondos-origen-pill:hover{border-color:var(--accent);color:var(--text)}
+.fondos-origen-pill.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.fondos-origen-cnt{background:rgba(0,0,0,.2);border-radius:10px;padding:1px 7px;font-size:.68rem;font-weight:700}
+.fondos-origen-pill.active .fondos-origen-cnt{background:rgba(255,255,255,.2)}
+/* Badges de domicilio */
+.fondos-flag-badge{display:inline-flex;align-items:center;gap:4px;font-size:.66rem;padding:2px 6px;border-radius:4px;font-weight:700;vertical-align:middle;margin-left:4px}
+.fondos-flag-badge.es{background:rgba(220,38,38,.15);color:#fca5a5}
+.fondos-flag-badge.lu{background:rgba(37,99,235,.15);color:#93c5fd}
+.fondos-flag-badge.ie{background:rgba(5,150,105,.15);color:#6ee7b7}
 .fondos-filter-bar{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap}
 .fondos-search{flex:1;min-width:200px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px 12px;color:var(--text);font-size:.83rem;font-family:var(--font);outline:none}
 .fondos-search::placeholder{color:var(--text3)}
@@ -1416,7 +1428,14 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <!-- Cabecera -->
       <div class="fondos-topbar">
         <div class="fondos-title">📂 Comparador de Fondos de Inversión</div>
-        <div class="fondos-src-badge">📋 Fuente: CNMV · Gestoras · Morningstar 2023-2024</div>
+        <div class="fondos-src-badge">📋 Fuente: CNMV · CSSF Luxemburgo · CBI Irlanda · Morningstar 2024</div>
+      </div>
+
+      <!-- Segmentación Nacional / Internacional -->
+      <div class="fondos-origen-bar">
+        <button class="fondos-origen-pill active" id="fondosOrigenTodos"       onclick="fondosSetOrigen('todos')">🌍 Todos <span class="fondos-origen-cnt" id="fondosOrigenCntTodos">90</span></button>
+        <button class="fondos-origen-pill"        id="fondosOrigenNacional"    onclick="fondosSetOrigen('nacional')">🇪🇸 Nacionales CNMV <span class="fondos-origen-cnt" id="fondosOrigenCntNacional">50</span></button>
+        <button class="fondos-origen-pill"        id="fondosOrigenInternacional" onclick="fondosSetOrigen('internacional')">🇪🇺 Internacionales CSSF / CBI <span class="fondos-origen-cnt" id="fondosOrigenCntInternacional">40</span></button>
       </div>
 
       <!-- Panel de comparación (oculto hasta seleccionar fondos) -->
@@ -1483,8 +1502,9 @@ tr:hover td{background:rgba(255,255,255,.02)}
           <thead>
             <tr>
               <th style="width:28px;cursor:default">+</th>
-              <th style="min-width:200px">Fondo</th>
+              <th style="min-width:210px">Fondo</th>
               <th>Gestora</th>
+              <th>Dom.</th>
               <th>Categoría</th>
               <th onclick="fondosSortBy('patM')">AUM (M€)</th>
               <th onclick="fondosSortBy('part')">Partícipes</th>
@@ -1983,6 +2003,7 @@ let _fondosLoaded  = false;      // flag: ya se renderizó el comparador de fond
 let _fondosSelected = new Set(); // IDs de fondos seleccionados para comparar (max 5)
 let _fondosSortKey  = 'patM';    // columna de orden activa
 let _fondosSortDir  = -1;        // -1 desc / 1 asc
+let _fondosOrigen   = 'todos';   // 'todos' | 'nacional' | 'internacional'
 let _fondosCatFilter = '';
 let _fondosGestoraFilter = '';
 let _fondosQ = '';
@@ -5039,6 +5060,69 @@ const FONDOS_DATA = [
   {id:49, nombre:'BBVA Gestión Alternativa FI',            isin:'ES0112714002', gestora:'BBVA AM',       cat:'Alternativo',     patM:680,   part:16000,  rYTD:1.62, r1y:3.12, r3y:2.42, r5y:1.85, vol:2.10, sharpe:1.28, com:0.90, ter:1.15, ms:3},
   // ── GARANTIZADOS ──────────────────────────────────────────────
   {id:50, nombre:'CaixaBank Garantizado Bolsa 2026 FI',    isin:'ES0137868003', gestora:'CaixaBank AM',  cat:'Garantizado',     patM:1850,  part:62000,  rYTD:1.12, r1y:2.25, r3y:1.52, r5y:1.18, vol:0.80, sharpe:1.85, com:0.50, ter:0.65, ms:3},
+
+  // ══════════════════════════════════════════════════════════════════
+  // FONDOS INTERNACIONALES — Domiciliados en Luxemburgo (LU) e Irlanda (IE)
+  // Fuente: CSSF Luxembourg · Central Bank of Ireland · Morningstar 2024
+  // ══════════════════════════════════════════════════════════════════
+
+  // ── VANGUARD (Irlanda / Luxemburgo) ───────────────────────────────
+  {id:51, nombre:'Vanguard Global Stock Index Fund EUR Acc',         isin:'LU0274208692', gestora:'Vanguard',        cat:'RV Global',       patM:48200, part:0, origen:'LU', rYTD:14.82,r1y:23.45,r3y:13.12,r5y:15.85,vol:15.20,sharpe:1.28, com:0.18, ter:0.25, ms:5},
+  {id:52, nombre:'Vanguard LifeStrategy 80% Equity UCITS ETF Acc',   isin:'IE00BMVB5Q68', gestora:'Vanguard',        cat:'Mixto Agresivo',  patM:8200,  part:0, origen:'IE', rYTD:8.52, r1y:13.85,r3y:7.42, r5y:9.18, vol:9.50, sharpe:1.18, com:0.20, ter:0.25, ms:5},
+  {id:53, nombre:'Vanguard LifeStrategy 60% Equity UCITS ETF Acc',   isin:'IE00BMVB5R75', gestora:'Vanguard',        cat:'Mixto Moderado',  patM:6400,  part:0, origen:'IE', rYTD:6.18, r1y:9.95, r3y:5.12, r5y:6.85, vol:6.80, sharpe:1.10, com:0.20, ter:0.25, ms:5},
+  {id:54, nombre:'Vanguard LifeStrategy 40% Equity UCITS ETF Acc',   isin:'IE00BMVB5S82', gestora:'Vanguard',        cat:'Mixto Defensivo', patM:4100,  part:0, origen:'IE', rYTD:4.12, r1y:6.42, r3y:3.18, r5y:4.28, vol:4.20, sharpe:1.08, com:0.20, ter:0.25, ms:4},
+  {id:55, nombre:'Vanguard Emerging Markets Stock Index Fund EUR Acc',isin:'LU0323578657', gestora:'Vanguard',        cat:'RV Emergentes',   patM:12400, part:0, origen:'LU', rYTD:8.42, r1y:12.85,r3y:4.52, r5y:5.28, vol:18.50,sharpe:0.72, com:0.22, ter:0.28, ms:4},
+  {id:56, nombre:'Vanguard FTSE All-World UCITS ETF USD Acc',        isin:'IE00B3RBWM25', gestora:'Vanguard',        cat:'RV Global',       patM:32800, part:0, origen:'IE', rYTD:14.52,r1y:22.85,r3y:12.82,r5y:15.42,vol:15.00,sharpe:1.25, com:0.22, ter:0.22, ms:5},
+
+  // ── BLACKROCK / BGF (Luxemburgo) ──────────────────────────────────
+  {id:57, nombre:'BGF World Equity Index Fund A2 EUR',               isin:'LU0072462426', gestora:'BlackRock',       cat:'RV Global',       patM:24800, part:0, origen:'LU', rYTD:14.28,r1y:22.82,r3y:12.52,r5y:15.18,vol:15.40,sharpe:1.20, com:0.50, ter:0.68, ms:5},
+  {id:58, nombre:'BGF US Growth Fund A2 EUR',                        isin:'LU0171303029', gestora:'BlackRock',       cat:'RV USA',          patM:18200, part:0, origen:'LU', rYTD:16.85,r1y:27.52,r3y:15.82,r5y:20.18,vol:19.80,sharpe:1.15, com:1.50, ter:1.75, ms:4},
+  {id:59, nombre:'BGF World Technology Fund A2 EUR',                 isin:'LU0056508442', gestora:'BlackRock',       cat:'RV Temático',     patM:32400, part:0, origen:'LU', rYTD:21.52,r1y:33.85,r3y:18.42,r5y:24.52,vol:26.80,sharpe:1.12, com:1.50, ter:1.75, ms:5},
+  {id:60, nombre:'BGF European Equity Income Fund A2 EUR',           isin:'LU0329592462', gestora:'BlackRock',       cat:'RV Europa',       patM:9800,  part:0, origen:'LU', rYTD:9.85, r1y:15.42,r3y:8.52, r5y:8.85, vol:14.20,sharpe:0.92, com:1.50, ter:1.72, ms:4},
+  {id:61, nombre:'BGF ESG Multi-Asset Fund A2 EUR',                  isin:'LU0342835158', gestora:'BlackRock',       cat:'Mixto Moderado',  patM:7200,  part:0, origen:'LU', rYTD:5.42, r1y:8.85, r3y:4.12, r5y:5.52, vol:6.80, sharpe:1.02, com:1.20, ter:1.45, ms:4},
+  {id:62, nombre:'BGF Emerging Markets Fund A2 EUR',                 isin:'LU0011850392', gestora:'BlackRock',       cat:'RV Emergentes',   patM:14200, part:0, origen:'LU', rYTD:9.12, r1y:13.52,r3y:5.18, r5y:5.82, vol:19.20,sharpe:0.78, com:1.50, ter:1.75, ms:3},
+  {id:63, nombre:'BGF Fixed Income Global Opportunities A2 EUR H',   isin:'LU0548153104', gestora:'BlackRock',       cat:'Renta Fija',      patM:11400, part:0, origen:'LU', rYTD:2.82, r1y:4.52, r3y:0.18, r5y:1.28, vol:4.20, sharpe:0.82, com:1.00, ter:1.22, ms:3},
+
+  // ── FIDELITY (Luxemburgo) ─────────────────────────────────────────
+  {id:64, nombre:'Fidelity Funds Global Technology Fund A EUR Acc',  isin:'LU0099574567', gestora:'Fidelity',        cat:'RV Temático',     patM:12800, part:0, origen:'LU', rYTD:20.52,r1y:31.85,r3y:17.18,r5y:22.82,vol:25.50,sharpe:1.08, com:1.50, ter:1.80, ms:5},
+  {id:65, nombre:'Fidelity Funds European Dynamic Growth Fund A EUR', isin:'LU0048578792', gestora:'Fidelity',        cat:'RV Europa',       patM:8400,  part:0, origen:'LU', rYTD:11.52,r1y:18.82,r3y:10.82,r5y:11.52,vol:16.80,sharpe:0.98, com:1.50, ter:1.78, ms:4},
+  {id:66, nombre:'Fidelity Funds World Fund A EUR Acc',              isin:'LU0115764456', gestora:'Fidelity',        cat:'RV Global',       patM:15200, part:0, origen:'LU', rYTD:13.85,r1y:22.42,r3y:11.85,r5y:14.52,vol:15.80,sharpe:1.10, com:1.50, ter:1.72, ms:4},
+  {id:67, nombre:'Fidelity Funds Sustainable Water & Waste A EUR',   isin:'LU0119124781', gestora:'Fidelity',        cat:'RV Temático',     patM:6800,  part:0, origen:'LU', rYTD:7.52, r1y:11.85,r3y:5.82, r5y:8.52, vol:18.20,sharpe:0.72, com:1.50, ter:1.80, ms:4},
+  {id:68, nombre:'Fidelity Funds America Fund A EUR Acc',            isin:'LU0048575426', gestora:'Fidelity',        cat:'RV USA',          patM:11400, part:0, origen:'LU', rYTD:15.52,r1y:24.82,r3y:13.52,r5y:17.82,vol:17.20,sharpe:1.12, com:1.50, ter:1.78, ms:4},
+  {id:69, nombre:'Fidelity Funds Euro Short Term Bond Fund A EUR',   isin:'LU0251130638', gestora:'Fidelity',        cat:'RF Corto Plazo',  patM:4200,  part:0, origen:'LU', rYTD:1.85, r1y:3.42, r3y:0.82, r5y:0.42, vol:0.85, sharpe:1.82, com:0.50, ter:0.65, ms:3},
+
+  // ── JP MORGAN AM (Luxemburgo) ─────────────────────────────────────
+  {id:70, nombre:'JPM Global Growth Fund A (acc) EUR',               isin:'LU0070212591', gestora:'JP Morgan AM',    cat:'RV Global',       patM:14200, part:0, origen:'LU', rYTD:14.52,r1y:23.85,r3y:13.52,r5y:16.82,vol:16.20,sharpe:1.18, com:1.50, ter:1.75, ms:4},
+  {id:71, nombre:'JPM America Equity Fund A (acc) EUR',              isin:'LU0046217351', gestora:'JP Morgan AM',    cat:'RV USA',          patM:9800,  part:0, origen:'LU', rYTD:16.12,r1y:26.52,r3y:14.82,r5y:19.52,vol:17.50,sharpe:1.12, com:1.50, ter:1.75, ms:4},
+  {id:72, nombre:'JPM Europe Dynamic Fund A (acc) EUR',              isin:'LU0107398884', gestora:'JP Morgan AM',    cat:'RV Europa',       patM:6200,  part:0, origen:'LU', rYTD:10.52,r1y:17.85,r3y:9.52, r5y:10.18,vol:15.80,sharpe:0.95, com:1.50, ter:1.78, ms:4},
+  {id:73, nombre:'JPM Emerging Markets Equity Fund A (acc) EUR',     isin:'LU0053685029', gestora:'JP Morgan AM',    cat:'RV Emergentes',   patM:8400,  part:0, origen:'LU', rYTD:8.85, r1y:13.18,r3y:5.52, r5y:6.12, vol:19.50,sharpe:0.75, com:1.50, ter:1.78, ms:3},
+  {id:74, nombre:'JPM Global Income Fund A (inc) EUR H',             isin:'LU1736569458', gestora:'JP Morgan AM',    cat:'Mixto Moderado',  patM:12800, part:0, origen:'LU', rYTD:5.82, r1y:9.18, r3y:4.52, r5y:5.82, vol:7.20, sharpe:1.05, com:1.20, ter:1.42, ms:5},
+  {id:75, nombre:'JPM Global Macro Opportunities Fund A (acc) EUR',  isin:'LU0325480237', gestora:'JP Morgan AM',    cat:'Alternativo',     patM:5200,  part:0, origen:'LU', rYTD:3.52, r1y:5.82, r3y:3.12, r5y:3.85, vol:3.80, sharpe:1.32, com:1.00, ter:1.25, ms:4},
+
+  // ── AMUNDI (Luxemburgo) ───────────────────────────────────────────
+  {id:76, nombre:'Amundi Funds European Equity Value A EUR Acc',     isin:'LU0568601045', gestora:'Amundi LU',       cat:'RV Europa',       patM:8200,  part:0, origen:'LU', rYTD:10.18,r1y:16.52,r3y:8.85, r5y:9.52, vol:14.80,sharpe:0.92, com:1.20, ter:1.45, ms:3},
+  {id:77, nombre:'Amundi Funds US Pioneer A EUR Acc',                isin:'LU0119340069', gestora:'Amundi LU',       cat:'RV USA',          patM:11400, part:0, origen:'LU', rYTD:15.85,r1y:25.52,r3y:13.85,r5y:18.52,vol:16.80,sharpe:1.18, com:1.20, ter:1.48, ms:4},
+  {id:78, nombre:'Amundi Funds Bond Global Aggregate A EUR H',       isin:'LU0989140390', gestora:'Amundi LU',       cat:'Renta Fija',      patM:7600,  part:0, origen:'LU', rYTD:1.82, r1y:3.52, r3y:-0.85,r5y:0.18, vol:4.50, sharpe:0.62, com:0.60, ter:0.78, ms:3},
+  {id:79, nombre:'Amundi Funds Multi-Asset Sustainable Future A EUR',isin:'LU1883318966', gestora:'Amundi LU',       cat:'Mixto Moderado',  patM:5800,  part:0, origen:'LU', rYTD:5.52, r1y:8.52, r3y:3.85, r5y:5.12, vol:7.50, sharpe:0.98, com:1.10, ter:1.35, ms:4},
+
+  // ── SCHRODERS (Luxemburgo) ────────────────────────────────────────
+  {id:80, nombre:'Schroder ISF European Equity A Acc EUR',           isin:'LU0106235535', gestora:'Schroders',       cat:'RV Europa',       patM:12400, part:0, origen:'LU', rYTD:11.52,r1y:18.52,r3y:9.85, r5y:10.52,vol:15.50,sharpe:0.98, com:1.50, ter:1.72, ms:4},
+  {id:81, nombre:'Schroder ISF Global Technology A Acc EUR',         isin:'LU0099615536', gestora:'Schroders',       cat:'RV Temático',     patM:9200,  part:0, origen:'LU', rYTD:19.52,r1y:30.52,r3y:16.52,r5y:21.85,vol:24.50,sharpe:1.08, com:1.50, ter:1.75, ms:4},
+  {id:82, nombre:'Schroder ISF Global Equity Alpha A Acc EUR',       isin:'LU0119344042', gestora:'Schroders',       cat:'RV Global',       patM:14800, part:0, origen:'LU', rYTD:13.52,r1y:21.85,r3y:11.52,r5y:14.18,vol:15.80,sharpe:1.08, com:1.50, ter:1.72, ms:4},
+  {id:83, nombre:'Schroder ISF EURO Bond A Acc EUR',                 isin:'LU0093757919', gestora:'Schroders',       cat:'Renta Fija',      patM:6200,  part:0, origen:'LU', rYTD:1.52, r1y:3.18, r3y:-0.92,r5y:0.08, vol:3.80, sharpe:0.68, com:0.75, ter:0.95, ms:3},
+
+  // ── PIMCO (Irlanda) ───────────────────────────────────────────────
+  {id:84, nombre:'PIMCO GIS Income Fund Admin EUR Hedged Inc',       isin:'IE00B7KFL990', gestora:'PIMCO',           cat:'Renta Fija',      patM:68400, part:0, origen:'IE', rYTD:4.52, r1y:7.82, r3y:3.18, r5y:3.85, vol:5.50, sharpe:1.28, com:0.85, ter:1.05, ms:5},
+  {id:85, nombre:'PIMCO GIS Total Return Bond Admin EUR Hedged Inc', isin:'IE0003308726', gestora:'PIMCO',           cat:'Renta Fija',      patM:24800, part:0, origen:'IE', rYTD:3.12, r1y:5.82, r3y:1.52, r5y:2.12, vol:4.80, sharpe:1.02, com:0.85, ter:1.05, ms:4},
+  {id:86, nombre:'PIMCO GIS Dynamic Bond Admin EUR Hedged Inc',      isin:'IE00B11XZ010', gestora:'PIMCO',           cat:'Renta Fija',      patM:12200, part:0, origen:'IE', rYTD:3.52, r1y:6.52, r3y:1.82, r5y:2.52, vol:5.20, sharpe:1.08, com:0.90, ter:1.12, ms:4},
+
+  // ── T. ROWE PRICE (Luxemburgo) ────────────────────────────────────
+  {id:87, nombre:'T. Rowe Price Global Growth Equity Fund A EUR',    isin:'LU0174119429', gestora:'T. Rowe Price',   cat:'RV Global',       patM:11800, part:0, origen:'LU', rYTD:14.85,r1y:24.52,r3y:13.85,r5y:17.52,vol:17.20,sharpe:1.18, com:1.50, ter:1.72, ms:5},
+  {id:88, nombre:'T. Rowe Price US Blue Chip Equity Fund A EUR',     isin:'LU1244139231', gestora:'T. Rowe Price',   cat:'RV USA',          patM:8200,  part:0, origen:'LU', rYTD:17.52,r1y:28.52,r3y:16.52,r5y:21.52,vol:18.80,sharpe:1.20, com:1.50, ter:1.75, ms:5},
+
+  // ── MORGAN STANLEY (Luxemburgo) ───────────────────────────────────
+  {id:89, nombre:'MS INVF Global Opportunity Fund A EUR',            isin:'LU0552385295', gestora:'Morgan Stanley',  cat:'RV Global',       patM:14200, part:0, origen:'LU', rYTD:12.52,r1y:19.85,r3y:8.52, r5y:14.52,vol:20.50,sharpe:0.88, com:1.50, ter:1.75, ms:4},
+  {id:90, nombre:'MS INVF US Growth Fund A EUR',                     isin:'LU0225737302', gestora:'Morgan Stanley',  cat:'RV USA',          patM:9800,  part:0, origen:'LU', rYTD:18.52,r1y:29.85,r3y:14.52,r5y:22.52,vol:24.80,sharpe:1.02, com:1.50, ter:1.75, ms:4},
 ];
 
 const FONDOS_COMPARE_COLORS = ['#2563EB','#10B981','#F59E0B','#EF4444','#8B5CF6'];
@@ -5060,13 +5144,44 @@ const CAT_TEXT = {
 
 function renderFondosPanel() {
   _fondosLoaded = true;
-  // Poblar select gestoras
-  const gestoras = [...new Set(FONDOS_DATA.map(f => f.gestora))].sort();
+  _fondosRefreshGestorasSel();
+  _fondosUpdateOrigenCounts();
+  _renderFondosTable();
+}
+
+function _fondosRefreshGestorasSel() {
+  const base = _fondosOrigen === 'todos' ? FONDOS_DATA :
+               _fondosOrigen === 'nacional' ? FONDOS_DATA.filter(f => !f.origen || f.origen === 'ES') :
+               FONDOS_DATA.filter(f => f.origen && f.origen !== 'ES');
+  const gestoras = [...new Set(base.map(f => f.gestora))].sort();
   const gSel = document.getElementById('fondosGestoraSel');
   if (gSel) {
+    const cur = gSel.value;
     gSel.innerHTML = '<option value="">Todas las gestoras</option>' +
-      gestoras.map(g => `<option value="${g}">${g}</option>`).join('');
+      gestoras.map(g => `<option value="${g}" ${g===cur?'selected':''}>${g}</option>`).join('');
   }
+}
+
+function _fondosUpdateOrigenCounts() {
+  const total = FONDOS_DATA.length;
+  const nac   = FONDOS_DATA.filter(f => !f.origen || f.origen === 'ES').length;
+  const intl  = FONDOS_DATA.filter(f => f.origen && f.origen !== 'ES').length;
+  const t = document.getElementById('fondosOrigenCntTodos');        if (t) t.textContent = total;
+  const n = document.getElementById('fondosOrigenCntNacional');     if (n) n.textContent = nac;
+  const i = document.getElementById('fondosOrigenCntInternacional');if (i) i.textContent = intl;
+}
+
+function fondosSetOrigen(v) {
+  _fondosOrigen = v;
+  ['Todos','Nacional','Internacional'].forEach(x => {
+    const el = document.getElementById(`fondosOrigen${x}`);
+    if (el) el.classList.toggle('active', v === x.toLowerCase() || (v==='todos' && x==='Todos'));
+  });
+  // Resetear filtro de gestora al cambiar origen
+  const gSel = document.getElementById('fondosGestoraSel');
+  if (gSel) gSel.value = '';
+  _fondosGestoraFilter = '';
+  _fondosRefreshGestorasSel();
   _renderFondosTable();
 }
 
@@ -5076,7 +5191,11 @@ function _getFilteredFondos() {
     const matchQ = !q || f.nombre.toLowerCase().includes(q) || f.gestora.toLowerCase().includes(q) || f.isin.toLowerCase().includes(q);
     const matchC = !_fondosCatFilter    || f.cat === _fondosCatFilter;
     const matchG = !_fondosGestoraFilter || f.gestora === _fondosGestoraFilter;
-    return matchQ && matchC && matchG;
+    const isNac  = !f.origen || f.origen === 'ES';
+    const matchO = _fondosOrigen === 'todos' ||
+                   (_fondosOrigen === 'nacional' && isNac) ||
+                   (_fondosOrigen === 'internacional' && !isNac);
+    return matchQ && matchC && matchG && matchO;
   });
   data.sort((a, b) => {
     const av = a[_fondosSortKey] ?? 0;
@@ -5090,7 +5209,6 @@ function _renderFondosTable() {
   const data  = _getFilteredFondos();
   const tbody = document.getElementById('fondosTableBody');
   const cnt   = document.getElementById('fondosCount');
-  if (cnt) cnt.textContent = `${data.length} de ${FONDOS_DATA.length} fondos`;
 
   const fmtRet = v => {
     const cls = v > 0 ? 'fondos-ret-pos' : v < 0 ? 'fondos-ret-neg' : '';
@@ -5101,10 +5219,17 @@ function _renderFondosTable() {
   const fmtPart = v => v >= 1000 ? (v / 1000).toFixed(0) + 'K' : v;
 
   if (!tbody) return;
+  const DOMICILIO = {
+    'ES':{ flag:'🇪🇸', label:'ES', cls:'es', full:'España (CNMV)' },
+    'LU':{ flag:'🇱🇺', label:'LU', cls:'lu', full:'Luxemburgo (CSSF)' },
+    'IE':{ flag:'🇮🇪', label:'IE', cls:'ie', full:'Irlanda (CBI)' },
+  };
   tbody.innerHTML = data.map(f => {
     const bg  = CAT_COLORS[f.cat] || '#1e293b';
     const txt = CAT_TEXT[f.cat]   || '#94a3b8';
     const sel = _fondosSelected.has(f.id);
+    const dom = DOMICILIO[f.origen || 'ES'];
+    const partStr = f.part > 0 ? fmtPart(f.part) : '<span style="color:var(--text3)">—</span>';
     return `<tr>
       <td>
         <button class="fondos-sel-btn ${sel ? 'selected' : ''}" onclick="fondosToggleSelect(${f.id})" title="${sel ? 'Quitar de comparación' : 'Añadir a comparación'}">
@@ -5113,9 +5238,10 @@ function _renderFondosTable() {
       </td>
       <td title="${f.nombre} · ISIN: ${f.isin}">${f.nombre}</td>
       <td>${f.gestora}</td>
+      <td title="${dom.full}"><span class="fondos-flag-badge ${dom.cls}">${dom.flag} ${dom.label}</span></td>
       <td><span class="fondos-cat-badge" style="background:${bg};color:${txt}">${f.cat}</span></td>
       <td><strong style="color:var(--text)">${fmtPat(f.patM)}</strong></td>
-      <td>${fmtPart(f.part)}</td>
+      <td>${partStr}</td>
       <td>${fmtRet(f.rYTD)}</td>
       <td>${fmtRet(f.r1y)}</td>
       <td>${fmtRet(f.r3y)}</td>
@@ -5126,6 +5252,7 @@ function _renderFondosTable() {
       <td><span class="fondos-stars">${fmtStar(f.ms)}</span></td>
     </tr>`;
   }).join('');
+  if (cnt) cnt.textContent = `${data.length} de ${FONDOS_DATA.length} fondos`;
 }
 
 function fondosToggleSelect(id) {
