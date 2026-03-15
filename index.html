@@ -1072,6 +1072,55 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .calc-recalc-btn{width:100%;padding:11px;background:var(--accent);color:#fff;border:none;border-radius:9px;font-size:.9rem;font-weight:700;cursor:pointer;transition:.2s;font-family:var(--font);letter-spacing:.02em;margin-top:4px}
 .calc-recalc-btn:hover{background:var(--accent2);box-shadow:0 4px 14px rgba(37,99,235,.35)}
 .calc-recalc-btn:active{transform:scale(.98)}
+.calc-plan-btn{
+  width:100%;padding:11px;margin-top:10px;
+  background:linear-gradient(135deg,#7c3aed 0%,#2563EB 100%);
+  color:#fff;border:none;border-radius:9px;font-size:.88rem;font-weight:700;
+  cursor:pointer;transition:.2s;font-family:var(--font);letter-spacing:.02em;
+  box-shadow:0 4px 16px rgba(124,58,237,.3);display:flex;align-items:center;
+  justify-content:center;gap:7px;
+}
+.calc-plan-btn:hover{filter:brightness(1.12);transform:translateY(-1px);box-shadow:0 6px 20px rgba(124,58,237,.4)}
+.calc-plan-btn:active{transform:scale(.98)}
+/* PLAN PERSONALIZADO MODAL */
+#modalPlanPersonalizado .modal{max-width:560px;padding:30px}
+.plan-modal-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:linear-gradient(135deg,rgba(124,58,237,.15),rgba(37,99,235,.15));
+  border:1px solid rgba(124,58,237,.3);border-radius:20px;
+  padding:4px 12px;font-size:.72rem;font-weight:700;color:#a78bfa;
+  margin-bottom:14px;letter-spacing:.03em;
+}
+.plan-calc-summary{
+  background:var(--bg2);border:1px solid var(--border);border-radius:10px;
+  padding:12px 16px;margin:14px 0 20px;display:flex;gap:0;flex-direction:column;
+}
+.plan-sum-row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:5px 0;font-size:.82rem;border-bottom:1px solid rgba(255,255,255,.04);
+}
+.plan-sum-row:last-child{border-bottom:none}
+.plan-sum-label{color:var(--text3)}
+.plan-sum-val{font-weight:700;font-family:monospace;color:var(--text);font-size:.85rem}
+.plan-sum-val.purple{color:#a78bfa}
+.plan-field-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.plan-form-group{margin-bottom:14px}
+.plan-form-group label{display:block;font-size:.78rem;font-weight:500;color:var(--text2);margin-bottom:5px}
+.plan-textarea{width:100%;padding:10px 14px;background:var(--bg2);border:1px solid var(--border);
+  border-radius:8px;color:var(--text);font-size:.82rem;font-family:var(--font);
+  transition:.15s;resize:vertical;min-height:130px;box-sizing:border-box;line-height:1.5}
+.plan-textarea:focus{outline:none;border-color:var(--accent)}
+.plan-send-btn{
+  width:100%;padding:12px;margin-top:4px;
+  background:linear-gradient(135deg,#7c3aed,#2563EB);
+  color:#fff;border:none;border-radius:9px;font-size:.92rem;font-weight:700;
+  cursor:pointer;transition:.2s;font-family:var(--font);letter-spacing:.02em;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.plan-send-btn:hover{filter:brightness(1.1);box-shadow:0 4px 16px rgba(124,58,237,.4)}
+.plan-mailto-note{
+  text-align:center;font-size:.72rem;color:var(--text3);margin-top:10px;line-height:1.5;
+}
 
 @media(max-width:900px){.calc-wrapper{grid-template-columns:1fr}.calc-inputs{position:static}}
 @media(max-width:768px){
@@ -1248,7 +1297,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
   <div class="nav-logo">
     <div class="nav-logo-dot"></div>
     Agencia de Valores Generación Z
-    <span class="nav-version">v3.0.1</span>
+    <span class="nav-version">v3.1.0</span>
   </div>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="showSection('Mercados')">Mercados</button>
@@ -1467,6 +1516,10 @@ tr:hover td{background:rgba(255,255,255,.02)}
           </div>
 
           <button class="calc-recalc-btn" onclick="calcIC()">↻ Recalcular</button>
+          <button class="calc-plan-btn" onclick="openPlanModal()">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            Quiero mi plan personalizado
+          </button>
         </div>
 
         <!-- ─ Resultados ─ -->
@@ -2133,6 +2186,58 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <div class="creds-row"><span class="creds-label">Contraseña</span><span class="creds-val" id="resetCredsPass">—</span></div>
       <button class="btn-copy-all" onclick="copyResetCredentials()">📋 Copiar credenciales</button>
     </div>
+  </div>
+</div>
+
+<!-- PLAN PERSONALIZADO MODAL -->
+<div class="modal-overlay" id="modalPlanPersonalizado" onclick="if(event.target===this)closePlanModal()">
+  <div class="modal" style="max-width:560px;padding:30px">
+    <button class="modal-close" onclick="closePlanModal()">✕</button>
+
+    <div class="plan-modal-badge">✨ Plan de Inversión</div>
+    <h2 class="modal-title" style="font-size:1.2rem;margin-bottom:6px">Quiero mi plan personalizado</h2>
+    <p class="modal-sub" style="margin-bottom:0;font-size:.82rem">Revisa los datos de tu simulación, completa el formulario y se abrirá tu gestor de correo con todo pre-rellenado listo para enviar a nuestros gestores.</p>
+
+    <!-- Resumen de la calculadora -->
+    <div class="plan-calc-summary" id="planCalcSummary"></div>
+
+    <!-- Nombre + Apellidos -->
+    <div class="plan-field-grid">
+      <div class="plan-form-group" style="margin-bottom:0">
+        <label>Nombre <span style="color:var(--red)">*</span></label>
+        <input class="form-input" id="planNombre" type="text" placeholder="Tu nombre" autocomplete="given-name">
+      </div>
+      <div class="plan-form-group" style="margin-bottom:0">
+        <label>Apellidos</label>
+        <input class="form-input" id="planApellidos" type="text" placeholder="Tus apellidos" autocomplete="family-name">
+      </div>
+    </div>
+
+    <!-- Email -->
+    <div class="plan-form-group" style="margin-top:14px">
+      <label>Email <span style="color:var(--red)">*</span></label>
+      <input class="form-input" id="planEmail" type="email" placeholder="tu@email.com" autocomplete="email">
+    </div>
+
+    <!-- Asunto -->
+    <div class="plan-form-group">
+      <label>Asunto</label>
+      <input class="form-input" id="planAsunto" type="text">
+    </div>
+
+    <!-- Mensaje -->
+    <div class="plan-form-group">
+      <label>Mensaje <span style="color:var(--red)">*</span></label>
+      <textarea class="plan-textarea" id="planMensaje" placeholder="Cuéntanos tus objetivos de inversión, horizonte temporal y perfil de riesgo..."></textarea>
+    </div>
+
+    <button class="plan-send-btn" onclick="sendPlanRequest()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      Abrir gestor de correo y enviar
+    </button>
+    <p class="plan-mailto-note">
+      🔒 No almacenamos tu solicitud. Se abrirá tu aplicación de correo (Outlook, Gmail, Apple Mail…)<br>con el mensaje pre-rellenado. Revísalo y pulsa Enviar cuando estés listo.
+    </p>
   </div>
 </div>
 
@@ -4232,6 +4337,121 @@ async function _tmLoadData() {
 
 // Cerrar modal con Escape
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeTickerChart(); });
+
+// ================================================================
+// PLAN PERSONALIZADO MODAL
+// ================================================================
+const PLAN_DEST_EMAIL = 'gestores@agenciadevalores.es';
+
+function openPlanModal() {
+  // Leer valores actuales de la calculadora
+  const capital    = parseFloat(document.getElementById('calcCapital')?.value)    || 0;
+  const aportacion = parseFloat(document.getElementById('calcAportacion')?.value) || 0;
+  const tasa       = parseFloat(document.getElementById('calcTasa')?.value)       || 7;
+  const anos       = parseInt(document.getElementById('calcAnos')?.value)         || 20;
+  const frecSel    = document.getElementById('calcFrecuencia');
+  const frecLabel  = frecSel ? frecSel.options[frecSel.selectedIndex].text : 'Mensual';
+  const frecVal    = parseInt(frecSel?.value || 12);
+
+  // Cálculo rápido del total proyectado
+  const r      = tasa / 100 / frecVal;
+  const n      = anos * frecVal;
+  const fvCap  = capital * Math.pow(1 + r, n);
+  const fvAp   = aportacion * (Math.pow(1 + r, n) - 1) / r;
+  const total  = fvCap + fvAp;
+  const fmtEur = v => v.toLocaleString('es-ES', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + ' €';
+
+  // Pre-rellenar datos del inversor desde la sesión
+  const name     = _session?.name || '';
+  const parts    = name.trim().split(/\s+/);
+  const nombre   = parts[0] || '';
+  const apellidos = parts.slice(1).join(' ') || '';
+
+  document.getElementById('planNombre').value    = nombre;
+  document.getElementById('planApellidos').value = apellidos;
+  document.getElementById('planEmail').value     = _session?.email || '';
+  document.getElementById('planAsunto').value    = 'Solicitud de Plan de Inversión Personalizado';
+
+  // Mensaje pre-rellenado con los datos de la simulación
+  document.getElementById('planMensaje').value =
+`Estimado equipo de Agencia de Valores,
+
+Me pongo en contacto para solicitar una propuesta personalizada de plan de inversión basada en mi simulación.
+
+📊 PARÁMETROS DE MI SIMULACIÓN:
+• Capital inicial disponible: ${fmtEur(capital)}
+• Aportación periódica: ${fmtEur(aportacion)} (${frecLabel})
+• Rentabilidad anual estimada: ${tasa}%
+• Horizonte temporal: ${anos} años
+• Capital proyectado al vencimiento: ${fmtEur(total)}
+
+💬 OBJETIVOS E INFORMACIÓN ADICIONAL:
+[Describe aquí tu perfil de riesgo, objetivos financieros o cualquier información relevante]
+
+Quedo a disposición para concertar una reunión o llamada.
+
+Saludos cordiales,
+${name || 'El inversor'}`;
+
+  // Resumen visual en el modal
+  document.getElementById('planCalcSummary').innerHTML = `
+    <div class="plan-sum-row">
+      <span class="plan-sum-label">💰 Capital inicial</span>
+      <span class="plan-sum-val">${fmtEur(capital)}</span>
+    </div>
+    <div class="plan-sum-row">
+      <span class="plan-sum-label">📅 Aportación</span>
+      <span class="plan-sum-val">${fmtEur(aportacion)} · ${frecLabel}</span>
+    </div>
+    <div class="plan-sum-row">
+      <span class="plan-sum-label">📈 Rentabilidad estimada</span>
+      <span class="plan-sum-val">${tasa}% · ${anos} años</span>
+    </div>
+    <div class="plan-sum-row">
+      <span class="plan-sum-label">🏁 Capital proyectado</span>
+      <span class="plan-sum-val purple">${fmtEur(total)}</span>
+    </div>`;
+
+  document.getElementById('modalPlanPersonalizado').classList.add('show');
+  setTimeout(() => document.getElementById('planNombre').focus(), 150);
+}
+
+function closePlanModal() {
+  document.getElementById('modalPlanPersonalizado').classList.remove('show');
+}
+
+function sendPlanRequest() {
+  const nombre    = document.getElementById('planNombre').value.trim();
+  const apellidos = document.getElementById('planApellidos').value.trim();
+  const email     = document.getElementById('planEmail').value.trim();
+  const asunto    = document.getElementById('planAsunto').value.trim();
+  const mensaje   = document.getElementById('planMensaje').value.trim();
+
+  // Validación básica
+  if (!nombre) { document.getElementById('planNombre').focus(); toast('Indica tu nombre', 'err'); return; }
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    document.getElementById('planEmail').focus(); toast('Email no válido', 'err'); return;
+  }
+  if (!mensaje) { document.getElementById('planMensaje').focus(); toast('Escribe un mensaje', 'err'); return; }
+
+  // Firma al final del mensaje
+  const firma    = `\n\n--\n${nombre}${apellidos ? ' ' + apellidos : ''}\n${email}`;
+  const bodyFull = mensaje + firma;
+
+  // Construir URL mailto (CC al inversor para que quede copia)
+  const subject = encodeURIComponent(asunto || 'Solicitud Plan de Inversión Personalizado');
+  const body    = encodeURIComponent(bodyFull);
+  const cc      = encodeURIComponent(email);
+  const mailtoUrl = `mailto:${PLAN_DEST_EMAIL}?subject=${subject}&body=${body}&cc=${cc}`;
+
+  window.location.href = mailtoUrl;
+
+  // Cerrar modal y notificar
+  setTimeout(() => {
+    closePlanModal();
+    toast('📧 Gestor de correo abierto — revisa el borrador y pulsa Enviar', 'ok');
+  }, 300);
+}
 
 // ================================================================
 // TOAST
