@@ -1010,6 +1010,59 @@ tr:hover td{background:rgba(255,255,255,.02)}
 @media(max-width:1100px){.bancos-chart-row1{grid-template-columns:1fr 1fr}.bancos-chart-row1>:first-child{grid-column:1/-1}}
 @media(max-width:900px){.bancos-kpi-row{grid-template-columns:repeat(2,1fr)}.bancos-chart-row2{grid-template-columns:1fr 1fr}}
 @media(max-width:640px){.bancos-kpi-row{grid-template-columns:1fr 1fr}.bancos-chart-row2{grid-template-columns:1fr}}
+
+/* ===== COMPARADOR DE FONDOS ===== */
+.fondos-topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px}
+.fondos-title{font-size:1.2rem;font-weight:700;color:var(--text)}
+.fondos-src-badge{font-size:.72rem;color:var(--text3);background:var(--card);border:1px solid var(--border);border-radius:6px;padding:4px 12px}
+.fondos-filter-bar{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.fondos-search{flex:1;min-width:200px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px 12px;color:var(--text);font-size:.83rem;font-family:var(--font);outline:none}
+.fondos-search::placeholder{color:var(--text3)}
+.fondos-search:focus{border-color:var(--accent)}
+.fondos-sel{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px 10px;color:var(--text);font-size:.82rem;font-family:var(--font);outline:none;cursor:pointer}
+.fondos-sel:focus{border-color:var(--accent)}
+.fondos-count{font-size:.76rem;color:var(--text3);white-space:nowrap}
+.fondos-table-wrap{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow-x:auto;margin-bottom:16px}
+.fondos-tbl{width:100%;border-collapse:collapse;font-size:.77rem;min-width:950px}
+.fondos-tbl th{color:var(--text3);font-weight:600;font-size:.68rem;text-transform:uppercase;letter-spacing:.04em;padding:10px 10px;border-bottom:1px solid var(--border);text-align:right;white-space:nowrap;cursor:pointer;user-select:none}
+.fondos-tbl th:first-child,.fondos-tbl th:nth-child(2),.fondos-tbl th:nth-child(3){text-align:left;cursor:default}
+.fondos-tbl th.sort-asc::after{content:' ▲';color:var(--accent)}
+.fondos-tbl th.sort-desc::after{content:' ▼';color:var(--accent)}
+.fondos-tbl td{padding:9px 10px;border-bottom:1px solid rgba(255,255,255,.04);color:var(--text2);text-align:right;white-space:nowrap}
+.fondos-tbl td:first-child{color:var(--text3);font-size:.7rem;font-weight:700}
+.fondos-tbl td:nth-child(2){text-align:left;color:var(--text);font-weight:500;max-width:240px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fondos-tbl td:nth-child(3){text-align:left;color:var(--text2)}
+.fondos-tbl tr:hover td{background:rgba(255,255,255,.025)}
+.fondos-tbl tr:last-child td{border-bottom:none}
+.fondos-ret-pos{color:#10B981;font-weight:600}
+.fondos-ret-neg{color:#EF4444;font-weight:600}
+.fondos-stars{color:#F59E0B;font-size:.75rem;letter-spacing:-1px}
+.fondos-cat-badge{display:inline-block;padding:2px 7px;border-radius:4px;font-size:.67rem;font-weight:600;white-space:nowrap}
+.fondos-sel-btn{width:22px;height:22px;border-radius:6px;border:1.5px solid var(--border);background:transparent;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:.15s;font-size:.7rem;color:var(--text3)}
+.fondos-sel-btn:hover{border-color:var(--accent);color:var(--accent)}
+.fondos-sel-btn.selected{background:var(--accent);border-color:var(--accent);color:#fff}
+/* Panel de comparación */
+.fondos-cmp-panel{background:var(--card);border:1px solid var(--accent);border-radius:12px;padding:20px;margin-bottom:20px;position:relative}
+.fondos-cmp-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px}
+.fondos-cmp-title{font-size:.95rem;font-weight:700;color:var(--text)}
+.fondos-cmp-clear{background:transparent;border:1px solid var(--border);border-radius:7px;padding:5px 12px;color:var(--text3);font-size:.75rem;cursor:pointer;transition:.15s}
+.fondos-cmp-clear:hover{border-color:var(--red);color:var(--red)}
+.fondos-cmp-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+.fondos-chip{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:20px;font-size:.72rem;font-weight:600;color:#fff;cursor:pointer}
+.fondos-chip-x{opacity:.7;font-size:.8rem}
+.fondos-chip:hover .fondos-chip-x{opacity:1}
+.fondos-cmp-body{display:grid;grid-template-columns:1fr 360px;gap:16px;align-items:start}
+.fondos-cmp-metrics{overflow-x:auto}
+.fondos-cmp-tbl{width:100%;border-collapse:collapse;font-size:.75rem}
+.fondos-cmp-tbl th{font-size:.68rem;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.04em;padding:7px 8px;text-align:right;border-bottom:1px solid var(--border)}
+.fondos-cmp-tbl th:first-child{text-align:left}
+.fondos-cmp-tbl td{padding:8px 8px;border-bottom:1px solid rgba(255,255,255,.04);text-align:right;color:var(--text2)}
+.fondos-cmp-tbl td:first-child{text-align:left;color:var(--text3);font-weight:600;font-size:.7rem}
+.fondos-cmp-tbl td.best{color:#10B981;font-weight:700}
+.fondos-cmp-tbl td.worst{color:#EF4444}
+.fondos-cmp-tbl tr:last-child td{border-bottom:none}
+@media(max-width:1000px){.fondos-cmp-body{grid-template-columns:1fr}}
+@media(max-width:640px){.fondos-filter-bar{flex-direction:column;align-items:stretch}}
 </style>
 </head>
 <body>
@@ -1132,6 +1185,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <button class="inv-tab" id="invTabCarteras" onclick="switchInvTab('carteras')">💼 Mis Carteras</button>
       <button class="inv-tab" id="invTabAnalisis" onclick="switchInvTab('analisis')">📰 Análisis</button>
       <button class="inv-tab" id="invTabBancos" onclick="switchInvTab('bancos')">🏦 Entidades Financieras</button>
+      <button class="inv-tab" id="invTabFondos" onclick="switchInvTab('fondos')">📂 Comparador de Fondos</button>
     </div>
 
     <!-- ── Contenido: Mis Mercados ── -->
@@ -1348,6 +1402,100 @@ tr:hover td{background:rgba(255,255,255,.02)}
       </div>
 
     </div><!-- /invBancosPanel -->
+
+    <!-- ── Contenido: Comparador de Fondos ── -->
+    <div id="invFondosPanel" style="display:none">
+
+      <!-- Cabecera -->
+      <div class="fondos-topbar">
+        <div class="fondos-title">📂 Comparador de Fondos de Inversión</div>
+        <div class="fondos-src-badge">📋 Fuente: CNMV · Gestoras · Morningstar 2023-2024</div>
+      </div>
+
+      <!-- Panel de comparación (oculto hasta seleccionar fondos) -->
+      <div class="fondos-cmp-panel" id="fondosCmpPanel" style="display:none">
+        <div class="fondos-cmp-header">
+          <div class="fondos-cmp-title">📊 Comparando fondos seleccionados</div>
+          <button class="fondos-cmp-clear" onclick="fondosClearAll()">✕ Limpiar selección</button>
+        </div>
+        <div class="fondos-cmp-chips" id="fondosChips"></div>
+        <div class="fondos-cmp-body">
+          <div>
+            <div style="font-size:.72rem;color:var(--text3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:10px">Rentabilidades comparadas (%)</div>
+            <canvas id="fondosCmpChart" height="210" style="width:100%;display:block"></canvas>
+          </div>
+          <div class="fondos-cmp-metrics">
+            <div style="font-size:.72rem;color:var(--text3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:10px">KPIs comparativos</div>
+            <table class="fondos-cmp-tbl">
+              <thead id="fondosCmpThead"></thead>
+              <tbody id="fondosCmpTbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filtros -->
+      <div class="fondos-filter-bar">
+        <input class="fondos-search" id="fondosSearch" type="text" placeholder="🔍 Buscar fondo o gestora..." oninput="fondosApplyFilter()">
+        <select class="fondos-sel" id="fondosCatSel" onchange="fondosApplyFilter()">
+          <option value="">Todas las categorías</option>
+          <option value="Monetario">Monetario</option>
+          <option value="RF Corto Plazo">RF Corto Plazo</option>
+          <option value="Renta Fija">Renta Fija</option>
+          <option value="Mixto Defensivo">Mixto Defensivo</option>
+          <option value="Mixto Moderado">Mixto Moderado</option>
+          <option value="Mixto Agresivo">Mixto Agresivo</option>
+          <option value="RV España">RV España</option>
+          <option value="RV Europa">RV Europa</option>
+          <option value="RV Internacional">RV Internacional</option>
+          <option value="RV USA">RV USA</option>
+          <option value="RV Global">RV Global</option>
+          <option value="RV Temático">RV Temático</option>
+          <option value="Alternativo">Alternativo</option>
+          <option value="Garantizado">Garantizado</option>
+        </select>
+        <select class="fondos-sel" id="fondosGestoraSel" onchange="fondosApplyFilter()">
+          <option value="">Todas las gestoras</option>
+        </select>
+        <select class="fondos-sel" id="fondosSortSel" onchange="fondosApplySort()">
+          <option value="patM_desc">Patrimonio ↓</option>
+          <option value="r1y_desc">Rent. 1A ↓</option>
+          <option value="r3y_desc">Rent. 3A ↓</option>
+          <option value="r5y_desc">Rent. 5A ↓</option>
+          <option value="vol_asc">Volatilidad ↑</option>
+          <option value="sharpe_desc">Sharpe ↓</option>
+          <option value="ter_asc">TER ↑</option>
+          <option value="ms_desc">Rating ↓</option>
+        </select>
+        <div class="fondos-count" id="fondosCount">50 fondos</div>
+      </div>
+
+      <!-- Tabla de fondos -->
+      <div class="fondos-table-wrap">
+        <table class="fondos-tbl">
+          <thead>
+            <tr>
+              <th style="width:28px;cursor:default">+</th>
+              <th style="min-width:200px">Fondo</th>
+              <th>Gestora</th>
+              <th>Categoría</th>
+              <th onclick="fondosSortBy('patM')">AUM (M€)</th>
+              <th onclick="fondosSortBy('part')">Partícipes</th>
+              <th onclick="fondosSortBy('rYTD')">YTD %</th>
+              <th onclick="fondosSortBy('r1y')">1A %</th>
+              <th onclick="fondosSortBy('r3y')">3A % anual.</th>
+              <th onclick="fondosSortBy('r5y')">5A % anual.</th>
+              <th onclick="fondosSortBy('vol')">Volat.</th>
+              <th onclick="fondosSortBy('sharpe')">Sharpe</th>
+              <th onclick="fondosSortBy('ter')">TER %</th>
+              <th onclick="fondosSortBy('ms')">⭐</th>
+            </tr>
+          </thead>
+          <tbody id="fondosTableBody"></tbody>
+        </table>
+      </div>
+
+    </div><!-- /invFondosPanel -->
 
   </div>
 
@@ -1824,6 +1972,13 @@ let _carterasLoaded = false;     // flag: ya se cargó al menos una vez
 let _cartModalColor = '#2563EB'; // color seleccionado en el modal de cartera
 let _newsData      = [];         // artículos del feed de noticias cargados
 let _bancosLoaded  = false;      // flag: ya se renderizó el panel de entidades financieras
+let _fondosLoaded  = false;      // flag: ya se renderizó el comparador de fondos
+let _fondosSelected = new Set(); // IDs de fondos seleccionados para comparar (max 5)
+let _fondosSortKey  = 'patM';    // columna de orden activa
+let _fondosSortDir  = -1;        // -1 desc / 1 asc
+let _fondosCatFilter = '';
+let _fondosGestoraFilter = '';
+let _fondosQ = '';
 let _newsFilter    = 'todos';    // categoría activa: todos|oportunidad|riesgo|tendencia
 let _currentSymbol = '^GSPC';
 let _currentPeriod = '3mo';
@@ -1963,6 +2118,8 @@ function logout() {
   _newsFilter      = 'todos';
   _carteras        = [];
   _carterasLoaded  = false;
+  _fondosLoaded    = false;
+  _fondosSelected  = new Set();
   if (_marketData.length) { renderMainSection(_marketData); updateTicker(_marketData); }
   document.getElementById('userBadge').style.display = 'none';
   document.getElementById('btnRegister').style.display = 'block';
@@ -2590,12 +2747,14 @@ function switchInvTab(tab) {
   document.getElementById('invTabCarteras').classList.toggle('active',     tab === 'carteras');
   document.getElementById('invTabCalculadora').classList.toggle('active',  tab === 'calculadora');
   document.getElementById('invTabBancos').classList.toggle('active',       tab === 'bancos');
+  document.getElementById('invTabFondos').classList.toggle('active',       tab === 'fondos');
   // Muestra/oculta contenido
   document.getElementById('invMercadosContent').style.display     = tab === 'mercados'    ? 'block' : 'none';
   document.getElementById('invAnalisisPanel').style.display       = tab === 'analisis'    ? 'block' : 'none';
   document.getElementById('invCarterasPanel').style.display       = tab === 'carteras'    ? 'block' : 'none';
   document.getElementById('invCalculadoraPanel').style.display    = tab === 'calculadora' ? 'block' : 'none';
   document.getElementById('invBancosPanel').style.display         = tab === 'bancos'      ? 'block' : 'none';
+  document.getElementById('invFondosPanel').style.display         = tab === 'fondos'      ? 'block' : 'none';
   // Carga noticias la primera vez que se abre la pestaña
   if (tab === 'analisis'   && _newsData.length === 0) loadInvestorNews();
   // Carga carteras la primera vez que se abre la pestaña
@@ -2604,6 +2763,8 @@ function switchInvTab(tab) {
   if (tab === 'calculadora') setTimeout(calcIC, 30);
   // Renderiza balances de entidades financieras (solo una vez, datos estáticos)
   if (tab === 'bancos' && !_bancosLoaded) setTimeout(renderBancosPanel, 60);
+  // Renderiza comparador de fondos (solo una vez, datos estáticos)
+  if (tab === 'fondos' && !_fondosLoaded) setTimeout(renderFondosPanel, 60);
 }
 
 async function loadInvestorNews() {
@@ -4385,6 +4546,350 @@ function _drawCalcChart(capital, aportacion, m, tasa, maxAnos) {
     ctx.fillStyle = 'rgba(148,163,184,.8)';
     ctx.textAlign = 'center';
     ctx.fillText(d.year + 'a', x + barW / 2, padT + chartH + 16);
+  });
+}
+
+// ================================================================
+// COMPARADOR DE FONDOS DE INVERSIÓN
+// Fuente: CNMV · Gestoras · Morningstar 2023-2024
+// ================================================================
+const FONDOS_DATA = [
+  // ── MONETARIOS ────────────────────────────────────────────────
+  {id:1,  nombre:'CaixaBank Monetario Rendimiento FI',      isin:'ES0137860018', gestora:'CaixaBank AM',   cat:'Monetario',       patM:8450,  part:284000, rYTD:2.15, r1y:3.82, r3y:2.10, r5y:0.85, vol:0.22, sharpe:2.10, com:0.15, ter:0.20, ms:4},
+  {id:2,  nombre:'Santander Monetario FI',                  isin:'ES0174680014', gestora:'Santander AM',  cat:'Monetario',       patM:6180,  part:196000, rYTD:2.05, r1y:3.65, r3y:1.90, r5y:0.72, vol:0.18, sharpe:2.05, com:0.12, ter:0.18, ms:4},
+  {id:3,  nombre:'BBVA Bonos Corto Plazo FI',               isin:'ES0112709039', gestora:'BBVA AM',       cat:'RF Corto Plazo',  patM:4820,  part:152000, rYTD:1.92, r1y:3.58, r3y:1.75, r5y:0.60, vol:0.31, sharpe:1.85, com:0.20, ter:0.28, ms:3},
+  {id:4,  nombre:'Kutxabank Depósitos FI',                  isin:'ES0156839004', gestora:'Kutxabank G.',  cat:'Monetario',       patM:4130,  part:118000, rYTD:2.02, r1y:3.72, r3y:1.88, r5y:0.68, vol:0.15, sharpe:2.20, com:0.10, ter:0.15, ms:5},
+  {id:5,  nombre:'Sabadell BS Fondepósito Plus FI',         isin:'ES0174991007', gestora:'Sabadell AM',   cat:'Monetario',       patM:3240,  part:98000,  rYTD:1.98, r1y:3.60, r3y:1.82, r5y:0.65, vol:0.20, sharpe:1.95, com:0.15, ter:0.22, ms:3},
+  // ── RENTA FIJA ────────────────────────────────────────────────
+  {id:6,  nombre:'CaixaBank RF Euro FI',                    isin:'ES0137864002', gestora:'CaixaBank AM',  cat:'Renta Fija',      patM:3910,  part:87000,  rYTD:1.42, r1y:2.95, r3y:-1.20,r5y:-0.30,vol:3.20, sharpe:0.60, com:0.45, ter:0.58, ms:3},
+  {id:7,  nombre:'Santander RF Corporativa Euro FI',        isin:'ES0174680022', gestora:'Santander AM',  cat:'Renta Fija',      patM:2810,  part:62000,  rYTD:1.55, r1y:3.18, r3y:-0.95,r5y:0.12, vol:2.85, sharpe:0.78, com:0.40, ter:0.52, ms:3},
+  {id:8,  nombre:'BBVA Renta Fija Largo Plazo FI',          isin:'ES0112709021', gestora:'BBVA AM',       cat:'Renta Fija',      patM:2600,  part:54000,  rYTD:1.28, r1y:2.78, r3y:-1.45,r5y:-0.48,vol:3.80, sharpe:0.52, com:0.50, ter:0.65, ms:2},
+  {id:9,  nombre:'Bankinter RF Mixta FI',                   isin:'ES0100046005', gestora:'Bankinter G.',  cat:'Renta Fija',      patM:1820,  part:39000,  rYTD:1.65, r1y:3.32, r3y:-0.72,r5y:0.28, vol:2.40, sharpe:0.88, com:0.38, ter:0.50, ms:3},
+  {id:10, nombre:'Amundi Fds Eur Govt Bond A EUR FI',       isin:'ES0159162006', gestora:'Amundi Iberia', cat:'Renta Fija',      patM:1540,  part:28000,  rYTD:1.38, r1y:2.88, r3y:-1.32,r5y:-0.22,vol:3.50, sharpe:0.58, com:0.42, ter:0.55, ms:3},
+  // ── MIXTOS DEFENSIVOS ─────────────────────────────────────────
+  {id:11, nombre:'CaixaBank Mixto Defensivo FI',            isin:'ES0137866007', gestora:'CaixaBank AM',  cat:'Mixto Defensivo', patM:5210,  part:198000, rYTD:2.80, r1y:4.52, r3y:0.95, r5y:1.82, vol:2.10, sharpe:1.42, com:0.70, ter:0.90, ms:4},
+  {id:12, nombre:'Santander PB Conservador FI',             isin:'ES0174682002', gestora:'Santander AM',  cat:'Mixto Defensivo', patM:3120,  part:92000,  rYTD:2.55, r1y:4.18, r3y:0.72, r5y:1.55, vol:1.95, sharpe:1.38, com:0.65, ter:0.85, ms:3},
+  {id:13, nombre:'BBVA Multiactivo Conservador FI',         isin:'ES0112712006', gestora:'BBVA AM',       cat:'Mixto Defensivo', patM:2920,  part:78000,  rYTD:2.42, r1y:3.98, r3y:0.58, r5y:1.42, vol:2.05, sharpe:1.28, com:0.68, ter:0.88, ms:3},
+  {id:14, nombre:'Kutxabank Renta 20 FI',                   isin:'ES0156839038', gestora:'Kutxabank G.',  cat:'Mixto Defensivo', patM:2180,  part:58000,  rYTD:2.92, r1y:4.72, r3y:1.15, r5y:2.10, vol:1.85, sharpe:1.58, com:0.55, ter:0.72, ms:5},
+  {id:15, nombre:'Bankinter Pluscapital 10 FI',             isin:'ES0100046021', gestora:'Bankinter G.',  cat:'Mixto Defensivo', patM:1280,  part:34000,  rYTD:2.38, r1y:4.08, r3y:0.62, r5y:1.48, vol:2.00, sharpe:1.32, com:0.60, ter:0.80, ms:3},
+  // ── MIXTOS MODERADOS ──────────────────────────────────────────
+  {id:16, nombre:'CaixaBank Mixto Moderado FI',             isin:'ES0137866015', gestora:'CaixaBank AM',  cat:'Mixto Moderado',  patM:4180,  part:142000, rYTD:4.52, r1y:7.82, r3y:3.15, r5y:4.28, vol:5.80, sharpe:1.12, com:1.00, ter:1.25, ms:3},
+  {id:17, nombre:'Santander PB Moderado FI',                isin:'ES0174682028', gestora:'Santander AM',  cat:'Mixto Moderado',  patM:3105,  part:88000,  rYTD:4.28, r1y:7.42, r3y:2.85, r5y:3.98, vol:5.50, sharpe:1.05, com:0.95, ter:1.20, ms:3},
+  {id:18, nombre:'BBVA Multiactivo Moderado FI',            isin:'ES0112712014', gestora:'BBVA AM',       cat:'Mixto Moderado',  patM:2890,  part:72000,  rYTD:4.12, r1y:7.18, r3y:2.62, r5y:3.72, vol:5.65, sharpe:0.98, com:1.00, ter:1.28, ms:3},
+  {id:19, nombre:'Kutxabank Renta 50 FI',                   isin:'ES0156839046', gestora:'Kutxabank G.',  cat:'Mixto Moderado',  patM:2420,  part:65000,  rYTD:4.85, r1y:8.32, r3y:3.52, r5y:4.82, vol:5.20, sharpe:1.28, com:0.75, ter:0.95, ms:5},
+  {id:20, nombre:'Bankinter Pluscapital 30 FI',             isin:'ES0100046039', gestora:'Bankinter G.',  cat:'Mixto Moderado',  patM:1420,  part:38000,  rYTD:3.98, r1y:7.05, r3y:2.42, r5y:3.58, vol:5.85, sharpe:0.95, com:0.98, ter:1.22, ms:3},
+  // ── MIXTOS AGRESIVOS ──────────────────────────────────────────
+  {id:21, nombre:'CaixaBank Mixto Agresivo FI',             isin:'ES0137866023', gestora:'CaixaBank AM',  cat:'Mixto Agresivo',  patM:2980,  part:85000,  rYTD:7.42, r1y:12.85,r3y:5.82, r5y:7.42, vol:9.80, sharpe:1.02, com:1.25, ter:1.55, ms:3},
+  {id:22, nombre:'Kutxabank Renta 80 FI',                   isin:'ES0156839053', gestora:'Kutxabank G.',  cat:'Mixto Agresivo',  patM:1850,  part:48000,  rYTD:7.95, r1y:13.52,r3y:6.28, r5y:8.12, vol:9.20, sharpe:1.15, com:0.95, ter:1.18, ms:5},
+  {id:23, nombre:'BBVA Multiactivo Dinámico FI',            isin:'ES0112712030', gestora:'BBVA AM',       cat:'Mixto Agresivo',  patM:1640,  part:42000,  rYTD:7.18, r1y:12.42,r3y:5.52, r5y:7.02, vol:9.90, sharpe:0.98, com:1.20, ter:1.52, ms:3},
+  // ── RENTA VARIABLE ESPAÑA ─────────────────────────────────────
+  {id:24, nombre:'CaixaBank Bolsa España Estándar FI',      isin:'ES0137864028', gestora:'CaixaBank AM',  cat:'RV España',       patM:2120,  part:52000,  rYTD:8.52, r1y:14.82,r3y:7.82, r5y:6.52, vol:14.20,sharpe:0.82, com:1.50, ter:1.72, ms:3},
+  {id:25, nombre:'BBVA Bolsa España FI',                    isin:'ES0112709047', gestora:'BBVA AM',       cat:'RV España',       patM:1620,  part:38000,  rYTD:8.15, r1y:14.32,r3y:7.45, r5y:6.12, vol:14.50,sharpe:0.78, com:1.55, ter:1.80, ms:3},
+  {id:26, nombre:'Renta 4 Bolsa FI',                        isin:'ES0173272032', gestora:'Renta 4 G.',   cat:'RV España',       patM:1105,  part:28000,  rYTD:9.12, r1y:15.85,r3y:8.52, r5y:7.28, vol:13.80,sharpe:0.92, com:1.40, ter:1.62, ms:4},
+  {id:27, nombre:'Santander Acciones Españolas FI',         isin:'ES0174680048', gestora:'Santander AM',  cat:'RV España',       patM:985,   part:24000,  rYTD:7.92, r1y:13.95,r3y:7.12, r5y:5.88, vol:14.80,sharpe:0.74, com:1.60, ter:1.85, ms:2},
+  {id:28, nombre:'Bankinter Bolsa España FI',               isin:'ES0100046054', gestora:'Bankinter G.',  cat:'RV España',       patM:720,   part:18000,  rYTD:7.82, r1y:13.72,r3y:6.92, r5y:5.72, vol:14.95,sharpe:0.72, com:1.55, ter:1.78, ms:3},
+  // ── RENTA VARIABLE EUROPA ─────────────────────────────────────
+  {id:29, nombre:'Bestinver Bolsa FI',                      isin:'ES0114884003', gestora:'Bestinver',     cat:'RV Europa',       patM:1220,  part:35000,  rYTD:9.52, r1y:16.42,r3y:9.15, r5y:8.82, vol:15.20,sharpe:0.92, com:1.50, ter:1.72, ms:4},
+  {id:30, nombre:'Magallanes European Equity FI',           isin:'ES0159188001', gestora:'Magallanes V.', cat:'RV Europa',       patM:2420,  part:62000,  rYTD:10.18,r1y:17.42,r3y:10.12,r5y:9.62, vol:14.50,sharpe:1.00, com:1.50, ter:1.70, ms:5},
+  {id:31, nombre:'Magallanes Microcaps Europa FI',          isin:'ES0159188019', gestora:'Magallanes V.', cat:'RV Europa',       patM:510,   part:12000,  rYTD:12.52,r1y:21.82,r3y:13.52,r5y:12.82,vol:19.80,sharpe:0.98, com:1.75, ter:2.00, ms:5},
+  // ── RENTA VARIABLE INTERNACIONAL ──────────────────────────────
+  {id:32, nombre:'Bestinver Internacional FI',              isin:'ES0114884011', gestora:'Bestinver',     cat:'RV Internacional',patM:2820,  part:78000,  rYTD:10.52,r1y:17.85,r3y:10.42,r5y:9.95, vol:14.80,sharpe:1.02, com:1.50, ter:1.72, ms:5},
+  {id:33, nombre:'azValor Internacional FI',                isin:'ES0159296002', gestora:'azValor AM',    cat:'RV Internacional',patM:2215,  part:58000,  rYTD:11.82,r1y:19.52,r3y:12.42,r5y:11.82,vol:17.50,sharpe:1.00, com:1.75, ter:2.00, ms:5},
+  {id:34, nombre:'Cobas Internacional FI',                  isin:'ES0110381003', gestora:'Cobas AM',      cat:'RV Internacional',patM:1820,  part:48000,  rYTD:11.12,r1y:18.82,r3y:11.82,r5y:10.95,vol:18.20,sharpe:0.92, com:1.75, ter:2.00, ms:4},
+  {id:35, nombre:'Cobas Grandes Compañías FI',              isin:'ES0110381029', gestora:'Cobas AM',      cat:'RV Internacional',patM:520,   part:14000,  rYTD:10.82,r1y:18.42,r3y:11.52,r5y:10.62,vol:17.80,sharpe:0.90, com:1.75, ter:2.00, ms:4},
+  // ── RENTA VARIABLE USA ────────────────────────────────────────
+  {id:36, nombre:'Amundi Índice S&P 500 AE-C FI',          isin:'ES0159162014', gestora:'Amundi Iberia', cat:'RV USA',          patM:1520,  part:42000,  rYTD:13.52,r1y:22.42,r3y:12.85,r5y:14.52,vol:16.80,sharpe:1.18, com:0.30, ter:0.40, ms:5},
+  {id:37, nombre:'Vanguard US 500 Stock Idx €-Acc FI',     isin:'ES0174244003', gestora:'Vanguard',      cat:'RV USA',          patM:1280,  part:35000,  rYTD:13.58,r1y:22.52,r3y:12.92,r5y:14.58,vol:16.75,sharpe:1.19, com:0.10, ter:0.18, ms:5},
+  {id:38, nombre:'Bankinter EE.UU. Nasdaq FI',             isin:'ES0100046088', gestora:'Bankinter G.',  cat:'RV USA',          patM:720,   part:18000,  rYTD:15.82,r1y:26.52,r3y:14.52,r5y:18.82,vol:22.50,sharpe:1.05, com:0.75, ter:0.98, ms:4},
+  // ── RENTA VARIABLE GLOBAL ─────────────────────────────────────
+  {id:39, nombre:'CaixaBank Bolsa Gestión Global FI',      isin:'ES0137864036', gestora:'CaixaBank AM',  cat:'RV Global',       patM:1850,  part:52000,  rYTD:11.52,r1y:19.82,r3y:10.52,r5y:12.52,vol:15.20,sharpe:1.08, com:1.20, ter:1.45, ms:4},
+  {id:40, nombre:'Pictet Global Megatrend Sel R EUR FI',   isin:'ES0164600001', gestora:'Pictet AM',     cat:'RV Global',       patM:720,   part:19000,  rYTD:13.82,r1y:22.82,r3y:11.82,r5y:14.82,vol:17.20,sharpe:1.05, com:1.60, ter:1.90, ms:4},
+  {id:41, nombre:'BlackRock GF World Equity A2 EUR FI',    isin:'ES0152072003', gestora:'BlackRock',     cat:'RV Global',       patM:680,   part:18000,  rYTD:14.52,r1y:23.52,r3y:12.52,r5y:15.52,vol:16.50,sharpe:1.12, com:1.50, ter:1.78, ms:5},
+  {id:42, nombre:'Renta 4 Wertefinder FI',                 isin:'ES0173272040', gestora:'Renta 4 G.',   cat:'RV Global',       patM:480,   part:12000,  rYTD:9.12, r1y:15.82,r3y:8.52, r5y:9.82, vol:13.50,sharpe:0.95, com:1.35, ter:1.58, ms:4},
+  // ── RENTA VARIABLE TEMÁTICO ───────────────────────────────────
+  {id:43, nombre:'CaixaBank Bolsa Tecnología Mundial FI',  isin:'ES0137867005', gestora:'CaixaBank AM',  cat:'RV Temático',     patM:980,   part:28000,  rYTD:18.52,r1y:28.52,r3y:14.52,r5y:20.52,vol:24.80,sharpe:1.02, com:1.60, ter:1.85, ms:4},
+  {id:44, nombre:'Santander Global Tech FI',               isin:'ES0174683018', gestora:'Santander AM',  cat:'RV Temático',     patM:720,   part:22000,  rYTD:17.82,r1y:27.52,r3y:13.85,r5y:19.82,vol:24.20,sharpe:0.98, com:1.55, ter:1.82, ms:3},
+  {id:45, nombre:'BBVA Bolsa Tecnología FI',               isin:'ES0112713004', gestora:'BBVA AM',       cat:'RV Temático',     patM:650,   part:19000,  rYTD:17.42,r1y:26.82,r3y:13.52,r5y:19.42,vol:23.80,sharpe:0.96, com:1.58, ter:1.85, ms:3},
+  {id:46, nombre:'Fidelity Fds Global Technology A EUR FI',isin:'ES0138014003', gestora:'Fidelity',      cat:'RV Temático',     patM:580,   part:16000,  rYTD:19.12,r1y:29.82,r3y:15.52,r5y:21.82,vol:25.50,sharpe:1.05, com:1.50, ter:1.80, ms:5},
+  {id:47, nombre:'CaixaBank Selección Tendencias FI',      isin:'ES0137867013', gestora:'CaixaBank AM',  cat:'Mixto Moderado',  patM:850,   part:28000,  rYTD:5.82, r1y:9.82, r3y:4.52, r5y:5.82, vol:8.20, sharpe:0.98, com:1.15, ter:1.42, ms:4},
+  // ── ALTERNATIVOS ──────────────────────────────────────────────
+  {id:48, nombre:'Renta 4 Valor Relativo FI',              isin:'ES0173272024', gestora:'Renta 4 G.',   cat:'Alternativo',     patM:912,   part:22000,  rYTD:1.82, r1y:3.52, r3y:2.82, r5y:2.18, vol:1.80, sharpe:1.55, com:0.80, ter:1.05, ms:3},
+  {id:49, nombre:'BBVA Gestión Alternativa FI',            isin:'ES0112714002', gestora:'BBVA AM',       cat:'Alternativo',     patM:680,   part:16000,  rYTD:1.62, r1y:3.12, r3y:2.42, r5y:1.85, vol:2.10, sharpe:1.28, com:0.90, ter:1.15, ms:3},
+  // ── GARANTIZADOS ──────────────────────────────────────────────
+  {id:50, nombre:'CaixaBank Garantizado Bolsa 2026 FI',    isin:'ES0137868003', gestora:'CaixaBank AM',  cat:'Garantizado',     patM:1850,  part:62000,  rYTD:1.12, r1y:2.25, r3y:1.52, r5y:1.18, vol:0.80, sharpe:1.85, com:0.50, ter:0.65, ms:3},
+];
+
+const FONDOS_COMPARE_COLORS = ['#2563EB','#10B981','#F59E0B','#EF4444','#8B5CF6'];
+
+const CAT_COLORS = {
+  'Monetario':       '#064e3b', 'RF Corto Plazo':   '#0c4a6e', 'Renta Fija':       '#1e3a8a',
+  'Mixto Defensivo': '#713f12', 'Mixto Moderado':   '#78350f', 'Mixto Agresivo':   '#7c2d12',
+  'RV España':       '#4c1d95', 'RV Europa':        '#5b21b6', 'RV Internacional': '#6d28d9',
+  'RV USA':          '#831843', 'RV Global':        '#9d174d', 'RV Temático':      '#be185d',
+  'Alternativo':     '#134e4a', 'Garantizado':      '#1e293b',
+};
+const CAT_TEXT = {
+  'Monetario':'#6ee7b7','RF Corto Plazo':'#7dd3fc','Renta Fija':'#93c5fd',
+  'Mixto Defensivo':'#fcd34d','Mixto Moderado':'#fbbf24','Mixto Agresivo':'#fb923c',
+  'RV España':'#c4b5fd','RV Europa':'#a78bfa','RV Internacional':'#8b5cf6',
+  'RV USA':'#f9a8d4','RV Global':'#f472b6','RV Temático':'#ec4899',
+  'Alternativo':'#5eead4','Garantizado':'#94a3b8',
+};
+
+function renderFondosPanel() {
+  _fondosLoaded = true;
+  // Poblar select gestoras
+  const gestoras = [...new Set(FONDOS_DATA.map(f => f.gestora))].sort();
+  const gSel = document.getElementById('fondosGestoraSel');
+  if (gSel) {
+    gSel.innerHTML = '<option value="">Todas las gestoras</option>' +
+      gestoras.map(g => `<option value="${g}">${g}</option>`).join('');
+  }
+  _renderFondosTable();
+}
+
+function _getFilteredFondos() {
+  const q  = _fondosQ.toLowerCase();
+  let data = FONDOS_DATA.filter(f => {
+    const matchQ = !q || f.nombre.toLowerCase().includes(q) || f.gestora.toLowerCase().includes(q) || f.isin.toLowerCase().includes(q);
+    const matchC = !_fondosCatFilter    || f.cat === _fondosCatFilter;
+    const matchG = !_fondosGestoraFilter || f.gestora === _fondosGestoraFilter;
+    return matchQ && matchC && matchG;
+  });
+  data.sort((a, b) => {
+    const av = a[_fondosSortKey] ?? 0;
+    const bv = b[_fondosSortKey] ?? 0;
+    return _fondosSortDir * (bv - av);
+  });
+  return data;
+}
+
+function _renderFondosTable() {
+  const data  = _getFilteredFondos();
+  const tbody = document.getElementById('fondosTableBody');
+  const cnt   = document.getElementById('fondosCount');
+  if (cnt) cnt.textContent = `${data.length} de ${FONDOS_DATA.length} fondos`;
+
+  const fmtRet = v => {
+    const cls = v > 0 ? 'fondos-ret-pos' : v < 0 ? 'fondos-ret-neg' : '';
+    return `<span class="${cls}">${v > 0 ? '+' : ''}${v.toFixed(2)}%</span>`;
+  };
+  const fmtStar = n => '★'.repeat(n) + '☆'.repeat(5 - n);
+  const fmtPat  = v => v >= 1000 ? (v / 1000).toFixed(2) + ' B' : v.toLocaleString('es-ES') + ' M';
+  const fmtPart = v => v >= 1000 ? (v / 1000).toFixed(0) + 'K' : v;
+
+  if (!tbody) return;
+  tbody.innerHTML = data.map(f => {
+    const bg  = CAT_COLORS[f.cat] || '#1e293b';
+    const txt = CAT_TEXT[f.cat]   || '#94a3b8';
+    const sel = _fondosSelected.has(f.id);
+    return `<tr>
+      <td>
+        <button class="fondos-sel-btn ${sel ? 'selected' : ''}" onclick="fondosToggleSelect(${f.id})" title="${sel ? 'Quitar de comparación' : 'Añadir a comparación'}">
+          ${sel ? '✓' : '+'}
+        </button>
+      </td>
+      <td title="${f.nombre} · ISIN: ${f.isin}">${f.nombre}</td>
+      <td>${f.gestora}</td>
+      <td><span class="fondos-cat-badge" style="background:${bg};color:${txt}">${f.cat}</span></td>
+      <td><strong style="color:var(--text)">${fmtPat(f.patM)}</strong></td>
+      <td>${fmtPart(f.part)}</td>
+      <td>${fmtRet(f.rYTD)}</td>
+      <td>${fmtRet(f.r1y)}</td>
+      <td>${fmtRet(f.r3y)}</td>
+      <td>${fmtRet(f.r5y)}</td>
+      <td style="color:${f.vol > 15 ? 'var(--yellow)' : 'var(--text2)'}">${f.vol.toFixed(2)}%</td>
+      <td style="color:${f.sharpe >= 1 ? 'var(--green)' : 'var(--text2)'}">${f.sharpe.toFixed(2)}</td>
+      <td style="color:${f.ter > 1.5 ? 'var(--yellow)' : 'var(--text2)'}">${f.ter.toFixed(2)}%</td>
+      <td><span class="fondos-stars">${fmtStar(f.ms)}</span></td>
+    </tr>`;
+  }).join('');
+}
+
+function fondosToggleSelect(id) {
+  if (_fondosSelected.has(id)) {
+    _fondosSelected.delete(id);
+  } else {
+    if (_fondosSelected.size >= 5) { toast('Máximo 5 fondos para comparar', 'warn'); return; }
+    _fondosSelected.add(id);
+  }
+  _renderFondosTable();
+  _renderFondosCompare();
+}
+
+function fondosClearAll() {
+  _fondosSelected.clear();
+  _renderFondosTable();
+  _renderFondosCompare();
+}
+
+function fondosApplyFilter() {
+  _fondosQ              = (document.getElementById('fondosSearch')?.value || '').trim();
+  _fondosCatFilter      = document.getElementById('fondosCatSel')?.value    || '';
+  _fondosGestoraFilter  = document.getElementById('fondosGestoraSel')?.value || '';
+  _renderFondosTable();
+}
+
+function fondosApplySort() {
+  const val = document.getElementById('fondosSortSel')?.value || 'patM_desc';
+  const [key, dir] = val.split('_');
+  _fondosSortKey = key;
+  _fondosSortDir = dir === 'desc' ? -1 : 1;
+  _renderFondosTable();
+}
+
+function fondosSortBy(key) {
+  if (_fondosSortKey === key) { _fondosSortDir *= -1; }
+  else { _fondosSortKey = key; _fondosSortDir = -1; }
+  _renderFondosTable();
+}
+
+function _renderFondosCompare() {
+  const panel = document.getElementById('fondosCmpPanel');
+  if (!panel) return;
+  const n = _fondosSelected.size;
+  panel.style.display = n < 1 ? 'none' : 'block';
+  if (n < 1) return;
+
+  const selected = [..._fondosSelected].map(id => FONDOS_DATA.find(f => f.id === id)).filter(Boolean);
+
+  // Chips
+  const chips = document.getElementById('fondosChips');
+  if (chips) {
+    chips.innerHTML = selected.map((f, i) => `
+      <span class="fondos-chip" style="background:${FONDOS_COMPARE_COLORS[i]}" onclick="fondosToggleSelect(${f.id})">
+        <span>${f.nombre.split(' ').slice(0,3).join(' ')}</span>
+        <span class="fondos-chip-x">✕</span>
+      </span>`).join('');
+  }
+
+  // Tabla de métricas
+  const thead = document.getElementById('fondosCmpThead');
+  const tbody = document.getElementById('fondosCmpTbody');
+  if (thead) {
+    thead.innerHTML = `<tr>
+      <th>Métrica</th>
+      ${selected.map((f,i) => `<th style="color:${FONDOS_COMPARE_COLORS[i]}">${f.gestora.split(' ')[0]}</th>`).join('')}
+    </tr>`;
+  }
+
+  const metrics = [
+    { label:'Patrimonio (M€)',  key:'patM',  fmt: v => v.toLocaleString('es-ES'), higher: true },
+    { label:'Partícipes',       key:'part',  fmt: v => v.toLocaleString('es-ES'), higher: true },
+    { label:'Rent. YTD %',      key:'rYTD',  fmt: v => (v>0?'+':'')+v.toFixed(2)+'%', higher: true },
+    { label:'Rent. 1 Año %',    key:'r1y',   fmt: v => (v>0?'+':'')+v.toFixed(2)+'%', higher: true },
+    { label:'Rent. 3A anual. %',key:'r3y',   fmt: v => (v>0?'+':'')+v.toFixed(2)+'%', higher: true },
+    { label:'Rent. 5A anual. %',key:'r5y',   fmt: v => (v>0?'+':'')+v.toFixed(2)+'%', higher: true },
+    { label:'Volatilidad %',    key:'vol',   fmt: v => v.toFixed(2)+'%', higher: false },
+    { label:'Sharpe',           key:'sharpe',fmt: v => v.toFixed(2), higher: true },
+    { label:'TER %',            key:'ter',   fmt: v => v.toFixed(2)+'%', higher: false },
+    { label:'Rating ⭐',        key:'ms',    fmt: v => '★'.repeat(v)+'☆'.repeat(5-v), higher: true },
+  ];
+
+  if (tbody) {
+    tbody.innerHTML = metrics.map(m => {
+      const vals = selected.map(f => f[m.key]);
+      const best  = m.higher ? Math.max(...vals) : Math.min(...vals);
+      const worst = m.higher ? Math.min(...vals) : Math.max(...vals);
+      return `<tr>
+        <td>${m.label}</td>
+        ${selected.map((f,i) => {
+          const v = f[m.key];
+          const cls = n > 1 ? (v === best ? 'best' : v === worst ? 'worst' : '') : '';
+          return `<td class="${cls}" style="${i>0?'':''}color:${FONDOS_COMPARE_COLORS[i]}">${m.fmt(v)}</td>`;
+        }).join('')}
+      </tr>`;
+    }).join('');
+  }
+
+  // Gráfico barras agrupadas
+  setTimeout(() => _drawFondosCompareChart('fondosCmpChart', selected), 30);
+}
+
+function _drawFondosCompareChart(canvasId, selected) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas || !selected.length) return;
+  const dpr = window.devicePixelRatio || 1;
+  const W   = canvas.clientWidth || 600;
+  const H   = 210;
+  canvas.width  = W * dpr;
+  canvas.height = H * dpr;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+
+  const periods = [
+    { key:'rYTD', label:'YTD' },
+    { key:'r1y',  label:'1 Año' },
+    { key:'r3y',  label:'3A anual.' },
+    { key:'r5y',  label:'5A anual.' },
+  ];
+
+  const padL = 42, padR = 12, padT = 16, padB = 28;
+  const chartW = W - padL - padR;
+  const chartH = H - padT - padB;
+
+  const allVals = selected.flatMap(f => periods.map(p => f[p.key]));
+  const maxVal  = Math.max(...allVals, 0.1);
+  const minVal  = Math.min(...allVals, 0);
+  const range   = maxVal - minVal || 1;
+
+  const zeroY = padT + chartH * (1 - (0 - minVal) / range);
+
+  // Líneas de guía
+  [minVal, minVal + range * 0.5, maxVal].forEach(v => {
+    const y = padT + chartH * (1 - (v - minVal) / range);
+    ctx.strokeStyle = 'rgba(255,255,255,.06)';
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(padL, y); ctx.lineTo(W - padR, y); ctx.stroke();
+    ctx.fillStyle = '#475569'; ctx.font = '9px Inter,sans-serif';
+    ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+    ctx.fillText(v.toFixed(1) + '%', padL - 4, y);
+  });
+
+  // Línea cero
+  ctx.strokeStyle = 'rgba(255,255,255,.18)';
+  ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(padL, zeroY); ctx.lineTo(W - padR, zeroY); ctx.stroke();
+
+  // Barras agrupadas
+  const gW    = chartW / periods.length;
+  const nF    = selected.length;
+  const barW  = Math.min((gW - 16) / nF, 32);
+  const gOff  = (gW - barW * nF) / 2;
+
+  periods.forEach((period, pi) => {
+    const gX = padL + pi * gW;
+    selected.forEach((f, fi) => {
+      const v     = f[period.key];
+      const color = FONDOS_COMPARE_COLORS[fi];
+      const bX    = gX + gOff + fi * barW;
+      const bH    = Math.abs(v / range) * chartH;
+      const bY    = v >= 0 ? zeroY - bH : zeroY;
+
+      ctx.globalAlpha = 0.88;
+      ctx.fillStyle   = color;
+      ctx.beginPath();
+      if (ctx.roundRect) ctx.roundRect(bX, bY, barW - 2, Math.max(bH, 2), v >= 0 ? [3,3,0,0] : [0,0,3,3]);
+      else ctx.rect(bX, bY, barW - 2, Math.max(bH, 2));
+      ctx.fill();
+      ctx.globalAlpha = 1;
+
+      // Etiqueta valor
+      if (bH > 12) {
+        ctx.fillStyle    = 'rgba(255,255,255,.9)';
+        ctx.font         = '8.5px Inter,sans-serif';
+        ctx.textAlign    = 'center';
+        ctx.textBaseline = v >= 0 ? 'bottom' : 'top';
+        ctx.fillText((v > 0 ? '+' : '') + v.toFixed(1) + '%', bX + (barW - 2) / 2, v >= 0 ? bY - 2 : bY + bH + 2);
+      }
+    });
+
+    // Etiqueta X (período)
+    ctx.fillStyle    = '#94a3b8';
+    ctx.font         = '10px Inter,sans-serif';
+    ctx.textAlign    = 'center';
+    ctx.textBaseline = 'bottom';
+    ctx.fillText(period.label, gX + gW / 2, H - 4);
   });
 }
 
