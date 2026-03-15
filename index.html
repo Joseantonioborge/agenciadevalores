@@ -811,9 +811,38 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .cart-modal-cancel{padding:10px 18px;background:none;border:1px solid var(--border);color:var(--text2);border-radius:8px;font-size:.88rem;font-weight:600;cursor:pointer;transition:.15s;font-family:var(--font)}
 .cart-modal-cancel:hover{color:var(--text);border-color:var(--text2)}
 
+/* Proyección de inversión */
+.cart-proj-section{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px 20px;margin-bottom:16px}
+.cart-proj-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px}
+.cart-proj-title{font-size:.72rem;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.06em}
+.cart-proj-tabs{display:flex;gap:4px}
+.cart-proj-tab{background:none;border:1px solid var(--border);color:var(--text2);border-radius:7px;padding:5px 12px;font-size:.78rem;font-weight:600;cursor:pointer;transition:.15s;font-family:var(--font)}
+.cart-proj-tab:hover{color:var(--text);border-color:var(--accent)}
+.cart-proj-tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.cart-proj-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
+.cart-proj-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px 16px;text-align:center;transition:.2s}
+.cart-proj-card.highlight{border-color:rgba(37,99,235,.4);box-shadow:0 0 0 1px rgba(37,99,235,.15)}
+.cart-proj-card-label{font-size:.68rem;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.cart-proj-card-value{font-size:1.15rem;font-weight:700;font-family:monospace;color:var(--text);margin-bottom:4px}
+.cart-proj-card-gain{font-size:.8rem;font-weight:700;font-family:monospace}.cart-proj-card-gain.up{color:var(--green)}.cart-proj-card-gain.flat{color:var(--text3)}
+.cart-proj-card-pct{font-size:.7rem;color:var(--text3);margin-top:2px}
+.cart-proj-bars-row{display:flex;align-items:flex-end;justify-content:center;gap:28px;height:72px;padding:0 10px;margin-bottom:8px}
+.cart-proj-bar-wrap{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;height:100%}
+.cart-proj-bar-inner{width:100%;display:flex;align-items:flex-end;justify-content:center;flex:1}
+.cart-proj-bar{width:32px;background:var(--accent);border-radius:4px 4px 0 0;transition:height .7s cubic-bezier(.4,0,.2,1);min-height:4px}
+.cart-proj-bar-lbl{font-size:.65rem;color:var(--text3)}
+.cart-proj-note{font-size:.67rem;color:var(--text3);text-align:center;font-style:italic;margin-top:4px}
+/* Toggle aportación recurrente */
+.cart-aportar-row{display:none}
+.cart-aportar-row.visible{display:block}
+/* Badges tipo compra */
+.cart-badge-recurrente{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:2px 6px;border-radius:4px;background:rgba(16,185,129,.15);color:var(--green)}
+.cart-badge-puntual{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:2px 6px;border-radius:4px;background:rgba(255,255,255,.07);color:var(--text3)}
+
 @media(max-width:768px){
   .cart-kpi-row{grid-template-columns:repeat(2,1fr)}
   .cart-charts-row{grid-template-columns:1fr}
+  .cart-proj-cards{grid-template-columns:1fr}
   .cart-input-grid{grid-template-columns:1fr}
   .cart-card-val{display:none}
 }
@@ -826,7 +855,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
   <div class="nav-logo">
     <div class="nav-logo-dot"></div>
     Agencia de Valores
-    <span class="nav-version">v2.0.0</span>
+    <span class="nav-version">v2.1.0</span>
   </div>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="showSection('Mercados')">Mercados</button>
@@ -1281,6 +1310,20 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <div class="cart-field">
         <label>Precio actual de mercado</label>
         <input class="cart-input" id="activoPrecioActual" type="number" placeholder="185.00" min="0" step="any">
+      </div>
+    </div>
+    <div class="cart-input-grid">
+      <div class="cart-field">
+        <label>Tipo de compra</label>
+        <select class="cart-input" id="activoTipoCompra" onchange="toggleAportacion()">
+          <option value="puntual">Puntual (única)</option>
+          <option value="mensual">Recurrente mensual</option>
+          <option value="semanal">Recurrente semanal</option>
+        </select>
+      </div>
+      <div class="cart-field cart-aportar-row" id="activoAportarRow">
+        <label>Aportación periódica (€)</label>
+        <input class="cart-input" id="activoAportacion" type="number" placeholder="100.00" min="0" step="any">
       </div>
     </div>
     <div class="cart-modal-msg" id="activoModalMsg"></div>
@@ -2968,6 +3011,92 @@ const TIPO_COLORS   = { accion:'#2563EB', etf:'#10B981', fondo:'#8B5CF6', crypto
 const TIPO_LABELS   = { accion:'Acción', etf:'ETF', fondo:'Fondo', crypto:'Crypto', bono:'Bono', otro:'Otro' };
 const DIVISA_SYM    = { EUR:'€', USD:'$', GBP:'£' };
 
+// Rentabilidades históricas anuales por tipo de activo (medias ajustadas por inflación, conservadoras)
+const TASA_ANUAL = { accion: 0.08, etf: 0.07, fondo: 0.055, crypto: 0.25, bono: 0.03, otro: 0.05 };
+const TASA_LABEL = { accion:'~8% anual', etf:'~7% anual', fondo:'~5.5% anual', crypto:'~25% anual', bono:'~3% anual', otro:'~5% anual' };
+
+// Proyección de un activo a N años (interés compuesto + FV de aportaciones periódicas)
+function _proyActivo(a, años) {
+  const tasa   = TASA_ANUAL[a.tipo] || 0.07;
+  const val    = (parseFloat(a.cantidad) || 0) * (parseFloat(a.precioActual) || 0);
+  let proyVal  = val * Math.pow(1 + tasa, años);
+  const ap     = parseFloat(a.aportacion) || 0;
+  if (ap > 0 && a.tipoCompra !== 'puntual') {
+    const m    = a.tipoCompra === 'mensual' ? 12 : 52;
+    const r    = tasa / m;
+    const nPer = años * m;
+    // FV de anualidad ordinaria al final de cada período
+    proyVal   += ap * ((Math.pow(1 + r, nPer) - 1) / r);
+  }
+  return proyVal;
+}
+
+function _calcProyeccionTotal(años) {
+  let actual = 0, proyectado = 0;
+  _carteras.forEach(c => {
+    (c.activos || []).forEach(a => {
+      const val = (parseFloat(a.cantidad) || 0) * (parseFloat(a.precioActual) || 0);
+      actual    += val;
+      proyectado += años === 0 ? val : _proyActivo(a, años);
+    });
+  });
+  const ganancia = proyectado - actual;
+  const pct      = actual > 0 ? ganancia / actual * 100 : 0;
+  return { actual, proyectado, ganancia, pct };
+}
+
+function _renderProjCards(años) {
+  const cards = document.getElementById('cartProjCards');
+  if (!cards) return;
+  const { actual, proyectado, ganancia, pct } = _calcProyeccionTotal(años);
+  const tasaMedia = actual > 0 ? (Math.pow(proyectado / actual, 1 / años) - 1) * 100 : 0;
+  const fmtEur = n => '€' + Math.round(n).toLocaleString('es-ES');
+  cards.innerHTML = `
+    <div class="cart-proj-card">
+      <div class="cart-proj-card-label">Capital actual</div>
+      <div class="cart-proj-card-value">${fmtEur(actual)}</div>
+      <div class="cart-proj-card-gain flat">Base de inversión</div>
+    </div>
+    <div class="cart-proj-card highlight">
+      <div class="cart-proj-card-label">Proyectado en ${años} años</div>
+      <div class="cart-proj-card-value">${fmtEur(proyectado)}</div>
+      <div class="cart-proj-card-gain up">+${fmtEur(ganancia)}</div>
+      <div class="cart-proj-card-pct">+${pct.toFixed(1)}% total acumulado</div>
+    </div>
+    <div class="cart-proj-card">
+      <div class="cart-proj-card-label">Rentabilidad anual media</div>
+      <div class="cart-proj-card-value" style="font-size:.95rem">${tasaMedia.toFixed(1).replace('.',',')}%</div>
+      <div class="cart-proj-card-gain flat">Ponderada por activo</div>
+    </div>`;
+}
+
+function switchProjYear(años, btn) {
+  document.querySelectorAll('.cart-proj-tab').forEach(t => t.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  _renderProjCards(años);
+}
+
+function _initProyeccion() {
+  const p3  = _calcProyeccionTotal(3).proyectado;
+  const p5  = _calcProyeccionTotal(5).proyectado;
+  const p10 = _calcProyeccionTotal(10).proyectado;
+  const max = Math.max(p3, p5, p10, 1);
+  _renderProjCards(3);
+  setTimeout(() => {
+    const heights = { projBar3: p3, projBar5: p5, projBar10: p10 };
+    Object.entries(heights).forEach(([id, val]) => {
+      const el = document.getElementById(id);
+      if (el) el.style.height = Math.max(val / max * 100, 4) + '%';
+    });
+  }, 80);
+}
+
+function toggleAportacion() {
+  const tipo = document.getElementById('activoTipoCompra').value;
+  const row  = document.getElementById('activoAportarRow');
+  if (row) row.classList.toggle('visible', tipo !== 'puntual');
+}
+
 function _calcCartera(activos) {
   let invertido = 0, actual = 0;
   (activos || []).forEach(a => {
@@ -3125,6 +3254,34 @@ function renderCarteras() {
       </div>
     </div>
 
+    <!-- ── Proyección ── -->
+    <div class="cart-proj-section">
+      <div class="cart-proj-header">
+        <div class="cart-proj-title">📊 Proyección de tu inversión</div>
+        <div class="cart-proj-tabs">
+          <button class="cart-proj-tab active" onclick="switchProjYear(3,this)">3 años</button>
+          <button class="cart-proj-tab" onclick="switchProjYear(5,this)">5 años</button>
+          <button class="cart-proj-tab" onclick="switchProjYear(10,this)">10 años</button>
+        </div>
+      </div>
+      <div class="cart-proj-cards" id="cartProjCards"></div>
+      <div class="cart-proj-bars-row">
+        <div class="cart-proj-bar-wrap">
+          <div class="cart-proj-bar-inner"><div class="cart-proj-bar" id="projBar3" style="height:4%"></div></div>
+          <div class="cart-proj-bar-lbl">3 años</div>
+        </div>
+        <div class="cart-proj-bar-wrap">
+          <div class="cart-proj-bar-inner"><div class="cart-proj-bar" id="projBar5" style="height:4%"></div></div>
+          <div class="cart-proj-bar-lbl">5 años</div>
+        </div>
+        <div class="cart-proj-bar-wrap">
+          <div class="cart-proj-bar-inner"><div class="cart-proj-bar" id="projBar10" style="height:4%"></div></div>
+          <div class="cart-proj-bar-lbl">10 años</div>
+        </div>
+      </div>
+      <div class="cart-proj-note">Proyección estimada con rentabilidades históricas anuales por tipo de activo (acciones ~8%, ETFs ~7%, crypto ~25%, bonos ~3%). No garantiza rendimientos futuros.</div>
+    </div>
+
     <!-- ── Lista de carteras ── -->
     <div class="cart-list">
       ${_carteras.map(c => _renderCarteraCard(c)).join('')}
@@ -3135,13 +3292,14 @@ function renderCarteras() {
       <button class="cart-new-btn" onclick="openCarteraModal()">+ Nueva Cartera</button>
     </div>`;
 
-  // Dibuja donut tras render
+  // Dibuja donut y proyección tras render
   if (donutSegs.length > 0) {
     setTimeout(() => {
       const cv = document.getElementById('cartDonutCanvas');
       if (cv) _drawDonut(cv, donutSegs);
     }, 30);
   }
+  _initProyeccion();
 }
 
 function _renderCarteraCard(c) {
@@ -3161,6 +3319,10 @@ function _renderCarteraCard(c) {
     const pl  = inv > 0 ? (val - inv) / inv * 100 : 0;
     const plCls = pl > 0 ? 'up' : pl < 0 ? 'down' : 'flat';
     const fmt2 = n => s + n.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const tc = a.tipoCompra || 'puntual';
+    const apBadge = tc === 'puntual'
+      ? `<span class="cart-badge-puntual">Puntual</span>`
+      : `<span class="cart-badge-recurrente">${tc === 'mensual' ? `${s}${(parseFloat(a.aportacion)||0).toLocaleString('es-ES',{minimumFractionDigits:0,maximumFractionDigits:0})}/mes` : `${s}${(parseFloat(a.aportacion)||0).toLocaleString('es-ES',{minimumFractionDigits:0,maximumFractionDigits:0})}/sem`}</span>`;
     return `<tr>
       <td>${a.ticker || '—'}</td>
       <td>${a.nombre || '—'}</td>
@@ -3170,6 +3332,7 @@ function _renderCarteraCard(c) {
       <td>${fmt2(pa)}</td>
       <td>${fmt2(val)}</td>
       <td><span class="cart-activo-pl ${plCls}">${pl > 0 ? '+' : ''}${pl.toFixed(2)}%</span></td>
+      <td>${apBadge}</td>
       <td>
         <button class="cart-card-btn" onclick="openActivoModal('${c.id}','${a.id}')" title="Editar">✏️</button>
         <button class="cart-card-btn del" onclick="deleteActivo('${c.id}','${a.id}')" title="Eliminar">✕</button>
@@ -3197,7 +3360,7 @@ function _renderCarteraCard(c) {
             <table class="cart-activos-table">
               <thead><tr>
                 <th>Ticker</th><th>Nombre</th><th>Tipo</th><th>Cantidad</th>
-                <th>Precio compra</th><th>Precio actual</th><th>Valor</th><th>P&amp;L</th><th></th>
+                <th>Precio compra</th><th>Precio actual</th><th>Valor</th><th>P&amp;L</th><th>Aportación</th><th></th>
               </tr></thead>
               <tbody>${rows}</tbody>
             </table>
@@ -3344,6 +3507,8 @@ function openActivoModal(carteraId, activoId) {
     document.getElementById('activoFecha').value              = activo.fechaCompra || '';
     document.getElementById('activoPrecioCompra').value       = activo.precioCompra || '';
     document.getElementById('activoPrecioActual').value       = activo.precioActual || '';
+    document.getElementById('activoTipoCompra').value         = activo.tipoCompra || 'puntual';
+    document.getElementById('activoAportacion').value         = activo.aportacion || '';
   } else {
     document.getElementById('activoModalTitle').textContent   = 'Añadir Activo';
     document.getElementById('activoModalId').value            = '';
@@ -3355,7 +3520,10 @@ function openActivoModal(carteraId, activoId) {
     document.getElementById('activoFecha').value              = '';
     document.getElementById('activoPrecioCompra').value       = '';
     document.getElementById('activoPrecioActual').value       = '';
+    document.getElementById('activoTipoCompra').value         = 'puntual';
+    document.getElementById('activoAportacion').value         = '';
   }
+  toggleAportacion();
   document.getElementById('modalActivo').classList.add('show');
   document.getElementById('activoTicker').focus();
 }
@@ -3375,6 +3543,8 @@ async function saveActivo() {
   const fechaCompra  = document.getElementById('activoFecha').value;
   const precioCompra = parseFloat(document.getElementById('activoPrecioCompra').value);
   const precioActual = parseFloat(document.getElementById('activoPrecioActual').value);
+  const tipoCompra   = document.getElementById('activoTipoCompra').value;
+  const aportacion   = tipoCompra !== 'puntual' ? (parseFloat(document.getElementById('activoAportacion').value) || 0) : 0;
   const msgEl        = document.getElementById('activoModalMsg');
 
   if (!nombre)                           { msgEl.textContent = '⚠️ Introduce el nombre del activo'; return; }
@@ -3385,7 +3555,7 @@ async function saveActivo() {
   const cartera = _carteras.find(c => c.id === carteraId);
   if (!cartera) return;
 
-  const activo = { id: activoId || undefined, ticker, nombre, tipo, divisa, cantidad, fechaCompra, precioCompra, precioActual };
+  const activo = { id: activoId || undefined, ticker, nombre, tipo, divisa, cantidad, fechaCompra, precioCompra, precioActual, tipoCompra, aportacion };
   const updActivos = activoId
     ? (cartera.activos || []).map(a => a.id === activoId ? { ...a, ...activo } : a)
     : [...(cartera.activos || []), activo];
