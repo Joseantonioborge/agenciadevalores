@@ -1011,6 +1011,13 @@ tr:hover td{background:rgba(255,255,255,.02)}
 @media(max-width:900px){.bancos-kpi-row{grid-template-columns:repeat(2,1fr)}.bancos-chart-row2{grid-template-columns:1fr 1fr}}
 @media(max-width:640px){.bancos-kpi-row{grid-template-columns:1fr 1fr}.bancos-chart-row2{grid-template-columns:1fr}}
 
+/* ===== INFORME DE CARTERA ===== */
+.cart-report-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px}
+.cart-report-title{font-size:1.0rem;font-weight:600;color:var(--text2)}
+.cart-report-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;background:linear-gradient(135deg,#1e3a8a,#2563EB);color:#fff;border:none;border-radius:10px;font-size:.83rem;font-weight:700;cursor:pointer;transition:.2s;font-family:var(--font);letter-spacing:.02em}
+.cart-report-btn:hover{background:linear-gradient(135deg,#2563EB,#3b82f6);box-shadow:0 4px 18px rgba(37,99,235,.45);transform:translateY(-1px)}
+.cart-report-btn:active{transform:scale(.98)}
+
 /* ===== COMPARADOR DE FONDOS ===== */
 .fondos-topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px}
 .fondos-title{font-size:1.2rem;font-weight:700;color:var(--text)}
@@ -3949,6 +3956,14 @@ function renderCarteras() {
   const fmtPct = (p, s) => (s || '') + Math.abs(p).toFixed(2) + '%';
 
   panel.innerHTML = `
+    <!-- ── Barra de acciones ── -->
+    <div class="cart-report-bar">
+      <div class="cart-report-title">💼 Mi Cartera de Inversión</div>
+      <button class="cart-report-btn" onclick="generateCarteraReport()">
+        📄 Descargar Informe
+      </button>
+    </div>
+
     <!-- ── KPIs ── -->
     <div class="cart-kpi-row">
       <div class="cart-kpi-card">
@@ -4547,6 +4562,413 @@ function _drawCalcChart(capital, aportacion, m, tasa, maxAnos) {
     ctx.textAlign = 'center';
     ctx.fillText(d.year + 'a', x + barW / 2, padT + chartH + 16);
   });
+}
+
+// ================================================================
+// INFORME DE CARTERA — Generador HTML/PDF
+// ================================================================
+function generateCarteraReport() {
+  if (!_carteras.length) { toast('Sin datos de cartera para generar el informe', 'warn'); return; }
+  toast('Generando informe…', 'ok');
+
+  const inv     = _session?.name || 'Inversor';
+  const now     = new Date();
+  const fmtDate = d => d.toLocaleDateString('es-ES', { day:'2-digit', month:'long', year:'numeric' });
+  const fmtEur  = n => '€' + (n||0).toLocaleString('es-ES', { minimumFractionDigits:2, maximumFractionDigits:2 });
+  const fmtEurK = n => n >= 1000000 ? '€' + (n/1000000).toFixed(2) + 'M' : n >= 1000 ? '€' + (n/1000).toFixed(1) + 'K' : fmtEur(n);
+  const fmtPct  = (v, sign=true) => (sign && v > 0 ? '+' : '') + v.toFixed(2) + '%';
+  const sgn     = v => v > 0 ? 'pos' : v < 0 ? 'neg' : 'neu';
+
+  // ── Cálculos globales ───────────────────────────────────────────
+  let totalInv=0, totalAct=0, totalActivos=0;
+  const tipoMap = {};
+  _carteras.forEach(c => {
+    const calc = _calcCartera(c.activos);
+    totalInv += calc.invertido; totalAct += calc.actual;
+    totalActivos += (c.activos||[]).length;
+    (c.activos||[]).forEach(a => {
+      const v = (parseFloat(a.cantidad)||0)*(parseFloat(a.precioActual)||0);
+      tipoMap[a.tipo] = (tipoMap[a.tipo]||0) + v;
+    });
+  });
+  const totalGan = totalAct - totalInv;
+  const totalPct = totalInv > 0 ? totalGan/totalInv*100 : 0;
+  const p3  = _calcProyeccionTotal(3);
+  const p5  = _calcProyeccionTotal(5);
+  const p10 = _calcProyeccionTotal(10);
+
+  // ── SVG Donut distribución ───────────────────────────────────────
+  const donutSegs = Object.entries(tipoMap)
+    .map(([tipo,val]) => ({ label: TIPO_LABELS[tipo]||tipo, val, color: TIPO_COLORS[tipo]||'#64748b', pct: totalAct>0 ? val/totalAct*100 : 0 }))
+    .sort((a,b) => b.val - a.val);
+
+  function _svgDonutPath(segs, cx, cy, r) {
+    const total = segs.reduce((s,sg) => s+sg.val, 0);
+    if (!total) return '';
+    let angle = -Math.PI/2, paths = '';
+    segs.forEach(sg => {
+      const sweep = (sg.val/total)*2*Math.PI;
+      const x1 = cx + r*Math.cos(angle),          y1 = cy + r*Math.sin(angle);
+      const x2 = cx + r*Math.cos(angle+sweep),     y2 = cy + r*Math.sin(angle+sweep);
+      const ir = r*0.55;
+      const ix1 = cx + ir*Math.cos(angle+sweep),   iy1 = cy + ir*Math.sin(angle+sweep);
+      const ix2 = cx + ir*Math.cos(angle),          iy2 = cy + ir*Math.sin(angle);
+      const la = sweep > Math.PI ? 1 : 0;
+      paths += `<path d="M${x1},${y1} A${r},${r} 0 ${la} 1 ${x2},${y2} L${ix1},${iy1} A${ir},${ir} 0 ${la} 0 ${ix2},${iy2} Z" fill="${sg.color}" opacity=".9"/>`;
+      angle += sweep;
+    });
+    return paths;
+  }
+  const donutSVG = `<svg width="160" height="160" viewBox="0 0 160 160">
+    ${_svgDonutPath(donutSegs, 80, 80, 70)}
+    <circle cx="80" cy="80" r="39" fill="white"/>
+    <text x="80" y="76" text-anchor="middle" font-size="11" font-weight="700" font-family="Inter,sans-serif" fill="#1e293b">${fmtEurK(totalAct)}</text>
+    <text x="80" y="91" text-anchor="middle" font-size="9" font-family="Inter,sans-serif" fill="#64748b">Valor actual</text>
+  </svg>`;
+
+  // ── SVG Barras proyección ─────────────────────────────────────────
+  const projData = [
+    { label:'Actual',   val:totalAct,    color:'#2563EB' },
+    { label:'3 años',   val:p3.proyectado, color:'#10B981' },
+    { label:'5 años',   val:p5.proyectado, color:'#059669' },
+    { label:'10 años',  val:p10.proyectado,color:'#065f46' },
+  ];
+  const projMax = Math.max(...projData.map(d => d.val), 1);
+  const projBars = projData.map(d => {
+    const w = Math.round((d.val/projMax)*260);
+    return `<g>
+      <rect x="70" y="0" width="${w}" height="28" rx="4" fill="${d.color}" opacity=".85"/>
+      <text x="66" y="18" text-anchor="end" font-size="11" font-family="Inter,sans-serif" fill="#475569">${d.label}</text>
+      <text x="${70+w+6}" y="18" font-size="11" font-weight="700" font-family="Inter,sans-serif" fill="${d.color}">${fmtEurK(d.val)}</text>
+    </g>`;
+  });
+  const projSVG = `<svg width="420" height="152" viewBox="0 0 420 152">
+    ${projBars.map((b,i) => `<g transform="translate(0,${i*38})">${b}</g>`).join('')}
+  </svg>`;
+
+  // ── Tabla detalle activos ─────────────────────────────────────────
+  const detalleHTML = _carteras.map(c => {
+    const calc = _calcCartera(c.activos);
+    const cls  = calc.pct >= 0 ? 'pos' : 'neg';
+    const actRows = (c.activos||[]).map(a => {
+      const q=parseFloat(a.cantidad)||0, pc=parseFloat(a.precioCompra)||0, pa=parseFloat(a.precioActual)||0;
+      const val=q*pa, inv2=q*pc, pl=inv2>0?(val-inv2)/inv2*100:0;
+      const tc=a.tipoCompra||'puntual';
+      const ap=tc!=='puntual'? `€${(parseFloat(a.aportacion)||0).toLocaleString('es-ES')}/${tc==='mensual'?'mes':'sem'}` : 'Puntual';
+      return `<tr>
+        <td>${a.ticker||'—'}</td><td>${a.nombre||'—'}</td>
+        <td>${TIPO_LABELS[a.tipo]||a.tipo}</td>
+        <td class="num">${q.toLocaleString('es-ES')}</td>
+        <td class="num">€${pc.toFixed(2)}</td>
+        <td class="num">€${pa.toFixed(2)}</td>
+        <td class="num">€${val.toFixed(2)}</td>
+        <td class="num ${sgn(pl)}">${fmtPct(pl)}</td>
+        <td>${ap}</td>
+      </tr>`;
+    }).join('');
+    return `
+      <div class="section-card" style="break-inside:avoid">
+        <div class="cartera-header">
+          <span class="cartera-dot" style="background:${c.color}"></span>
+          <span class="cartera-name">${c.nombre}</span>
+          <span class="badge ${cls}">${fmtPct(calc.pct)}</span>
+          <span class="cartera-meta">${fmtEur(calc.actual)} · ${(c.activos||[]).length} activos</span>
+        </div>
+        <table class="data-tbl"><thead><tr>
+          <th>Ticker</th><th>Nombre</th><th>Tipo</th>
+          <th class="num">Cant.</th><th class="num">P.Compra</th><th class="num">P.Actual</th>
+          <th class="num">Valor</th><th class="num">P&L</th><th>Aportación</th>
+        </tr></thead><tbody>${actRows}</tbody></table>
+      </div>`;
+  }).join('');
+
+  // ── Mercados actuales ─────────────────────────────────────────────
+  const mktsHTML = _marketData && _marketData.length ? `
+    <table class="data-tbl">
+      <thead><tr><th>Índice</th><th class="num">Precio</th><th class="num">Cambio</th><th class="num">Var. %</th><th>Estado</th></tr></thead>
+      <tbody>${_marketData.slice(0,9).map(m => {
+        const chg = m.changePct || m.change || 0;
+        const cls = chg >= 0 ? 'pos' : 'neg';
+        const arrow = chg >= 0 ? '▲' : '▼';
+        return `<tr>
+          <td><strong>${m.name||m.symbol||'—'}</strong></td>
+          <td class="num">${(m.price||0).toLocaleString('es-ES',{minimumFractionDigits:2})}</td>
+          <td class="num ${cls}">${arrow} ${Math.abs(m.change||0).toFixed(2)}</td>
+          <td class="num ${cls}">${arrow} ${Math.abs(chg).toFixed(2)}%</td>
+          <td><span class="badge ${cls}" style="font-size:.68rem">${chg>=0?'Alcista':'Bajista'}</span></td>
+        </tr>`;
+      }).join('')}</tbody>
+    </table>` : '<p class="note">Datos de mercado no disponibles en este momento.</p>';
+
+  // ── Recomendaciones algorítmicas ──────────────────────────────────
+  const recs = [];
+  const tipoArr = Object.entries(tipoMap).sort((a,b)=>b[1]-a[1]);
+  const cryptoPct = totalAct>0 ? (tipoMap.crypto||0)/totalAct*100 : 0;
+  const bonoPct   = totalAct>0 ? (tipoMap.bono||0)/totalAct*100 : 0;
+  const accionPct = totalAct>0 ? (tipoMap.accion||0)/totalAct*100 : 0;
+  const nTipos    = tipoArr.length;
+  const tieneAportaciones = _carteras.some(c => (c.activos||[]).some(a => a.tipoCompra!=='puntual' && parseFloat(a.aportacion)>0));
+  const mktCaida  = _marketData && _marketData.length ? _marketData.filter(m=>(m.changePct||m.change||0)<-0.5).length : 0;
+  const mktSubida = _marketData && _marketData.length ? _marketData.filter(m=>(m.changePct||m.change||0)>0.5).length : 0;
+
+  if (nTipos < 3)
+    recs.push({ icon:'⚠️', tipo:'Diversificación', titulo:'Diversifica tu cartera', texto:`Tu cartera tiene activos de solo ${nTipos} tipo${nTipos!==1?'s':''}. Considera añadir más clases de activos (ETFs, bonos, renta variable global) para reducir la volatilidad y mejorar el ratio riesgo/rentabilidad.`, prio:'medium' });
+  if (cryptoPct > 30)
+    recs.push({ icon:'🔴', tipo:'Riesgo', titulo:'Alta exposición a criptoactivos', texto:`El ${cryptoPct.toFixed(1)}% de tu cartera está en criptoactivos, que pueden presentar volatilidades superiores al 60% anual. Se recomienda limitar la exposición a entre un 5-15% del total para perfiles moderados.`, prio:'high' });
+  if (bonoPct === 0 && totalAct > 5000)
+    recs.push({ icon:'💡', tipo:'Optimización', titulo:'Considera añadir renta fija', texto:`No tienes ningún bono o fondo de renta fija. Incluir un 10-20% en RF de calidad puede actuar como amortiguador en momentos de turbulencia y mejorar la estabilidad general de la cartera.`, prio:'medium' });
+  if (accionPct > 80)
+    recs.push({ icon:'📊', tipo:'Equilibrio', titulo:'Alta concentración en acciones', texto:`El ${accionPct.toFixed(1)}% de tu cartera son acciones individuales. Complementar con ETFs de índices amplios (S&P 500, MSCI World) puede mejorar la diversificación y reducir el riesgo específico de compañía.`, prio:'medium' });
+  if (tieneAportaciones)
+    recs.push({ icon:'✅', tipo:'Estrategia', titulo:'Aportaciones periódicas activas', texto:`Tienes aportaciones recurrentes configuradas. Esta estrategia de Dollar Cost Averaging (DCA) es una de las más efectivas a largo plazo, reduciendo el impacto de la volatilidad de mercado. ¡Mantén la disciplina!`, prio:'low' });
+  else
+    recs.push({ icon:'💡', tipo:'Estrategia', titulo:'Activa aportaciones periódicas', texto:`Configurar aportaciones mensuales o semanales automáticas, incluso pequeñas, activa el efecto del interés compuesto y reduce el riesgo de entrada en los mercados. Es una de las estrategias más recomendadas para inversores a largo plazo.`, prio:'medium' });
+  if (p10.pct > 100)
+    recs.push({ icon:'🚀', tipo:'Proyección', titulo:'Excelente proyección a largo plazo', texto:`A 10 años, tu cartera proyecta un crecimiento acumulado del ${p10.pct.toFixed(0)}% (${fmtEurK(p10.proyectado)}). Si mantienes las inversiones y añades aportaciones, el efecto del interés compuesto trabajará fuertemente a tu favor.`, prio:'low' });
+  if (mktCaida > mktSubida && _marketData?.length)
+    recs.push({ icon:'📉', tipo:'Mercados', titulo:'Mercados en corrección', texto:`${mktCaida} de los principales índices muestran caídas hoy. Las correcciones de mercado pueden ser oportunidades para incrementar posiciones en activos de calidad a precios más atractivos, especialmente si tu horizonte es superior a 3 años.`, prio:'medium' });
+  if (mktSubida > mktCaida && _marketData?.length)
+    recs.push({ icon:'📈', tipo:'Mercados', titulo:'Tendencia alcista en mercados', texto:`${mktSubida} índices principales muestran tendencia positiva hoy. En entornos alcistas, considera revisar tus stops de beneficios y valorar si quieres materializar algunas ganancias en posiciones muy apreciadas.`, prio:'low' });
+  if (totalPct < -10)
+    recs.push({ icon:'🛡️', tipo:'Gestión de riesgo', titulo:'Cartera con pérdidas significativas', texto:`Tu cartera acumula una pérdida del ${Math.abs(totalPct).toFixed(1)}%. Antes de tomar decisiones, analiza si los fundamentales de los activos siguen siendo sólidos. Las pérdidas no realizadas solo se materializan al vender.`, prio:'high' });
+
+  const recosHTML = recs.map(r => {
+    const borderMap = { high:'#EF4444', medium:'#F59E0B', low:'#10B981' };
+    return `<div class="reco-card" style="border-left-color:${borderMap[r.prio]}">
+      <div class="reco-head">
+        <span class="reco-icon">${r.icon}</span>
+        <span class="reco-tipo" style="color:${borderMap[r.prio]}">${r.tipo}</span>
+        <span class="reco-titulo">${r.titulo}</span>
+      </div>
+      <div class="reco-texto">${r.texto}</div>
+    </div>`;
+  }).join('');
+
+  // ── Descargo de responsabilidad ────────────────────────────────────
+  const legal = `Este informe ha sido generado automáticamente por el sistema Agencia de Valores Generación Z con fines informativos. Las proyecciones de rentabilidad se basan en datos históricos de mercado y no garantizan rendimientos futuros. Las recomendaciones son orientativas y no constituyen asesoramiento financiero personalizado regulado. Consulte con un asesor financiero certificado antes de tomar decisiones de inversión. Datos de mercado con posible delay. Generado el ${fmtDate(now)}.`;
+
+  // ── HTML del informe ───────────────────────────────────────────────
+  const html = `<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Informe de Cartera — ${inv} — ${fmtDate(now)}</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',sans-serif;background:#f8fafc;color:#1e293b;font-size:13px;line-height:1.5}
+  .page{max-width:860px;margin:0 auto;padding:0}
+  /* ── PORTADA ── */
+  .cover{background:linear-gradient(135deg,#0f172a 0%,#1e3a8a 50%,#1d4ed8 100%);color:#fff;padding:60px 50px 50px;min-height:280px;display:flex;flex-direction:column;justify-content:space-between;page-break-after:always}
+  .cover-logo{display:flex;align-items:center;gap:10px;margin-bottom:40px}
+  .cover-logo-dot{width:10px;height:10px;border-radius:50%;background:#3b82f6}
+  .cover-logo-text{font-size:14px;font-weight:700;letter-spacing:.05em;opacity:.9}
+  .cover-title{font-size:32px;font-weight:800;line-height:1.15;margin-bottom:8px}
+  .cover-sub{font-size:15px;opacity:.7;margin-bottom:32px}
+  .cover-meta{display:flex;gap:30px;flex-wrap:wrap}
+  .cover-meta-item{display:flex;flex-direction:column;gap:2px}
+  .cover-meta-label{font-size:10px;opacity:.6;text-transform:uppercase;letter-spacing:.08em}
+  .cover-meta-value{font-size:14px;font-weight:600}
+  .cover-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:36px}
+  .cover-kpi{background:rgba(255,255,255,.1);border-radius:10px;padding:14px 16px;border:1px solid rgba(255,255,255,.15)}
+  .cover-kpi-label{font-size:9.5px;opacity:.65;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+  .cover-kpi-val{font-size:17px;font-weight:700}
+  .cover-kpi-sub{font-size:10px;opacity:.6;margin-top:3px}
+  /* ── SECCIONES ── */
+  .content{padding:36px 40px}
+  .section{margin-bottom:36px;page-break-inside:avoid}
+  .section-title{font-size:16px;font-weight:700;color:#0f172a;border-bottom:2px solid #2563EB;padding-bottom:8px;margin-bottom:18px;display:flex;align-items:center;gap:8px}
+  .section-card{background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:18px 20px;margin-bottom:14px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+  /* ── KPIs resumen ── */
+  .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:22px}
+  .kpi-card{background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:14px 16px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+  .kpi-label{font-size:9.5px;color:#64748b;text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px;font-weight:600}
+  .kpi-val{font-size:16px;font-weight:700;color:#0f172a}
+  .kpi-sub{font-size:10px;color:#94a3b8;margin-top:3px}
+  /* ── Distribución ── */
+  .dist-row{display:flex;align-items:center;gap:28px;background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:20px;margin-bottom:18px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+  .dist-legend{flex:1}
+  .dist-item{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid #f1f5f9;font-size:12px}
+  .dist-item:last-child{border-bottom:none}
+  .dist-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+  .dist-pct{font-weight:700;color:#0f172a;margin-left:auto;font-size:12px}
+  .dist-eur{color:#64748b;font-size:11px;margin-left:8px}
+  /* ── Tablas ── */
+  .data-tbl{width:100%;border-collapse:collapse;font-size:11.5px}
+  .data-tbl th{background:#f8fafc;color:#64748b;font-weight:600;font-size:10px;text-transform:uppercase;letter-spacing:.04em;padding:8px 10px;border-bottom:1.5px solid #e2e8f0;text-align:left}
+  .data-tbl th.num{text-align:right}
+  .data-tbl td{padding:8px 10px;border-bottom:1px solid #f1f5f9;color:#374151;vertical-align:middle}
+  .data-tbl td.num{text-align:right}
+  .data-tbl tr:last-child td{border-bottom:none}
+  .data-tbl tr:hover td{background:#f8fafc}
+  /* ── Cartera cabecera ── */
+  .cartera-header{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+  .cartera-dot{width:14px;height:14px;border-radius:50%}
+  .cartera-name{font-size:14px;font-weight:700;color:#0f172a}
+  .cartera-meta{font-size:11px;color:#64748b;margin-left:auto}
+  /* ── Badges ── */
+  .badge{display:inline-flex;align-items:center;padding:2px 9px;border-radius:5px;font-size:11px;font-weight:700}
+  .badge.pos{background:#dcfce7;color:#16a34a}
+  .badge.neg{background:#fee2e2;color:#dc2626}
+  .badge.neu{background:#f1f5f9;color:#64748b}
+  /* ── Colores P&L ── */
+  .pos{color:#16a34a;font-weight:600}
+  .neg{color:#dc2626;font-weight:600}
+  .neu{color:#64748b}
+  /* ── Proyección ── */
+  .proj-table{width:100%;border-collapse:collapse;font-size:12px;margin-top:16px}
+  .proj-table th{background:#eff6ff;color:#1d4ed8;font-weight:700;font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;padding:9px 14px;border-bottom:1.5px solid #bfdbfe;text-align:right}
+  .proj-table th:first-child{text-align:left}
+  .proj-table td{padding:10px 14px;border-bottom:1px solid #e2e8f0;text-align:right}
+  .proj-table td:first-child{text-align:left;font-weight:600}
+  .proj-table tr:last-child td{border-bottom:none;font-weight:700;background:#eff6ff}
+  /* ── Recomendaciones ── */
+  .reco-card{background:#fff;border:1px solid #e2e8f0;border-left:4px solid #2563EB;border-radius:8px;padding:14px 16px;margin-bottom:12px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+  .reco-head{display:flex;align-items:center;gap:8px;margin-bottom:7px;flex-wrap:wrap}
+  .reco-icon{font-size:16px}
+  .reco-tipo{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;background:#eff6ff;padding:2px 7px;border-radius:4px}
+  .reco-titulo{font-size:13px;font-weight:700;color:#0f172a}
+  .reco-texto{font-size:12px;color:#475569;line-height:1.6}
+  /* ── Legal ── */
+  .legal{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:14px 18px;font-size:10px;color:#94a3b8;line-height:1.6;margin-top:28px}
+  /* ── Footer ── */
+  .report-footer{text-align:center;padding:18px 0 0;color:#cbd5e1;font-size:10px;border-top:1px solid #e2e8f0;margin-top:28px}
+  /* ── Utilidades ── */
+  .note{color:#94a3b8;font-size:12px;font-style:italic;padding:10px 0}
+  @media print{
+    body{background:#fff}
+    .cover{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .section{page-break-inside:avoid}
+    .section-card{page-break-inside:avoid}
+    .reco-card{page-break-inside:avoid}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ══════════════════════════════════════════════════════
+       PORTADA
+  ══════════════════════════════════════════════════════ -->
+  <div class="cover">
+    <div>
+      <div class="cover-logo">
+        <div class="cover-logo-dot"></div>
+        <div class="cover-logo-text">AGENCIA DE VALORES GENERACIÓN Z</div>
+      </div>
+      <div class="cover-title">Informe de Cartera<br>Personal</div>
+      <div class="cover-sub">Análisis · Proyección · Recomendaciones</div>
+      <div class="cover-meta">
+        <div class="cover-meta-item"><div class="cover-meta-label">Inversor</div><div class="cover-meta-value">${inv}</div></div>
+        <div class="cover-meta-item"><div class="cover-meta-label">Generado</div><div class="cover-meta-value">${fmtDate(now)}</div></div>
+        <div class="cover-meta-item"><div class="cover-meta-label">Carteras</div><div class="cover-meta-value">${_carteras.length}</div></div>
+        <div class="cover-meta-item"><div class="cover-meta-label">Activos</div><div class="cover-meta-value">${totalActivos}</div></div>
+      </div>
+    </div>
+    <div class="cover-kpis">
+      <div class="cover-kpi"><div class="cover-kpi-label">Total Invertido</div><div class="cover-kpi-val">${fmtEurK(totalInv)}</div><div class="cover-kpi-sub">Capital comprometido</div></div>
+      <div class="cover-kpi"><div class="cover-kpi-label">Valor Actual</div><div class="cover-kpi-val">${fmtEurK(totalAct)}</div><div class="cover-kpi-sub">A precio de mercado</div></div>
+      <div class="cover-kpi"><div class="cover-kpi-label">Rentabilidad</div><div class="cover-kpi-val">${fmtPct(totalPct)}</div><div class="cover-kpi-sub">${fmtEur(totalGan)}</div></div>
+      <div class="cover-kpi"><div class="cover-kpi-label">Proy. 10 años</div><div class="cover-kpi-val">${fmtEurK(p10.proyectado)}</div><div class="cover-kpi-sub">+${p10.pct.toFixed(0)}% estimado</div></div>
+    </div>
+  </div>
+
+  <div class="content">
+
+  <!-- ══════════════════════════════════════════════════════
+       1. RESUMEN EJECUTIVO
+  ══════════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-title">📊 1. Resumen Ejecutivo</div>
+    <div class="kpi-grid">
+      <div class="kpi-card"><div class="kpi-label">Total Invertido</div><div class="kpi-val">${fmtEur(totalInv)}</div><div class="kpi-sub">${_carteras.length} cartera${_carteras.length!==1?'s':''}</div></div>
+      <div class="kpi-card"><div class="kpi-label">Valor de Mercado</div><div class="kpi-val">${fmtEur(totalAct)}</div><div class="kpi-sub">${totalActivos} activos</div></div>
+      <div class="kpi-card"><div class="kpi-label">Ganancia / Pérdida</div><div class="kpi-val ${sgn(totalGan)}">${fmtEur(totalGan)}</div><div class="kpi-sub ${sgn(totalPct)}">${fmtPct(totalPct)}</div></div>
+      <div class="kpi-card"><div class="kpi-label">Proyección 5 años</div><div class="kpi-val">${fmtEur(p5.proyectado)}</div><div class="kpi-sub">+${fmtEur(p5.ganancia)} estimado</div></div>
+    </div>
+    <div class="dist-row">
+      ${donutSVG}
+      <div class="dist-legend">
+        <div style="font-weight:700;font-size:12px;color:#0f172a;margin-bottom:10px">Distribución por tipo de activo</div>
+        ${donutSegs.map(s=>`<div class="dist-item"><span class="dist-dot" style="background:${s.color}"></span><span>${s.label}</span><span class="dist-eur">${fmtEur(s.val)}</span><span class="dist-pct">${s.pct.toFixed(1)}%</span></div>`).join('')}
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       2. DETALLE DE CARTERAS Y ACTIVOS
+  ══════════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-title">💼 2. Detalle de Carteras y Activos</div>
+    ${detalleHTML}
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       3. PROYECCIÓN DE RENTABILIDAD
+  ══════════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-title">📈 3. Proyección de Rentabilidad</div>
+    <div class="section-card">
+      <p style="font-size:12px;color:#475569;margin-bottom:18px">Proyección basada en rentabilidades históricas anuales por tipo de activo: acciones ~8%, ETFs ~7%, fondos ~5.5%, crypto ~25%, bonos ~3%. Incluye el efecto de las aportaciones periódicas configuradas.</p>
+      ${projSVG}
+      <table class="proj-table" style="margin-top:22px">
+        <thead><tr><th>Horizonte</th><th>Capital actual</th><th>Proyección</th><th>Ganancia estimada</th><th>Rentab. acumulada</th><th>CAGR</th></tr></thead>
+        <tbody>
+          ${[{label:'3 años',p:p3},{label:'5 años',p:p5},{label:'10 años',p:p10}].map(({label,p})=>{
+            const cagr = p.actual > 0 ? (Math.pow(p.proyectado/p.actual, 1/parseInt(label))-1)*100 : 0;
+            return `<tr>
+              <td>${label}</td><td>${fmtEur(p.actual)}</td>
+              <td><strong>${fmtEur(p.proyectado)}</strong></td>
+              <td class="pos">+${fmtEur(p.ganancia)}</td>
+              <td class="pos">+${p.pct.toFixed(1)}%</td>
+              <td>${cagr.toFixed(1)}% anual</td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       4. SITUACIÓN ACTUAL DE MERCADOS
+  ══════════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-title">🌍 4. Situación Actual de Mercados</div>
+    <div class="section-card">
+      <p style="font-size:12px;color:#475569;margin-bottom:14px">Principales índices bursátiles mundiales en el momento de generar el informe.</p>
+      ${mktsHTML}
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       5. RECOMENDACIONES DE INVERSIÓN
+  ══════════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-title">💡 5. Recomendaciones de Inversión</div>
+    ${recosHTML}
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       AVISO LEGAL
+  ══════════════════════════════════════════════════════ -->
+  <div class="legal">⚖️ <strong>Aviso legal:</strong> ${legal}</div>
+
+  <div class="report-footer">
+    Agencia de Valores Generación Z · v2.5.0 · agenciadevalores.vercel.app · Informe generado el ${fmtDate(now)}
+  </div>
+
+  </div><!-- /content -->
+</div><!-- /page -->
+</body>
+</html>`;
+
+  const win = window.open('', '_blank', 'width=920,height=850,scrollbars=yes');
+  if (!win) { toast('El navegador bloqueó la ventana emergente. Permite los pop-ups para este sitio.', 'warn'); return; }
+  win.document.open();
+  win.document.write(html);
+  win.document.close();
+  win.onload = () => { setTimeout(() => win.print(), 400); };
 }
 
 // ================================================================
