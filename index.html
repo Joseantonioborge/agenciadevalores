@@ -44,6 +44,11 @@ nav{
 .nav-tab.active{color:var(--text);background:var(--card2)}
 .nav-right{display:flex;align-items:center;gap:12px}
 .nav-time{font-size:.8rem;color:var(--text3);font-variant-numeric:tabular-nums}
+#btnRegister{
+  padding:7px 16px;border-radius:6px;font-size:.85rem;font-weight:500;
+  background:transparent;color:var(--accent);border:1px solid var(--accent);cursor:pointer;transition:.15s;
+}
+#btnRegister:hover{background:rgba(37,99,235,.1)}
 #btnLogin{
   padding:7px 16px;border-radius:6px;font-size:.85rem;font-weight:500;
   background:var(--accent);color:#fff;border:none;cursor:pointer;transition:.15s;
@@ -912,6 +917,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <span class="ub-name" id="ubName"></span>
       <span class="ub-chevron">▾</span>
     </button>
+    <button id="btnRegister" onclick="openRegisterModal()">Registro</button>
     <button id="btnLogin" onclick="openLoginModal()">Acceder</button>
     <button id="btnLogout" style="display:none" onclick="logout()">Cerrar sesión</button>
   </div>
@@ -1459,6 +1465,36 @@ tr:hover td{background:rgba(255,255,255,.02)}
   </div>
 </div>
 
+<!-- REGISTRO PÚBLICO MODAL -->
+<div class="modal-overlay" id="modalRegister">
+  <div class="modal">
+    <button class="modal-close" onclick="closeRegisterModal()">✕</button>
+    <h2 class="modal-title">Crear cuenta</h2>
+    <p class="modal-sub">Regístrate para acceder a tu dashboard de inversión</p>
+    <div class="form-group">
+      <label class="form-label">Nombre completo</label>
+      <input class="form-input" type="text" id="regName" placeholder="Carlos García" autocomplete="name">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Email</label>
+      <input class="form-input" type="email" id="regEmail" placeholder="correo@ejemplo.com" autocomplete="email">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Contraseña</label>
+      <input class="form-input" type="password" id="regPass" placeholder="Mínimo 6 caracteres" autocomplete="new-password">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Confirmar contraseña</label>
+      <input class="form-input" type="password" id="regPass2" placeholder="Repite la contraseña" autocomplete="new-password" onkeydown="if(event.key==='Enter')doRegister()">
+    </div>
+    <div class="form-error" id="regError"></div>
+    <button class="btn-primary" id="regBtn" onclick="doRegister()">Crear cuenta</button>
+    <p style="text-align:center;margin-top:14px;font-size:.82rem;color:var(--text3)">
+      ¿Ya tienes cuenta? <a href="#" style="color:var(--accent);text-decoration:none" onclick="closeRegisterModal();openLoginModal();return false">Acceder</a>
+    </p>
+  </div>
+</div>
+
 <!-- NUEVO INVERSOR MODAL -->
 <div class="modal-overlay" id="modalNewInvestor">
   <div class="modal">
@@ -1662,6 +1698,7 @@ function onLogin() {
   document.getElementById('ubAvatar').textContent = u.name.charAt(0).toUpperCase();
   document.getElementById('ubName').textContent = u.name.split(' ')[0];
   document.getElementById('userBadge').style.display = 'flex';
+  document.getElementById('btnRegister').style.display = 'none';
   document.getElementById('btnLogin').style.display = 'none';
   document.getElementById('btnLogout').style.display = 'none'; // sustituido por botón en panel
   if (u.role === 'admin') document.getElementById('tabAdmin').style.display = 'block';
@@ -1685,6 +1722,7 @@ function logout() {
   _carterasLoaded  = false;
   if (_marketData.length) { renderMainSection(_marketData); updateTicker(_marketData); }
   document.getElementById('userBadge').style.display = 'none';
+  document.getElementById('btnRegister').style.display = 'block';
   document.getElementById('btnLogin').style.display = 'block';
   document.getElementById('tabAdmin').style.display = 'none';
   showSection('Mercados');
@@ -1704,6 +1742,53 @@ function restoreSession() {
 function openLoginModal()  { document.getElementById('modalLogin').classList.add('show'); document.getElementById('loginUser').focus(); }
 function closeLoginModal() { document.getElementById('modalLogin').classList.remove('show'); }
 document.getElementById('modalLogin').addEventListener('click', e => { if (e.target === e.currentTarget) closeLoginModal(); });
+
+function openRegisterModal() {
+  document.getElementById('modalRegister').classList.add('show');
+  document.getElementById('regName').focus();
+  document.getElementById('regError').style.display = 'none';
+}
+function closeRegisterModal() {
+  document.getElementById('modalRegister').classList.remove('show');
+  ['regName','regEmail','regPass','regPass2'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('regError').style.display = 'none';
+}
+document.getElementById('modalRegister').addEventListener('click', e => { if (e.target === e.currentTarget) closeRegisterModal(); });
+
+async function doRegister() {
+  const name  = document.getElementById('regName').value.trim();
+  const email = document.getElementById('regEmail').value.trim();
+  const pass  = document.getElementById('regPass').value;
+  const pass2 = document.getElementById('regPass2').value;
+  const err   = document.getElementById('regError');
+  const btn   = document.getElementById('regBtn');
+  err.style.display = 'none';
+
+  if (!email || !pass) { err.textContent = 'Email y contraseña son obligatorios'; err.style.display = 'block'; return; }
+  if (pass.length < 6) { err.textContent = 'La contraseña debe tener al menos 6 caracteres'; err.style.display = 'block'; return; }
+  if (pass !== pass2)  { err.textContent = 'Las contraseñas no coinciden'; err.style.display = 'block'; return; }
+
+  btn.disabled = true; btn.textContent = 'Creando cuenta...';
+  try {
+    const res = await fetch(API_BASE + '/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password: pass, name }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Error al registrarse');
+    closeRegisterModal();
+    // Abrir login con el email pre-rellenado
+    openLoginModal();
+    document.getElementById('loginUser').value = email;
+    toast('Cuenta creada. Ya puedes acceder con tu email.', 'ok');
+  } catch (e) {
+    err.textContent = e.message;
+    err.style.display = 'block';
+  } finally {
+    btn.disabled = false; btn.textContent = 'Crear cuenta';
+  }
+}
 
 // ================================================================
 // MERCADOS — Carga y renderizado
