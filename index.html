@@ -976,6 +976,40 @@ tr:hover td{background:rgba(255,255,255,.02)}
   .calc-milestone-row{grid-template-columns:1fr}
   .calc-summary-row{grid-template-columns:1fr}
 }
+
+/* ===== BALANCES ENTIDADES FINANCIERAS ===== */
+.bancos-topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px}
+.bancos-title{font-size:1.2rem;font-weight:700;color:var(--text)}
+.bancos-source-badge{font-size:.72rem;color:var(--text3);background:var(--card);border:1px solid var(--border);border-radius:6px;padding:4px 12px;display:flex;align-items:center;gap:6px}
+.bancos-kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.bancos-kpi{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 18px}
+.bancos-kpi-label{font-size:.7rem;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
+.bancos-kpi-val{font-size:1.35rem;font-weight:700;color:var(--text)}
+.bancos-kpi-sub{font-size:.71rem;color:var(--text3);margin-top:5px}
+.bancos-chart-row1{display:grid;grid-template-columns:2fr 1fr 1fr;gap:16px;margin-bottom:16px}
+.bancos-chart-row2{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:20px}
+.bancos-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px 20px}
+.bancos-card-title{font-size:.75rem;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:14px}
+.bancos-legend{display:flex;flex-wrap:wrap;gap:4px 10px;margin-top:12px}
+.bancos-legend-item{display:flex;align-items:center;gap:5px;font-size:.68rem;color:var(--text2)}
+.bancos-legend-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.bancos-table-wrap{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px 20px;overflow-x:auto}
+.bancos-tbl{width:100%;border-collapse:collapse;font-size:.79rem;min-width:600px}
+.bancos-tbl th{color:var(--text3);font-weight:600;font-size:.7rem;text-transform:uppercase;letter-spacing:.04em;padding:8px 12px;border-bottom:1px solid var(--border);text-align:right}
+.bancos-tbl th:first-child,.bancos-tbl th:nth-child(2){text-align:left}
+.bancos-tbl td{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.04);color:var(--text2);text-align:right}
+.bancos-tbl td:first-child{text-align:left;color:var(--text3);font-size:.72rem;font-weight:700}
+.bancos-tbl td:nth-child(2){text-align:left;color:var(--text);font-weight:500}
+.bancos-tbl tr:hover td{background:rgba(255,255,255,.03)}
+.bancos-tbl tr:last-child td{border-bottom:none}
+.bancos-badge{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:5px;font-size:.7rem;font-weight:600}
+.bancos-badge.green{background:rgba(16,185,129,.15);color:#10B981}
+.bancos-badge.yellow{background:rgba(245,158,11,.12);color:#F59E0B}
+.bancos-badge.blue{background:rgba(37,99,235,.15);color:#60a5fa}
+.bancos-rank-color{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;flex-shrink:0}
+@media(max-width:1100px){.bancos-chart-row1{grid-template-columns:1fr 1fr}.bancos-chart-row1>:first-child{grid-column:1/-1}}
+@media(max-width:900px){.bancos-kpi-row{grid-template-columns:repeat(2,1fr)}.bancos-chart-row2{grid-template-columns:1fr 1fr}}
+@media(max-width:640px){.bancos-kpi-row{grid-template-columns:1fr 1fr}.bancos-chart-row2{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -1097,6 +1131,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <button class="inv-tab active" id="invTabMercados" onclick="switchInvTab('mercados')">📊 Mis Mercados</button>
       <button class="inv-tab" id="invTabCarteras" onclick="switchInvTab('carteras')">💼 Mis Carteras</button>
       <button class="inv-tab" id="invTabAnalisis" onclick="switchInvTab('analisis')">📰 Análisis</button>
+      <button class="inv-tab" id="invTabBancos" onclick="switchInvTab('bancos')">🏦 Entidades Financieras</button>
     </div>
 
     <!-- ── Contenido: Mis Mercados ── -->
@@ -1220,6 +1255,99 @@ tr:hover td{background:rgba(255,255,255,.02)}
         </div>
       </div>
     </div><!-- /invCalculadoraPanel -->
+
+    <!-- ── Contenido: Balances Entidades Financieras ── -->
+    <div id="invBancosPanel" style="display:none">
+
+      <!-- Cabecera -->
+      <div class="bancos-topbar">
+        <div class="bancos-title">🏦 Balances Entidades Financieras Españolas</div>
+        <div class="bancos-source-badge">
+          <span>📋</span>
+          <span>Fuente: Banco de España · AEB · Memorias anuales 2023</span>
+        </div>
+      </div>
+
+      <!-- KPIs del sector -->
+      <div class="bancos-kpi-row">
+        <div class="bancos-kpi">
+          <div class="bancos-kpi-label">Activos totales (Top 10)</div>
+          <div class="bancos-kpi-val">3.90 B€</div>
+          <div class="bancos-kpi-sub">+7.2% vs 2022</div>
+        </div>
+        <div class="bancos-kpi">
+          <div class="bancos-kpi-label">Depósitos totales</div>
+          <div class="bancos-kpi-val">2.17 B€</div>
+          <div class="bancos-kpi-sub">+4.1% vs 2022</div>
+        </div>
+        <div class="bancos-kpi">
+          <div class="bancos-kpi-label">Préstamos totales</div>
+          <div class="bancos-kpi-val">2.20 B€</div>
+          <div class="bancos-kpi-sub">+3.6% vs 2022</div>
+        </div>
+        <div class="bancos-kpi">
+          <div class="bancos-kpi-label">ROE medio sector</div>
+          <div class="bancos-kpi-val" style="color:var(--green)">13.1%</div>
+          <div class="bancos-kpi-sub">Mejor desde 2008</div>
+        </div>
+      </div>
+
+      <!-- Fila 1: Barras activos (wide) + Donut depósitos + Donut préstamos -->
+      <div class="bancos-chart-row1">
+        <div class="bancos-card">
+          <div class="bancos-card-title">📊 Top 10 — Activos Totales (Bn €)</div>
+          <canvas id="bancosBarActivos" height="240" style="width:100%;display:block"></canvas>
+        </div>
+        <div class="bancos-card">
+          <div class="bancos-card-title">🔵 Distribución Depósitos</div>
+          <canvas id="bancosDonutDep" height="170" style="width:100%;display:block"></canvas>
+          <div class="bancos-legend" id="bancosDepLegend"></div>
+        </div>
+        <div class="bancos-card">
+          <div class="bancos-card-title">🟢 Distribución Préstamos</div>
+          <canvas id="bancosDonutPre" height="170" style="width:100%;display:block"></canvas>
+          <div class="bancos-legend" id="bancosPreLegend"></div>
+        </div>
+      </div>
+
+      <!-- Fila 2: ROE + CET1 + Ratio depósitos/activos -->
+      <div class="bancos-chart-row2">
+        <div class="bancos-card">
+          <div class="bancos-card-title">📈 ROE por entidad (%)</div>
+          <canvas id="bancosBarRoe" height="200" style="width:100%;display:block"></canvas>
+        </div>
+        <div class="bancos-card">
+          <div class="bancos-card-title">🛡️ Ratio CET1 Capital (%)</div>
+          <canvas id="bancosBarCet1" height="200" style="width:100%;display:block"></canvas>
+        </div>
+        <div class="bancos-card">
+          <div class="bancos-card-title">⚖️ Ratio Préstamos / Depósitos</div>
+          <canvas id="bancosBarLtd" height="200" style="width:100%;display:block"></canvas>
+        </div>
+      </div>
+
+      <!-- Tabla completa -->
+      <div class="bancos-table-wrap">
+        <div class="bancos-card-title" style="margin-bottom:14px">📋 Balance Consolidado Comparativo (2023 — datos en Bn €)</div>
+        <table class="bancos-tbl">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Entidad</th>
+              <th>Activos Totales</th>
+              <th>Depósitos</th>
+              <th>Préstamos</th>
+              <th>ROE</th>
+              <th>CET1</th>
+              <th>Liq./Dep.</th>
+            </tr>
+          </thead>
+          <tbody id="bancosTableBody"></tbody>
+        </table>
+        <div style="margin-top:12px;font-size:.68rem;color:var(--text3)">* Datos consolidados globales. Fuente: Informes de resultados 2023, Banco de España, AEB (Asociación Española de Banca). Actualizado: Enero 2024.</div>
+      </div>
+
+    </div><!-- /invBancosPanel -->
 
   </div>
 
@@ -1695,6 +1823,7 @@ let _carteras      = [];         // carteras del inversor cargadas desde MongoDB
 let _carterasLoaded = false;     // flag: ya se cargó al menos una vez
 let _cartModalColor = '#2563EB'; // color seleccionado en el modal de cartera
 let _newsData      = [];         // artículos del feed de noticias cargados
+let _bancosLoaded  = false;      // flag: ya se renderizó el panel de entidades financieras
 let _newsFilter    = 'todos';    // categoría activa: todos|oportunidad|riesgo|tendencia
 let _currentSymbol = '^GSPC';
 let _currentPeriod = '3mo';
@@ -2460,17 +2589,21 @@ function switchInvTab(tab) {
   document.getElementById('invTabAnalisis').classList.toggle('active',     tab === 'analisis');
   document.getElementById('invTabCarteras').classList.toggle('active',     tab === 'carteras');
   document.getElementById('invTabCalculadora').classList.toggle('active',  tab === 'calculadora');
+  document.getElementById('invTabBancos').classList.toggle('active',       tab === 'bancos');
   // Muestra/oculta contenido
   document.getElementById('invMercadosContent').style.display     = tab === 'mercados'    ? 'block' : 'none';
   document.getElementById('invAnalisisPanel').style.display       = tab === 'analisis'    ? 'block' : 'none';
   document.getElementById('invCarterasPanel').style.display       = tab === 'carteras'    ? 'block' : 'none';
   document.getElementById('invCalculadoraPanel').style.display    = tab === 'calculadora' ? 'block' : 'none';
+  document.getElementById('invBancosPanel').style.display         = tab === 'bancos'      ? 'block' : 'none';
   // Carga noticias la primera vez que se abre la pestaña
-  if (tab === 'analisis'  && _newsData.length === 0) loadInvestorNews();
+  if (tab === 'analisis'   && _newsData.length === 0) loadInvestorNews();
   // Carga carteras la primera vez que se abre la pestaña
-  if (tab === 'carteras'  && !_carterasLoaded) loadCarteras();
+  if (tab === 'carteras'   && !_carterasLoaded) loadCarteras();
   // Inicializa calculadora al abrir por primera vez
   if (tab === 'calculadora') setTimeout(calcIC, 30);
+  // Renderiza balances de entidades financieras (solo una vez, datos estáticos)
+  if (tab === 'bancos' && !_bancosLoaded) setTimeout(renderBancosPanel, 60);
 }
 
 async function loadInvestorNews() {
@@ -4253,6 +4386,188 @@ function _drawCalcChart(capital, aportacion, m, tasa, maxAnos) {
     ctx.textAlign = 'center';
     ctx.fillText(d.year + 'a', x + barW / 2, padT + chartH + 16);
   });
+}
+
+// ================================================================
+// BALANCES ENTIDADES FINANCIERAS ESPAÑOLAS
+// Fuente: Banco de España · AEB · Memorias anuales 2023
+// ================================================================
+const BANCOS_DATA = [
+  { rank:1,  name:'Banco Santander', short:'SAN',       activos:1799, depositos:930, prestamos:1050, roe:15.3, cet1:12.3, color:'#EC4899' },
+  { rank:2,  name:'BBVA',            short:'BBVA',      activos:788,  depositos:430, prestamos:400,  roe:18.9, cet1:13.7, color:'#2563EB' },
+  { rank:3,  name:'CaixaBank',       short:'CABK',      activos:595,  depositos:380, prestamos:330,  roe:16.1, cet1:12.4, color:'#10B981' },
+  { rank:4,  name:'Banco Sabadell',  short:'SAB',       activos:240,  depositos:147, prestamos:152,  roe:13.4, cet1:13.1, color:'#8B5CF6' },
+  { rank:5,  name:'Bankinter',       short:'BKT',       activos:107,  depositos:67,  prestamos:73,   roe:17.2, cet1:12.6, color:'#F59E0B' },
+  { rank:6,  name:'Unicaja Banco',   short:'UNI',       activos:82,   depositos:55,  prestamos:47,   roe:8.4,  cet1:14.3, color:'#06B6D4' },
+  { rank:7,  name:'Abanca',          short:'ABA',       activos:77,   depositos:51,  prestamos:48,   roe:12.8, cet1:14.8, color:'#84CC16' },
+  { rank:8,  name:'Ibercaja',        short:'IBR',       activos:70,   depositos:50,  prestamos:44,   roe:12.0, cet1:13.5, color:'#EF4444' },
+  { rank:9,  name:'Kutxabank',       short:'KUT',       activos:67,   depositos:45,  prestamos:38,   roe:9.1,  cet1:17.2, color:'#0EA5E9' },
+  { rank:10, name:'Cajamar',         short:'CAJ',       activos:23,   depositos:16,  prestamos:14,   roe:7.1,  cet1:13.8, color:'#A78BFA' },
+];
+
+function renderBancosPanel() {
+  _bancosLoaded = true;
+  _populateBancosTable();
+  // Pequeño delay para asegurar que el DOM ha pintado los canvas
+  setTimeout(() => {
+    _drawBancosHBar('bancosBarActivos', [...BANCOS_DATA].sort((a,b) => b.activos - a.activos), 'activos', 240);
+    _drawBancosDonut('bancosDonutDep',  BANCOS_DATA, 'depositos', 'bancosDepLegend');
+    _drawBancosDonut('bancosDonutPre',  BANCOS_DATA, 'prestamos', 'bancosPreLegend');
+    _drawBancosHBar('bancosBarRoe',     [...BANCOS_DATA].sort((a,b) => b.roe - a.roe),      'roe',  200);
+    _drawBancosHBar('bancosBarCet1',    [...BANCOS_DATA].sort((a,b) => b.cet1 - a.cet1),    'cet1', 200);
+    _drawBancosHBar('bancosBarLtd',     [...BANCOS_DATA].sort((a,b) => (b.prestamos/b.depositos) - (a.prestamos/a.depositos)), 'ltd', 200);
+  }, 80);
+}
+
+function _drawBancosHBar(canvasId, data, field, canvasH) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  const dpr = window.devicePixelRatio || 1;
+  const W   = canvas.clientWidth  || 500;
+  const H   = canvasH;
+  canvas.width  = W * dpr;
+  canvas.height = H * dpr;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+
+  const isPercent  = field === 'roe' || field === 'cet1';
+  const isRatio    = field === 'ltd';
+  const getValue   = d => isRatio ? +(d.prestamos / d.depositos).toFixed(2) : d[field];
+  const fmtVal     = v => isPercent ? v.toFixed(1) + '%' : isRatio ? v.toFixed(2) + 'x' : v.toLocaleString('es-ES') + ' Bn';
+
+  const sorted = data;
+  const vals   = sorted.map(getValue);
+  const maxVal = Math.max(...vals);
+
+  const padL  = 62;
+  const padR  = 70;
+  const padT  = 8;
+  const padB  = 8;
+  const n     = sorted.length;
+  const barH  = Math.floor((H - padT - padB - (n - 1) * 5) / n);
+  const gap   = 5;
+
+  sorted.forEach((bank, i) => {
+    const v = getValue(bank);
+    const y = padT + i * (barH + gap);
+    const availW = W - padL - padR;
+    const bw = (v / maxVal) * availW;
+
+    // track gris
+    ctx.fillStyle = 'rgba(255,255,255,.04)';
+    ctx.beginPath();
+    if (ctx.roundRect) ctx.roundRect(padL, y, availW, barH, 3);
+    else ctx.rect(padL, y, availW, barH);
+    ctx.fill();
+
+    // barra coloreada
+    ctx.globalAlpha = 0.88;
+    ctx.fillStyle   = bank.color;
+    ctx.beginPath();
+    if (ctx.roundRect) ctx.roundRect(padL, y, Math.max(bw, 4), barH, 3);
+    else ctx.rect(padL, y, Math.max(bw, 4), barH);
+    ctx.fill();
+    ctx.globalAlpha = 1;
+
+    // etiqueta izquierda
+    ctx.fillStyle    = '#94a3b8';
+    ctx.font         = '10.5px Inter, sans-serif';
+    ctx.textAlign    = 'right';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(bank.short, padL - 6, y + barH / 2);
+
+    // valor derecho
+    ctx.fillStyle = '#e2e8f0';
+    ctx.textAlign = 'left';
+    ctx.fillText(fmtVal(v), padL + bw + 6, y + barH / 2);
+  });
+}
+
+function _drawBancosDonut(canvasId, data, field, legendId) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  const dpr = window.devicePixelRatio || 1;
+  const W   = canvas.clientWidth  || 280;
+  const H   = canvas.clientHeight || 170;
+  canvas.width  = W * dpr;
+  canvas.height = H * dpr;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+
+  const sorted = [...data].sort((a, b) => b[field] - a[field]);
+  const top6   = sorted.slice(0, 6);
+  const rest   = sorted.slice(6);
+  const restT  = rest.reduce((s, b) => s + b[field], 0);
+
+  const slices = top6.map(b => ({ name: b.short, val: b[field], color: b.color }));
+  if (restT > 0) slices.push({ name: 'Otros', val: restT, color: '#334155' });
+
+  const total  = slices.reduce((s, sl) => s + sl.val, 0);
+  const cx     = W / 2;
+  const cy     = H / 2;
+  const r      = Math.min(W, H) * 0.40;
+  const inner  = r * 0.56;
+
+  let angle = -Math.PI / 2;
+  slices.forEach(sl => {
+    const sweep = (sl.val / total) * 2 * Math.PI;
+    // pequeño gap entre segmentos
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.arc(cx, cy, r, angle + 0.02, angle + sweep - 0.02);
+    ctx.closePath();
+    ctx.fillStyle = sl.color;
+    ctx.fill();
+    angle += sweep;
+  });
+
+  // agujero interior
+  ctx.beginPath();
+  ctx.arc(cx, cy, inner, 0, 2 * Math.PI);
+  ctx.fillStyle = '#1a1f35';
+  ctx.fill();
+
+  // texto central
+  const totalFmt = total >= 1000 ? (total / 1000).toFixed(2) + 'T€' : total + 'Bn€';
+  ctx.fillStyle    = '#f1f5f9';
+  ctx.font         = 'bold 12.5px Inter, sans-serif';
+  ctx.textAlign    = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(totalFmt, cx, cy - 6);
+  ctx.fillStyle = '#64748b';
+  ctx.font      = '9px Inter, sans-serif';
+  ctx.fillText('TOTAL', cx, cy + 9);
+
+  // leyenda
+  const legendEl = document.getElementById(legendId);
+  if (legendEl) {
+    legendEl.innerHTML = slices.map(sl => `
+      <span class="bancos-legend-item">
+        <span class="bancos-legend-dot" style="background:${sl.color}"></span>
+        ${sl.name} <strong style="color:var(--text)">${((sl.val / total) * 100).toFixed(1)}%</strong>
+      </span>`).join('');
+  }
+}
+
+function _populateBancosTable() {
+  const tbody = document.getElementById('bancosTableBody');
+  if (!tbody) return;
+  const sorted = [...BANCOS_DATA].sort((a, b) => a.rank - b.rank);
+  tbody.innerHTML = sorted.map(b => {
+    const ltd     = (b.prestamos / b.depositos).toFixed(2);
+    const roeBadge = b.roe >= 15 ? 'green' : b.roe >= 10 ? 'yellow' : 'blue';
+    const cet1Badge = b.cet1 >= 15 ? 'green' : b.cet1 >= 13 ? 'yellow' : 'blue';
+    return `<tr>
+      <td>${b.rank}</td>
+      <td><span class="bancos-rank-color" style="background:${b.color}"></span>${b.name}</td>
+      <td><strong style="color:var(--text)">${b.activos.toLocaleString('es-ES')}</strong></td>
+      <td>${b.depositos.toLocaleString('es-ES')}</td>
+      <td>${b.prestamos.toLocaleString('es-ES')}</td>
+      <td><span class="bancos-badge ${roeBadge}">${b.roe.toFixed(1)}%</span></td>
+      <td><span class="bancos-badge ${cet1Badge}">${b.cet1.toFixed(1)}%</span></td>
+      <td style="color:${ltd > 1.1 ? 'var(--yellow)' : 'var(--green)'}">${ltd}x</td>
+    </tr>`;
+  }).join('');
 }
 
 // ================================================================
