@@ -2654,15 +2654,29 @@ function renderIndexCards(data) {
     </div>`;
   }).join('');
 
-  // Sparklines mini
+  // Sparklines mini — animadas
   data.forEach(d => {
     const cv = document.getElementById('spark_' + d.key);
     if (!cv) return;
-    drawSparkline(cv, d);
+    _animChart(600, p => drawSparkline(cv, d, p));
   });
 }
 
-function drawSparkline(canvas, d) {
+// ── Animación universal de canvas ────────────────────────────────
+// frameFn recibe progress [0..1] con easing cuadrático in-out
+function _animChart(duration, frameFn) {
+  const start = performance.now();
+  const ease  = t => t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+  function frame(now) {
+    const raw = Math.min(1, (now - start) / duration);
+    frameFn(ease(raw));
+    if (raw < 1) requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+}
+
+function drawSparkline(canvas, d, progress) {
+  if (progress === undefined) progress = 1;
   // Sparkline simple basado en open/prevClose/price
   const ctx = canvas.getContext('2d');
   const W = canvas.offsetWidth || 260;
@@ -2677,6 +2691,12 @@ function drawSparkline(canvas, d) {
   const min = Math.min(...pts);
   const max = Math.max(...pts);
   const range = max - min || 1;
+
+  // Clip to animated width
+  ctx.save();
+  ctx.beginPath();
+  ctx.rect(0, 0, W * progress, H);
+  ctx.clip();
 
   ctx.beginPath();
   pts.forEach((p, i) => {
@@ -2696,6 +2716,7 @@ function drawSparkline(canvas, d) {
   grad.addColorStop(1, 'transparent');
   ctx.fillStyle = grad;
   ctx.fill();
+  ctx.restore();
 }
 
 // ================================================================
@@ -4761,11 +4782,11 @@ function renderCarteras() {
       <button class="cart-new-btn" onclick="openCarteraModal()">+ Nueva Cartera</button>
     </div>`;
 
-  // Dibuja donut y proyección tras render
+  // Dibuja donut y proyección tras render — animado
   if (donutSegs.length > 0) {
     setTimeout(() => {
       const cv = document.getElementById('cartDonutCanvas');
-      if (cv) _drawDonut(cv, donutSegs);
+      if (cv) _animChart(750, p => _drawDonut(cv, donutSegs, p));
     }, 30);
   }
   _initProyeccion();
@@ -4847,16 +4868,18 @@ function toggleCarteraExpand(id) {
   if (chevron) chevron.style.transform = open ? 'rotate(180deg)' : '';
 }
 
-function _drawDonut(canvas, segs) {
+function _drawDonut(canvas, segs, progress) {
+  if (progress === undefined) progress = 1;
   const ctx = canvas.getContext('2d');
   const w = canvas.width, h = canvas.height;
   ctx.clearRect(0, 0, w, h);
   const cx = w / 2, cy = h / 2, r = Math.min(w, h) / 2 - 3;
   const total = segs.reduce((s, g) => s + g.value, 0);
   if (total === 0) return;
+  const totalSweep = 2 * Math.PI * progress;
   let angle = -Math.PI / 2;
   segs.forEach(seg => {
-    const sweep = (seg.value / total) * 2 * Math.PI;
+    const sweep = (seg.value / total) * totalSweep;
     ctx.beginPath();
     ctx.moveTo(cx, cy);
     ctx.arc(cx, cy, r, angle, angle + sweep);
@@ -5176,11 +5199,12 @@ function calcIC() {
       <div class="calc-summary-value gold">${_fmtCalc(intereses)} (+${totalDepositado > 0 ? (intereses/totalDepositado*100).toFixed(1) : 0}%)</div>
     </div>`;
 
-  // Dibujar gráfico
-  _drawCalcChart(capital, aportacion, m, tasa, maxAnos);
+  // Dibujar gráfico — animado
+  _animChart(700, p => _drawCalcChart(capital, aportacion, m, tasa, maxAnos, p));
 }
 
-function _drawCalcChart(capital, aportacion, m, tasa, maxAnos) {
+function _drawCalcChart(capital, aportacion, m, tasa, maxAnos, progress) {
+  if (progress === undefined) progress = 1;
   const cv = document.getElementById('calcChart');
   if (!cv) return;
   cv.width = cv.parentElement.clientWidth || 400;
@@ -5222,9 +5246,9 @@ function _drawCalcChart(capital, aportacion, m, tasa, maxAnos) {
   // Barras apiladas
   data.forEach((d, i) => {
     const x    = padL + i * gap + (gap - barW) / 2;
-    const hCap = (d.cap / maxVal) * chartH;
-    const hAp  = (d.ap  / maxVal) * chartH;
-    const hInt = (d.int / maxVal) * chartH;
+    const hCap = (d.cap / maxVal) * chartH * progress;
+    const hAp  = (d.ap  / maxVal) * chartH * progress;
+    const hInt = (d.int / maxVal) * chartH * progress;
     let   yPos = padT + chartH;
 
     // Capital inicial (azul)
@@ -6018,11 +6042,12 @@ function _renderFondosCompare() {
     }).join('');
   }
 
-  // Gráfico barras agrupadas
-  setTimeout(() => _drawFondosCompareChart('fondosCmpChart', selected), 30);
+  // Gráfico barras agrupadas — animado
+  setTimeout(() => _animChart(700, p => _drawFondosCompareChart('fondosCmpChart', selected, p)), 30);
 }
 
-function _drawFondosCompareChart(canvasId, selected) {
+function _drawFondosCompareChart(canvasId, selected, progress) {
+  if (progress === undefined) progress = 1;
   const canvas = document.getElementById(canvasId);
   if (!canvas || !selected.length) return;
   const dpr = window.devicePixelRatio || 1;
@@ -6079,7 +6104,7 @@ function _drawFondosCompareChart(canvasId, selected) {
       const v     = f[period.key];
       const color = FONDOS_COMPARE_COLORS[fi];
       const bX    = gX + gOff + fi * barW;
-      const bH    = Math.abs(v / range) * chartH;
+      const bH    = Math.abs(v / range) * chartH * progress;
       const bY    = v >= 0 ? zeroY - bH : zeroY;
 
       ctx.globalAlpha = 0.88;
@@ -6129,18 +6154,21 @@ const BANCOS_DATA = [
 function renderBancosPanel() {
   _bancosLoaded = true;
   _populateBancosTable();
-  // Pequeño delay para asegurar que el DOM ha pintado los canvas
+  // Pequeño delay para asegurar que el DOM ha pintado los canvas — animado
   setTimeout(() => {
-    _drawBancosHBar('bancosBarActivos', [...BANCOS_DATA].sort((a,b) => b.activos - a.activos), 'activos', 240);
-    _drawBancosDonut('bancosDonutDep',  BANCOS_DATA, 'depositos', 'bancosDepLegend');
-    _drawBancosDonut('bancosDonutPre',  BANCOS_DATA, 'prestamos', 'bancosPreLegend');
-    _drawBancosHBar('bancosBarRoe',     [...BANCOS_DATA].sort((a,b) => b.roe - a.roe),      'roe',  200);
-    _drawBancosHBar('bancosBarCet1',    [...BANCOS_DATA].sort((a,b) => b.cet1 - a.cet1),    'cet1', 200);
-    _drawBancosHBar('bancosBarLtd',     [...BANCOS_DATA].sort((a,b) => (b.prestamos/b.depositos) - (a.prestamos/a.depositos)), 'ltd', 200);
+    _animChart(750, p => {
+      _drawBancosHBar('bancosBarActivos', [...BANCOS_DATA].sort((a,b) => b.activos - a.activos), 'activos', 240, p);
+      _drawBancosDonut('bancosDonutDep',  BANCOS_DATA, 'depositos', 'bancosDepLegend', p);
+      _drawBancosDonut('bancosDonutPre',  BANCOS_DATA, 'prestamos', 'bancosPreLegend', p);
+      _drawBancosHBar('bancosBarRoe',     [...BANCOS_DATA].sort((a,b) => b.roe - a.roe),      'roe',  200, p);
+      _drawBancosHBar('bancosBarCet1',    [...BANCOS_DATA].sort((a,b) => b.cet1 - a.cet1),    'cet1', 200, p);
+      _drawBancosHBar('bancosBarLtd',     [...BANCOS_DATA].sort((a,b) => (b.prestamos/b.depositos) - (a.prestamos/a.depositos)), 'ltd', 200, p);
+    });
   }, 80);
 }
 
-function _drawBancosHBar(canvasId, data, field, canvasH) {
+function _drawBancosHBar(canvasId, data, field, canvasH, progress) {
+  if (progress === undefined) progress = 1;
   const canvas = document.getElementById(canvasId);
   if (!canvas) return;
   const dpr = window.devicePixelRatio || 1;
@@ -6172,7 +6200,7 @@ function _drawBancosHBar(canvasId, data, field, canvasH) {
     const v = getValue(bank);
     const y = padT + i * (barH + gap);
     const availW = W - padL - padR;
-    const bw = (v / maxVal) * availW;
+    const bw = (v / maxVal) * availW * progress;
 
     // track gris
     ctx.fillStyle = 'rgba(255,255,255,.04)';
@@ -6204,7 +6232,8 @@ function _drawBancosHBar(canvasId, data, field, canvasH) {
   });
 }
 
-function _drawBancosDonut(canvasId, data, field, legendId) {
+function _drawBancosDonut(canvasId, data, field, legendId, progress) {
+  if (progress === undefined) progress = 1;
   const canvas = document.getElementById(canvasId);
   if (!canvas) return;
   const dpr = window.devicePixelRatio || 1;
@@ -6229,9 +6258,10 @@ function _drawBancosDonut(canvasId, data, field, legendId) {
   const r      = Math.min(W, H) * 0.40;
   const inner  = r * 0.56;
 
+  const totalSweep = 2 * Math.PI * progress;
   let angle = -Math.PI / 2;
   slices.forEach(sl => {
-    const sweep = (sl.val / total) * 2 * Math.PI;
+    const sweep = (sl.val / total) * totalSweep;
     // pequeño gap entre segmentos
     ctx.beginPath();
     ctx.moveTo(cx, cy);

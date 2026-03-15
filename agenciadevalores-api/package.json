@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "API serverless para Agencia de Valores — datos de mercado, autenticación e inversores",
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.78.0",
     "mongodb": "^6.3.0"
   },
   "engines": {
