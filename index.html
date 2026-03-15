@@ -782,14 +782,25 @@ tr:hover td{background:rgba(255,255,255,.02)}
 }
 .constituent-card{
   background:var(--bg2);border:1px solid var(--border);border-radius:8px;
-  padding:10px 12px;display:flex;align-items:center;gap:10px;
-  cursor:pointer;transition:.15s;
+  padding:9px 12px;display:flex;align-items:center;gap:9px;
+  cursor:pointer;transition:border-color .15s,background .15s,transform .15s,box-shadow .15s;
 }
 .constituent-card:hover{border-color:var(--accent);background:rgba(37,99,235,.06)}
+/* Logo empresa */
+.c-logo{
+  width:30px;height:30px;border-radius:7px;background:var(--card2);
+  border:1px solid var(--border);overflow:hidden;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+}
+.c-logo img{width:22px;height:22px;object-fit:contain;display:block}
+.c-logo-fb{
+  font-size:.72rem;font-weight:800;color:var(--text3);
+  font-family:monospace;letter-spacing:-.5px;
+}
 .c-ticker{
-  font-size:.75rem;font-weight:700;padding:3px 7px;border-radius:5px;
+  font-size:.72rem;font-weight:700;padding:2px 6px;border-radius:5px;
   background:var(--card2);color:var(--accent);font-family:monospace;letter-spacing:.5px;
-  flex-shrink:0;min-width:52px;text-align:center;
+  flex-shrink:0;min-width:46px;text-align:center;
 }
 .c-info{flex:1;min-width:0}
 .c-name{font-size:.78rem;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -1237,7 +1248,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
   <div class="nav-logo">
     <div class="nav-logo-dot"></div>
     Agencia de Valores Generación Z
-    <span class="nav-version">v3.0.0</span>
+    <span class="nav-version">v3.0.1</span>
   </div>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="showSection('Mercados')">Mercados</button>
@@ -3914,13 +3925,15 @@ function renderConstituents(symbol) {
 
   const grid = document.getElementById('constituentsGrid');
   grid.innerHTML = cfg.items.map(c => {
-    const id = c.ticker.replace(/[^a-zA-Z0-9]/g, '-');
-    const label = c.ticker.includes('.') ? c.ticker.split('.')[0] : c.ticker;
+    const id       = c.ticker.replace(/[^a-zA-Z0-9]/g, '-');
+    const label    = c.ticker.includes('.') ? c.ticker.split('.')[0] : c.ticker;
     const safeName = c.name.replace(/'/g, "\\'");
+    const logoEl   = _tickerLogoEl(c.ticker, label);
     return `
       <div class="constituent-card clickable" data-ticker="${c.ticker}"
            onclick="openTickerChart('${c.ticker}','${safeName}')"
            title="Ver gráfica de ${c.name}">
+        ${logoEl}
         <span class="c-ticker">${label}</span>
         <div class="c-info">
           <div class="c-name">${c.name}</div>
@@ -3977,6 +3990,83 @@ async function loadConstituentQuotes() {
 }
 
 // ================================================================
+// TICKER LOGOS — dominio Clearbit por ticker
+// ================================================================
+const TICKER_LOGOS = {
+  // US — S&P/NASDAQ/Dow
+  'AAPL':'apple.com','MSFT':'microsoft.com','NVDA':'nvidia.com',
+  'AMZN':'amazon.com','GOOGL':'google.com','GOOG':'google.com',
+  'META':'meta.com','TSLA':'tesla.com','BRK-B':'berkshirehathaway.com',
+  'AVGO':'broadcom.com','JPM':'jpmorganchase.com','LLY':'lilly.com',
+  'V':'visa.com','UNH':'unitedhealthgroup.com','XOM':'exxonmobil.com',
+  'MA':'mastercard.com','JNJ':'jnj.com','PG':'pg.com','HD':'homedepot.com',
+  'MRK':'merck.com','COST':'costco.com','NFLX':'netflix.com','ADBE':'adobe.com',
+  'AMD':'amd.com','QCOM':'qualcomm.com','CSCO':'cisco.com',
+  'AMAT':'appliedmaterials.com','TXN':'ti.com','AMGN':'amgen.com',
+  'INTC':'intel.com','MU':'micron.com','INTU':'intuit.com','PYPL':'paypal.com',
+  'GS':'goldmansachs.com','CAT':'caterpillar.com','SHW':'sherwin-williams.com',
+  'MCD':'mcdonalds.com','CRM':'salesforce.com','AXP':'americanexpress.com',
+  'TRV':'travelers.com','IBM':'ibm.com','HON':'honeywell.com','MMM':'3m.com',
+  'BA':'boeing.com','NKE':'nike.com','WMT':'walmart.com',
+  'DIS':'thewaltdisneycompany.com','CVX':'chevron.com','KO':'coca-cola.com',
+  'DOW':'dow.com','VZ':'verizon.com','ASML':'asml.com','NVO':'novonordisk.com',
+  // IBEX 35
+  'ITX.MC':'inditex.com','IBE.MC':'iberdrola.com','SAN.MC':'santander.com',
+  'BBVA.MC':'bbva.com','FER.MC':'ferrovial.com','CLNX.MC':'cellnex.com',
+  'REP.MC':'repsol.com','AMS.MC':'amadeus.com','AENA.MC':'aena.es',
+  'TEF.MC':'telefonica.com','CABK.MC':'caixabank.com','ACS.MC':'grupoacs.com',
+  'NTGY.MC':'naturgy.com','ELE.MC':'endesa.com','MTS.MC':'arcelormittal.com',
+  'BKT.MC':'bankinter.com','GRF.MC':'grifols.com','IAG.MC':'iairgroup.com',
+  'ENG.MC':'enagas.es','MEL.MC':'meliahotels.com','MAP.MC':'mapfre.com',
+  'IDR.MC':'indracompany.com','RED.MC':'redeia.com','SCYR.MC':'sacyr.com',
+  'SLR.MC':'solariaenergia.com',
+  // DAX
+  'SAP.DE':'sap.com','SIE.DE':'siemens.com','ALV.DE':'allianz.com',
+  'DTE.DE':'telekom.com','MUV2.DE':'munichre.com','BMW.DE':'bmwgroup.com',
+  'RHM.DE':'rheinmetall.com','MBG.DE':'mercedes-benz.com','AIR.DE':'airbus.com',
+  'BAYN.DE':'bayer.com','BAS.DE':'basf.com','VOW3.DE':'volkswagen.com',
+  'DB1.DE':'deutsche-boerse.com','IFX.DE':'infineon.com',
+  'SHL.DE':'siemens-healthineers.com','ADS.DE':'adidas.com',
+  'DBK.DE':'db.com','HEI.DE':'heidelbergmaterials.com',
+  'RWE.DE':'rwe.com','EOAN.DE':'eon.com',
+  // Nikkei
+  '7203.T':'toyota.com','9984.T':'softbank.com','6758.T':'sony.com',
+  '8306.T':'mufg.jp','8035.T':'tel.com','6861.T':'keyence.com',
+  '6954.T':'fanuc.com','7741.T':'hoya.com','9433.T':'kddi.com',
+  '4519.T':'chugai-pharm.co.jp','8316.T':'smfg.co.jp','9432.T':'ntt.com',
+  '6367.T':'daikin.com','7267.T':'honda.com','6501.T':'hitachi.com',
+  '4502.T':'takeda.com','9022.T':'jr-central.co.jp','3382.T':'7andi.com',
+  '6098.T':'recruit.co.jp','8766.T':'tokiomarine.com',
+  // Hang Seng
+  '0700.HK':'tencent.com','9988.HK':'alibaba.com','0005.HK':'hsbc.com',
+  '1299.HK':'aia.com','0939.HK':'ccb.com','1398.HK':'icbc.com',
+  '2318.HK':'pingan.com','3690.HK':'meituan.com','0388.HK':'hkex.com',
+  '9618.HK':'jd.com','1810.HK':'mi.com','0011.HK':'hangseng.com',
+  '0016.HK':'shkp.com','0001.HK':'ckhutchison.com','0002.HK':'clpgroup.com',
+  '0175.HK':'geely.com','0267.HK':'citic.com','2269.HK':'wuxibiologics.com',
+  '0003.HK':'towngas.com','9999.HK':'netease.com',
+  // Euro Stoxx
+  'ASML.AS':'asml.com','MC.PA':'lvmh.com','SAN.PA':'sanofi.com',
+  'OR.PA':'loreal.com','TTE.PA':'totalenergies.com','AIR.PA':'airbus.com',
+  'BNP.PA':'bnpparibas.com','ENEL.MI':'enel.com','ABI.BR':'ab-inbev.com',
+  'RMS.PA':'hermes.com','DG.PA':'vinci.com','INGA.AS':'ing.com',
+  'CS.PA':'axa.com','ENI.MI':'eni.com',
+};
+
+function _tickerLogoEl(ticker, label) {
+  const domain = TICKER_LOGOS[ticker];
+  const fb = label.charAt(0).toUpperCase();
+  if (domain) {
+    return `<div class="c-logo">
+      <img src="https://logo.clearbit.com/${domain}" alt="${label}"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <span class="c-logo-fb" style="display:none">${fb}</span>
+    </div>`;
+  }
+  return `<div class="c-logo"><span class="c-logo-fb">${fb}</span></div>`;
+}
+
+// ================================================================
 // TICKER CHART MODAL — Gráfica individual de componentes del índice
 // ================================================================
 let _tmChart   = null;
@@ -4001,36 +4091,47 @@ function openTickerChart(ticker, name) {
 
   _tmSyncPeriodUI();
 
-  // Destruye instancia previa y crea nueva
+  // Destruye instancia previa
   if (_tmChart) { try { _tmChart.remove(); } catch(_) {} _tmChart = null; _tmSeries = null; }
-  const el = document.getElementById('tickerChartEl');
-  _tmChart = LightweightCharts.createChart(el, {
-    width:  el.clientWidth,
-    height: el.clientHeight || 270,
-    layout: { background: { color: '#1a1f35' }, textColor: '#94a3b8' },
-    grid:   { vertLines: { color: '#2a3050' }, horzLines: { color: '#2a3050' } },
-    crosshair: { mode: LightweightCharts.CrosshairMode.Normal },
-    rightPriceScale: { borderColor: '#2a3050' },
-    timeScale: { borderColor: '#2a3050', timeVisible: true },
-  });
-  _tmSeries = _tmChart.addAreaSeries({
-    lineColor: '#2563EB', topColor: 'rgba(37,99,235,.25)',
-    bottomColor: 'rgba(37,99,235,.02)', lineWidth: 2,
-  });
 
-  _tmLoadData();
+  // Defer chart creation until modal is fully rendered in the DOM
+  requestAnimationFrame(() => {
+    const el = document.getElementById('tickerChartEl');
+    const w = el.getBoundingClientRect().width || el.offsetWidth || el.clientWidth || 600;
+    const h = el.getBoundingClientRect().height || el.offsetHeight || 270;
+    try {
+      _tmChart = LightweightCharts.createChart(el, {
+        width: w, height: h,
+        layout: { background: { color: '#1a1f35' }, textColor: '#94a3b8' },
+        grid:   { vertLines: { color: '#2a3050' }, horzLines: { color: '#2a3050' } },
+        crosshair: { mode: LightweightCharts.CrosshairMode.Normal },
+        rightPriceScale: { borderColor: '#2a3050' },
+        timeScale: { borderColor: '#2a3050', timeVisible: true },
+      });
+      _tmSeries = _tmChart.addAreaSeries({
+        lineColor: '#2563EB', topColor: 'rgba(37,99,235,.25)',
+        bottomColor: 'rgba(37,99,235,.02)', lineWidth: 2,
+      });
+    } catch(err) {
+      console.warn('Chart creation error:', err.message);
+      return;
+    }
 
-  // Resize listener
-  const onResize = () => { if (_tmChart) _tmChart.applyOptions({ width: el.clientWidth }); };
-  window._tmResizeFn = onResize;
-  window.addEventListener('resize', onResize);
+    _tmLoadData();
+
+    const onResize = () => {
+      if (_tmChart) _tmChart.applyOptions({ width: el.getBoundingClientRect().width || 600 });
+    };
+    window._tmResizeFn = onResize;
+    window.addEventListener('resize', onResize);
+  });
 }
 
 function closeTickerChart() {
   document.getElementById('tickerChartModal').classList.remove('show');
   document.body.style.overflow = '';
   if (_tmChart) {
-    window.removeEventListener('resize', window._tmResizeFn);
+    window.removeEventListener('resize', window._tmResizeFn || function(){});
     try { _tmChart.remove(); } catch(_) {}
     _tmChart = null; _tmSeries = null;
   }
@@ -4050,18 +4151,24 @@ function _tmSyncPeriodUI() {
 }
 
 async function _tmLoadData() {
-  if (!_tmChart || !_tmSymbol) return;
+  if (!_tmChart || !_tmSeries || !_tmSymbol) return;
   try {
     const res = await fetch(
       `${API_BASE}/historical?symbol=${encodeURIComponent(_tmSymbol)}&period=${_tmPeriod}`,
-      { signal: AbortSignal.timeout(20000) }
+      { signal: AbortSignal.timeout(25000) }
     );
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
+    if (data.error) throw new Error(data.error);
 
-    // Datos gráfica
+    // Ordenar y deduplicar timestamps (Yahoo Finance a veces devuelve el precio
+    // actual con un timestamp diferente al del cierre, causando duplicados)
     const lineData = (data.ohlcv || [])
       .filter(d => d.close !== null && d.time)
-      .map(d => ({ time: d.time, value: d.close }));
+      .map(d => ({ time: d.time, value: d.close }))
+      .sort((a, b) => a.time - b.time)
+      .filter((d, i, arr) => i === 0 || d.time !== arr[i - 1].time);
+
     if (lineData.length && _tmSeries) {
       _tmSeries.setData(lineData);
       _tmChart.timeScale().fitContent();
@@ -4075,19 +4182,21 @@ async function _tmLoadData() {
       : '—';
     const up = (m.changePct || 0) >= 0;
     const chgEl = document.getElementById('tmChg');
-    const sign = up ? '+' : '';
-    chgEl.textContent  = m.changePct != null ? `${sign}${m.changePct.toFixed(2)}%` : '';
-    chgEl.className    = 'ticker-modal-chg card-change ' +
+    chgEl.textContent = m.changePct != null
+      ? `${up ? '+' : ''}${m.changePct.toFixed(2)}%` : '';
+    chgEl.className = 'ticker-modal-chg card-change ' +
       (Math.abs(m.changePct || 0) < 0.01 ? 'flat' : up ? 'up' : 'dn');
 
     // Mini indicadores
     const ind    = data.indicators || {};
     const signal = data.signal || 'NEUTRAL';
-    const sigColors = { BUY: 'var(--green)', SELL: 'var(--red)', NEUTRAL: 'var(--text3)' };
-    const sigLabels = { BUY: '▲ COMPRA', SELL: '▼ VENTA', NEUTRAL: '— NEUTRAL —' };
-
-    const fmt2 = v => v != null ? v.toLocaleString('es-ES',{minimumFractionDigits:2,maximumFractionDigits:2}) : '—';
-    const clr  = (v, ref) => v != null && ref != null ? (ref > v ? 'var(--green)' : 'var(--red)') : 'var(--text)';
+    const sigColors = { BUY:'var(--green)', SELL:'var(--red)', NEUTRAL:'var(--text3)' };
+    const sigLabels = { BUY:'▲ COMPRA', SELL:'▼ VENTA', NEUTRAL:'— NEUTRAL —' };
+    const fmt2 = v => v != null
+      ? v.toLocaleString('es-ES',{minimumFractionDigits:2,maximumFractionDigits:2}) : '—';
+    const clr = (ma) => ma != null && price != null
+      ? (price > ma ? 'var(--green)' : 'var(--red)') : 'var(--text)';
+    const macdVal = typeof ind.macd === 'object' ? ind.macd?.macd : ind.macd;
 
     document.getElementById('tmIndicators').innerHTML = `
       <div class="tm-ind">
@@ -4100,28 +4209,24 @@ async function _tmLoadData() {
       </div>
       <div class="tm-ind">
         <span class="tm-ind-lbl">MA 20</span>
-        <span class="tm-ind-val" style="color:${clr(ind.ma20, price)}">${fmt2(ind.ma20)}</span>
+        <span class="tm-ind-val" style="color:${clr(ind.ma20)}">${fmt2(ind.ma20)}</span>
       </div>
       <div class="tm-ind">
         <span class="tm-ind-lbl">MA 50</span>
-        <span class="tm-ind-val" style="color:${clr(ind.ma50, price)}">${fmt2(ind.ma50)}</span>
+        <span class="tm-ind-val" style="color:${clr(ind.ma50)}">${fmt2(ind.ma50)}</span>
       </div>
       <div class="tm-ind">
         <span class="tm-ind-lbl">MA 200</span>
-        <span class="tm-ind-val" style="color:${clr(ind.ma200, price)}">${fmt2(ind.ma200)}</span>
+        <span class="tm-ind-val" style="color:${clr(ind.ma200)}">${fmt2(ind.ma200)}</span>
       </div>
       <div class="tm-ind">
         <span class="tm-ind-lbl">MACD</span>
-        <span class="tm-ind-val" style="color:${(ind.macd||0) > 0 ? 'var(--green)' : 'var(--red)'}">${ind.macd != null ? ind.macd.toFixed(2) : '—'}</span>
-      </div>
-      <div class="tm-ind">
-        <span class="tm-ind-lbl">Vol. Medio</span>
-        <span class="tm-ind-val">${m.avgVolume ? (m.avgVolume/1e6).toFixed(1)+'M' : '—'}</span>
+        <span class="tm-ind-val" style="color:${(macdVal||0) > 0 ? 'var(--green)' : 'var(--red)'}">${macdVal != null ? macdVal.toFixed(2) : '—'}</span>
       </div>`;
   } catch(e) {
-    console.warn('Ticker chart error:', e.message);
+    console.warn('Ticker chart error:', _tmSymbol, e.message);
     document.getElementById('tmIndicators').innerHTML =
-      '<span style="color:var(--red);font-size:.78rem">Error cargando datos del ticker</span>';
+      `<span style="color:var(--red);font-size:.78rem">⚠ ${e.message || 'Error cargando datos'}</span>`;
   }
 }
 
