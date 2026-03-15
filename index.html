@@ -87,7 +87,7 @@ nav{
 .portal-backdrop.open{opacity:1;pointer-events:all}
 #portalPanel{
   position:fixed;top:60px;right:0;
-  width:min(500px,100vw);
+  width:min(340px,100vw);
   height:calc(100vh - 60px - 36px);
   background:var(--bg2);border-left:1px solid var(--border);
   z-index:150;overflow-y:auto;
@@ -96,49 +96,53 @@ nav{
 }
 #portalPanel.open{transform:translateX(0)}
 .pp-header{
-  padding:18px 20px 16px;
+  padding:11px 14px;
   display:flex;align-items:center;justify-content:space-between;
   border-bottom:1px solid var(--border);flex-shrink:0;
   background:var(--card);position:sticky;top:0;z-index:1;
 }
-.pp-title{font-size:.9rem;font-weight:700;display:flex;align-items:center;gap:8px}
+.pp-title{font-size:.8rem;font-weight:700;display:flex;align-items:center;gap:6px}
 .pp-close{
   background:none;border:none;color:var(--text3);cursor:pointer;
-  font-size:1.1rem;padding:4px 6px;border-radius:5px;line-height:1;
+  font-size:1rem;padding:3px 5px;border-radius:5px;line-height:1;
   transition:color .15s,background .15s;
 }
 .pp-close:hover{color:var(--text);background:rgba(255,255,255,.06)}
-.pp-body{padding:20px;display:flex;flex-direction:column;gap:16px;flex:1}
+.pp-body{padding:12px;display:flex;flex-direction:column;gap:10px;flex:1}
 .pp-profile{
-  background:var(--card);border:1px solid var(--border);border-radius:12px;
-  padding:18px 20px;display:flex;align-items:center;gap:14px;
+  background:var(--card);border:1px solid var(--border);border-radius:10px;
+  padding:11px 13px;display:flex;align-items:center;gap:10px;
 }
 .pp-avatar{
-  width:48px;height:48px;border-radius:50%;
+  width:34px;height:34px;border-radius:50%;
   background:linear-gradient(135deg,var(--accent),#7c3aed);
-  color:#fff;font-size:1.3rem;font-weight:700;
+  color:#fff;font-size:.95rem;font-weight:700;
   display:flex;align-items:center;justify-content:center;flex-shrink:0;
 }
 .pp-user-info{flex:1;min-width:0}
-.pp-user-name{font-size:.95rem;font-weight:700;margin-bottom:2px}
-.pp-user-email{font-size:.75rem;color:var(--text3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pp-user-name{font-size:.82rem;font-weight:700;margin-bottom:1px}
+.pp-user-email{font-size:.68rem;color:var(--text3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pp-role-badge{
-  font-size:.65rem;font-weight:600;padding:2px 8px;border-radius:10px;
+  font-size:.6rem;font-weight:600;padding:2px 6px;border-radius:8px;
   background:rgba(37,99,235,.15);color:var(--accent);border:1px solid rgba(37,99,235,.3);
   white-space:nowrap;
 }
 .pp-card{
-  background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 18px;
+  background:var(--card);border:1px solid var(--border);border-radius:10px;padding:11px 13px;
 }
 .pp-card-title{
-  font-size:.75rem;font-weight:700;color:var(--text3);
-  letter-spacing:.5px;text-transform:uppercase;margin-bottom:12px;
-  display:flex;align-items:center;gap:6px;
+  font-size:.68rem;font-weight:700;color:var(--text3);
+  letter-spacing:.5px;text-transform:uppercase;margin-bottom:9px;
+  display:flex;align-items:center;gap:5px;
 }
-.pp-mkt-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.pp-mkt-item{background:var(--bg2);border-radius:8px;padding:10px 12px}
-.pp-mkt-label{font-size:.68rem;color:var(--text3);margin-bottom:3px}
-.pp-mkt-val{font-size:.85rem;font-weight:700}
+.pp-mkt-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.pp-mkt-item{background:var(--bg2);border-radius:7px;padding:7px 9px}
+.pp-mkt-label{font-size:.62rem;color:var(--text3);margin-bottom:2px}
+.pp-mkt-val{font-size:.78rem;font-weight:700}
+/* Watchlist compacta dentro del panel lateral */
+#portalPanel .watchlist-item{padding:6px 0;font-size:.78rem}
+#portalPanel .wl-name{font-size:.78rem}
+#portalPanel .wl-chg{font-size:.74rem}
 
 /* MAIN */
 main{padding-top:60px}
@@ -1141,7 +1145,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
   <div class="nav-logo">
     <div class="nav-logo-dot"></div>
     Agencia de Valores Generación Z
-    <span class="nav-version">v2.5.0</span>
+    <span class="nav-version">v2.9.1</span>
   </div>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="showSection('Mercados')">Mercados</button>
@@ -1211,26 +1215,28 @@ tr:hover td{background:rgba(255,255,255,.02)}
     <!-- Cambiar contraseña -->
     <div class="pp-card">
       <div class="pp-card-title">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
         Cambiar Contraseña
       </div>
-      <div class="form-group">
-        <label class="form-label">Contraseña actual</label>
-        <input class="form-input" type="password" id="cpOld" placeholder="••••••••">
+      <div style="display:flex;flex-direction:column;gap:7px">
+        <div>
+          <label style="font-size:.65rem;color:var(--text3);display:block;margin-bottom:3px">Contraseña actual</label>
+          <input class="form-input" type="password" id="cpOld" placeholder="••••••••" style="padding:6px 10px;font-size:.78rem;height:auto">
+        </div>
+        <div>
+          <label style="font-size:.65rem;color:var(--text3);display:block;margin-bottom:3px">Nueva contraseña</label>
+          <input class="form-input" type="password" id="cpNew" placeholder="••••••••" style="padding:6px 10px;font-size:.78rem;height:auto">
+        </div>
+        <button class="btn-primary" onclick="changePassword()" style="margin-top:4px;width:100%;padding:7px;font-size:.75rem">Actualizar</button>
       </div>
-      <div class="form-group" style="margin-top:10px">
-        <label class="form-label">Nueva contraseña</label>
-        <input class="form-input" type="password" id="cpNew" placeholder="••••••••">
-      </div>
-      <button class="btn-primary" onclick="changePassword()" style="margin-top:12px;width:100%">Actualizar contraseña</button>
     </div>
 
     <!-- Cerrar sesión -->
     <button onclick="logout()" style="
       background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);
-      color:var(--red);border-radius:8px;padding:10px;width:100%;
-      cursor:pointer;font-size:.82rem;font-weight:600;font-family:var(--font);
-      transition:background .15s;margin-bottom:8px;
+      color:var(--red);border-radius:8px;padding:8px;width:100%;
+      cursor:pointer;font-size:.78rem;font-weight:600;font-family:var(--font);
+      transition:background .15s;margin-bottom:4px;
     " onmouseover="this.style.background='rgba(239,68,68,.2)'"
        onmouseout="this.style.background='rgba(239,68,68,.1)'">
       Cerrar sesión
