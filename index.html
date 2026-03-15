@@ -839,12 +839,52 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .cart-badge-recurrente{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:2px 6px;border-radius:4px;background:rgba(16,185,129,.15);color:var(--green)}
 .cart-badge-puntual{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:2px 6px;border-radius:4px;background:rgba(255,255,255,.07);color:var(--text3)}
 
+/* ── Calculadora de Interés Compuesto ─────────────────────────── */
+.calc-wrapper{display:grid;grid-template-columns:290px 1fr;gap:16px;align-items:start}
+.calc-inputs{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;position:sticky;top:72px}
+.calc-inputs-title{font-size:.72rem;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:16px}
+.calc-field{margin-bottom:16px}
+.calc-field label{display:block;font-size:.75rem;font-weight:500;color:var(--text2);margin-bottom:6px}
+.calc-input{width:100%;padding:9px 12px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:.88rem;font-family:var(--font);outline:none;transition:.15s;box-sizing:border-box}
+.calc-input:focus{border-color:var(--accent)}
+.calc-range-row{display:flex;align-items:center;gap:10px}
+.calc-range{-webkit-appearance:none;appearance:none;flex:1;height:4px;background:var(--border);border-radius:2px;outline:none;cursor:pointer}
+.calc-range::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:16px;height:16px;border-radius:50%;background:var(--accent);cursor:pointer;transition:.15s}
+.calc-range::-webkit-slider-thumb:hover{background:var(--accent2)}
+.calc-range-val{font-size:.85rem;font-weight:700;color:var(--text);min-width:58px;text-align:right;font-family:monospace}
+.calc-results{display:flex;flex-direction:column;gap:14px}
+.calc-milestone-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.calc-milestone{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px;transition:.2s}
+.calc-milestone.highlight{border-color:rgba(37,99,235,.45);box-shadow:0 0 0 1px rgba(37,99,235,.18)}
+.calc-ms-label{font-size:.68rem;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
+.calc-ms-total{font-size:1.1rem;font-weight:700;font-family:monospace;color:var(--text);margin-bottom:10px}
+.calc-ms-breakdown{display:flex;flex-direction:column;gap:5px}
+.calc-ms-row{display:flex;justify-content:space-between;align-items:center;font-size:.73rem}
+.calc-ms-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0;margin-right:5px}
+.calc-ms-name{color:var(--text3);display:flex;align-items:center}
+.calc-ms-val{font-family:monospace;font-weight:600;color:var(--text2)}
+.calc-ms-val.gold{color:#F59E0B}
+.calc-chart-box{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px}
+.calc-chart-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px}
+.calc-chart-title{font-size:.72rem;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.06em}
+.calc-legend{display:flex;gap:14px;flex-wrap:wrap}
+.calc-legend-item{display:flex;align-items:center;gap:5px;font-size:.72rem;color:var(--text3)}
+.calc-legend-dot{width:9px;height:9px;border-radius:2px;flex-shrink:0}
+.calc-summary-row{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.calc-summary-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px}
+.calc-summary-label{font-size:.7rem;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px}
+.calc-summary-value{font-size:1rem;font-weight:700;font-family:monospace;color:var(--text)}
+.calc-summary-value.gold{color:#F59E0B}
+
+@media(max-width:900px){.calc-wrapper{grid-template-columns:1fr}.calc-inputs{position:static}}
 @media(max-width:768px){
   .cart-kpi-row{grid-template-columns:repeat(2,1fr)}
   .cart-charts-row{grid-template-columns:1fr}
   .cart-proj-cards{grid-template-columns:1fr}
   .cart-input-grid{grid-template-columns:1fr}
   .cart-card-val{display:none}
+  .calc-milestone-row{grid-template-columns:1fr}
+  .calc-summary-row{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -855,7 +895,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
   <div class="nav-logo">
     <div class="nav-logo-dot"></div>
     Agencia de Valores
-    <span class="nav-version">v2.1.0</span>
+    <span class="nav-version">v2.2.0</span>
   </div>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="showSection('Mercados')">Mercados</button>
@@ -965,6 +1005,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <button class="inv-tab active" id="invTabMercados" onclick="switchInvTab('mercados')">📊 Mis Mercados</button>
       <button class="inv-tab" id="invTabAnalisis" onclick="switchInvTab('analisis')">📰 Análisis</button>
       <button class="inv-tab" id="invTabCarteras" onclick="switchInvTab('carteras')">💼 Mis Carteras</button>
+      <button class="inv-tab" id="invTabCalculadora" onclick="switchInvTab('calculadora')">🧮 Calculadora</button>
     </div>
 
     <!-- ── Contenido: Mis Mercados ── -->
@@ -1026,6 +1067,66 @@ tr:hover td{background:rgba(255,255,255,.02)}
     <div id="invCarterasPanel" style="display:none">
       <!-- Renderizado por renderCarteras() -->
     </div><!-- /invCarterasPanel -->
+
+    <!-- ── Contenido: Calculadora ── -->
+    <div id="invCalculadoraPanel" style="display:none">
+      <div class="calc-wrapper">
+
+        <!-- ─ Inputs ─ -->
+        <div class="calc-inputs">
+          <div class="calc-inputs-title">⚙️ Parámetros</div>
+
+          <div class="calc-field">
+            <label>Capital inicial (€)</label>
+            <input class="calc-input" id="calcCapital" type="number" value="10000" min="0" step="100" oninput="calcIC()">
+          </div>
+
+          <div class="calc-field">
+            <label>Aportación periódica (€)</label>
+            <input class="calc-input" id="calcAportacion" type="number" value="200" min="0" step="10" oninput="calcIC()">
+          </div>
+
+          <div class="calc-field">
+            <label>Frecuencia de aportación</label>
+            <select class="calc-input" id="calcFrecuencia" onchange="calcIC()">
+              <option value="12">Mensual</option>
+              <option value="52">Semanal</option>
+              <option value="4">Trimestral</option>
+              <option value="1">Anual</option>
+            </select>
+          </div>
+
+          <div class="calc-field">
+            <label>Tasa de interés anual — <span id="calcTasaVal" style="color:var(--accent)">7%</span></label>
+            <input class="calc-range" id="calcTasa" type="range" min="1" max="30" step="0.5" value="7"
+              oninput="document.getElementById('calcTasaVal').textContent=this.value+'%';calcIC()">
+          </div>
+
+          <div class="calc-field">
+            <label>Horizonte temporal — <span id="calcAnosVal" style="color:var(--accent)">20 años</span></label>
+            <input class="calc-range" id="calcAnos" type="range" min="1" max="40" step="1" value="20"
+              oninput="document.getElementById('calcAnosVal').textContent=this.value+' años';calcIC()">
+          </div>
+        </div>
+
+        <!-- ─ Resultados ─ -->
+        <div class="calc-results">
+          <div class="calc-milestone-row" id="calcMilestones"></div>
+          <div class="calc-summary-row" id="calcSummary"></div>
+          <div class="calc-chart-box">
+            <div class="calc-chart-header">
+              <div class="calc-chart-title">Evolución del capital</div>
+              <div class="calc-legend">
+                <div class="calc-legend-item"><div class="calc-legend-dot" style="background:#2563EB"></div>Capital inicial</div>
+                <div class="calc-legend-item"><div class="calc-legend-dot" style="background:#10B981"></div>Aportaciones</div>
+                <div class="calc-legend-item"><div class="calc-legend-dot" style="background:#F59E0B"></div>Intereses</div>
+              </div>
+            </div>
+            <canvas id="calcChart" height="180" style="width:100%;display:block"></canvas>
+          </div>
+        </div>
+      </div>
+    </div><!-- /invCalculadoraPanel -->
 
   </div>
 
@@ -1988,17 +2089,21 @@ function togglePendingFav(key) {
 function switchInvTab(tab) {
   _invTab = tab;
   // Actualiza botones de pestaña
-  document.getElementById('invTabMercados').classList.toggle('active', tab === 'mercados');
-  document.getElementById('invTabAnalisis').classList.toggle('active', tab === 'analisis');
-  document.getElementById('invTabCarteras').classList.toggle('active', tab === 'carteras');
+  document.getElementById('invTabMercados').classList.toggle('active',     tab === 'mercados');
+  document.getElementById('invTabAnalisis').classList.toggle('active',     tab === 'analisis');
+  document.getElementById('invTabCarteras').classList.toggle('active',     tab === 'carteras');
+  document.getElementById('invTabCalculadora').classList.toggle('active',  tab === 'calculadora');
   // Muestra/oculta contenido
-  document.getElementById('invMercadosContent').style.display = tab === 'mercados' ? 'block' : 'none';
-  document.getElementById('invAnalisisPanel').style.display   = tab === 'analisis'  ? 'block' : 'none';
-  document.getElementById('invCarterasPanel').style.display   = tab === 'carteras'  ? 'block' : 'none';
+  document.getElementById('invMercadosContent').style.display     = tab === 'mercados'    ? 'block' : 'none';
+  document.getElementById('invAnalisisPanel').style.display       = tab === 'analisis'    ? 'block' : 'none';
+  document.getElementById('invCarterasPanel').style.display       = tab === 'carteras'    ? 'block' : 'none';
+  document.getElementById('invCalculadoraPanel').style.display    = tab === 'calculadora' ? 'block' : 'none';
   // Carga noticias la primera vez que se abre la pestaña
-  if (tab === 'analisis' && _newsData.length === 0) loadInvestorNews();
+  if (tab === 'analisis'  && _newsData.length === 0) loadInvestorNews();
   // Carga carteras la primera vez que se abre la pestaña
-  if (tab === 'carteras' && !_carterasLoaded) loadCarteras();
+  if (tab === 'carteras'  && !_carterasLoaded) loadCarteras();
+  // Inicializa calculadora al abrir por primera vez
+  if (tab === 'calculadora') setTimeout(calcIC, 30);
 }
 
 async function loadInvestorNews() {
@@ -3616,6 +3721,172 @@ async function deleteActivo(carteraId, activoId) {
 // Click-fuera cierra modales de carteras
 document.getElementById('modalCartera').addEventListener('click', e => { if (e.target === e.currentTarget) closeCarteraModal(); });
 document.getElementById('modalActivo').addEventListener('click',  e => { if (e.target === e.currentTarget) closeActivoModal(); });
+
+// ================================================================
+// CALCULADORA DE INTERÉS COMPUESTO
+// ================================================================
+
+function _calcIC_at(capital, aportacion, m, r, n) {
+  // Valor futuro del capital inicial
+  const fvCapital = capital * Math.pow(1 + r, n);
+  // Valor futuro de aportaciones periódicas (anualidad ordinaria al final de período)
+  const rM = r / m;
+  const nM = n * m;
+  const fvAportaciones = rM > 0
+    ? aportacion * ((Math.pow(1 + rM, nM) - 1) / rM)
+    : aportacion * nM;
+  const total         = fvCapital + fvAportaciones;
+  const totalDepositado = capital + aportacion * nM;
+  const intereses     = total - totalDepositado;
+  return { total, fvCapital, totalAportado: aportacion * nM, intereses, totalDepositado };
+}
+
+function _fmtCalc(n) {
+  if (Math.abs(n) >= 1e6) return '€' + (n / 1e6).toFixed(2).replace('.',',') + 'M';
+  if (Math.abs(n) >= 1e3) return '€' + (n / 1e3).toFixed(1).replace('.',',') + 'K';
+  return '€' + Math.round(n).toLocaleString('es-ES');
+}
+
+function _fmtCalcShort(n) {
+  if (n >= 1e6) return (n / 1e6).toFixed(1).replace('.',',') + 'M';
+  if (n >= 1e3) return Math.round(n / 1e3) + 'K';
+  return Math.round(n).toLocaleString('es-ES');
+}
+
+function calcIC() {
+  const capital    = Math.max(0, parseFloat(document.getElementById('calcCapital').value)    || 0);
+  const aportacion = Math.max(0, parseFloat(document.getElementById('calcAportacion').value) || 0);
+  const m          = parseInt(document.getElementById('calcFrecuencia').value);
+  const tasa       = parseFloat(document.getElementById('calcTasa').value) / 100;
+  const maxAnos    = parseInt(document.getElementById('calcAnos').value);
+
+  // Tres hitos: 25%, 50% y 100% del horizonte (mínimo 1, 2, maxAnos)
+  const ms1 = Math.max(1, Math.round(maxAnos * 0.25));
+  const ms2 = Math.max(ms1 + 1, Math.round(maxAnos * 0.5));
+  const ms3 = maxAnos;
+
+  // Render milestone cards
+  const renderMilestone = (años, cls) => {
+    const { total, fvCapital, totalAportado, intereses } = _calcIC_at(capital, aportacion, m, tasa, años);
+    const pctBenefit = total > 0 ? intereses / total * 100 : 0;
+    return `
+      <div class="calc-milestone${cls ? ' ' + cls : ''}">
+        <div class="calc-ms-label">${años} año${años !== 1 ? 's' : ''}</div>
+        <div class="calc-ms-total">${_fmtCalc(total)}</div>
+        <div class="calc-ms-breakdown">
+          <div class="calc-ms-row">
+            <span class="calc-ms-name"><span class="calc-ms-dot" style="background:#2563EB"></span>Capital inicial</span>
+            <span class="calc-ms-val">${_fmtCalc(fvCapital)}</span>
+          </div>
+          <div class="calc-ms-row">
+            <span class="calc-ms-name"><span class="calc-ms-dot" style="background:#10B981"></span>Aportaciones</span>
+            <span class="calc-ms-val">${_fmtCalc(totalAportado)}</span>
+          </div>
+          <div class="calc-ms-row">
+            <span class="calc-ms-name"><span class="calc-ms-dot" style="background:#F59E0B"></span>Intereses</span>
+            <span class="calc-ms-val gold">${_fmtCalc(intereses)}</span>
+          </div>
+          <div class="calc-ms-row" style="margin-top:3px;padding-top:5px;border-top:1px solid var(--border)">
+            <span class="calc-ms-name" style="color:var(--text3)">% del total son intereses</span>
+            <span class="calc-ms-val gold">${pctBenefit.toFixed(1)}%</span>
+          </div>
+        </div>
+      </div>`;
+  };
+
+  document.getElementById('calcMilestones').innerHTML =
+    renderMilestone(ms1, '') +
+    renderMilestone(ms2, 'highlight') +
+    renderMilestone(ms3, '');
+
+  // Resumen global al horizonte máximo
+  const { total, fvCapital, totalAportado, intereses, totalDepositado } = _calcIC_at(capital, aportacion, m, tasa, maxAnos);
+  const frecLabel = { '12':'mes', '52':'semana', '4':'trimestre', '1':'año' }[String(m)] || 'período';
+  document.getElementById('calcSummary').innerHTML = `
+    <div class="calc-summary-card">
+      <div class="calc-summary-label">Total depositado (sin intereses)</div>
+      <div class="calc-summary-value">${_fmtCalc(totalDepositado)}</div>
+    </div>
+    <div class="calc-summary-card">
+      <div class="calc-summary-label">Total generado en intereses</div>
+      <div class="calc-summary-value gold">${_fmtCalc(intereses)} (+${totalDepositado > 0 ? (intereses/totalDepositado*100).toFixed(1) : 0}%)</div>
+    </div>`;
+
+  // Dibujar gráfico
+  _drawCalcChart(capital, aportacion, m, tasa, maxAnos);
+}
+
+function _drawCalcChart(capital, aportacion, m, tasa, maxAnos) {
+  const cv = document.getElementById('calcChart');
+  if (!cv) return;
+  cv.width = cv.parentElement.clientWidth || 400;
+  const ctx = cv.getContext('2d');
+  const W = cv.width, H = cv.height;
+  ctx.clearRect(0, 0, W, H);
+
+  // Calcular años a mostrar (máximo 8 barras, distribuidas uniformemente)
+  const nBars = Math.min(maxAnos, 8);
+  const step  = Math.max(1, Math.floor(maxAnos / nBars));
+  const years = [];
+  for (let y = step; y < maxAnos; y += step) years.push(y);
+  years.push(maxAnos);
+
+  const data = years.map(y => {
+    const { fvCapital, totalAportado, intereses } = _calcIC_at(capital, aportacion, m, tasa, y);
+    return { year: y, cap: Math.max(0, fvCapital), ap: Math.max(0, totalAportado), int: Math.max(0, intereses) };
+  });
+
+  const maxVal = Math.max(...data.map(d => d.cap + d.ap + d.int), 1);
+  const padL = 58, padR = 12, padT = 12, padB = 28;
+  const chartW = W - padL - padR;
+  const chartH = H - padT - padB;
+  const gap    = chartW / data.length;
+  const barW   = Math.min(42, gap * 0.6);
+
+  // Grid + etiquetas Y
+  ctx.font = '10px Inter,sans-serif';
+  for (let i = 0; i <= 4; i++) {
+    const val = maxVal * (i / 4);
+    const y   = padT + chartH - (i / 4) * chartH;
+    ctx.strokeStyle = 'rgba(255,255,255,.05)';
+    ctx.beginPath(); ctx.moveTo(padL, y); ctx.lineTo(W - padR, y); ctx.stroke();
+    ctx.fillStyle = 'rgba(148,163,184,.7)';
+    ctx.textAlign = 'right';
+    ctx.fillText(_fmtCalcShort(val), padL - 5, y + 3);
+  }
+
+  // Barras apiladas
+  data.forEach((d, i) => {
+    const x    = padL + i * gap + (gap - barW) / 2;
+    const hCap = (d.cap / maxVal) * chartH;
+    const hAp  = (d.ap  / maxVal) * chartH;
+    const hInt = (d.int / maxVal) * chartH;
+    let   yPos = padT + chartH;
+
+    // Capital inicial (azul)
+    ctx.fillStyle = '#2563EB';
+    ctx.beginPath();
+    ctx.roundRect ? ctx.roundRect(x, yPos - hCap, barW, hCap, [2, 2, 0, 0]) : ctx.rect(x, yPos - hCap, barW, hCap);
+    ctx.fill();
+    yPos -= hCap;
+
+    // Aportaciones (verde)
+    ctx.fillStyle = '#10B981';
+    ctx.fillRect(x, yPos - hAp, barW, hAp);
+    yPos -= hAp;
+
+    // Intereses (amarillo)
+    ctx.fillStyle = '#F59E0B';
+    ctx.beginPath();
+    ctx.roundRect ? ctx.roundRect(x, yPos - hInt, barW, hInt, [3, 3, 0, 0]) : ctx.rect(x, yPos - hInt, barW, hInt);
+    ctx.fill();
+
+    // Etiqueta X
+    ctx.fillStyle = 'rgba(148,163,184,.8)';
+    ctx.textAlign = 'center';
+    ctx.fillText(d.year + 'a', x + barW / 2, padT + chartH + 16);
+  });
+}
 
 // ================================================================
 // INIT
