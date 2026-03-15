@@ -423,6 +423,88 @@ main{padding-top:60px}
 .skeleton{background:linear-gradient(90deg,var(--card) 25%,var(--card2) 50%,var(--card) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite}
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
 
+/* ===== PUBLIC HERO LAYOUT ===== */
+#secMercados{padding:0 0 0}
+.pub-header-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:18px 24px 14px;border-bottom:1px solid var(--border);
+}
+.pub-header-bar h1{font-size:1.15rem;font-weight:700;margin:0}
+.pub-layout{
+  display:grid;
+  grid-template-columns:220px 1fr 270px;
+  height:calc(100vh - 148px);
+  min-height:480px;max-height:780px;
+}
+/* Left: index compact list */
+.pub-left{
+  border-right:1px solid var(--border);
+  overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border) transparent;
+}
+.pub-idx-row{
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  padding:11px 14px;border-bottom:1px solid rgba(255,255,255,.04);
+  cursor:pointer;transition:.12s;border-left:3px solid transparent;
+}
+.pub-idx-row:hover{background:rgba(255,255,255,.03)}
+.pub-idx-row.active{background:rgba(37,99,235,.1);border-left-color:var(--accent)}
+.pub-idx-left{display:flex;flex-direction:column;gap:2px;min-width:0}
+.pub-idx-name{font-size:.78rem;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text)}
+.pub-idx-region{font-size:.65rem;color:var(--text3)}
+.pub-idx-right{display:flex;flex-direction:column;align-items:flex-end;gap:2px;flex-shrink:0}
+.pub-idx-price{font-size:.8rem;font-weight:600;font-variant-numeric:tabular-nums;color:var(--text)}
+.pub-idx-chg{font-size:.7rem;font-weight:600;padding:1px 5px;border-radius:4px}
+/* Center: featured chart */
+.pub-center{display:flex;flex-direction:column;overflow:hidden}
+.pub-feat-header{
+  padding:14px 20px 12px;border-bottom:1px solid var(--border);
+  display:flex;align-items:flex-start;justify-content:space-between;flex-shrink:0;gap:12px;
+}
+.pub-feat-meta{display:flex;flex-direction:column;gap:4px}
+.pub-feat-name{font-size:1rem;font-weight:700;color:var(--text)}
+.pub-feat-price-row{display:flex;align-items:center;gap:10px}
+.pub-feat-price{font-size:1.5rem;font-weight:700;font-variant-numeric:tabular-nums}
+.pub-period-row{display:flex;gap:4px;align-items:center;flex-shrink:0}
+.pub-period-row .chart-period{
+  padding:4px 10px;font-size:.75rem;border-radius:5px;
+  background:transparent;color:var(--text3);border:1px solid var(--border);cursor:pointer;transition:.12s;
+}
+.pub-period-row .chart-period.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.pub-period-row .chart-period:hover:not(.active){color:var(--text);border-color:var(--text3)}
+.pub-feat-chart{flex:1;min-height:0;position:relative;overflow:hidden}
+#pubChart{position:absolute;inset:0;width:100%;height:100%}
+/* Right: top 10 */
+.pub-right{
+  border-left:1px solid var(--border);
+  overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border) transparent;
+  display:flex;flex-direction:column;
+}
+.pub-top10-header{
+  padding:12px 16px;border-bottom:1px solid var(--border);
+  font-size:.78rem;font-weight:600;color:var(--text2);
+  position:sticky;top:0;background:var(--bg2);z-index:1;flex-shrink:0;
+}
+.pub-top10-row{
+  display:grid;grid-template-columns:18px 1fr auto auto;
+  gap:6px;align-items:center;padding:9px 14px;
+  border-bottom:1px solid rgba(255,255,255,.04);
+  font-size:.76rem;transition:.1s;
+}
+.pub-top10-row:hover{background:rgba(255,255,255,.02)}
+.pub-top10-num{color:var(--text3);font-size:.68rem;text-align:center;font-weight:600}
+.pub-top10-info{min-width:0}
+.pub-top10-name{font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text)}
+.pub-top10-ticker{font-size:.67rem;color:var(--text3)}
+.pub-top10-price{font-variant-numeric:tabular-nums;color:var(--text2);text-align:right;font-size:.74rem}
+.pub-top10-chg{font-size:.7rem;font-weight:600;padding:2px 5px;border-radius:4px;text-align:right;white-space:nowrap}
+.pub-empty-top10{padding:20px 16px;font-size:.78rem;color:var(--text3);text-align:center}
+@media(max-width:900px){
+  .pub-layout{grid-template-columns:1fr;height:auto}
+  .pub-left{display:none}
+  .pub-right{display:none}
+  .pub-feat-chart{height:280px;position:relative}
+}
+
 /* ===== ANÁLISIS ===== */
 #secAnalisis{padding:32px 24px 48px}
 .analysis-layout{display:grid;grid-template-columns:1fr 320px;gap:20px}
@@ -1143,17 +1225,49 @@ tr:hover td{background:rgba(255,255,255,.02)}
 
   <!-- ── VISTA PÚBLICA (sin sesión o admin) ── -->
   <div id="publicDash">
-    <div class="section-header">
-      <h1 class="section-title">Mercados Globales</h1>
-      <p class="section-sub">Principales índices bursátiles en tiempo real</p>
-      <div class="refresh-info">
-        <div class="live-dot"></div>
-        <span>Actualización automática cada 60 segundos</span>
-        <span id="lastUpdate" style="margin-left:8px;color:var(--text3)"></span>
+    <!-- Header compacto -->
+    <div class="pub-header-bar">
+      <div>
+        <h1>Mercados Globales</h1>
+        <div class="refresh-info" style="margin-top:4px">
+          <div class="live-dot"></div>
+          <span>Actualización automática cada 60 segundos</span>
+          <span id="lastUpdate" style="margin-left:8px;color:var(--text3)"></span>
+        </div>
       </div>
     </div>
-    <div class="indices-grid" id="indicesGrid">
-      <!-- Cards generadas por JS -->
+    <!-- Layout 3 columnas -->
+    <div class="pub-layout">
+      <!-- Izquierda: lista compacta de índices -->
+      <div class="pub-left" id="pubIndexList">
+        <!-- Generado por renderPublicDash() -->
+      </div>
+      <!-- Centro: gráfico del índice destacado -->
+      <div class="pub-center">
+        <div class="pub-feat-header">
+          <div class="pub-feat-meta">
+            <div class="pub-feat-name" id="pubFeatName">—</div>
+            <div class="pub-feat-price-row">
+              <span class="pub-feat-price" id="pubFeatPrice">—</span>
+              <span class="card-change flat" id="pubFeatChange">—</span>
+            </div>
+          </div>
+          <div class="pub-period-row">
+            <button class="chart-period active" onclick="setPubPeriod('1mo',this)">1M</button>
+            <button class="chart-period" onclick="setPubPeriod('3mo',this)">3M</button>
+            <button class="chart-period" onclick="setPubPeriod('6mo',this)">6M</button>
+            <button class="chart-period" onclick="setPubPeriod('1y',this)">1A</button>
+          </div>
+        </div>
+        <div class="pub-feat-chart">
+          <div id="pubChart"></div>
+        </div>
+      </div>
+      <!-- Derecha: top 10 del índice destacado -->
+      <div class="pub-right">
+        <div class="pub-top10-header" id="pubTop10Title">Top 10 componentes</div>
+        <div id="pubTop10List"></div>
+      </div>
     </div>
   </div>
 
@@ -1879,6 +1993,7 @@ function toggleFavorite(key) {
 
 function buildSkeletonCards() {
   const grid = document.getElementById('indicesGrid');
+  if (!grid) return;
   grid.innerHTML = Object.keys(INDEX_MAP).map(() => `
     <div class="index-card loading">
       <div class="skeleton" style="height:14px;width:60%;border-radius:4px;margin-bottom:12px"></div>
@@ -1968,6 +2083,168 @@ function drawSparkline(canvas, d) {
 }
 
 // ================================================================
+// PUBLIC HERO DASHBOARD
+// ================================================================
+let _pubChart   = null;
+let _pubSeries  = null;
+let _pubSymbol  = null;
+let _pubPeriod  = '1mo';
+
+function renderPublicDash(data) {
+  // Índice con mejor variación positiva del día
+  const best = data.reduce((b, d) => d.changePct > b.changePct ? d : b, data[0]);
+
+  // Lista compacta izquierda
+  const listEl = document.getElementById('pubIndexList');
+  if (listEl) {
+    listEl.innerHTML = data.map(d => {
+      const up  = d.changePct >= 0;
+      const cls = Math.abs(d.changePct) < 0.01 ? 'flat' : (up ? 'up' : 'dn');
+      return `<div class="pub-idx-row${d.symbol === best.symbol ? ' active' : ''}"
+                id="pubRow_${d.key}" onclick="selectFeatured('${d.symbol}','${d.key}')">
+        <div class="pub-idx-left">
+          <div class="pub-idx-name">${d.name}</div>
+          <div class="pub-idx-region">${d.region} &nbsp;${d.marketState === 'REGULAR' ? '● Abierto' : '● Cerrado'}</div>
+        </div>
+        <div class="pub-idx-right">
+          <div class="pub-idx-price">${fmt(d.price)}</div>
+          <div class="pub-idx-chg ${cls}">${up ? '▲' : '▼'} ${Math.abs(d.changePct).toFixed(2)}%</div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  // Inicializa featured con el mejor índice
+  selectFeatured(best.symbol, best.key, false);
+}
+
+function selectFeatured(symbol, key, updateRows = true) {
+  _pubSymbol = symbol;
+
+  if (updateRows) {
+    document.querySelectorAll('.pub-idx-row').forEach(r => r.classList.remove('active'));
+    const row = document.getElementById('pubRow_' + key);
+    if (row) row.classList.add('active');
+  }
+
+  // Cabecera con datos actuales
+  const d = _marketData.find(x => x.symbol === symbol);
+  if (d) {
+    document.getElementById('pubFeatName').textContent  = d.name;
+    document.getElementById('pubFeatPrice').textContent = fmt(d.price);
+    const up  = d.changePct >= 0;
+    const cls = Math.abs(d.changePct) < 0.01 ? 'flat' : (up ? 'up' : 'dn');
+    const chgEl = document.getElementById('pubFeatChange');
+    chgEl.textContent  = `${up ? '▲' : '▼'} ${Math.abs(d.changePct).toFixed(2)}%  (${up ? '+' : ''}${fmt(d.change)})`;
+    chgEl.className    = 'card-change ' + cls;
+  }
+
+  _initPubChart();
+  _loadPubHistorical(symbol);
+  _loadPubTop10(symbol);
+}
+
+function _initPubChart() {
+  const container = document.getElementById('pubChart');
+  if (!container) return;
+  if (_pubChart) { try { _pubChart.remove(); } catch (_) {} _pubChart = null; _pubSeries = null; }
+
+  const h = container.offsetHeight || container.parentElement?.offsetHeight || 320;
+  _pubChart = LightweightCharts.createChart(container, {
+    width:  container.offsetWidth  || container.parentElement?.offsetWidth || 600,
+    height: h,
+    layout:     { background: { color: '#1a1f35' }, textColor: '#94a3b8' },
+    grid:       { vertLines: { color: '#2a3050' }, horzLines: { color: '#2a3050' } },
+    crosshair:  { mode: LightweightCharts.CrosshairMode.Normal },
+    rightPriceScale: { borderColor: '#2a3050' },
+    timeScale:  { borderColor: '#2a3050', timeVisible: true },
+  });
+  _pubSeries = _pubChart.addAreaSeries({
+    lineColor: '#2563EB', topColor: 'rgba(37,99,235,.28)',
+    bottomColor: 'rgba(37,99,235,.02)', lineWidth: 2,
+  });
+
+  const ro = new ResizeObserver(() => {
+    if (_pubChart && container.offsetWidth > 0) {
+      _pubChart.applyOptions({ width: container.offsetWidth, height: container.offsetHeight || 320 });
+    }
+  });
+  ro.observe(container);
+}
+
+async function _loadPubHistorical(symbol) {
+  if (!_pubSeries) return;
+  try {
+    const res  = await fetch(`${API_BASE}/historical?symbol=${encodeURIComponent(symbol)}&period=${_pubPeriod}`,
+      { signal: AbortSignal.timeout(20000) });
+    if (!res.ok) return;
+    const data = await res.json();
+    if (data.ohlcv?.length) {
+      const pts = data.ohlcv.filter(d => d.close !== null && d.time).map(d => ({ time: d.time, value: d.close }));
+      if (pts.length) { _pubSeries.setData(pts); _pubChart.timeScale().fitContent(); }
+    }
+  } catch (e) { console.warn('pubChart error:', e.message); }
+}
+
+function setPubPeriod(period, btn) {
+  _pubPeriod = period;
+  document.querySelectorAll('.pub-period-row .chart-period').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  if (_pubSymbol) _loadPubHistorical(_pubSymbol);
+}
+
+async function _loadPubTop10(symbol) {
+  const cfg    = CONSTITUENTS[symbol];
+  const listEl = document.getElementById('pubTop10List');
+  const title  = document.getElementById('pubTop10Title');
+  if (!listEl) return;
+
+  if (!cfg) {
+    if (title) title.textContent = 'Componentes';
+    listEl.innerHTML = `<div class="pub-empty-top10">Sin componentes disponibles para este índice</div>`;
+    return;
+  }
+
+  const top10 = cfg.items.slice(0, 10);
+  if (title) title.textContent = (INDEX_MAP[symbol]?.name || symbol) + ' — Top 10';
+
+  // Skeleton mientras carga
+  listEl.innerHTML = top10.map((it, i) => `
+    <div class="pub-top10-row">
+      <div class="pub-top10-num">${i + 1}</div>
+      <div class="pub-top10-info">
+        <div class="pub-top10-name">${it.name}</div>
+        <div class="pub-top10-ticker">${it.ticker}</div>
+      </div>
+      <div class="pub-top10-price skeleton" style="height:13px;width:52px;border-radius:3px"></div>
+      <div class="pub-top10-chg skeleton" style="height:18px;width:46px;border-radius:4px"></div>
+    </div>`).join('');
+
+  try {
+    const tickers = top10.map(it => it.ticker).join(',');
+    const res  = await fetch(`${API_BASE}/quotes?symbols=${tickers}`, { signal: AbortSignal.timeout(15000) });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const { quotes } = await res.json();
+
+    listEl.innerHTML = top10.map((it, i) => {
+      const q   = quotes?.find(q => q.symbol === it.ticker);
+      const pct = q?.changePct ?? null;
+      const up  = pct >= 0;
+      const cls = pct === null ? 'flat' : (Math.abs(pct) < 0.01 ? 'flat' : (up ? 'up' : 'dn'));
+      return `<div class="pub-top10-row">
+        <div class="pub-top10-num">${i + 1}</div>
+        <div class="pub-top10-info">
+          <div class="pub-top10-name">${it.name}</div>
+          <div class="pub-top10-ticker">${it.ticker}</div>
+        </div>
+        <div class="pub-top10-price">${q ? fmt(q.price) : '—'}</div>
+        <div class="pub-top10-chg ${cls}">${pct !== null ? `${up ? '▲' : '▼'} ${Math.abs(pct).toFixed(2)}%` : '—'}</div>
+      </div>`;
+    }).join('');
+  } catch (e) { console.warn('Top10 error:', e.message); }
+}
+
+// ================================================================
 // INVESTOR DASHBOARD
 // ================================================================
 function renderMainSection(data) {
@@ -1977,7 +2254,7 @@ function renderMainSection(data) {
   if (isInvestor) {
     renderInvestorDashboard(data);
   } else {
-    renderIndexCards(data);
+    renderPublicDash(data);
   }
 }
 
