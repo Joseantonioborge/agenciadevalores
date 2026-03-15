@@ -5707,17 +5707,55 @@ function finbotToggle() {
   _finbotOpen = !_finbotOpen;
   const win = document.getElementById('finbotWindow');
   if (win) win.style.display = _finbotOpen ? 'flex' : 'none';
-  // Ocultar notif
   const notif = document.getElementById('finbotNotif');
   if (notif) notif.style.display = 'none';
-  // Primer saludo
   if (_finbotOpen && !_finbotGreeted) {
     _finbotGreeted = true;
-    _finbotAppendBot(`¡Hola${_session?.name ? ', **' + _session.name + '**' : ''}! 👋 Soy **FinBot**, tu asistente financiero IA.\n\nPuedo ayudarte con:\n- 📊 Situación actual de los mercados\n- 💼 Análisis de tu cartera de inversión\n- 📈 Proyecciones y cálculos de rentabilidad\n- 🌍 Comparativa de fondos nacionales e internacionales\n- ⚖️ Estrategias de diversificación y gestión de riesgo\n\n¿Sobre qué quieres hablar hoy?`);
-    finbotShowCtxBadge();
+    finbotLoadHistory();
   }
-  // Scroll al final
   if (_finbotOpen) setTimeout(finbotScrollBottom, 50);
+}
+
+async function finbotLoadHistory() {
+  if (!_session?.username) return _finbotShowWelcome();
+  const loadEl = document.getElementById('finbotMsgs');
+  if (loadEl) { const el = document.createElement('div'); el.className='finbot-msg bot'; el.innerHTML='<div class="finbot-typing"><span></span><span></span><span></span></div>'; el.id='finbot-init-load'; loadEl.appendChild(el); }
+  try {
+    const r = await fetch(`${API_BASE}/chat?username=${encodeURIComponent(_session.username)}`, { headers: { 'x-api-key': API_KEY_INVESTOR } });
+    const d = await r.json();
+    document.getElementById('finbot-init-load')?.remove();
+    if (d.ok && d.messages?.length > 0) {
+      const msgs = document.getElementById('finbotMsgs');
+      if (msgs) msgs.innerHTML = '';
+      const toShow = d.messages.slice(-20);
+      toShow.forEach(m => { if (m.role==='user') _finbotAppendUser(m.content,true); else _finbotAppendBot(m.content,true); });
+      _finbotHistory = toShow.map(m => ({ role:m.role, content:m.content }));
+      const msgs2 = document.getElementById('finbotMsgs');
+      const sep = document.createElement('div');
+      sep.style.cssText = 'text-align:center;font-size:.62rem;color:var(--text3);padding:8px 0;border-top:1px solid var(--border);margin-top:6px';
+      sep.textContent = '── conversación restaurada ──';
+      msgs2?.appendChild(sep);
+      finbotShowCtxBadge();
+      setTimeout(finbotScrollBottom, 60);
+    } else { _finbotShowWelcome(); }
+  } catch { document.getElementById('finbot-init-load')?.remove(); _finbotShowWelcome(); }
+}
+
+function _finbotShowWelcome() {
+  _finbotAppendBot(`¡Hola${_session?.name?', **'+_session.name+'**':''}! 👋 Soy **FinBot**, asistente financiero IA con datos en tiempo real.\n\nTengo acceso directo a:\n- 📊 Cotizaciones en vivo de índices y acciones\n- 📰 Últimas noticias financieras\n- 📈 Análisis técnico + **escenarios futuros** (alcista/base/bajista)\n- 🌍 90 fondos de inversión (CNMV + CSSF Luxemburgo + CBI Irlanda)\n- 💼 Tu cartera personal\n\n¿Sobre qué quieres hablar hoy?`);
+  finbotShowCtxBadge();
+}
+
+async function finbotClearHistory() {
+  if (!_session?.username || !confirm('¿Borrar el historial completo de conversación con FinBot?')) return;
+  await fetch(`${API_BASE}/chat?username=${encodeURIComponent(_session.username)}`, { method:'DELETE', headers:{'x-api-key':API_KEY_INVESTOR} });
+  _finbotHistory = []; _finbotGreeted = false;
+  const msgs = document.getElementById('finbotMsgs');
+  if (msgs) msgs.innerHTML = '';
+  const sug = document.getElementById('finbotSugs');
+  if (sug) sug.style.display = 'flex';
+  _finbotShowWelcome();
+  toast('Historial borrado', 'ok');
 }
 
 // Badge de contexto disponible
@@ -5776,51 +5814,53 @@ async function finbotSend() {
   _finbotBusy = true;
   const sendBtn = document.getElementById('finbotSend');
   if (sendBtn) sendBtn.disabled = true;
-  const typingId = _finbotShowTyping();
+  const typingId = _finbotShowTyping('🔍 Consultando datos en tiempo real…');
 
-  // Construir contexto
-  const context = {};
-  if (_marketData?.length) {
-    context.marketData = _marketData.slice(0, 9).map(m => ({
-      name:       m.name   || m.symbol || m.key,
-      price:      m.price  || 0,
-      changePct:  m.changePct ?? m.change ?? 0,
-    }));
-  }
+  // Construir contexto de cartera como texto (más eficiente que JSON en el system prompt)
+  let portfolioContext = null;
   if (_carteras?.length) {
-    context.carteras = _carteras.map(c => {
+    const lines = [];
+    let totalInv = 0, totalAct = 0;
+    _carteras.forEach(c => {
       const calc = _calcCartera(c.activos);
-      return {
-        nombre:    c.nombre,
-        invertido: calc.invertido,
-        actual:    calc.actual,
-        pct:       calc.pct,
-        activos:   (c.activos || []).map(a => ({
-          ticker: a.ticker,
-          nombre: a.nombre,
-          tipo:   a.tipo,
-          valor:  (parseFloat(a.cantidad)||0) * (parseFloat(a.precioActual)||0),
-        })),
-      };
+      totalInv += calc.invertido; totalAct += calc.actual;
+      lines.push(`Cartera "${c.nombre}": invertido €${calc.invertido.toFixed(0)}, valor actual €${calc.actual.toFixed(0)}, rentabilidad ${calc.pct>=0?'+':''}${calc.pct.toFixed(2)}%`);
+      (c.activos||[]).forEach(a => {
+        const val = (parseFloat(a.cantidad)||0)*(parseFloat(a.precioActual)||0);
+        lines.push(`  · ${a.ticker||a.nombre} (${a.tipo}): €${val.toFixed(0)}`);
+      });
     });
+    const gl = totalInv>0?(totalAct-totalInv)/totalInv*100:0;
+    portfolioContext = `Total invertido: €${totalInv.toFixed(0)} | Valor actual: €${totalAct.toFixed(0)} | Rentabilidad global: ${gl>=0?'+':''}${gl.toFixed(2)}%\n` + lines.join('\n');
   }
 
   try {
     const resp = await fetch(`${API_BASE}/chat`, {
       method:  'POST',
       headers: { 'Content-Type':'application/json', 'x-api-key': API_KEY_INVESTOR },
-      body:    JSON.stringify({ message: msg, history: _finbotHistory.slice(-12), context }),
+      body:    JSON.stringify({ message: msg, username: _session?.username, portfolioContext }),
     });
     const data = await resp.json();
     _finbotRemoveTyping(typingId);
 
     if (data.ok && data.reply) {
       _finbotAppendBot(data.reply);
-      _finbotHistory.push({ role: 'assistant', content: data.reply });
-      // Limitar historial a 30 turnos
-      if (_finbotHistory.length > 30) _finbotHistory = _finbotHistory.slice(-30);
+      _finbotHistory.push({ role:'user', content:msg });
+      _finbotHistory.push({ role:'assistant', content:data.reply });
+      // Badge de herramientas usadas
+      if (data.toolsUsed?.length) {
+        const TOOL_LABELS = { get_market_data:'📊 Mercados', get_stock_quotes:'💹 Cotizaciones',
+          get_financial_news:'📰 Noticias', get_technical_analysis:'📈 Análisis técnico', search_investment_funds:'🌍 Fondos' };
+        const msgs = document.getElementById('finbotMsgs');
+        if (msgs) {
+          const badge = document.createElement('div');
+          badge.style.cssText='font-size:.6rem;color:var(--text3);padding:2px 14px 8px;';
+          badge.textContent = 'Fuentes: ' + [...new Set(data.toolsUsed)].map(t=>TOOL_LABELS[t]||t).join(' · ');
+          msgs.appendChild(badge);
+        }
+      }
     } else {
-      _finbotAppendBot(`❌ Lo siento, no pude procesar tu consulta: ${data.error || 'Error desconocido'}. Por favor inténtalo de nuevo.`);
+      _finbotAppendBot(`❌ ${data.error || 'Error al procesar la consulta'}. Inténtalo de nuevo.`);
     }
   } catch (err) {
     _finbotRemoveTyping(typingId);
@@ -5829,11 +5869,12 @@ async function finbotSend() {
     _finbotBusy = false;
     if (sendBtn) sendBtn.disabled = false;
     input?.focus();
+    finbotScrollBottom();
   }
 }
 
 // ── Helpers de render ──────────────────────────────────────────────
-function _finbotAppendUser(text) {
+function _finbotAppendUser(text, silent) {
   const msgs = document.getElementById('finbotMsgs');
   if (!msgs) return;
   const el = document.createElement('div');
@@ -5844,7 +5885,7 @@ function _finbotAppendUser(text) {
   finbotScrollBottom();
 }
 
-function _finbotAppendBot(md) {
+function _finbotAppendBot(md, silent) {
   const msgs = document.getElementById('finbotMsgs');
   if (!msgs) return;
   const el = document.createElement('div');
@@ -5852,17 +5893,19 @@ function _finbotAppendBot(md) {
   el.innerHTML = `<div class="finbot-bubble">${_mdToHtml(md)}</div>
     <div class="finbot-ts">FinBot · ${_fmtNow()}</div>`;
   msgs.appendChild(el);
-  finbotScrollBottom();
+  if (!silent) finbotScrollBottom();
 }
 
-function _finbotShowTyping() {
+function _finbotShowTyping(label) {
   const msgs = document.getElementById('finbotMsgs');
   if (!msgs) return null;
   const id = 'finbot-typing-' + Date.now();
   const el = document.createElement('div');
   el.id = id;
   el.className = 'finbot-msg bot';
-  el.innerHTML = `<div class="finbot-typing"><span></span><span></span><span></span></div>`;
+  el.innerHTML = label
+    ? `<div class="finbot-typing" style="gap:8px"><span></span><span></span><span></span><span style="font-size:.68rem;color:var(--text3);margin-left:4px;animation:none;border-radius:0;background:transparent;width:auto;height:auto">${label}</span></div>`
+    : `<div class="finbot-typing"><span></span><span></span><span></span></div>`;
   msgs.appendChild(el);
   finbotScrollBottom();
   return id;
@@ -5937,6 +5980,7 @@ init();
         <div class="finbot-hname">FinBot · Agencia de Valores</div>
         <div class="finbot-hstatus">Asistente financiero IA · En línea</div>
       </div>
+      <button class="finbot-close" onclick="finbotClearHistory()" title="Borrar historial" style="margin-right:4px">🗑</button>
       <button class="finbot-close" onclick="finbotToggle()" title="Cerrar">✕</button>
     </div>
     <div class="finbot-msgs" id="finbotMsgs"></div>
