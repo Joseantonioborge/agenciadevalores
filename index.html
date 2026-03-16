@@ -2355,6 +2355,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
           <option value="bono">Bono</option>
           <option value="inmobiliario">Inmobiliario</option>
           <option value="efectivo">Efectivo</option>
+          <option value="startup">Startup</option>
           <option value="otro">Otro</option>
         </select>
       </div>
@@ -5245,13 +5246,13 @@ function toast(msg, type = 'ok') {
 // MIS CARTERAS
 // ================================================================
 const CARTERA_COLORS = ['#2563EB','#10B981','#8B5CF6','#F59E0B','#EF4444','#EC4899','#06B6D4','#84CC16'];
-const TIPO_COLORS   = { accion:'#2563EB', etf:'#10B981', fondo:'#8B5CF6', crypto:'#F59E0B', bono:'#94a3b8', inmobiliario:'#EA580C', efectivo:'#0EA5E9', otro:'#64748b' };
-const TIPO_LABELS   = { accion:'Acción', etf:'ETF', fondo:'Fondo', crypto:'Crypto', bono:'Bono', inmobiliario:'Inmobiliario', efectivo:'Efectivo', otro:'Otro' };
+const TIPO_COLORS   = { accion:'#2563EB', etf:'#10B981', fondo:'#8B5CF6', crypto:'#F59E0B', bono:'#94a3b8', inmobiliario:'#EA580C', efectivo:'#0EA5E9', startup:'#D946EF', otro:'#64748b' };
+const TIPO_LABELS   = { accion:'Acción', etf:'ETF', fondo:'Fondo', crypto:'Crypto', bono:'Bono', inmobiliario:'Inmobiliario', efectivo:'Efectivo', startup:'Startup', otro:'Otro' };
 const DIVISA_SYM    = { EUR:'€', USD:'$', GBP:'£' };
 
 // Rentabilidades históricas anuales por tipo de activo (medias ajustadas por inflación, conservadoras)
-const TASA_ANUAL = { accion: 0.08, etf: 0.07, fondo: 0.055, crypto: 0.25, bono: 0.03, inmobiliario: 0.04, efectivo: 0.02, otro: 0.05 };
-const TASA_LABEL = { accion:'~8% anual', etf:'~7% anual', fondo:'~5.5% anual', crypto:'~25% anual', bono:'~3% anual', inmobiliario:'~4% anual', efectivo:'~2% anual', otro:'~5% anual' };
+const TASA_ANUAL = { accion: 0.08, etf: 0.07, fondo: 0.055, crypto: 0.25, bono: 0.03, inmobiliario: 0.04, efectivo: 0.02, startup: 0.20, otro: 0.05 };
+const TASA_LABEL = { accion:'~8% anual', etf:'~7% anual', fondo:'~5.5% anual', crypto:'~25% anual', bono:'~3% anual', inmobiliario:'~4% anual', efectivo:'~2% anual', startup:'~20% anual', otro:'~5% anual' };
 
 // Proyección de un activo a N años (interés compuesto + FV de aportaciones periódicas)
 function _proyActivo(a, años) {
