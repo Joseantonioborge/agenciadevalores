@@ -1372,7 +1372,6 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .crypto-sel-change.pos{color:var(--green)}
 .crypto-sel-change.neg{color:var(--red)}
 /* Chart panel */
-.crypto-chart-panel{background:var(--card);border:1px solid var(--border);border-radius:12px;display:flex;flex-direction:column;min-height:360px}
 .crypto-chart-header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:8px}
 .crypto-chart-meta{display:flex;align-items:center;gap:12px}
 .crypto-chart-coin-logo{width:32px;height:32px;border-radius:50%;object-fit:cover;background:var(--bg2)}
@@ -1392,7 +1391,9 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .crypto-type-pill{padding:4px 11px;border-radius:5px;border:1px solid var(--border);background:transparent;color:var(--text3);font-size:.72rem;font-weight:600;cursor:pointer;font-family:var(--font);transition:.12s}
 .crypto-type-pill:hover{color:var(--text2)}
 .crypto-type-pill.active{background:rgba(37,99,235,.15);border-color:var(--accent);color:var(--accent)}
-.crypto-chart-body{flex:1;padding:8px;min-height:280px;position:relative}
+.crypto-chart-body{height:320px;padding:8px;position:relative;overflow:hidden;width:100%}
+.crypto-chart-panel{background:var(--card);border:1px solid var(--border);border-radius:12px;display:flex;flex-direction:column;min-height:360px;min-width:0;overflow:hidden}
+.crypto-selector-panel{min-width:0}
 .crypto-chart-loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;color:var(--text3);font-size:.82rem}
 .crypto-chart-spinner{width:28px;height:28px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite}
 /* Table */
@@ -7020,8 +7021,10 @@ function _buildCryptoChart(container, ohlcData, lineData) {
   // Destruir chart anterior
   if (_cryptoChart) { try { _cryptoChart.remove(); } catch(_){} _cryptoChart = null; _cryptoSeries = null; }
   container.innerHTML = '';
-  const w = container.offsetWidth || 600;
-  const h = Math.max(container.offsetHeight || 0, 270);
+  // clientWidth tras limpiar el container refleja el ancho CSS real (overflow:hidden + width:100%)
+  const w = container.clientWidth || 600;
+  const h = 304; // altura fija, sincronizada con CSS
+  const panel = container.parentElement || container;
   _cryptoChart = LightweightCharts.createChart(container, {
     width: w, height: h,
     layout: { background: { color: '#1a1f35' }, textColor: '#94a3b8' },
@@ -7039,22 +7042,23 @@ function _buildCryptoChart(container, ohlcData, lineData) {
     });
     _cryptoSeries.setData(ohlcData);
   } else {
-    _cryptoSeries = _cryptoChart.addAreaSeries({
-      lineColor: '#2563EB', topColor: 'rgba(37,99,235,0.3)', bottomColor: 'rgba(37,99,235,0.02)',
+    // Línea simple sin relleno ni gradiente
+    _cryptoSeries = _cryptoChart.addLineSeries({
+      color: '#2563EB',
       lineWidth: 2,
+      crosshairMarkerVisible: true,
     });
     _cryptoSeries.setData(lineData);
   }
   _cryptoChart.timeScale().fitContent();
-  // Resize observer
+  // Resize observer: observar el PANEL padre para evitar bucle de crecimiento
   if (window.ResizeObserver) {
     const ro = new ResizeObserver(() => {
-      if (_cryptoChart) {
-        const newW = container.offsetWidth;
-        if (newW > 0) _cryptoChart.applyOptions({ width: newW });
-      }
+      if (!_cryptoChart) { ro.disconnect(); return; }
+      const newW = Math.round(panel.getBoundingClientRect().width);
+      if (newW > 50) _cryptoChart.applyOptions({ width: newW });
     });
-    ro.observe(container);
+    ro.observe(panel);
   }
 }
 
