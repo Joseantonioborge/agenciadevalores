@@ -1282,6 +1282,8 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .finbot-send:hover{background:var(--accent2)}
 .finbot-send:disabled{opacity:.4;cursor:not-allowed}
 .finbot-ctx-badge{font-size:.65rem;background:rgba(16,185,129,.12);color:#10B981;border:1px solid rgba(16,185,129,.25);border-radius:4px;padding:2px 7px;margin:0 14px 8px;display:inline-flex;align-items:center;gap:4px;flex-shrink:0;width:fit-content}
+.finbot-idle-tip{background:var(--card);border:1px solid var(--border);border-radius:12px;border-bottom-right-radius:3px;padding:9px 14px;font-size:.75rem;color:var(--text2);white-space:nowrap;box-shadow:0 4px 16px rgba(0,0,0,.35);opacity:0;transform:translateY(6px);transition:opacity .3s ease,transform .3s ease;pointer-events:none;max-width:220px;line-height:1.4}
+.finbot-idle-tip.show{opacity:1;transform:translateY(0)}
 
 /* ===== COMPARADOR DE FONDOS ===== */
 .fondos-topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:10px}
@@ -7418,13 +7420,46 @@ let _finbotHistory  = [];     // historial de mensajes { role, content }
 let _finbotOpen     = false;  // ventana abierta
 let _finbotBusy     = false;  // esperando respuesta de la API
 let _finbotGreeted  = false;  // ya mostró el mensaje de bienvenida
+let _finbotIdleTimer     = null;  // setTimeout 60s → muestra tooltip idle
+let _finbotIdleHideTimer = null;  // setTimeout 4s → oculta tooltip idle
+
+// ── Idle tooltip ──────────────────────────────────────────────────
+function _finbotStartIdleTimer() {
+  _finbotClearIdleTimers();
+  _finbotIdleTimer = setTimeout(_finbotShowIdleTip, 60000);
+}
+function _finbotResetIdleTimer() {
+  _finbotHideIdleTip();
+  _finbotStartIdleTimer();
+}
+function _finbotClearIdleTimers() {
+  if (_finbotIdleTimer)     { clearTimeout(_finbotIdleTimer);     _finbotIdleTimer = null; }
+  if (_finbotIdleHideTimer) { clearTimeout(_finbotIdleHideTimer); _finbotIdleHideTimer = null; }
+}
+function _finbotShowIdleTip() {
+  if (_finbotOpen) return;
+  const tip = document.getElementById('finbotIdleTip');
+  if (!tip) return;
+  tip.textContent = '💬 ' + (_lang === 'en' ? "I'm here if you need help" : 'Estoy aquí si necesitas ayuda');
+  tip.classList.add('show');
+  _finbotIdleHideTimer = setTimeout(_finbotHideIdleTip, 4000);
+}
+function _finbotHideIdleTip() {
+  const tip = document.getElementById('finbotIdleTip');
+  if (tip) tip.classList.remove('show');
+  if (_finbotIdleHideTimer) { clearTimeout(_finbotIdleHideTimer); _finbotIdleHideTimer = null; }
+}
 
 // Mostrar/ocultar el widget según sesión activa
 function finbotSetVisible(visible) {
   const el = document.getElementById('finbotBubble');
   if (el) el.classList.toggle('visible', !!visible);
-  if (!visible) {
+  if (visible) {
+    _finbotStartIdleTimer();
+  } else {
     _finbotOpen = false;
+    _finbotClearIdleTimers();
+    _finbotHideIdleTip();
     const win = document.getElementById('finbotWindow');
     if (win) win.style.display = 'none';
   }
@@ -7437,11 +7472,11 @@ function finbotToggle() {
   if (win) win.style.display = _finbotOpen ? 'flex' : 'none';
   const notif = document.getElementById('finbotNotif');
   if (notif) notif.style.display = 'none';
-  if (_finbotOpen && !_finbotGreeted) {
-    _finbotGreeted = true;
-    finbotLoadHistory();
+  if (_finbotOpen) {
+    _finbotResetIdleTimer();
+    if (!_finbotGreeted) { _finbotGreeted = true; finbotLoadHistory(); }
+    setTimeout(finbotScrollBottom, 50);
   }
-  if (_finbotOpen) setTimeout(finbotScrollBottom, 50);
 }
 
 async function finbotLoadHistory() {
@@ -7529,6 +7564,7 @@ async function finbotSend() {
   if (!msg) return;
   input.value = '';
   input.style.height = 'auto';
+  _finbotResetIdleTimer();
 
   // Ocultar sugerencias
   const sug = document.getElementById('finbotSugs');
@@ -7725,6 +7761,8 @@ init();
       <button class="finbot-send" id="finbotSend" onclick="finbotSend()" title="Enviar">➤</button>
     </div>
   </div>
+  <!-- Mensaje idle -->
+  <div class="finbot-idle-tip" id="finbotIdleTip">💬 Estoy aquí si necesitas ayuda</div>
   <!-- Botón flotante -->
   <button class="finbot-toggle" id="finbotToggleBtn" onclick="finbotToggle()" title="FinBot — Asistente financiero IA">
     🤖
