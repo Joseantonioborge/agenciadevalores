@@ -45,9 +45,9 @@ module.exports = async (req, res) => {
       return res.status(201).json({ ok: true, username: username.toLowerCase().trim() });
     }
 
-    // PUT — actualizar (investor puede cambiar su contraseña; admin puede editar todo)
+    // PUT — actualizar (investor puede cambiar su contraseña, watchlist e idioma; admin puede editar todo)
     if (req.method === 'PUT') {
-      const { username, password, newPassword, name, email, watchlist } = req.body || {};
+      const { username, password, newPassword, name, email, watchlist, lang } = req.body || {};
       if (!username) return res.status(400).json({ error: 'username requerido' });
 
       const user = await col.findOne({ username: username.toLowerCase().trim() });
@@ -61,12 +61,22 @@ module.exports = async (req, res) => {
         if (name) update.name = name;
         if (email) update.email = email.toLowerCase().trim();
         if (watchlist) update.watchlist = watchlist;
+        if (lang && ['es', 'en'].includes(lang)) update.lang = lang;
       } else {
-        // Investor solo puede cambiar su propia contraseña y watchlist
-        if (!password || !newPassword) return res.status(400).json({ error: 'password y newPassword requeridos' });
-        if (user.password !== sha256(password)) return res.status(401).json({ error: 'Contraseña actual incorrecta' });
-        update.password = sha256(newPassword);
+        // Investor puede actualizar idioma sin contraseña
+        if (lang && ['es', 'en'].includes(lang)) update.lang = lang;
+        // Investor puede actualizar watchlist sin contraseña
         if (watchlist) update.watchlist = watchlist;
+        // Para cambiar contraseña sí requiere la actual
+        if (newPassword) {
+          if (!password) return res.status(400).json({ error: 'password actual requerida para cambiar contraseña' });
+          if (user.password !== sha256(password)) return res.status(401).json({ error: 'Contraseña actual incorrecta' });
+          update.password = sha256(newPassword);
+        }
+        // Si no hay nada que actualizar, rechazar
+        if (Object.keys(update).length === 1) {
+          return res.status(400).json({ error: 'Nada que actualizar' });
+        }
       }
 
       await col.updateOne({ username: username.toLowerCase().trim() }, { $set: update });

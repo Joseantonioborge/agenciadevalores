@@ -51,14 +51,15 @@ module.exports = async (req, res) => {
     const lookup = username.toLowerCase().trim();
     const user   = await db.collection('inversores').findOne(
       { $or: [{ username: lookup }, { email: lookup }] },
-      { projection: { password:1, username:1, name:1, email:1, role:1, watchlist:1 } }
+      { projection: { password:1, username:1, name:1, email:1, role:1, watchlist:1, lang:1 } }
     );
     if (!user) return res.status(401).json({ error: 'Usuario no encontrado' });
     if (user.password !== sha256(password)) return res.status(401).json({ error: 'Contraseña incorrecta' });
 
     return res.status(200).json({
       ok: true, username: user.username || username,
-      name: user.name, email: user.email, role: user.role, watchlist: user.watchlist || [],
+      name: user.name, email: user.email, role: user.role,
+      watchlist: user.watchlist || [], lang: user.lang || 'es',
     });
   } catch (err) { return res.status(500).json({ error: err.message }); }
 };

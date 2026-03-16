@@ -1348,6 +1348,16 @@ tr:hover td{background:rgba(255,255,255,.02)}
 @media(max-width:1000px){.fondos-cmp-body{grid-template-columns:1fr}}
 @media(max-width:640px){.fondos-filter-bar{flex-direction:column;align-items:stretch}}
 
+/* ===== SELECTOR DE IDIOMA ===== */
+.lang-selector-wrap{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;margin-bottom:0}
+.lang-selector-label{font-size:.65rem;font-weight:700;color:var(--text3);letter-spacing:.5px}
+.lang-pills{display:flex;gap:4px}
+.lang-pill{display:flex;align-items:center;gap:5px;padding:6px 12px;border-radius:7px;border:1.5px solid var(--border);background:transparent;color:var(--text2);font-size:.78rem;font-weight:600;cursor:pointer;font-family:var(--font);transition:.15s}
+.lang-pill:hover{border-color:var(--accent);color:var(--text)}
+.lang-pill.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.nav-lang-indicator{font-size:.85rem;cursor:pointer;margin-right:2px;opacity:.85;transition:.15s}
+.nav-lang-indicator:hover{opacity:1}
+
 /* ===== CRYPTO DASHBOARD ===== */
 .crypto-topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px}
 .crypto-title{font-size:1.2rem;font-weight:700;color:var(--text)}
@@ -1473,7 +1483,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
   <div class="nav-logo">
     <div class="nav-logo-dot"></div>
     Agencia de Valores Generación Z
-    <span class="nav-version">v3.4.0</span>
+    <span class="nav-version">v3.5.0</span>
   </div>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="showSection('Mercados')">Mercados</button>
@@ -1482,6 +1492,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
   </div>
   <div class="nav-right">
     <div class="nav-time" id="navTime"></div>
+    <span class="nav-lang-indicator" id="navLangIndicator" onclick="togglePortalPanel()" title="Idioma / Language">🇪🇸</span>
     <button id="userBadge" onclick="togglePortalPanel()" aria-label="Mi portal">
       <span class="ub-avatar" id="ubAvatar">?</span>
       <span class="ub-name" id="ubName"></span>
@@ -1502,7 +1513,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
   <div class="pp-header">
     <div class="pp-title">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-      Mi Portal
+      <span data-i18n="mi_portal">Mi Portal</span>
     </div>
     <button class="pp-close" onclick="closePortalPanel()" title="Cerrar">✕</button>
   </div>
@@ -1518,14 +1529,26 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <span class="pp-role-badge" id="portalRoleBadge">Inversor</span>
     </div>
 
+    <!-- Idioma / Language -->
+    <div class="pp-card">
+      <div class="pp-card-title">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        <span data-i18n="idioma_label">IDIOMA / LANGUAGE</span>
+      </div>
+      <div class="lang-selector-wrap">
+        <button class="lang-pill active" id="langBtnES" onclick="setLang('es')">🇪🇸 Español</button>
+        <button class="lang-pill" id="langBtnEN" onclick="setLang('en')">🇬🇧 English</button>
+      </div>
+    </div>
+
     <!-- Resumen de mercado -->
     <div class="pp-card">
       <div class="pp-card-title">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-        Resumen del Mercado
+        <span data-i18n="resumen_mercado">RESUMEN DEL MERCADO</span>
       </div>
       <div id="portalMarketSummary" class="pp-mkt-grid">
-        <div class="pp-mkt-item"><div class="pp-mkt-label">Cargando...</div></div>
+        <div class="pp-mkt-item"><div class="pp-mkt-label" data-i18n="cargando">Cargando...</div></div>
       </div>
     </div>
 
@@ -1533,10 +1556,10 @@ tr:hover td{background:rgba(255,255,255,.02)}
     <div class="pp-card">
       <div class="pp-card-title">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
-        Mi Watchlist
+        <span data-i18n="mi_watchlist">MI WATCHLIST</span>
       </div>
       <div id="watchlistItems">
-        <div class="watchlist-item"><span class="wl-name" style="color:var(--text3)">Cargando...</span></div>
+        <div class="watchlist-item"><span class="wl-name" style="color:var(--text3)" data-i18n="cargando">Cargando...</span></div>
       </div>
     </div>
 
@@ -1544,23 +1567,23 @@ tr:hover td{background:rgba(255,255,255,.02)}
     <div class="pp-card">
       <div class="pp-card-title">
         <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-        Cambiar Contraseña
+        <span data-i18n="cambiar_password">CAMBIAR CONTRASEÑA</span>
       </div>
       <div style="display:flex;flex-direction:column;gap:7px">
         <div>
-          <label style="font-size:.65rem;color:var(--text3);display:block;margin-bottom:3px">Contraseña actual</label>
+          <label id="cpOldLabel" style="font-size:.65rem;color:var(--text3);display:block;margin-bottom:3px" data-i18n="pass_actual">Contraseña actual</label>
           <input class="form-input" type="password" id="cpOld" placeholder="••••••••" style="padding:6px 10px;font-size:.78rem;height:auto">
         </div>
         <div>
-          <label style="font-size:.65rem;color:var(--text3);display:block;margin-bottom:3px">Nueva contraseña</label>
+          <label id="cpNewLabel" style="font-size:.65rem;color:var(--text3);display:block;margin-bottom:3px" data-i18n="pass_nueva">Nueva contraseña</label>
           <input class="form-input" type="password" id="cpNew" placeholder="••••••••" style="padding:6px 10px;font-size:.78rem;height:auto">
         </div>
-        <button class="btn-primary" onclick="changePassword()" style="margin-top:4px;width:100%;padding:7px;font-size:.75rem">Actualizar</button>
+        <button class="btn-primary" onclick="changePassword()" style="margin-top:4px;width:100%;padding:7px;font-size:.75rem" data-i18n="btn_actualizar">Actualizar</button>
       </div>
     </div>
 
     <!-- Cerrar sesión -->
-    <button onclick="logout()" style="
+    <button onclick="logout()" data-i18n="cerrar_sesion" style="
       background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);
       color:var(--red);border-radius:8px;padding:8px;width:100%;
       cursor:pointer;font-size:.78rem;font-weight:600;font-family:var(--font);
@@ -1583,13 +1606,13 @@ tr:hover td{background:rgba(255,255,255,.02)}
 
     <!-- ── Pestañas ── -->
     <div class="inv-tab-row">
-      <button class="inv-tab" id="invTabCalculadora" onclick="switchInvTab('calculadora')">🧮 Calculadora de interés compuesto</button>
-      <button class="inv-tab active" id="invTabMercados" onclick="switchInvTab('mercados')">📊 Mis Mercados</button>
-      <button class="inv-tab" id="invTabCarteras" onclick="switchInvTab('carteras')">💼 Mis Carteras</button>
-      <button class="inv-tab" id="invTabAnalisis" onclick="switchInvTab('analisis')">📰 Análisis</button>
-      <button class="inv-tab" id="invTabBancos" onclick="switchInvTab('bancos')">🏦 Entidades Financieras</button>
-      <button class="inv-tab" id="invTabFondos" onclick="switchInvTab('fondos')">📂 Comparador de Fondos</button>
-      <button class="inv-tab" id="invTabCrypto" onclick="switchInvTab('crypto')">₿ Crypto</button>
+      <button class="inv-tab" id="invTabCalculadora" onclick="switchInvTab('calculadora')" data-i18n="tab_calculadora">🧮 Calculadora de interés compuesto</button>
+      <button class="inv-tab active" id="invTabMercados" onclick="switchInvTab('mercados')" data-i18n="tab_mercados">📊 Mis Mercados</button>
+      <button class="inv-tab" id="invTabCarteras" onclick="switchInvTab('carteras')" data-i18n="tab_carteras">💼 Mis Carteras</button>
+      <button class="inv-tab" id="invTabAnalisis" onclick="switchInvTab('analisis')" data-i18n="tab_analisis">📰 Análisis</button>
+      <button class="inv-tab" id="invTabBancos" onclick="switchInvTab('bancos')" data-i18n="tab_bancos">🏦 Entidades Financieras</button>
+      <button class="inv-tab" id="invTabFondos" onclick="switchInvTab('fondos')" data-i18n="tab_fondos">📂 Comparador de Fondos</button>
+      <button class="inv-tab" id="invTabCrypto" onclick="switchInvTab('crypto')" data-i18n="tab_crypto">₿ Crypto</button>
     </div>
 
     <!-- ── Contenido: Mis Mercados ── -->
@@ -1637,10 +1660,10 @@ tr:hover td{background:rgba(255,255,255,.02)}
     <!-- ── Contenido: Análisis / Noticias ── -->
     <div id="invAnalisisPanel" style="display:none">
       <div class="news-filter-row">
-        <button class="news-filter active" id="nfTodos"        onclick="filterNews('todos')">Todos</button>
-        <button class="news-filter"        id="nfOportunidad"  onclick="filterNews('oportunidad')">🟢 Oportunidades</button>
-        <button class="news-filter"        id="nfRiesgo"       onclick="filterNews('riesgo')">🔴 Riesgos</button>
-        <button class="news-filter"        id="nfTendencia"    onclick="filterNews('tendencia')">🔵 Tendencias</button>
+        <button class="news-filter active" id="nfTodos"        onclick="filterNews('todos')"        data-i18n="filtro_todos">Todos</button>
+        <button class="news-filter"        id="nfOportunidad"  onclick="filterNews('oportunidad')"  data-i18n="filtro_opor">🟢 Oportunidades</button>
+        <button class="news-filter"        id="nfRiesgo"       onclick="filterNews('riesgo')"       data-i18n="filtro_riesgo">🔴 Riesgos</button>
+        <button class="news-filter"        id="nfTendencia"    onclick="filterNews('tendencia')"    data-i18n="filtro_tendencia">🔵 Tendencias</button>
       </div>
       <div id="newsFeed">
         <!-- Generado por renderNewsFeed() -->
@@ -1658,20 +1681,20 @@ tr:hover td{background:rgba(255,255,255,.02)}
 
         <!-- ─ Inputs ─ -->
         <div class="calc-inputs">
-          <div class="calc-inputs-title">⚙️ Parámetros</div>
+          <div class="calc-inputs-title" data-i18n="parametros">⚙️ Parámetros</div>
 
           <div class="calc-field">
-            <label>Capital inicial (€)</label>
+            <label data-i18n="capital_inicial">Capital inicial (€)</label>
             <input class="calc-input" id="calcCapital" type="number" value="10000" min="0" step="100">
           </div>
 
           <div class="calc-field">
-            <label>Aportación periódica (€)</label>
+            <label data-i18n="aportacion">Aportación periódica (€)</label>
             <input class="calc-input" id="calcAportacion" type="number" value="200" min="0" step="10">
           </div>
 
           <div class="calc-field">
-            <label>Frecuencia de aportación</label>
+            <label data-i18n="frecuencia">Frecuencia de aportación</label>
             <select class="calc-input" id="calcFrecuencia">
               <option value="12">Mensual</option>
               <option value="52">Semanal</option>
@@ -1681,21 +1704,21 @@ tr:hover td{background:rgba(255,255,255,.02)}
           </div>
 
           <div class="calc-field">
-            <label>Tasa de interés anual — <span id="calcTasaVal" style="color:var(--accent)">7%</span></label>
+            <label><span data-i18n="tasa_interes">Tasa de interés anual</span> — <span id="calcTasaVal" style="color:var(--accent)">7%</span></label>
             <input class="calc-range" id="calcTasa" type="range" min="1" max="30" step="0.5" value="7"
               oninput="document.getElementById('calcTasaVal').textContent=this.value+'%'">
           </div>
 
           <div class="calc-field">
-            <label>Horizonte temporal — <span id="calcAnosVal" style="color:var(--accent)">20 años</span></label>
+            <label><span data-i18n="horizonte">Horizonte temporal</span> — <span id="calcAnosVal" style="color:var(--accent)">20 años</span></label>
             <input class="calc-range" id="calcAnos" type="range" min="1" max="40" step="1" value="20"
               oninput="document.getElementById('calcAnosVal').textContent=this.value+' años'">
           </div>
 
-          <button class="calc-recalc-btn" onclick="calcIC()">↻ Recalcular</button>
+          <button class="calc-recalc-btn" onclick="calcIC()" data-i18n="recalcular">↻ Recalcular</button>
           <button class="calc-plan-btn" onclick="openPlanModal()">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            Quiero mi plan personalizado
+            <span data-i18n="plan_pers">Quiero mi plan personalizado</span>
           </button>
         </div>
 
@@ -1705,11 +1728,11 @@ tr:hover td{background:rgba(255,255,255,.02)}
           <div class="calc-summary-row" id="calcSummary"></div>
           <div class="calc-chart-box">
             <div class="calc-chart-header">
-              <div class="calc-chart-title">Evolución del capital</div>
+              <div class="calc-chart-title" data-i18n="evolucion_cap">Evolución del capital</div>
               <div class="calc-legend">
-                <div class="calc-legend-item"><div class="calc-legend-dot" style="background:#2563EB"></div>Capital inicial</div>
-                <div class="calc-legend-item"><div class="calc-legend-dot" style="background:#10B981"></div>Aportaciones</div>
-                <div class="calc-legend-item"><div class="calc-legend-dot" style="background:#F59E0B"></div>Intereses</div>
+                <div class="calc-legend-item"><div class="calc-legend-dot" style="background:#2563EB"></div><span data-i18n="cap_inicial_leg">Capital inicial</span></div>
+                <div class="calc-legend-item"><div class="calc-legend-dot" style="background:#10B981"></div><span data-i18n="aportaciones_leg">Aportaciones</span></div>
+                <div class="calc-legend-item"><div class="calc-legend-dot" style="background:#F59E0B"></div><span data-i18n="intereses_leg">Intereses</span></div>
               </div>
             </div>
             <canvas id="calcChart" height="180" style="width:100%;display:block"></canvas>
@@ -1918,20 +1941,20 @@ tr:hover td{background:rgba(255,255,255,.02)}
 
       <!-- Cabecera -->
       <div class="crypto-topbar">
-        <div class="crypto-title">₿ Mercado Crypto <span style="font-size:.72rem;font-weight:400;color:var(--text3);margin-left:6px">Top 20 por capitalización</span></div>
+        <div class="crypto-title"><span data-i18n="mercado_crypto">₿ Mercado Crypto</span> <span style="font-size:.72rem;font-weight:400;color:var(--text3);margin-left:6px" data-i18n="top20_cap">Top 20 por capitalización</span></div>
         <div class="crypto-topbar-right">
-          <span class="crypto-src-badge">📡 CoinGecko</span>
+          <span class="crypto-src-badge" data-i18n="fuente_cg">📡 CoinGecko</span>
           <span class="crypto-updated" id="cryptoUpdated">—</span>
           <button class="crypto-refresh-btn" id="cryptoRefreshBtn" onclick="refreshCryptoData()">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
-            Actualizar
+            <span data-i18n="btn_actualizar">Actualizar</span>
           </button>
         </div>
       </div>
 
       <!-- Moneda y filtros -->
       <div class="crypto-currency-row">
-        <span class="crypto-currency-label">Moneda:</span>
+        <span class="crypto-currency-label" data-i18n="moneda_label">Moneda:</span>
         <div class="crypto-currency-pills">
           <button class="crypto-currency-pill active" id="cryptoPillEUR" onclick="setCryptoCurrency('eur')">€ EUR</button>
           <button class="crypto-currency-pill" id="cryptoPillUSD" onclick="setCryptoCurrency('usd')">$ USD</button>
@@ -1939,20 +1962,20 @@ tr:hover td{background:rgba(255,255,255,.02)}
       </div>
 
       <div class="crypto-filter-bar">
-        <span class="crypto-filter-label">Filtrar:</span>
-        <button class="crypto-filter-pill active" id="cryptoFilterTodos" onclick="setCryptoFilter('todos')">🌐 Todos</button>
-        <button class="crypto-filter-pill" id="cryptoFilterTop10" onclick="setCryptoFilter('top10')">🏆 Top 10</button>
-        <button class="crypto-filter-pill" id="cryptoFilterL1" onclick="setCryptoFilter('l1')">⛓ Layer 1</button>
-        <button class="crypto-filter-pill" id="cryptoFilterL2" onclick="setCryptoFilter('l2')">⚡ Layer 2</button>
-        <button class="crypto-filter-pill" id="cryptoFilterDefi" onclick="setCryptoFilter('defi')">🔗 DeFi</button>
-        <button class="crypto-filter-pill" id="cryptoFilterStable" onclick="setCryptoFilter('stablecoins')">🏦 Stablecoins</button>
+        <span class="crypto-filter-label" data-i18n="filtrar_label">Filtrar:</span>
+        <button class="crypto-filter-pill active" id="cryptoFilterTodos" onclick="setCryptoFilter('todos')" data-i18n="crypto_todos">🌐 Todos</button>
+        <button class="crypto-filter-pill" id="cryptoFilterTop10" onclick="setCryptoFilter('top10')" data-i18n="crypto_top10">🏆 Top 10</button>
+        <button class="crypto-filter-pill" id="cryptoFilterL1" onclick="setCryptoFilter('l1')" data-i18n="crypto_l1">⛓ Layer 1</button>
+        <button class="crypto-filter-pill" id="cryptoFilterL2" onclick="setCryptoFilter('l2')" data-i18n="crypto_l2">⚡ Layer 2</button>
+        <button class="crypto-filter-pill" id="cryptoFilterDefi" onclick="setCryptoFilter('defi')" data-i18n="crypto_defi">🔗 DeFi</button>
+        <button class="crypto-filter-pill" id="cryptoFilterStable" onclick="setCryptoFilter('stablecoins')" data-i18n="crypto_stable">🏦 Stablecoins</button>
       </div>
 
       <!-- Gráfico + Selector -->
       <div class="crypto-chart-section" id="cryptoChartSection">
         <!-- Selector lateral -->
         <div class="crypto-selector-panel">
-          <div class="crypto-selector-header">Seleccionar activo</div>
+          <div class="crypto-selector-header" data-i18n="sel_activo">Seleccionar activo</div>
           <div class="crypto-selector-list" id="cryptoSelectorList">
             <!-- JS fill -->
           </div>
@@ -1980,15 +2003,15 @@ tr:hover td{background:rgba(255,255,255,.02)}
                 <button class="crypto-period-pill" id="cryptoPeriod365" onclick="setCryptoPeriod(365)">1A</button>
               </div>
               <div class="crypto-type-pills">
-                <button class="crypto-type-pill active" id="cryptoTypeCandle" onclick="setCryptoChartType('candle')">🕯 Velas</button>
-                <button class="crypto-type-pill" id="cryptoTypeLine"  onclick="setCryptoChartType('line')">📈 Líneas</button>
+                <button class="crypto-type-pill active" id="cryptoTypeCandle" onclick="setCryptoChartType('candle')" data-i18n="btn_velas">🕯 Velas</button>
+                <button class="crypto-type-pill" id="cryptoTypeLine"  onclick="setCryptoChartType('line')" data-i18n="btn_lineas">📈 Líneas</button>
               </div>
             </div>
           </div>
           <div class="crypto-chart-body" id="cryptoChartBody">
             <div class="crypto-chart-loading" id="cryptoChartLoading">
               <div class="crypto-chart-spinner"></div>
-              <span>Selecciona una criptomoneda</span>
+              <span data-i18n="sel_crypto_msg">Selecciona una criptomoneda</span>
             </div>
           </div>
         </div>
@@ -1997,7 +2020,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <!-- Tabla de cotizaciones -->
       <div class="crypto-table-wrap">
         <div class="crypto-table-header">
-          <span class="crypto-table-title">Cotizaciones en tiempo real</span>
+          <span class="crypto-table-title" data-i18n="cotiz_real_time">Cotizaciones en tiempo real</span>
           <span class="crypto-table-count" id="cryptoTableCount">—</span>
         </div>
         <div style="overflow-x:auto">
@@ -2005,12 +2028,12 @@ tr:hover td{background:rgba(255,255,255,.02)}
             <thead>
               <tr>
                 <th style="width:32px">#</th>
-                <th onclick="sortCryptoTable('name')" id="cryptoThName">Nombre</th>
-                <th onclick="sortCryptoTable('price')" id="cryptoThPrice">Precio</th>
+                <th onclick="sortCryptoTable('name')" id="cryptoThName" data-i18n="col_nombre">Nombre</th>
+                <th onclick="sortCryptoTable('price')" id="cryptoThPrice" data-i18n="col_precio">Precio</th>
                 <th onclick="sortCryptoTable('chg24')" id="cryptoThChg24">24h</th>
                 <th onclick="sortCryptoTable('chg7')" id="cryptoThChg7">7d</th>
-                <th onclick="sortCryptoTable('mcap')" id="cryptoThMcap" class="crypto-mcap-col sort-desc">Cap. Mercado</th>
-                <th onclick="sortCryptoTable('vol')" id="cryptoThVol" class="crypto-vol-col">Vol. 24h</th>
+                <th onclick="sortCryptoTable('mcap')" id="cryptoThMcap" class="crypto-mcap-col sort-desc" data-i18n="col_cap_mercado">Cap. Mercado</th>
+                <th onclick="sortCryptoTable('vol')" id="cryptoThVol" class="crypto-vol-col" data-i18n="col_vol">Vol. 24h</th>
                 <th class="crypto-sparkline-cell">7d</th>
               </tr>
             </thead>
@@ -2123,14 +2146,14 @@ tr:hover td{background:rgba(255,255,255,.02)}
           <div class="constituents-header-right">
             <div class="quote-search-wrap" onclick="event.stopPropagation()">
               <input class="quote-search-input" id="quoteSearchInput" type="text"
-                     placeholder="Buscar ticker… AAPL, TSLA"
+                     placeholder="Buscar ticker… AAPL, TSLA" data-i18n-ph="buscar_ticker_ph"
                      onkeydown="if(event.key==='Enter')searchQuoteTicker()"
                      autocomplete="off" autocapitalize="characters" spellcheck="false">
               <button class="quote-search-btn" id="btnSearchQuote" onclick="event.stopPropagation();searchQuoteTicker()" title="Buscar cotización">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
               </button>
             </div>
-            <button class="btn-load-quotes" id="btnLoadQuotes" onclick="event.stopPropagation();loadConstituentQuotes()">⚡ Cargar cotizaciones</button>
+            <button class="btn-load-quotes" id="btnLoadQuotes" onclick="event.stopPropagation();loadConstituentQuotes()" data-i18n="btn_cargar_cot">⚡ Cargar cotizaciones</button>
             <span class="chevron" id="chevron">▼</span>
           </div>
         </div>
@@ -2139,8 +2162,8 @@ tr:hover td{background:rgba(255,255,255,.02)}
           <!-- Resultados de búsqueda de cotizaciones -->
           <div class="quote-search-results" id="quoteSearchResults">
             <div class="quote-search-results-header">
-              <span class="quote-search-results-label">🔍 Resultados de búsqueda</span>
-              <button class="quote-search-results-clear" onclick="clearQuoteSearchResults()">✕ Limpiar</button>
+              <span class="quote-search-results-label" data-i18n="resultados_busq">🔍 Resultados de búsqueda</span>
+              <button class="quote-search-results-clear" onclick="clearQuoteSearchResults()" data-i18n="limpiar">✕ Limpiar</button>
             </div>
             <div class="constituents-grid" id="quoteSearchGrid"></div>
           </div>
@@ -2614,6 +2637,163 @@ const API_KEY_INVESTOR = '4c0c769c6a9ef5d8530dc84945f71b89429beb1a2d4223ec94e277
 const API_KEY_ADMIN    = '8bb695a1e2adb8530351d9acbfddacf29dcd30f38da2a0d88d9d5c56bb17272a';
 
 // ================================================================
+// INTERNACIONALIZACIÓN (i18n) — ES / EN
+// ================================================================
+let _lang = 'es';
+
+const STRINGS = {
+  es: {
+    tab_calculadora:'🧮 Calculadora de interés compuesto', tab_mercados:'📊 Mis Mercados',
+    tab_carteras:'💼 Mis Carteras', tab_analisis:'📰 Análisis',
+    tab_bancos:'🏦 Entidades Financieras', tab_fondos:'📂 Comparador de Fondos', tab_crypto:'₿ Crypto',
+    mi_portal:'Mi Portal', resumen_mercado:'RESUMEN DEL MERCADO', mi_watchlist:'MI WATCHLIST',
+    cambiar_password:'CAMBIAR CONTRASEÑA', pass_actual:'Contraseña actual', pass_nueva:'Nueva contraseña',
+    btn_actualizar:'Actualizar', cerrar_sesion:'Cerrar sesión',
+    idioma_label:'IDIOMA / LANGUAGE', preferencias:'PREFERENCIAS',
+    hola:'Hola, ', tu_resumen:'Tu resumen de mercado personalizado',
+    mis_mercados_title:'★ &nbsp;Mis Mercados', elige_mercados:'ELIGE TUS MERCADOS',
+    configura_dash:'Configura tu dashboard',
+    selecciona_msg:'Selecciona los mercados que quieres seguir. Puedes cambiarlos en cualquier momento.',
+    editar_sel:'✏️ Editar selección', guardar_cambios:'Guardar cambios',
+    cancelar:'✕ Cancelar', anadir_dashboard:'+ Añadir a mi dashboard',
+    cerrado:'• Cerrado', abierto:'• Abierto',
+    sesion_actual:'Sesión actual', mejor:'Mejor', peor:'Peor', actualizado:'Actualizado',
+    componentes_indice:'Componentes del Índice',
+    clic_cargar:'Haz clic en "Cargar cotizaciones" para obtener precios en tiempo real.',
+    btn_cargar_cot:'⚡ Cargar cotizaciones', btn_cargando:'⏳ Cargando...', btn_cargado:'✓ Actualizado',
+    buscar_ticker_ph:'Buscar ticker… AAPL, TSLA', resultados_busq:'🔍 Resultados de búsqueda',
+    limpiar:'✕ Limpiar', buscado_badge:'Buscado', ver_grafica:'📈 Ver gráfica',
+    cargando_noticias:'Cargando análisis de mercado...', error_noticias:'No se pudieron cargar las noticias en este momento.',
+    reintentar:'Reintentar', sin_noticias:'📭 No hay noticias disponibles en este momento.',
+    filtro_todos:'Todos', filtro_opor:'🟢 Oportunidades', filtro_riesgo:'🔴 Riesgos', filtro_tendencia:'🔵 Tendencias',
+    mi_cartera_title:'💼 Mi Cartera de Inversión', descargar_informe:'📄 Descargar Informe',
+    total_invertido:'💰 Total Invertido', valor_actual:'📈 Valor Actual',
+    rentab_global:'Rentabilidad Global', mejor_cartera:'🏆 Mejor Cartera',
+    distrib_activos:'Distribución por tipo de activo', rentab_cartera:'Rentabilidad por cartera',
+    proyeccion:'📊 Proyección de tu inversión',
+    sin_carteras:'💼 Aún no tienes carteras', crear_primera:'+ Crear mi primera cartera',
+    sin_carteras_msg:'Crea tu primera cartera y añade los activos que tienes contratados para seguir su evolución de un vistazo',
+    nueva_cartera:'+ Nueva cartera', ver_detalle:'Ver detalle',
+    invertido:'Invertido', actual_val:'Actual', rentabilidad:'Rentab.', tipo_activos:'Tipo activos',
+    parametros:'⚙️ Parámetros', capital_inicial:'Capital inicial (€)', aportacion:'Aportación periódica (€)',
+    frecuencia:'Frecuencia de aportación', tasa_interes:'Tasa de interés anual', horizonte:'Horizonte temporal',
+    recalcular:'↻ Recalcular', plan_pers:'Quiero mi plan personalizado',
+    evolucion_cap:'Evolución del capital', cap_inicial_leg:'Capital inicial',
+    aportaciones_leg:'Aportaciones', intereses_leg:'Intereses',
+    mercado_crypto:'₿ Mercado Crypto', top20_cap:'Top 20 por capitalización',
+    fuente_cg:'📡 CoinGecko', moneda_label:'Moneda:', filtrar_label:'Filtrar:',
+    crypto_todos:'🌐 Todos', crypto_top10:'🏆 Top 10', crypto_l1:'⛓ Layer 1',
+    crypto_l2:'⚡ Layer 2', crypto_defi:'🔗 DeFi', crypto_stable:'🏦 Stablecoins',
+    sel_activo:'Seleccionar activo', cargando_chart:'Cargando gráfico…', sel_crypto_msg:'Selecciona una criptomoneda',
+    cotiz_real_time:'Cotizaciones en tiempo real', col_nombre:'Nombre', col_precio:'Precio',
+    col_cap_mercado:'Cap. Mercado', col_vol:'Vol. 24h',
+    btn_velas:'🕯 Velas', btn_lineas:'📈 Líneas',
+    activos_suffix:' activos', cargando_crypto:'No se pudo cargar el mercado crypto.', actualizado_pfx:'Actualizado: ',
+    balances_title:'🏦 Balances Entidades Financieras Españolas',
+    fondos_title:'📂 Comparador de Fondos de Inversión',
+    fondos_todos:'🌍 Todos', fondos_nac:'🇪🇸 Nacionales CNMV', fondos_int:'🇪🇺 Internacionales CSSF / CBI',
+    badge_opor:'🟢 Oportunidad', badge_riesgo:'🔴 Riesgo', badge_tendencia:'🔵 Tendencia',
+    buscar_fondo_ph:'🔍 Buscar fondo o gestora...', cargando:'Cargando...', guardar:'Guardar',
+  },
+  en: {
+    tab_calculadora:'🧮 Compound Interest Calculator', tab_mercados:'📊 My Markets',
+    tab_carteras:'💼 My Portfolios', tab_analisis:'📰 Analysis',
+    tab_bancos:'🏦 Financial Entities', tab_fondos:'📂 Fund Comparator', tab_crypto:'₿ Crypto',
+    mi_portal:'My Profile', resumen_mercado:'MARKET SUMMARY', mi_watchlist:'MY WATCHLIST',
+    cambiar_password:'CHANGE PASSWORD', pass_actual:'Current password', pass_nueva:'New password',
+    btn_actualizar:'Update', cerrar_sesion:'Log out',
+    idioma_label:'IDIOMA / LANGUAGE', preferencias:'PREFERENCES',
+    hola:'Hello, ', tu_resumen:'Your personalized market summary',
+    mis_mercados_title:'★ &nbsp;My Markets', elige_mercados:'CHOOSE YOUR MARKETS',
+    configura_dash:'Configure your dashboard',
+    selecciona_msg:'Select the markets you want to follow. You can change them at any time.',
+    editar_sel:'✏️ Edit selection', guardar_cambios:'Save changes',
+    cancelar:'✕ Cancel', anadir_dashboard:'+ Add to my dashboard',
+    cerrado:'• Closed', abierto:'• Open',
+    sesion_actual:'Current session', mejor:'Best', peor:'Worst', actualizado:'Updated',
+    componentes_indice:'Index Components',
+    clic_cargar:'Click "Load Quotes" to get real-time prices.',
+    btn_cargar_cot:'⚡ Load Quotes', btn_cargando:'⏳ Loading...', btn_cargado:'✓ Updated',
+    buscar_ticker_ph:'Search ticker… AAPL, TSLA', resultados_busq:'🔍 Search Results',
+    limpiar:'✕ Clear', buscado_badge:'Searched', ver_grafica:'📈 View chart',
+    cargando_noticias:'Loading market analysis...', error_noticias:'Could not load news at this time.',
+    reintentar:'Retry', sin_noticias:'📭 No news available at this time.',
+    filtro_todos:'All', filtro_opor:'🟢 Opportunities', filtro_riesgo:'🔴 Risks', filtro_tendencia:'🔵 Trends',
+    mi_cartera_title:'💼 My Investment Portfolio', descargar_informe:'📄 Download Report',
+    total_invertido:'💰 Total Invested', valor_actual:'📈 Current Value',
+    rentab_global:'Global Return', mejor_cartera:'🏆 Best Portfolio',
+    distrib_activos:'Distribution by asset type', rentab_cartera:'Return by portfolio',
+    proyeccion:'📊 Your investment projection',
+    sin_carteras:'💼 You have no portfolios yet', crear_primera:'+ Create my first portfolio',
+    sin_carteras_msg:'Create your first portfolio and add your assets to track their performance at a glance',
+    nueva_cartera:'+ New portfolio', ver_detalle:'View details',
+    invertido:'Invested', actual_val:'Current', rentabilidad:'Return', tipo_activos:'Asset type',
+    parametros:'⚙️ Parameters', capital_inicial:'Initial capital (€)', aportacion:'Periodic contribution (€)',
+    frecuencia:'Contribution frequency', tasa_interes:'Annual interest rate', horizonte:'Time horizon',
+    recalcular:'↻ Recalculate', plan_pers:'I want my personalized plan',
+    evolucion_cap:'Capital evolution', cap_inicial_leg:'Initial capital',
+    aportaciones_leg:'Contributions', intereses_leg:'Interest',
+    mercado_crypto:'₿ Crypto Market', top20_cap:'Top 20 by market cap',
+    fuente_cg:'📡 CoinGecko', moneda_label:'Currency:', filtrar_label:'Filter:',
+    crypto_todos:'🌐 All', crypto_top10:'🏆 Top 10', crypto_l1:'⛓ Layer 1',
+    crypto_l2:'⚡ Layer 2', crypto_defi:'🔗 DeFi', crypto_stable:'🏦 Stablecoins',
+    sel_activo:'Select asset', cargando_chart:'Loading chart…', sel_crypto_msg:'Select a cryptocurrency',
+    cotiz_real_time:'Real-time Quotes', col_nombre:'Name', col_precio:'Price',
+    col_cap_mercado:'Market Cap', col_vol:'Vol. 24h',
+    btn_velas:'🕯 Candles', btn_lineas:'📈 Lines',
+    activos_suffix:' assets', cargando_crypto:'Could not load the crypto market.', actualizado_pfx:'Updated: ',
+    balances_title:'🏦 Spanish Financial Institution Balances',
+    fondos_title:'📂 Investment Fund Comparator',
+    fondos_todos:'🌍 All', fondos_nac:'🇪🇸 National CNMV', fondos_int:'🇪🇺 International CSSF / CBI',
+    badge_opor:'🟢 Opportunity', badge_riesgo:'🔴 Risk', badge_tendencia:'🔵 Trend',
+    buscar_fondo_ph:'🔍 Search fund or manager...', cargando:'Loading...', guardar:'Save',
+  }
+};
+
+function t(key) {
+  return (STRINGS[_lang] || STRINGS.es)[key] ?? STRINGS.es[key] ?? key;
+}
+
+async function saveLang(lang) {
+  if (!_session) return;
+  try {
+    await fetch(`${API_BASE}/investors`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey() },
+      body: JSON.stringify({ username: _session.username, lang }),
+    });
+    _session.lang = lang;
+    localStorage.setItem('AV_SESSION', JSON.stringify(_session));
+  } catch(e) { /* silencioso */ }
+}
+
+function applyLang(lang) {
+  _lang = lang;
+  document.getElementById('langBtnES')?.classList.toggle('active', lang === 'es');
+  document.getElementById('langBtnEN')?.classList.toggle('active', lang === 'en');
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const val = t(el.getAttribute('data-i18n'));
+    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') el.placeholder = val;
+    else el.innerHTML = val;
+  });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+    el.placeholder = t(el.getAttribute('data-i18n-ph'));
+  });
+  const ind = document.getElementById('navLangIndicator');
+  if (ind) ind.textContent = lang === 'es' ? '🇪🇸' : '🇬🇧';
+}
+
+function setLang(lang) {
+  applyLang(lang);
+  saveLang(lang);
+  // Re-render sections that have dynamic i18n content
+  if (_invTab === 'mercados' && _marketData.length) renderMainSection(_marketData);
+  if (_invTab === 'analisis') renderNewsFeed(_newsData);
+  if (_invTab === 'carteras') renderCarteras();
+  if (_invTab === 'crypto' && _cryptoData.length) { _renderCryptoTable(); _renderCryptoSelectorList(); _updateCryptoStaticLabels(); }
+}
+
+// ================================================================
 // ESTADO GLOBAL
 // ================================================================
 let _session = null;
@@ -2742,6 +2922,7 @@ async function doLogin() {
     if (!res.ok) throw new Error(data.error || 'Error de autenticación');
     _session = { ...data, ts: Date.now() };
     localStorage.setItem('AV_SESSION', JSON.stringify(_session));
+    applyLang(_session.lang || 'es');
     closeLoginModal();
     onLogin();
     // Log de acceso
@@ -2888,6 +3069,7 @@ function restoreSession() {
     const saved = JSON.parse(localStorage.getItem('AV_SESSION'));
     if (saved && (Date.now() - saved.ts) < 24 * 3600 * 1000) {
       _session = saved;
+      applyLang(_session.lang || 'es');
       onLogin();
     }
   } catch {}
@@ -3057,7 +3239,7 @@ function renderIndexCards(data) {
         title="${isFav ? 'Quitar de favoritos' : 'Añadir a favoritos'}">
         ${isFav ? '★' : '☆'}
       </button>
-      <span class="market-badge ${isOpen ? 'open' : 'closed'}">${isOpen ? '● Abierto' : '● Cerrado'}</span>
+      <span class="market-badge ${isOpen ? 'open' : 'closed'}">${isOpen ? t('abierto') : t('cerrado')}</span>
       <div class="card-top">
         <div>
           <div class="card-name">${d.name}</div>
@@ -3165,7 +3347,7 @@ function renderPublicDash(data) {
                 id="pubRow_${d.key}" onclick="selectFeatured('${d.symbol}','${d.key}')">
         <div class="pub-idx-left">
           <div class="pub-idx-name">${d.name}</div>
-          <div class="pub-idx-region">${d.region} &nbsp;${d.marketState === 'REGULAR' ? '● Abierto' : '● Cerrado'}</div>
+          <div class="pub-idx-region">${d.region} &nbsp;${d.marketState === 'REGULAR' ? t('abierto') : t('cerrado')}</div>
         </div>
         <div class="pub-idx-right">
           <div class="pub-idx-price">${fmt(d.price)}</div>
@@ -3323,7 +3505,7 @@ function renderInvestorDashboard(data) {
   // ── Saludo y fecha ────────────────────────────────────────────
   document.getElementById('invName').textContent = _session.name.split(' ')[0];
   document.getElementById('invDateBadge').textContent =
-    new Date().toLocaleDateString('es-ES', { weekday:'long', day:'numeric', month:'long' });
+    new Date().toLocaleDateString(_lang === 'en' ? 'en-GB' : 'es-ES', { weekday:'long', day:'numeric', month:'long' });
 
   const hasFavs = _favorites.size > 0;
   const showingSelector = _editingMarkets || !hasFavs;
@@ -3342,18 +3524,18 @@ function renderInvestorDashboard(data) {
       kpiRow.style.display = 'grid';
       kpiRow.innerHTML = [
         { color: avgUp?'green':'red', icon: avgUp?'📈':'📉',
-          label:'Rendimiento medio',
+          label: t('sesion_actual'),
           value:`${avgUp?'+':''}${avgChg.toFixed(2)}%`, cls: avgUp?'up':'dn',
-          sub:`Promedio de ${favData.length} mercado${favData.length!==1?'s':''}` },
-        { color:'accent', icon:'🏆', label:'Mejor hoy',
+          sub: _lang==='en' ? `Avg. ${favData.length} market${favData.length!==1?'s':''}` : `Promedio de ${favData.length} mercado${favData.length!==1?'s':''}` },
+        { color:'accent', icon:'🏆', label: t('mejor'),
           value: best.name, cls:'up',
           sub:`${best.changePct>=0?'+':''}${best.changePct.toFixed(2)}%` },
-        { color:'red', icon:'⚠️', label:'Peor hoy',
+        { color:'red', icon:'⚠️', label: t('peor'),
           value: worst.name, cls:'dn',
           sub:`${worst.changePct.toFixed(2)}%` },
-        { color:'yellow', icon:'🟢', label:'En positivo',
+        { color:'yellow', icon:'🟢', label: _lang==='en' ? 'Positive' : 'En positivo',
           value:`${positive} / ${favData.length}`, cls:'',
-          sub:`${openMkts} mercado${openMkts!==1?'s':''} abierto${openMkts!==1?'s':''}` }
+          sub: _lang==='en' ? `${openMkts} market${openMkts!==1?'s':''} open` : `${openMkts} mercado${openMkts!==1?'s':''} abierto${openMkts!==1?'s':''}` }
       ].map(k => `
         <div class="kpi-card ${k.color}">
           <div class="kpi-icon">${k.icon}</div>
@@ -3371,16 +3553,16 @@ function renderInvestorDashboard(data) {
   if (_editingMarkets) {
     hdr.innerHTML = `
       <div class="inv-section-title" style="margin-bottom:0">
-        ✏️ &nbsp;Editar selección de mercados
+        ${t('editar_sel')} &nbsp;${_lang==='en'?'of markets':'de mercados'}
       </div>
-      <button class="btn-cancel-sel" onclick="closeMarketEditor()">✕ Cancelar</button>`;
+      <button class="btn-cancel-sel" onclick="closeMarketEditor()">${t('cancelar')}</button>`;
   } else if (hasFavs) {
     hdr.innerHTML = `
-      <div class="inv-section-title" style="margin-bottom:0">★ &nbsp;Mis Mercados</div>
-      <button class="btn-edit-mkt" onclick="openMarketEditor()">✏️ Editar selección</button>`;
+      <div class="inv-section-title" style="margin-bottom:0">${t('mis_mercados_title')}</div>
+      <button class="btn-edit-mkt" onclick="openMarketEditor()">${t('editar_sel')}</button>`;
   } else {
     hdr.innerHTML = `
-      <div class="inv-section-title" style="margin-bottom:0">Elige tus mercados</div>`;
+      <div class="inv-section-title" style="margin-bottom:0">${t('elige_mercados')}</div>`;
   }
 
   // ── Mostrar grid favoritos vs selector ────────────────────────
@@ -3392,7 +3574,7 @@ function renderInvestorDashboard(data) {
     document.getElementById('btnCancelSel').style.display = hasFavs ? 'inline-block' : 'none';
     // Texto del botón guardar
     document.getElementById('btnSaveMkt').textContent =
-      hasFavs ? 'Guardar cambios' : 'Añadir a mi dashboard';
+      hasFavs ? t('guardar_cambios') : t('anadir_dashboard');
     renderMarketSelector(data);
   } else {
     renderFavGrid(data.filter(d => _favorites.has(d.key)));
@@ -3439,7 +3621,7 @@ function renderFavGrid(favData) {
       <button class="btn-fav active"
         onclick="event.stopPropagation();toggleFavorite('${d.key}')"
         title="Quitar de favoritos">★</button>
-      <span class="market-badge ${isOpen ? 'open' : 'closed'}">${isOpen ? '● Abierto' : '● Cerrado'}</span>
+      <span class="market-badge ${isOpen ? 'open' : 'closed'}">${isOpen ? t('abierto') : t('cerrado')}</span>
       <div class="card-top">
         <div><div class="card-name">${d.name}</div></div>
         <span class="card-region">${d.region}</span>
@@ -3553,7 +3735,7 @@ async function loadInvestorNews() {
   document.getElementById('newsFeed').innerHTML = `
     <div class="news-loading">
       <div class="news-spinner"></div>
-      <div>Cargando análisis de mercado...</div>
+      <div>${t('cargando_noticias')}</div>
     </div>`;
 
   // Usa los favoritos del inversor como símbolos, o todos si no tiene
@@ -3575,12 +3757,12 @@ async function loadInvestorNews() {
     document.getElementById('newsFeed').innerHTML = `
       <div class="news-empty">
         <div class="news-empty-icon">⚠️</div>
-        <p>No se pudieron cargar las noticias en este momento.</p>
+        <p>${t('error_noticias')}</p>
         <p style="margin-top:6px;font-size:.78rem;color:var(--text3)">${e.message}</p>
         <button onclick="loadInvestorNews()" style="
           margin-top:14px;padding:7px 18px;border-radius:6px;font-size:.8rem;font-weight:500;
           background:var(--accent);color:#fff;border:none;cursor:pointer;font-family:var(--font);
-        ">Reintentar</button>
+        ">${t('reintentar')}</button>
       </div>`;
   }
 }
@@ -3602,11 +3784,9 @@ const NEWS_INDEX_LABELS = {
   eurostoxx50:'Euro Stoxx 50', msciworld:'MSCI World',
 };
 
-const NEWS_BADGE_LABELS = {
-  oportunidad: '🟢 Oportunidad',
-  riesgo:      '🔴 Riesgo',
-  tendencia:   '🔵 Tendencia',
-};
+function getNewsBadgeLabel(cat) {
+  return { oportunidad: t('badge_opor'), riesgo: t('badge_riesgo'), tendencia: t('badge_tendencia') }[cat] || cat;
+}
 
 function renderNewsFeed(articles) {
   const feed = document.getElementById('newsFeed');
@@ -3614,7 +3794,7 @@ function renderNewsFeed(articles) {
     feed.innerHTML = `
       <div class="news-empty">
         <div class="news-empty-icon">📭</div>
-        <p>No hay noticias disponibles en este momento.</p>
+        <p>${t('sin_noticias')}</p>
       </div>`;
     return;
   }
@@ -3627,17 +3807,18 @@ function renderNewsFeed(articles) {
     feed.innerHTML = `
       <div class="news-empty">
         <div class="news-empty-icon">🔍</div>
-        <p>No hay noticias en la categoría <strong>${_newsFilter}</strong> en este momento.</p>
+        <p>${_lang === 'en' ? 'No news in the' : 'No hay noticias en la categoría'} <strong>${_newsFilter}</strong> ${_lang === 'en' ? 'category at this time.' : 'en este momento.'}</p>
       </div>`;
     return;
   }
 
   feed.innerHTML = `<div class="news-grid">${filtered.map(a => {
+    const locale = _lang === 'en' ? 'en-GB' : 'es-ES';
     const dateStr = a.pubDate
-      ? new Date(a.pubDate).toLocaleString('es-ES', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' })
+      ? new Date(a.pubDate).toLocaleString(locale, { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' })
       : '';
     const indexLabel = NEWS_INDEX_LABELS[a.indexKey] || a.indexKey || '';
-    const badgeLabel = NEWS_BADGE_LABELS[a.category] || a.category;
+    const badgeLabel = getNewsBadgeLabel(a.category);
     return `
     <div class="news-card">
       <div class="news-card-top">
@@ -3975,20 +4156,20 @@ function updatePortalMarketSummary() {
   const worst = _marketData.reduce((a, b) => a.changePct < b.changePct ? a : b);
   el.innerHTML = `
     <div class="pp-mkt-item">
-      <div class="pp-mkt-label">Sesión actual</div>
+      <div class="pp-mkt-label">${t('sesion_actual')}</div>
       <div class="pp-mkt-val">${up} ▲ · ${dn} ▼</div>
     </div>
     <div class="pp-mkt-item">
-      <div class="pp-mkt-label">Mejor</div>
+      <div class="pp-mkt-label">${t('mejor')}</div>
       <div class="pp-mkt-val" style="color:var(--green)">${best.name}<br><span style="font-size:.75rem">${fmtPct(best.changePct)}</span></div>
     </div>
     <div class="pp-mkt-item">
-      <div class="pp-mkt-label">Peor</div>
+      <div class="pp-mkt-label">${t('peor')}</div>
       <div class="pp-mkt-val" style="color:var(--red)">${worst.name}<br><span style="font-size:.75rem">${fmtPct(worst.changePct)}</span></div>
     </div>
     <div class="pp-mkt-item">
-      <div class="pp-mkt-label">Actualizado</div>
-      <div class="pp-mkt-val" style="font-size:.75rem">${new Date().toLocaleTimeString('es-ES')}</div>
+      <div class="pp-mkt-label">${t('actualizado')}</div>
+      <div class="pp-mkt-val" style="font-size:.75rem">${new Date().toLocaleTimeString(_lang === 'en' ? 'en-GB' : 'es-ES')}</div>
     </div>`;
 }
 
@@ -4478,11 +4659,10 @@ function renderConstituents(symbol) {
   if (searchInput) searchInput.value = '';
 
   document.getElementById('constituentsTitle').textContent = cfg.label;
-  document.getElementById('constituentsNote').textContent =
-    'Haz clic en "Cargar cotizaciones" para obtener precios en tiempo real.';
+  document.getElementById('constituentsNote').textContent = t('clic_cargar');
 
   const btn = document.getElementById('btnLoadQuotes');
-  if (btn) { btn.textContent = '⚡ Cargar cotizaciones'; btn.disabled = false; }
+  if (btn) { btn.textContent = t('btn_cargar_cot'); btn.disabled = false; }
 
   const grid = document.getElementById('constituentsGrid');
   grid.innerHTML = cfg.items.map(c => {
@@ -4499,7 +4679,7 @@ function renderConstituents(symbol) {
         <div class="c-info">
           <div class="c-name">${c.name}</div>
           <div class="c-weight">${c.sector} · ${c.weight}%</div>
-          <div class="c-chart-hint">📈 Ver gráfica</div>
+          <div class="c-chart-hint">${t('ver_grafica')}</div>
         </div>
         <div class="c-price">
           <span class="c-price-val" id="cpv-${id}">—</span>
@@ -4521,7 +4701,7 @@ async function loadConstituentQuotes() {
   if (!cfg) return;
 
   const btn = document.getElementById('btnLoadQuotes');
-  if (btn) { btn.textContent = '⏳ Cargando...'; btn.disabled = true; }
+  if (btn) { btn.textContent = t('btn_cargando'); btn.disabled = true; }
 
   const tickers = cfg.items.map(c => c.ticker).join(',');
   try {
@@ -4542,8 +4722,8 @@ async function loadConstituentQuotes() {
       }
     });
 
-    if (btn) btn.textContent = '✓ Actualizado';
-    setTimeout(() => { if (btn) { btn.textContent = '⚡ Cargar cotizaciones'; btn.disabled = false; } }, 3000);
+    if (btn) btn.textContent = t('btn_cargado');
+    setTimeout(() => { if (btn) { btn.textContent = t('btn_cargar_cot'); btn.disabled = false; } }, 3000);
   } catch (e) {
     toast('Error cargando cotizaciones', 'err');
     if (btn) { btn.textContent = '⚡ Cargar cotizaciones'; btn.disabled = false; }
@@ -4635,15 +4815,15 @@ function _addSearchResultCard(q) {
   const card = document.createElement('div');
   card.className = 'constituent-card clickable sq-result-card';
   card.id = 'sqr-' + id;
-  card.title = 'Ver gráfica de ' + name;
+  card.title = t('ver_grafica') + ' ' + name;
   card.setAttribute('onclick', `openTickerChart('${ticker}','${safeName}')`);
   card.innerHTML = `
     ${logoEl}
     <span class="c-ticker">${label}</span>
     <div class="c-info">
       <div class="c-name">${name}</div>
-      <div class="c-weight"><span class="sq-badge">Buscado</span></div>
-      <div class="c-chart-hint">📈 Ver gráfica</div>
+      <div class="c-weight"><span class="sq-badge">${t('buscado_badge')}</span></div>
+      <div class="c-chart-hint">${t('ver_grafica')}</div>
     </div>
     <div class="c-price">
       <span class="c-price-val">${price}</span>
@@ -5170,7 +5350,7 @@ function renderCarteras() {
   if (!panel) return;
 
   if (!_carterasLoaded) {
-    panel.innerHTML = '<div class="cart-loading"><div class="cart-spinner"></div><p>Cargando carteras…</p></div>';
+    panel.innerHTML = `<div class="cart-loading"><div class="cart-spinner"></div><p>${t('cargando')}…</p></div>`;
     return;
   }
 
@@ -5178,9 +5358,9 @@ function renderCarteras() {
     panel.innerHTML = `
       <div class="cart-empty">
         <div class="cart-empty-icon">💼</div>
-        <div class="cart-empty-title">Aún no tienes carteras</div>
-        <div class="cart-empty-sub">Crea tu primera cartera y añade los activos que tienes contratados<br>para seguir su evolución de un vistazo</div>
-        <button class="cart-new-btn" onclick="openCarteraModal()">+ Crear mi primera cartera</button>
+        <div class="cart-empty-title">${t('sin_carteras')}</div>
+        <div class="cart-empty-sub">${t('sin_carteras_msg')}</div>
+        <button class="cart-new-btn" onclick="openCarteraModal()">${t('crear_primera')}</button>
       </div>`;
     return;
   }
@@ -5223,9 +5403,9 @@ function renderCarteras() {
   panel.innerHTML = `
     <!-- ── Barra de acciones ── -->
     <div class="cart-report-bar">
-      <div class="cart-report-title">💼 Mi Cartera de Inversión</div>
+      <div class="cart-report-title">${t('mi_cartera_title')}</div>
       <button class="cart-report-btn" onclick="generateCarteraReport()">
-        📄 Descargar Informe
+        ${t('descargar_informe')}
       </button>
     </div>
 
@@ -5233,25 +5413,25 @@ function renderCarteras() {
     <div class="cart-kpi-row">
       <div class="cart-kpi-card">
         <div class="cart-kpi-icon">💰</div>
-        <div class="cart-kpi-label">Total Invertido</div>
+        <div class="cart-kpi-label">${t('total_invertido')}</div>
         <div class="cart-kpi-value">${fmtEur(totalInvertido)}</div>
-        <div class="cart-kpi-sub">${_carteras.length} cartera${_carteras.length !== 1 ? 's' : ''}</div>
+        <div class="cart-kpi-sub">${_carteras.length} ${_lang==='en' ? 'portfolio'+((_carteras.length!==1)?'s':'') : 'cartera'+(_carteras.length !== 1 ? 's' : '')}</div>
       </div>
       <div class="cart-kpi-card">
         <div class="cart-kpi-icon">📈</div>
-        <div class="cart-kpi-label">Valor Actual</div>
+        <div class="cart-kpi-label">${t('valor_actual')}</div>
         <div class="cart-kpi-value">${fmtEur(totalActual)}</div>
-        <div class="cart-kpi-sub">${totalActivos} activo${totalActivos !== 1 ? 's' : ''} en cartera</div>
+        <div class="cart-kpi-sub">${totalActivos} ${_lang==='en' ? 'asset'+(totalActivos!==1?'s':'') : 'activo'+(totalActivos !== 1 ? 's' : '')+' en cartera'}</div>
       </div>
       <div class="cart-kpi-card">
         <div class="cart-kpi-icon">${totalPct >= 0 ? '🟢' : '🔴'}</div>
-        <div class="cart-kpi-label">Rentabilidad Global</div>
+        <div class="cart-kpi-label">${t('rentab_global')}</div>
         <div class="cart-kpi-value cart-kpi-${pctCls}">${totalPct >= 0 ? '+' : ''}${totalPct.toFixed(2)}%</div>
         <div class="cart-kpi-sub">${totalGanancia >= 0 ? '+' : ''}${fmtEur(totalGanancia)}</div>
       </div>
       <div class="cart-kpi-card">
         <div class="cart-kpi-icon">🏆</div>
-        <div class="cart-kpi-label">Mejor Cartera</div>
+        <div class="cart-kpi-label">${t('mejor_cartera')}</div>
         <div class="cart-kpi-value" style="font-size:.95rem;line-height:1.2">${bestCartera ? bestCartera.nombre : '—'}</div>
         <div class="cart-kpi-sub">${bestCartera ? (bestPct >= 0 ? '+' : '') + bestPct.toFixed(2) + '%' : '—'}</div>
       </div>
@@ -5260,7 +5440,7 @@ function renderCarteras() {
     <!-- ── Gráficos ── -->
     <div class="cart-charts-row">
       <div class="cart-chart-box">
-        <div class="cart-chart-title">Distribución por tipo de activo</div>
+        <div class="cart-chart-title">${t('distrib_activos')}</div>
         ${donutSegs.length > 0 ? `
           <div class="cart-donut-wrap">
             <canvas id="cartDonutCanvas" width="130" height="130"></canvas>
@@ -5275,7 +5455,7 @@ function renderCarteras() {
           </div>` : '<div class="cart-empty-chart">Añade activos para ver la distribución</div>'}
       </div>
       <div class="cart-chart-box">
-        <div class="cart-chart-title">Rentabilidad por cartera</div>
+        <div class="cart-chart-title">${t('rentab_cartera')}</div>
         <div class="cart-perf-list">
           ${_carteras.map(c => {
             const calc = _calcCartera(c.activos);
@@ -5303,7 +5483,7 @@ function renderCarteras() {
     <!-- ── Proyección ── -->
     <div class="cart-proj-section">
       <div class="cart-proj-header">
-        <div class="cart-proj-title">📊 Proyección de tu inversión</div>
+        <div class="cart-proj-title">${t('proyeccion')}</div>
         <div class="cart-proj-tabs">
           <button class="cart-proj-tab active" onclick="switchProjYear(3,this)">3 años</button>
           <button class="cart-proj-tab" onclick="switchProjYear(5,this)">5 años</button>
@@ -5335,7 +5515,7 @@ function renderCarteras() {
 
     <!-- FAB -->
     <div class="cart-fab">
-      <button class="cart-new-btn" onclick="openCarteraModal()">+ Nueva Cartera</button>
+      <button class="cart-new-btn" onclick="openCarteraModal()">${t('nueva_cartera')}</button>
     </div>`;
 
   // Dibuja donut y proyección tras render — animado
@@ -5391,7 +5571,7 @@ function _renderCarteraCard(c) {
       <div class="cart-card-header" onclick="toggleCarteraExpand('${c.id}')">
         <span class="cart-card-dot" style="background:${c.color}"></span>
         <span class="cart-card-name">${c.nombre}</span>
-        <span class="cart-card-meta">${activos.length} activo${activos.length !== 1 ? 's' : ''}</span>
+        <span class="cart-card-meta">${activos.length} ${_lang==='en' ? 'asset'+(activos.length!==1?'s':'') : 'activo'+(activos.length!==1?'s':'')}</span>
         <span class="cart-card-pct ${cls}">${sign}${calc.pct.toFixed(2)}%</span>
         <span class="cart-card-val">€${calc.actual.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
         <div class="cart-card-actions" onclick="event.stopPropagation()">
@@ -5410,8 +5590,8 @@ function _renderCarteraCard(c) {
               </tr></thead>
               <tbody>${rows}</tbody>
             </table>
-          </div>` : `<p style="color:var(--text3);font-size:.83rem;margin:12px 0">Sin activos aún. Añade el primero.</p>`}
-        <button class="cart-add-activo-btn" onclick="openActivoModal('${c.id}')">+ Añadir activo</button>
+          </div>` : `<p style="color:var(--text3);font-size:.83rem;margin:12px 0">${_lang==='en'?'No assets yet. Add your first one.':'Sin activos aún. Añade el primero.'}</p>`}
+        <button class="cart-add-activo-btn" onclick="openActivoModal('${c.id}')">${_lang==='en'?'+ Add asset':'+ Añadir activo'}</button>
       </div>
     </div>`;
 }
@@ -6947,9 +7127,9 @@ async function loadCryptoMarket() {
     document.getElementById('cryptoTableBody').innerHTML = `
       <tr><td colspan="8" style="text-align:center;padding:32px;color:var(--text3)">
         <div style="font-size:1.5rem;margin-bottom:8px">⚠️</div>
-        No se pudo cargar el mercado crypto.<br>
+        ${t('cargando_crypto')}<br>
         <span style="font-size:.75rem">${e.message}</span><br>
-        <button onclick="refreshCryptoData()" style="margin-top:12px;padding:6px 16px;border-radius:6px;background:var(--accent);color:#fff;border:none;cursor:pointer;font-size:.8rem;font-family:var(--font)">Reintentar</button>
+        <button onclick="refreshCryptoData()" style="margin-top:12px;padding:6px 16px;border-radius:6px;background:var(--accent);color:#fff;border:none;cursor:pointer;font-size:.8rem;font-family:var(--font)">${t('reintentar')}</button>
       </td></tr>`;
   }
 }
@@ -6957,7 +7137,7 @@ async function loadCryptoMarket() {
 function _cryptoUpdatedNow() {
   const now = new Date();
   document.getElementById('cryptoUpdated').textContent =
-    'Actualizado: ' + now.toLocaleTimeString('es-ES', {hour:'2-digit',minute:'2-digit',second:'2-digit'});
+    t('actualizado_pfx') + now.toLocaleTimeString(_lang === 'en' ? 'en-GB' : 'es-ES', {hour:'2-digit',minute:'2-digit',second:'2-digit'});
 }
 
 async function refreshCryptoData() {
@@ -7060,7 +7240,7 @@ function _renderCryptoTable() {
     const vb = _getSortValue(b, _cryptoSortKey);
     return _cryptoSortDir * (va > vb ? 1 : va < vb ? -1 : 0);
   });
-  if (countEl) countEl.textContent = data.length + ' activos';
+  if (countEl) countEl.textContent = data.length + t('activos_suffix');
   const cur = _cryptoCurrency;
   tbody.innerHTML = data.map((coin, i) => {
     const chg24 = coin.price_change_percentage_24h || 0;
@@ -7102,6 +7282,13 @@ function _buildSparklineSvg(prices, isUp) {
   return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">
     <polyline points="${pts}" fill="none" stroke="${color}" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>
   </svg>`;
+}
+
+function _updateCryptoStaticLabels() {
+  // Static labels use data-i18n; applyLang() already handled them.
+  // Update the loading message if chart is in idle state.
+  const loadingSpan = document.querySelector('#cryptoChartLoading span');
+  if (loadingSpan) loadingSpan.textContent = t(_cryptoSelectedId ? 'cargando_chart' : 'sel_crypto_msg');
 }
 
 function _renderCryptoSelectorList() {
