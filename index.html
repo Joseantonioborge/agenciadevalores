@@ -1328,6 +1328,122 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .fondos-cmp-tbl tr:last-child td{border-bottom:none}
 @media(max-width:1000px){.fondos-cmp-body{grid-template-columns:1fr}}
 @media(max-width:640px){.fondos-filter-bar{flex-direction:column;align-items:stretch}}
+
+/* ===== CRYPTO DASHBOARD ===== */
+.crypto-topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px}
+.crypto-title{font-size:1.2rem;font-weight:700;color:var(--text)}
+.crypto-topbar-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.crypto-src-badge{font-size:.72rem;color:var(--text3);background:var(--card);border:1px solid var(--border);border-radius:6px;padding:4px 12px}
+.crypto-updated{font-size:.72rem;color:var(--text3)}
+.crypto-refresh-btn{display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:7px;border:1px solid var(--border);background:var(--card);color:var(--text2);font-size:.78rem;font-weight:500;cursor:pointer;font-family:var(--font);transition:.15s}
+.crypto-refresh-btn:hover{background:var(--card2);color:var(--text)}
+.crypto-refresh-btn.spinning svg{animation:spin .7s linear infinite}
+/* Currency toggle */
+.crypto-currency-row{display:flex;align-items:center;gap:8px;margin-bottom:16px}
+.crypto-currency-label{font-size:.78rem;color:var(--text3);font-weight:500}
+.crypto-currency-pills{display:flex;gap:4px}
+.crypto-currency-pill{padding:5px 16px;border-radius:20px;border:1.5px solid var(--border);background:var(--card);color:var(--text2);font-size:.78rem;font-weight:600;cursor:pointer;transition:.15s;font-family:var(--font)}
+.crypto-currency-pill:hover{border-color:var(--accent);color:var(--text)}
+.crypto-currency-pill.active{background:var(--accent);border-color:var(--accent);color:#fff}
+/* Filter bar */
+.crypto-filter-bar{display:flex;align-items:center;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+.crypto-filter-label{font-size:.78rem;color:var(--text3);font-weight:500;margin-right:4px}
+.crypto-filter-pill{display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:20px;border:1.5px solid var(--border);background:var(--card);color:var(--text2);font-size:.78rem;font-weight:600;cursor:pointer;transition:.15s;font-family:var(--font)}
+.crypto-filter-pill:hover{border-color:var(--accent);color:var(--text)}
+.crypto-filter-pill.active{background:rgba(37,99,235,.15);border-color:var(--accent);color:var(--accent)}
+/* Chart area */
+.crypto-chart-section{display:grid;grid-template-columns:280px 1fr;gap:16px;margin-bottom:24px}
+.crypto-selector-panel{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;display:flex;flex-direction:column}
+.crypto-selector-header{padding:12px 16px;border-bottom:1px solid var(--border);font-size:.8rem;font-weight:600;color:var(--text2)}
+.crypto-selector-list{overflow-y:auto;flex:1;max-height:340px}
+.crypto-selector-list::-webkit-scrollbar{width:4px}
+.crypto-selector-list::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+.crypto-sel-row{display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;transition:.12s;border-bottom:1px solid rgba(42,48,80,.4)}
+.crypto-sel-row:hover{background:var(--card2)}
+.crypto-sel-row.active{background:rgba(37,99,235,.12);border-left:3px solid var(--accent)}
+.crypto-sel-row.active .crypto-sel-name{color:var(--text)}
+.crypto-sel-logo{width:26px;height:26px;border-radius:50%;object-fit:cover;flex-shrink:0;background:var(--bg2)}
+.crypto-sel-info{flex:1;min-width:0}
+.crypto-sel-name{font-size:.82rem;font-weight:600;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.crypto-sel-symbol{font-size:.7rem;color:var(--text3)}
+.crypto-sel-price{text-align:right;flex-shrink:0}
+.crypto-sel-price-val{font-size:.82rem;font-weight:600;color:var(--text);font-family:monospace}
+.crypto-sel-change{font-size:.7rem;font-weight:600}
+.crypto-sel-change.pos{color:var(--green)}
+.crypto-sel-change.neg{color:var(--red)}
+/* Chart panel */
+.crypto-chart-panel{background:var(--card);border:1px solid var(--border);border-radius:12px;display:flex;flex-direction:column;min-height:360px}
+.crypto-chart-header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:8px}
+.crypto-chart-meta{display:flex;align-items:center;gap:12px}
+.crypto-chart-coin-logo{width:32px;height:32px;border-radius:50%;object-fit:cover;background:var(--bg2)}
+.crypto-chart-coin-name{font-size:1rem;font-weight:700;color:var(--text)}
+.crypto-chart-coin-symbol{font-size:.78rem;color:var(--text3);margin-left:4px}
+.crypto-chart-price-block{display:flex;align-items:baseline;gap:8px}
+.crypto-chart-price{font-size:1.3rem;font-weight:700;color:var(--text);font-family:monospace}
+.crypto-chart-change{font-size:.85rem;font-weight:600;padding:2px 8px;border-radius:5px}
+.crypto-chart-change.pos{color:var(--green);background:rgba(16,185,129,.1)}
+.crypto-chart-change.neg{color:var(--red);background:rgba(239,68,68,.1)}
+.crypto-chart-controls{display:flex;align-items:center;gap:8px}
+.crypto-period-pills{display:flex;gap:3px}
+.crypto-period-pill{padding:4px 11px;border-radius:5px;border:1px solid var(--border);background:transparent;color:var(--text3);font-size:.72rem;font-weight:600;cursor:pointer;font-family:var(--font);transition:.12s}
+.crypto-period-pill:hover{color:var(--text2)}
+.crypto-period-pill.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.crypto-type-pills{display:flex;gap:3px;border-left:1px solid var(--border);padding-left:8px}
+.crypto-type-pill{padding:4px 11px;border-radius:5px;border:1px solid var(--border);background:transparent;color:var(--text3);font-size:.72rem;font-weight:600;cursor:pointer;font-family:var(--font);transition:.12s}
+.crypto-type-pill:hover{color:var(--text2)}
+.crypto-type-pill.active{background:rgba(37,99,235,.15);border-color:var(--accent);color:var(--accent)}
+.crypto-chart-body{flex:1;padding:8px;min-height:280px;position:relative}
+.crypto-chart-loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;color:var(--text3);font-size:.82rem}
+.crypto-chart-spinner{width:28px;height:28px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite}
+/* Table */
+.crypto-table-wrap{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.crypto-table-header{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--border)}
+.crypto-table-title{font-size:.9rem;font-weight:700;color:var(--text)}
+.crypto-table-count{font-size:.75rem;color:var(--text3);background:var(--bg2);border:1px solid var(--border);border-radius:5px;padding:2px 9px}
+.crypto-tbl{width:100%;border-collapse:collapse}
+.crypto-tbl th{padding:10px 14px;text-align:right;font-size:.72rem;font-weight:600;color:var(--text3);border-bottom:1px solid var(--border);white-space:nowrap;cursor:pointer;user-select:none;transition:.12s}
+.crypto-tbl th:first-child,.crypto-tbl th:nth-child(2){text-align:left}
+.crypto-tbl th:hover{color:var(--text2)}
+.crypto-tbl th.sort-asc::after{content:' ↑'}
+.crypto-tbl th.sort-desc::after{content:' ↓'}
+.crypto-tbl td{padding:11px 14px;text-align:right;font-size:.82rem;border-bottom:1px solid rgba(42,48,80,.5);transition:background .1s}
+.crypto-tbl td:first-child,.crypto-tbl td:nth-child(2){text-align:left}
+.crypto-tbl tr:hover td{background:var(--card2)}
+.crypto-tbl tr:last-child td{border-bottom:none}
+.crypto-rank{font-size:.72rem;color:var(--text3);font-weight:600;min-width:20px}
+.crypto-coin-cell{display:flex;align-items:center;gap:10px;cursor:pointer}
+.crypto-coin-logo{width:28px;height:28px;border-radius:50%;object-fit:cover;flex-shrink:0;background:var(--bg2)}
+.crypto-coin-info{display:flex;flex-direction:column;gap:1px}
+.crypto-coin-name{font-size:.82rem;font-weight:600;color:var(--text);white-space:nowrap}
+.crypto-coin-symbol{font-size:.68rem;color:var(--text3);font-weight:500}
+.crypto-price-cell{font-family:monospace;font-weight:600;color:var(--text)}
+.crypto-chg-cell{font-weight:600;font-size:.8rem;padding:3px 8px;border-radius:5px;display:inline-block}
+.crypto-chg-cell.pos{color:var(--green);background:rgba(16,185,129,.08)}
+.crypto-chg-cell.neg{color:var(--red);background:rgba(239,68,68,.08)}
+.crypto-mcap-cell{color:var(--text2);font-family:monospace;font-size:.78rem}
+.crypto-vol-cell{color:var(--text3);font-family:monospace;font-size:.78rem}
+.crypto-sparkline-cell{width:90px}
+.crypto-sparkline-wrap{display:flex;align-items:center;justify-content:flex-end}
+/* Loading skeleton */
+.crypto-skeleton-row td{padding:13px 14px}
+.crypto-skeleton-bar{height:14px;border-radius:4px;background:linear-gradient(90deg,var(--card) 25%,var(--card2) 50%,var(--card) 75%);background-size:200% 100%;animation:shimmer 1.3s infinite}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+/* Responsive */
+@media(max-width:900px){
+  .crypto-chart-section{grid-template-columns:1fr}
+  .crypto-selector-panel{max-height:180px}
+  .crypto-selector-list{max-height:140px}
+  .crypto-tbl .crypto-vol-col{display:none}
+  .crypto-tbl .crypto-sparkline-cell{display:none}
+}
+@media(max-width:640px){
+  .crypto-currency-row{flex-wrap:wrap}
+  .crypto-filter-bar{gap:6px}
+  .crypto-chart-header{flex-direction:column;align-items:flex-start}
+  .crypto-tbl th,.crypto-tbl td{padding:9px 8px;font-size:.75rem}
+  .crypto-coin-name{font-size:.78rem}
+  .crypto-tbl .crypto-mcap-col{display:none}
+}
 </style>
 </head>
 <body>
@@ -1337,7 +1453,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
   <div class="nav-logo">
     <div class="nav-logo-dot"></div>
     Agencia de Valores Generación Z
-    <span class="nav-version">v3.3.0</span>
+    <span class="nav-version">v3.4.0</span>
   </div>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="showSection('Mercados')">Mercados</button>
@@ -1453,6 +1569,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <button class="inv-tab" id="invTabAnalisis" onclick="switchInvTab('analisis')">📰 Análisis</button>
       <button class="inv-tab" id="invTabBancos" onclick="switchInvTab('bancos')">🏦 Entidades Financieras</button>
       <button class="inv-tab" id="invTabFondos" onclick="switchInvTab('fondos')">📂 Comparador de Fondos</button>
+      <button class="inv-tab" id="invTabCrypto" onclick="switchInvTab('crypto')">₿ Crypto</button>
     </div>
 
     <!-- ── Contenido: Mis Mercados ── -->
@@ -1775,6 +1892,116 @@ tr:hover td{background:rgba(255,255,255,.02)}
       </div>
 
     </div><!-- /invFondosPanel -->
+
+    <!-- ── Contenido: Crypto ── -->
+    <div id="invCryptoPanel" style="display:none">
+
+      <!-- Cabecera -->
+      <div class="crypto-topbar">
+        <div class="crypto-title">₿ Mercado Crypto <span style="font-size:.72rem;font-weight:400;color:var(--text3);margin-left:6px">Top 20 por capitalización</span></div>
+        <div class="crypto-topbar-right">
+          <span class="crypto-src-badge">📡 CoinGecko</span>
+          <span class="crypto-updated" id="cryptoUpdated">—</span>
+          <button class="crypto-refresh-btn" id="cryptoRefreshBtn" onclick="refreshCryptoData()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
+            Actualizar
+          </button>
+        </div>
+      </div>
+
+      <!-- Moneda y filtros -->
+      <div class="crypto-currency-row">
+        <span class="crypto-currency-label">Moneda:</span>
+        <div class="crypto-currency-pills">
+          <button class="crypto-currency-pill active" id="cryptoPillEUR" onclick="setCryptoCurrency('eur')">€ EUR</button>
+          <button class="crypto-currency-pill" id="cryptoPillUSD" onclick="setCryptoCurrency('usd')">$ USD</button>
+        </div>
+      </div>
+
+      <div class="crypto-filter-bar">
+        <span class="crypto-filter-label">Filtrar:</span>
+        <button class="crypto-filter-pill active" id="cryptoFilterTodos" onclick="setCryptoFilter('todos')">🌐 Todos</button>
+        <button class="crypto-filter-pill" id="cryptoFilterTop10" onclick="setCryptoFilter('top10')">🏆 Top 10</button>
+        <button class="crypto-filter-pill" id="cryptoFilterL1" onclick="setCryptoFilter('l1')">⛓ Layer 1</button>
+        <button class="crypto-filter-pill" id="cryptoFilterL2" onclick="setCryptoFilter('l2')">⚡ Layer 2</button>
+        <button class="crypto-filter-pill" id="cryptoFilterDefi" onclick="setCryptoFilter('defi')">🔗 DeFi</button>
+        <button class="crypto-filter-pill" id="cryptoFilterStable" onclick="setCryptoFilter('stablecoins')">🏦 Stablecoins</button>
+      </div>
+
+      <!-- Gráfico + Selector -->
+      <div class="crypto-chart-section" id="cryptoChartSection">
+        <!-- Selector lateral -->
+        <div class="crypto-selector-panel">
+          <div class="crypto-selector-header">Seleccionar activo</div>
+          <div class="crypto-selector-list" id="cryptoSelectorList">
+            <!-- JS fill -->
+          </div>
+        </div>
+
+        <!-- Panel de gráfico -->
+        <div class="crypto-chart-panel">
+          <div class="crypto-chart-header">
+            <div class="crypto-chart-meta">
+              <img class="crypto-chart-coin-logo" id="cryptoChartLogo" src="" alt="" onerror="this.style.display='none'">
+              <div>
+                <span class="crypto-chart-coin-name" id="cryptoChartName">—</span>
+                <span class="crypto-chart-coin-symbol" id="cryptoChartSymbol"></span>
+              </div>
+              <div class="crypto-chart-price-block">
+                <span class="crypto-chart-price" id="cryptoChartPrice">—</span>
+                <span class="crypto-chart-change" id="cryptoChartChange"></span>
+              </div>
+            </div>
+            <div class="crypto-chart-controls">
+              <div class="crypto-period-pills">
+                <button class="crypto-period-pill" id="cryptoPeriod7"  onclick="setCryptoPeriod(7)"  >7D</button>
+                <button class="crypto-period-pill active" id="cryptoPeriod30" onclick="setCryptoPeriod(30)" >30D</button>
+                <button class="crypto-period-pill" id="cryptoPeriod90" onclick="setCryptoPeriod(90)" >90D</button>
+                <button class="crypto-period-pill" id="cryptoPeriod365" onclick="setCryptoPeriod(365)">1A</button>
+              </div>
+              <div class="crypto-type-pills">
+                <button class="crypto-type-pill active" id="cryptoTypeCandle" onclick="setCryptoChartType('candle')">🕯 Velas</button>
+                <button class="crypto-type-pill" id="cryptoTypeLine"  onclick="setCryptoChartType('line')">📈 Líneas</button>
+              </div>
+            </div>
+          </div>
+          <div class="crypto-chart-body" id="cryptoChartBody">
+            <div class="crypto-chart-loading" id="cryptoChartLoading">
+              <div class="crypto-chart-spinner"></div>
+              <span>Selecciona una criptomoneda</span>
+            </div>
+          </div>
+        </div>
+      </div><!-- /crypto-chart-section -->
+
+      <!-- Tabla de cotizaciones -->
+      <div class="crypto-table-wrap">
+        <div class="crypto-table-header">
+          <span class="crypto-table-title">Cotizaciones en tiempo real</span>
+          <span class="crypto-table-count" id="cryptoTableCount">—</span>
+        </div>
+        <div style="overflow-x:auto">
+          <table class="crypto-tbl" id="cryptoTable">
+            <thead>
+              <tr>
+                <th style="width:32px">#</th>
+                <th onclick="sortCryptoTable('name')" id="cryptoThName">Nombre</th>
+                <th onclick="sortCryptoTable('price')" id="cryptoThPrice">Precio</th>
+                <th onclick="sortCryptoTable('chg24')" id="cryptoThChg24">24h</th>
+                <th onclick="sortCryptoTable('chg7')" id="cryptoThChg7">7d</th>
+                <th onclick="sortCryptoTable('mcap')" id="cryptoThMcap" class="crypto-mcap-col sort-desc">Cap. Mercado</th>
+                <th onclick="sortCryptoTable('vol')" id="cryptoThVol" class="crypto-vol-col">Vol. 24h</th>
+                <th class="crypto-sparkline-cell">7d</th>
+              </tr>
+            </thead>
+            <tbody id="cryptoTableBody">
+              <!-- JS fill -->
+            </tbody>
+          </table>
+        </div>
+      </div><!-- /crypto-table-wrap -->
+
+    </div><!-- /invCryptoPanel -->
 
   </div>
 
@@ -2364,6 +2591,18 @@ let _cartModalColor = '#2563EB'; // color seleccionado en el modal de cartera
 let _newsData      = [];         // artículos del feed de noticias cargados
 let _bancosLoaded  = false;      // flag: ya se renderizó el panel de entidades financieras
 let _fondosLoaded  = false;      // flag: ya se renderizó el comparador de fondos
+let _cryptoLoaded  = false;      // flag: ya se inició el panel crypto
+let _cryptoData    = [];         // lista de coins del mercado
+let _cryptoCurrency = 'eur';     // 'eur' | 'usd'
+let _cryptoFilter   = 'todos';   // 'todos'|'top10'|'l1'|'l2'|'defi'|'stablecoins'
+let _cryptoSortKey  = 'mcap';    // columna de orden
+let _cryptoSortDir  = -1;        // -1 desc / 1 asc
+let _cryptoSelectedId = null;    // coin ID seleccionada para el gráfico
+let _cryptoPeriod   = 30;        // días del gráfico
+let _cryptoChartType = 'candle'; // 'candle' | 'line'
+let _cryptoChart    = null;      // instancia LightweightCharts
+let _cryptoSeries   = null;      // serie activa
+let _cryptoRefreshing = false;   // flag para spinner de refresh
 let _fondosSelected = new Set(); // IDs de fondos seleccionados para comparar (max 5)
 let _fondosSortKey  = 'patM';    // columna de orden activa
 let _fondosSortDir  = -1;        // -1 desc / 1 asc
@@ -2591,6 +2830,10 @@ function _doLogout() {
   _carterasLoaded  = false;
   _fondosLoaded    = false;
   _fondosSelected  = new Set();
+  _cryptoLoaded    = false;
+  _cryptoData      = [];
+  _cryptoSelectedId = null;
+  if (_cryptoChart) { try { _cryptoChart.remove(); } catch(_){} _cryptoChart = null; _cryptoSeries = null; }
   _finbotHistory   = [];
   _finbotGreeted   = false;
   finbotSetVisible(false);
@@ -3243,6 +3486,7 @@ function switchInvTab(tab) {
   document.getElementById('invTabCalculadora').classList.toggle('active',  tab === 'calculadora');
   document.getElementById('invTabBancos').classList.toggle('active',       tab === 'bancos');
   document.getElementById('invTabFondos').classList.toggle('active',       tab === 'fondos');
+  document.getElementById('invTabCrypto').classList.toggle('active',       tab === 'crypto');
   // Muestra/oculta contenido
   document.getElementById('invMercadosContent').style.display     = tab === 'mercados'    ? 'block' : 'none';
   document.getElementById('invAnalisisPanel').style.display       = tab === 'analisis'    ? 'block' : 'none';
@@ -3250,6 +3494,7 @@ function switchInvTab(tab) {
   document.getElementById('invCalculadoraPanel').style.display    = tab === 'calculadora' ? 'block' : 'none';
   document.getElementById('invBancosPanel').style.display         = tab === 'bancos'      ? 'block' : 'none';
   document.getElementById('invFondosPanel').style.display         = tab === 'fondos'      ? 'block' : 'none';
+  document.getElementById('invCryptoPanel').style.display         = tab === 'crypto'      ? 'block' : 'none';
   // Carga noticias la primera vez que se abre la pestaña
   if (tab === 'analisis'   && _newsData.length === 0) loadInvestorNews();
   // Carga carteras la primera vez que se abre la pestaña
@@ -3260,6 +3505,10 @@ function switchInvTab(tab) {
   if (tab === 'bancos' && !_bancosLoaded) setTimeout(renderBancosPanel, 60);
   // Renderiza comparador de fondos (solo una vez, datos estáticos)
   if (tab === 'fondos' && !_fondosLoaded) setTimeout(renderFondosPanel, 60);
+  // Inicia panel crypto la primera vez
+  if (tab === 'crypto' && !_cryptoLoaded) { _cryptoLoaded = true; setTimeout(loadCryptoMarket, 60); }
+  // Redimensiona gráfico crypto al volver a la pestaña
+  if (tab === 'crypto' && _cryptoChart) { setTimeout(() => { try { _cryptoChart.timeScale().fitContent(); } catch(_){} }, 80); }
 }
 
 async function loadInvestorNews() {
@@ -6463,6 +6712,350 @@ function _populateBancosTable() {
       <td style="color:${ltd > 1.1 ? 'var(--yellow)' : 'var(--green)'}">${ltd}x</td>
     </tr>`;
   }).join('');
+}
+
+// ================================================================
+// CRYPTO DASHBOARD — CoinGecko API (free, no auth)
+// ================================================================
+
+const CRYPTO_API = 'https://api.coingecko.com/api/v3';
+
+// Categorías estáticas para filtrado
+const CRYPTO_CATEGORIES = {
+  stablecoins: ['tether','usd-coin','dai','binance-usd','true-usd','first-digital-usd','usde'],
+  l1: ['bitcoin','ethereum','solana','cardano','avalanche-2','tron','polkadot','near','cosmos','algorand','hedera-hashgraph','stellar'],
+  l2: ['matic-network','arbitrum','optimism','immutable-x','mantle','base','loopring'],
+  defi: ['chainlink','uniswap','aave','maker','curve-dao-token','the-graph','synthetix-network-token','pancakeswap-token','1inch','compound-governance-token'],
+};
+
+const CRYPTO_SYMBOL_LABELS = {
+  bitcoin:'BTC', ethereum:'ETH', tether:'USDT', binancecoin:'BNB', solana:'SOL',
+  'usd-coin':'USDC', xrp:'XRP', 'staked-ether':'stETH', dogecoin:'DOGE', toncoin:'TON',
+  cardano:'ADA', 'avalanche-2':'AVAX', 'shiba-inu':'SHIB', tron:'TRX',
+  'wrapped-bitcoin':'WBTC', polkadot:'DOT', chainlink:'LINK', 'bitcoin-cash':'BCH',
+  near:'NEAR', 'matic-network':'POL', arbitrum:'ARB', 'uniswap':'UNI', cosmos:'ATOM',
+  litecoin:'LTC', 'internet-computer':'ICP', stellar:'XLM', hedera:'HBAR',
+  'the-sandbox':'SAND', decentraland:'MANA',
+};
+
+function _cryptoSymbol(id, symbol) {
+  return (CRYPTO_SYMBOL_LABELS[id] || symbol || id).toUpperCase();
+}
+
+function _fmtCryptoPrice(price, currency) {
+  const sym = currency === 'eur' ? '€' : '$';
+  if (price >= 1000) return sym + price.toLocaleString('es-ES', {minimumFractionDigits:2, maximumFractionDigits:2});
+  if (price >= 1)    return sym + price.toLocaleString('es-ES', {minimumFractionDigits:2, maximumFractionDigits:4});
+  if (price >= 0.01) return sym + price.toLocaleString('es-ES', {minimumFractionDigits:4, maximumFractionDigits:6});
+  return sym + price.toFixed(8);
+}
+
+function _fmtCryptoLarge(n) {
+  if (!n) return '—';
+  if (n >= 1e12) return (n/1e12).toFixed(2) + 'T';
+  if (n >= 1e9)  return (n/1e9).toFixed(2) + 'B';
+  if (n >= 1e6)  return (n/1e6).toFixed(2) + 'M';
+  return n.toLocaleString('es-ES');
+}
+
+function _cryptoFilterData(data) {
+  if (_cryptoFilter === 'todos') return data;
+  if (_cryptoFilter === 'top10') return data.slice(0, 10);
+  const ids = CRYPTO_CATEGORIES[_cryptoFilter] || [];
+  const filtered = data.filter(c => ids.includes(c.id));
+  return filtered.length ? filtered : data; // fallback al total si el filtro no da nada
+}
+
+async function loadCryptoMarket() {
+  _renderCryptoTableSkeleton();
+  try {
+    const url = `${CRYPTO_API}/coins/markets?vs_currency=${_cryptoCurrency}&order=market_cap_desc&per_page=20&page=1&sparkline=true&price_change_percentage=24h,7d`;
+    const res = await fetch(url, { signal: AbortSignal.timeout(15000) });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    _cryptoData = await res.json();
+    _cryptoUpdatedNow();
+    _renderCryptoTable();
+    _renderCryptoSelectorList();
+    // Selecciona Bitcoin por defecto
+    if (!_cryptoSelectedId && _cryptoData.length) {
+      loadCryptoChart(_cryptoData[0].id);
+    }
+  } catch(e) {
+    document.getElementById('cryptoTableBody').innerHTML = `
+      <tr><td colspan="8" style="text-align:center;padding:32px;color:var(--text3)">
+        <div style="font-size:1.5rem;margin-bottom:8px">⚠️</div>
+        No se pudo cargar el mercado crypto.<br>
+        <span style="font-size:.75rem">${e.message}</span><br>
+        <button onclick="refreshCryptoData()" style="margin-top:12px;padding:6px 16px;border-radius:6px;background:var(--accent);color:#fff;border:none;cursor:pointer;font-size:.8rem;font-family:var(--font)">Reintentar</button>
+      </td></tr>`;
+  }
+}
+
+function _cryptoUpdatedNow() {
+  const now = new Date();
+  document.getElementById('cryptoUpdated').textContent =
+    'Actualizado: ' + now.toLocaleTimeString('es-ES', {hour:'2-digit',minute:'2-digit',second:'2-digit'});
+}
+
+async function refreshCryptoData() {
+  if (_cryptoRefreshing) return;
+  _cryptoRefreshing = true;
+  const btn = document.getElementById('cryptoRefreshBtn');
+  if (btn) btn.classList.add('spinning');
+  await loadCryptoMarket();
+  _cryptoRefreshing = false;
+  if (btn) btn.classList.remove('spinning');
+}
+
+function setCryptoCurrency(cur) {
+  if (_cryptoCurrency === cur) return;
+  _cryptoCurrency = cur;
+  document.getElementById('cryptoPillEUR').classList.toggle('active', cur === 'eur');
+  document.getElementById('cryptoPillUSD').classList.toggle('active', cur === 'usd');
+  loadCryptoMarket();
+  if (_cryptoSelectedId) loadCryptoChart(_cryptoSelectedId);
+}
+
+function setCryptoFilter(filter) {
+  _cryptoFilter = filter;
+  ['todos','top10','l1','l2','defi','stablecoins'].forEach(f => {
+    const btn = document.getElementById('cryptoFilter' + f.charAt(0).toUpperCase() + f.slice(1));
+    if (btn) btn.classList.toggle('active', f === filter);
+  });
+  _renderCryptoTable();
+  _renderCryptoSelectorList();
+}
+
+function setCryptoPeriod(days) {
+  _cryptoPeriod = days;
+  [7,30,90,365].forEach(d => {
+    const btn = document.getElementById('cryptoPeriod' + d);
+    if (btn) btn.classList.toggle('active', d === days);
+  });
+  if (_cryptoSelectedId) loadCryptoChart(_cryptoSelectedId);
+}
+
+function setCryptoChartType(type) {
+  _cryptoChartType = type;
+  document.getElementById('cryptoTypeCandle').classList.toggle('active', type === 'candle');
+  document.getElementById('cryptoTypeLine').classList.toggle('active', type === 'line');
+  if (_cryptoSelectedId) loadCryptoChart(_cryptoSelectedId);
+}
+
+function sortCryptoTable(key) {
+  if (_cryptoSortKey === key) { _cryptoSortDir *= -1; }
+  else { _cryptoSortKey = key; _cryptoSortDir = -1; }
+  // Update header styles
+  ['name','price','chg24','chg7','mcap','vol'].forEach(k => {
+    const th = document.getElementById('cryptoTh' + k.charAt(0).toUpperCase() + k.slice(1));
+    if (!th) return;
+    th.classList.remove('sort-asc','sort-desc');
+    if (k === _cryptoSortKey) th.classList.add(_cryptoSortDir === -1 ? 'sort-desc' : 'sort-asc');
+  });
+  _renderCryptoTable();
+}
+
+function _getSortValue(coin, key) {
+  switch(key) {
+    case 'name':  return coin.name.toLowerCase();
+    case 'price': return coin.current_price || 0;
+    case 'chg24': return coin.price_change_percentage_24h || 0;
+    case 'chg7':  return coin.price_change_percentage_7d_in_currency || 0;
+    case 'mcap':  return coin.market_cap || 0;
+    case 'vol':   return coin.total_volume || 0;
+    default: return 0;
+  }
+}
+
+function _renderCryptoTableSkeleton() {
+  const tbody = document.getElementById('cryptoTableBody');
+  if (!tbody) return;
+  tbody.innerHTML = Array.from({length:10}, () => `
+    <tr class="crypto-skeleton-row">
+      <td><div class="crypto-skeleton-bar" style="width:18px"></div></td>
+      <td><div style="display:flex;align-items:center;gap:10px">
+        <div class="crypto-skeleton-bar" style="width:28px;height:28px;border-radius:50%"></div>
+        <div class="crypto-skeleton-bar" style="width:100px"></div>
+      </div></td>
+      <td><div class="crypto-skeleton-bar" style="width:80px;margin-left:auto"></div></td>
+      <td><div class="crypto-skeleton-bar" style="width:50px;margin-left:auto"></div></td>
+      <td><div class="crypto-skeleton-bar" style="width:50px;margin-left:auto"></div></td>
+      <td class="crypto-mcap-col"><div class="crypto-skeleton-bar" style="width:70px;margin-left:auto"></div></td>
+      <td class="crypto-vol-col"><div class="crypto-skeleton-bar" style="width:70px;margin-left:auto"></div></td>
+      <td class="crypto-sparkline-cell"></td>
+    </tr>`).join('');
+}
+
+function _renderCryptoTable() {
+  const tbody = document.getElementById('cryptoTableBody');
+  const countEl = document.getElementById('cryptoTableCount');
+  if (!tbody) return;
+  const data = _cryptoFilterData([..._cryptoData]);
+  // Sort
+  data.sort((a,b) => {
+    const va = _getSortValue(a, _cryptoSortKey);
+    const vb = _getSortValue(b, _cryptoSortKey);
+    return _cryptoSortDir * (va > vb ? 1 : va < vb ? -1 : 0);
+  });
+  if (countEl) countEl.textContent = data.length + ' activos';
+  const cur = _cryptoCurrency;
+  tbody.innerHTML = data.map((coin, i) => {
+    const chg24 = coin.price_change_percentage_24h || 0;
+    const chg7  = coin.price_change_percentage_7d_in_currency || 0;
+    const sym   = _cryptoSymbol(coin.id, coin.symbol);
+    const sparkSvg = _buildSparklineSvg(coin.sparkline_in_7d?.price || [], chg7 >= 0);
+    return `<tr onclick="loadCryptoChart('${coin.id}')" style="cursor:pointer">
+      <td><span class="crypto-rank">${coin.market_cap_rank || i+1}</span></td>
+      <td>
+        <div class="crypto-coin-cell">
+          <img class="crypto-coin-logo" src="${coin.image}" alt="${sym}" loading="lazy" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22><circle cx=%2212%22 cy=%2212%22 r=%2212%22 fill=%22%232a3050%22/><text x=%2212%22 y=%2216%22 text-anchor=%22middle%22 font-size=%2210%22 fill=%22%2394a3b8%22>${sym.charAt(0)}</text></svg>'">
+          <div class="crypto-coin-info">
+            <span class="crypto-coin-name">${coin.name}</span>
+            <span class="crypto-coin-symbol">${sym}</span>
+          </div>
+        </div>
+      </td>
+      <td><span class="crypto-price-cell">${_fmtCryptoPrice(coin.current_price, cur)}</span></td>
+      <td><span class="crypto-chg-cell ${chg24>=0?'pos':'neg'}">${chg24>=0?'+':''}${chg24.toFixed(2)}%</span></td>
+      <td><span class="crypto-chg-cell ${chg7>=0?'pos':'neg'}">${chg7>=0?'+':''}${chg7.toFixed(2)}%</span></td>
+      <td class="crypto-mcap-col"><span class="crypto-mcap-cell">${cur==='eur'?'€':'$'}${_fmtCryptoLarge(coin.market_cap)}</span></td>
+      <td class="crypto-vol-col"><span class="crypto-vol-cell">${cur==='eur'?'€':'$'}${_fmtCryptoLarge(coin.total_volume)}</span></td>
+      <td class="crypto-sparkline-cell"><div class="crypto-sparkline-wrap">${sparkSvg}</div></td>
+    </tr>`;
+  }).join('');
+}
+
+function _buildSparklineSvg(prices, isUp) {
+  if (!prices || prices.length < 2) return '<svg width="80" height="32"></svg>';
+  const color = isUp ? '#10B981' : '#EF4444';
+  const w = 80, h = 32, pad = 2;
+  const min = Math.min(...prices), max = Math.max(...prices);
+  const range = max - min || 1;
+  const pts = prices.map((p, i) => {
+    const x = pad + (i / (prices.length - 1)) * (w - 2*pad);
+    const y = pad + (1 - (p - min) / range) * (h - 2*pad);
+    return `${x.toFixed(1)},${y.toFixed(1)}`;
+  }).join(' ');
+  return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">
+    <polyline points="${pts}" fill="none" stroke="${color}" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>
+  </svg>`;
+}
+
+function _renderCryptoSelectorList() {
+  const list = document.getElementById('cryptoSelectorList');
+  if (!list) return;
+  const data = _cryptoFilterData([..._cryptoData]);
+  const cur = _cryptoCurrency;
+  list.innerHTML = data.map(coin => {
+    const chg24 = coin.price_change_percentage_24h || 0;
+    const sym = _cryptoSymbol(coin.id, coin.symbol);
+    return `<div class="crypto-sel-row ${coin.id === _cryptoSelectedId ? 'active' : ''}"
+                 onclick="loadCryptoChart('${coin.id}')">
+      <img class="crypto-sel-logo" src="${coin.image}" alt="${sym}" loading="lazy" onerror="this.style.visibility='hidden'">
+      <div class="crypto-sel-info">
+        <span class="crypto-sel-name">${coin.name}</span>
+        <span class="crypto-sel-symbol">${sym}</span>
+      </div>
+      <div class="crypto-sel-price">
+        <div class="crypto-sel-price-val">${_fmtCryptoPrice(coin.current_price, cur)}</div>
+        <div class="crypto-sel-change ${chg24>=0?'pos':'neg'}">${chg24>=0?'+':''}${chg24.toFixed(2)}%</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function loadCryptoChart(coinId) {
+  _cryptoSelectedId = coinId;
+  // Update active state en selector y tabla
+  document.querySelectorAll('.crypto-sel-row').forEach(el => {
+    el.classList.toggle('active', el.getAttribute('onclick')?.includes(`'${coinId}'`));
+  });
+  // Actualizar header del chart con datos del coin
+  const coin = _cryptoData.find(c => c.id === coinId);
+  if (coin) {
+    const sym = _cryptoSymbol(coin.id, coin.symbol);
+    const chg24 = coin.price_change_percentage_24h || 0;
+    const logoEl = document.getElementById('cryptoChartLogo');
+    const nameEl = document.getElementById('cryptoChartName');
+    const symEl  = document.getElementById('cryptoChartSymbol');
+    const priceEl = document.getElementById('cryptoChartPrice');
+    const chgEl  = document.getElementById('cryptoChartChange');
+    if (logoEl)  { logoEl.src = coin.image; logoEl.style.display = 'block'; }
+    if (nameEl)  nameEl.textContent = coin.name;
+    if (symEl)   symEl.textContent = sym;
+    if (priceEl) priceEl.textContent = _fmtCryptoPrice(coin.current_price, _cryptoCurrency);
+    if (chgEl) {
+      chgEl.textContent = (chg24>=0?'+':'') + chg24.toFixed(2) + '%';
+      chgEl.className = 'crypto-chart-change ' + (chg24>=0?'pos':'neg');
+    }
+  }
+  // Mostrar spinner
+  const body = document.getElementById('cryptoChartBody');
+  if (body) body.innerHTML = `<div class="crypto-chart-loading" id="cryptoChartLoading"><div class="crypto-chart-spinner"></div><span>Cargando gráfico…</span></div>`;
+  try {
+    // CoinGecko OHLC endpoint
+    const url = `${CRYPTO_API}/coins/${coinId}/ohlc?vs_currency=${_cryptoCurrency}&days=${_cryptoPeriod}`;
+    const res = await fetch(url, { signal: AbortSignal.timeout(12000) });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const raw = await res.json();
+    if (!Array.isArray(raw) || raw.length === 0) throw new Error('Sin datos OHLC');
+    // raw = [[timestamp_ms, open, high, low, close], ...]
+    const ohlcData = raw.map(([t, o, h, l, c]) => ({
+      time: Math.floor(t / 1000),
+      open: o, high: h, low: l, close: c,
+    }));
+    // Para líneas usamos close
+    const lineData = ohlcData.map(d => ({ time: d.time, value: d.close }));
+    _buildCryptoChart(body, ohlcData, lineData);
+  } catch(e) {
+    if (body) body.innerHTML = `<div class="crypto-chart-loading">
+      <div style="font-size:1.5rem">⚠️</div>
+      <span>No se pudo cargar el gráfico</span>
+      <span style="font-size:.72rem;color:var(--text3)">${e.message}</span>
+    </div>`;
+  }
+}
+
+function _buildCryptoChart(container, ohlcData, lineData) {
+  // Destruir chart anterior
+  if (_cryptoChart) { try { _cryptoChart.remove(); } catch(_){} _cryptoChart = null; _cryptoSeries = null; }
+  container.innerHTML = '';
+  const w = container.offsetWidth || 600;
+  const h = Math.max(container.offsetHeight || 0, 270);
+  _cryptoChart = LightweightCharts.createChart(container, {
+    width: w, height: h,
+    layout: { background: { color: '#1a1f35' }, textColor: '#94a3b8' },
+    grid:   { vertLines: { color: '#2a3050' }, horzLines: { color: '#2a3050' } },
+    crosshair: { mode: LightweightCharts.CrosshairMode.Normal },
+    rightPriceScale: { borderColor: '#2a3050' },
+    timeScale: { borderColor: '#2a3050', timeVisible: true },
+    handleScroll: true, handleScale: true,
+  });
+  if (_cryptoChartType === 'candle') {
+    _cryptoSeries = _cryptoChart.addCandlestickSeries({
+      upColor:'#10B981', downColor:'#EF4444',
+      borderUpColor:'#10B981', borderDownColor:'#EF4444',
+      wickUpColor:'#10B981', wickDownColor:'#EF4444',
+    });
+    _cryptoSeries.setData(ohlcData);
+  } else {
+    _cryptoSeries = _cryptoChart.addAreaSeries({
+      lineColor: '#2563EB', topColor: 'rgba(37,99,235,0.3)', bottomColor: 'rgba(37,99,235,0.02)',
+      lineWidth: 2,
+    });
+    _cryptoSeries.setData(lineData);
+  }
+  _cryptoChart.timeScale().fitContent();
+  // Resize observer
+  if (window.ResizeObserver) {
+    const ro = new ResizeObserver(() => {
+      if (_cryptoChart) {
+        const newW = container.offsetWidth;
+        if (newW > 0) _cryptoChart.applyOptions({ width: newW });
+      }
+    });
+    ro.observe(container);
+  }
 }
 
 // ================================================================
