@@ -773,6 +773,25 @@ tr:hover td{background:rgba(255,255,255,.02)}
 }
 .btn-load-quotes:hover{background:rgba(37,99,235,.22)}
 .btn-load-quotes:disabled{opacity:.5;cursor:not-allowed}
+/* Buscador de cotizaciones */
+.quote-search-wrap{display:flex;align-items:center;gap:0;border:1px solid var(--border);border-radius:7px;overflow:hidden;background:var(--bg2);transition:border-color .15s}
+.quote-search-wrap:focus-within{border-color:var(--accent)}
+.quote-search-input{background:transparent;border:none;outline:none;padding:5px 10px;font-size:.78rem;color:var(--text);font-family:var(--font);width:150px;transition:width .2s}
+.quote-search-input::placeholder{color:var(--text3)}
+.quote-search-input:focus{width:190px}
+.quote-search-btn{padding:5px 10px;background:transparent;border:none;border-left:1px solid var(--border);cursor:pointer;color:var(--text2);font-size:.78rem;transition:.15s;display:flex;align-items:center}
+.quote-search-btn:hover{background:rgba(37,99,235,.15);color:var(--accent)}
+.quote-search-btn:disabled{opacity:.5;cursor:not-allowed}
+/* Resultados de búsqueda */
+.quote-search-results{display:none;margin-bottom:12px}
+.quote-search-results-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;padding:0 2px}
+.quote-search-results-label{font-size:.72rem;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.4px}
+.quote-search-results-clear{font-size:.72rem;color:var(--text3);cursor:pointer;background:none;border:none;font-family:var(--font);padding:2px 6px;border-radius:4px;transition:.12s}
+.quote-search-results-clear:hover{color:var(--red);background:rgba(239,68,68,.1)}
+.sq-result-card{position:relative}
+.sq-remove-btn{position:absolute;top:6px;right:6px;width:18px;height:18px;border-radius:50%;background:rgba(239,68,68,.15);border:none;color:var(--red);font-size:.65rem;cursor:pointer;display:none;align-items:center;justify-content:center;line-height:1;padding:0}
+.sq-result-card:hover .sq-remove-btn{display:flex}
+.sq-badge{display:inline-block;font-size:.58rem;font-weight:700;color:var(--accent);background:rgba(37,99,235,.12);border:1px solid rgba(37,99,235,.25);border-radius:3px;padding:1px 5px;margin-top:2px;text-transform:uppercase}
 .chevron{transition:transform .2s;font-size:.75rem;color:var(--text3)}
 .chevron.open{transform:rotate(180deg)}
 .constituents-body{display:none;padding:16px 20px}
@@ -2102,12 +2121,29 @@ tr:hover td{background:rgba(255,255,255,.02)}
             <span id="constituentsTitle">Componentes del Índice</span>
           </div>
           <div class="constituents-header-right">
+            <div class="quote-search-wrap" onclick="event.stopPropagation()">
+              <input class="quote-search-input" id="quoteSearchInput" type="text"
+                     placeholder="Buscar ticker… AAPL, TSLA"
+                     onkeydown="if(event.key==='Enter')searchQuoteTicker()"
+                     autocomplete="off" autocapitalize="characters" spellcheck="false">
+              <button class="quote-search-btn" id="btnSearchQuote" onclick="event.stopPropagation();searchQuoteTicker()" title="Buscar cotización">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              </button>
+            </div>
             <button class="btn-load-quotes" id="btnLoadQuotes" onclick="event.stopPropagation();loadConstituentQuotes()">⚡ Cargar cotizaciones</button>
             <span class="chevron" id="chevron">▼</span>
           </div>
         </div>
         <div class="constituents-body" id="constituentsBody">
           <p class="constituents-note" id="constituentsNote"></p>
+          <!-- Resultados de búsqueda de cotizaciones -->
+          <div class="quote-search-results" id="quoteSearchResults">
+            <div class="quote-search-results-header">
+              <span class="quote-search-results-label">🔍 Resultados de búsqueda</span>
+              <button class="quote-search-results-clear" onclick="clearQuoteSearchResults()">✕ Limpiar</button>
+            </div>
+            <div class="constituents-grid" id="quoteSearchGrid"></div>
+          </div>
           <div class="constituents-grid" id="constituentsGrid"></div>
         </div>
       </div>
@@ -4436,6 +4472,11 @@ function renderConstituents(symbol) {
   const panel = document.getElementById('constituentsPanel');
   if (!cfg || !panel) return;
 
+  // Limpiar resultados de búsqueda al cambiar de índice
+  clearQuoteSearchResults();
+  const searchInput = document.getElementById('quoteSearchInput');
+  if (searchInput) searchInput.value = '';
+
   document.getElementById('constituentsTitle').textContent = cfg.label;
   document.getElementById('constituentsNote').textContent =
     'Haz clic en "Cargar cotizaciones" para obtener precios en tiempo real.';
@@ -4507,6 +4548,127 @@ async function loadConstituentQuotes() {
     toast('Error cargando cotizaciones', 'err');
     if (btn) { btn.textContent = '⚡ Cargar cotizaciones'; btn.disabled = false; }
   }
+}
+
+// ================================================================
+// BUSCADOR DE COTIZACIONES (campo junto a "Cargar cotizaciones")
+// ================================================================
+
+async function searchQuoteTicker() {
+  const input = document.getElementById('quoteSearchInput');
+  const raw   = input?.value?.trim();
+  if (!raw) { input?.focus(); return; }
+
+  // Soporta múltiples tickers separados por coma/espacio
+  const tickers = raw.toUpperCase().split(/[\s,;]+/).filter(Boolean).join(',');
+
+  const btn = document.getElementById('btnSearchQuote');
+  if (btn) btn.disabled = true;
+
+  try {
+    const res = await fetch(
+      `${API_BASE}/quotes?symbols=${encodeURIComponent(tickers)}`,
+      { headers: { 'x-api-key': apiKey() }, signal: AbortSignal.timeout(10000) }
+    );
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+    const quotes = data.quotes || [];
+
+    if (quotes.length === 0) {
+      toast('No se encontraron cotizaciones para: ' + raw, 'err');
+      return;
+    }
+
+    // Abre el panel si estaba cerrado
+    const body = document.getElementById('constituentsBody');
+    const chev = document.getElementById('chevron');
+    if (!body.classList.contains('open')) {
+      body.classList.add('open');
+      if (chev) chev.classList.add('open');
+      _constituentOpen = true;
+    }
+
+    quotes.forEach(q => _addSearchResultCard(q));
+    if (input) input.value = '';
+
+    // Scroll suave hasta los resultados
+    document.getElementById('quoteSearchResults')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+  } catch(e) {
+    toast('Error buscando cotización: ' + e.message, 'err');
+  } finally {
+    if (btn) btn.disabled = false;
+  }
+}
+
+function _addSearchResultCard(q) {
+  const resultsSection = document.getElementById('quoteSearchResults');
+  const grid = document.getElementById('quoteSearchGrid');
+  if (!resultsSection || !grid) return;
+
+  const ticker  = q.symbol || '—';
+  const id      = ticker.replace(/[^a-zA-Z0-9]/g, '-');
+  const label   = ticker.includes('.') ? ticker.split('.')[0] : ticker;
+  const name    = q.name || q.shortName || ticker;
+  const safeName = name.replace(/'/g, "\\'");
+  const price   = q.price != null
+    ? q.price.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+    : '—';
+  const chgPct  = q.changePct;
+  const sign    = (chgPct || 0) >= 0 ? '+' : '';
+  const chgStr  = chgPct != null ? `${sign}${chgPct.toFixed(2)}%` : '';
+  const isUp    = (chgPct || 0) >= 0;
+  const logoEl  = _tickerLogoEl(ticker, label);
+
+  // Si ya existe esta tarjeta, actualizar sus valores
+  const existing = document.getElementById('sqr-' + id);
+  if (existing) {
+    const valEl = existing.querySelector('.c-price-val');
+    const chgEl = existing.querySelector('.c-price-chg');
+    if (valEl) valEl.textContent = price;
+    if (chgEl) { chgEl.textContent = chgStr; chgEl.className = 'c-price-chg ' + (isUp ? 'up' : 'dn'); }
+    existing.style.animation = 'none';
+    requestAnimationFrame(() => { existing.style.animation = ''; });
+    return;
+  }
+
+  const card = document.createElement('div');
+  card.className = 'constituent-card clickable sq-result-card';
+  card.id = 'sqr-' + id;
+  card.title = 'Ver gráfica de ' + name;
+  card.setAttribute('onclick', `openTickerChart('${ticker}','${safeName}')`);
+  card.innerHTML = `
+    ${logoEl}
+    <span class="c-ticker">${label}</span>
+    <div class="c-info">
+      <div class="c-name">${name}</div>
+      <div class="c-weight"><span class="sq-badge">Buscado</span></div>
+      <div class="c-chart-hint">📈 Ver gráfica</div>
+    </div>
+    <div class="c-price">
+      <span class="c-price-val">${price}</span>
+      <span class="c-price-chg ${isUp ? 'up' : 'dn'}">${chgStr}</span>
+    </div>
+    <button class="sq-remove-btn" title="Quitar"
+      onclick="event.stopPropagation();_removeSearchCard('${id}')">✕</button>
+  `;
+  grid.appendChild(card);
+  resultsSection.style.display = 'block';
+}
+
+function _removeSearchCard(id) {
+  document.getElementById('sqr-' + id)?.remove();
+  const grid = document.getElementById('quoteSearchGrid');
+  if (grid && grid.children.length === 0) {
+    document.getElementById('quoteSearchResults').style.display = 'none';
+  }
+}
+
+function clearQuoteSearchResults() {
+  const grid = document.getElementById('quoteSearchGrid');
+  if (grid) grid.innerHTML = '';
+  const section = document.getElementById('quoteSearchResults');
+  if (section) section.style.display = 'none';
 }
 
 // ================================================================
