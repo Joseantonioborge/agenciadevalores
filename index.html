@@ -1565,13 +1565,16 @@ tr:hover td{background:rgba(255,255,255,.02)}
       </div>
     </div>
 
-    <!-- Cambiar contraseña -->
+    <!-- Cambiar contraseña (colapsable) -->
     <div class="pp-card">
-      <div class="pp-card-title">
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-        <span data-i18n="cambiar_password">CAMBIAR CONTRASEÑA</span>
+      <div class="pp-card-title" onclick="toggleCpSection()" style="cursor:pointer;user-select:none;justify-content:space-between">
+        <span style="display:flex;align-items:center;gap:5px">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <span data-i18n="cambiar_password">CAMBIAR CONTRASEÑA</span>
+        </span>
+        <svg id="cpChevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="transition:transform .2s;color:var(--text3)"><polyline points="6 9 12 15 18 9"/></svg>
       </div>
-      <div style="display:flex;flex-direction:column;gap:7px">
+      <div id="cpSection" style="display:none;flex-direction:column;gap:7px;margin-top:8px">
         <div>
           <label id="cpOldLabel" style="font-size:.65rem;color:var(--text3);display:block;margin-bottom:3px" data-i18n="pass_actual">Contraseña actual</label>
           <input class="form-input" type="password" id="cpOld" placeholder="••••••••" style="padding:6px 10px;font-size:.78rem;height:auto">
@@ -2881,6 +2884,8 @@ function openPortalPanel() {
   document.getElementById('portalPanel').classList.add('open');
   document.getElementById('portalBackdrop').classList.add('open');
   document.getElementById('userBadge').classList.add('open');
+  const fb = document.getElementById('finbotBubble');
+  if (fb) { fb.style.visibility = 'hidden'; fb.style.pointerEvents = 'none'; }
   renderPortal();
 }
 
@@ -2888,6 +2893,8 @@ function closePortalPanel() {
   document.getElementById('portalPanel').classList.remove('open');
   document.getElementById('portalBackdrop').classList.remove('open');
   document.getElementById('userBadge').classList.remove('open');
+  const fb = document.getElementById('finbotBubble');
+  if (fb) { fb.style.visibility = ''; fb.style.pointerEvents = ''; }
 }
 
 function updateTime() {
@@ -4180,6 +4187,15 @@ function getGreeting() {
   if (h < 13) return 'Buenos días';
   if (h < 20) return 'Buenas tardes';
   return 'Buenas noches';
+}
+
+function toggleCpSection() {
+  const sec = document.getElementById('cpSection');
+  const chv = document.getElementById('cpChevron');
+  if (!sec) return;
+  const open = sec.style.display === 'flex';
+  sec.style.display = open ? 'none' : 'flex';
+  if (chv) chv.style.transform = open ? '' : 'rotate(180deg)';
 }
 
 async function changePassword() {
