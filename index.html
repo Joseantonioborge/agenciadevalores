@@ -6414,18 +6414,22 @@ document.getElementById('modalActivo').addEventListener('click',  e => { if (e.t
 // ================================================================
 
 function _calcIC_at(capital, aportacion, m, r, n) {
-  // Valor futuro del capital inicial
+  // Valor futuro del capital inicial (con interés compuesto anual)
   const fvCapital = capital * Math.pow(1 + r, n);
-  // Valor futuro de aportaciones periódicas (anualidad ordinaria al final de período)
+  // Valor futuro de aportaciones periódicas (anualidad ordinaria, capitalización subperiódica)
   const rM = r / m;
-  const nM = n * m;
+  const nM = n * m;                    // total de períodos de aportación
   const fvAportaciones = rM > 0
     ? aportacion * ((Math.pow(1 + rM, nM) - 1) / rM)
     : aportacion * nM;
-  const total         = fvCapital + fvAportaciones;
-  const totalDepositado = capital + aportacion * nM;
-  const intereses     = total - totalDepositado;
-  return { total, fvCapital, totalAportado: aportacion * nM, intereses, totalDepositado };
+  const total           = fvCapital + fvAportaciones;
+  const totalAportado   = aportacion * nM;           // importe nominal aportado (sin intereses)
+  const totalDepositado = capital + totalAportado;    // todo lo depositado (sin intereses)
+  const intereses       = total - totalDepositado;    // beneficio neto = todo lo generado
+
+  // Para el desglose del gráfico y tarjetas los tres segmentos suman exactamente `total`:
+  //   capital (nominal) + totalAportado (nominal) + intereses = total  ✓
+  return { total, fvCapital, totalAportado, intereses, totalDepositado };
 }
 
 function _fmtCalc(n) {
@@ -6454,8 +6458,10 @@ function calcIC() {
 
   // Render milestone cards
   const renderMilestone = (años, cls) => {
-    const { total, fvCapital, totalAportado, intereses } = _calcIC_at(capital, aportacion, m, tasa, años);
-    const pctBenefit = total > 0 ? intereses / total * 100 : 0;
+    const { total, totalAportado, intereses } = _calcIC_at(capital, aportacion, m, tasa, años);
+    const pctBenefit  = total > 0 ? intereses / total * 100 : 0;
+    const totalDepos  = capital + totalAportado;   // lo que el inversor ha depositado realmente
+    // Verificación: capital + totalAportado + intereses debe = total (con posible error float ínfimo)
     return `
       <div class="calc-milestone${cls ? ' ' + cls : ''}">
         <div class="calc-ms-label">${años} año${años !== 1 ? 's' : ''}</div>
@@ -6463,19 +6469,19 @@ function calcIC() {
         <div class="calc-ms-breakdown">
           <div class="calc-ms-row">
             <span class="calc-ms-name"><span class="calc-ms-dot" style="background:#2563EB"></span>Capital inicial</span>
-            <span class="calc-ms-val">${_fmtCalc(fvCapital)}</span>
+            <span class="calc-ms-val">${_fmtCalc(capital)}</span>
           </div>
           <div class="calc-ms-row">
             <span class="calc-ms-name"><span class="calc-ms-dot" style="background:#10B981"></span>Aportaciones</span>
             <span class="calc-ms-val">${_fmtCalc(totalAportado)}</span>
           </div>
           <div class="calc-ms-row">
-            <span class="calc-ms-name"><span class="calc-ms-dot" style="background:#F59E0B"></span>Intereses</span>
+            <span class="calc-ms-name"><span class="calc-ms-dot" style="background:#F59E0B"></span>Intereses generados</span>
             <span class="calc-ms-val gold">${_fmtCalc(intereses)}</span>
           </div>
           <div class="calc-ms-row" style="margin-top:3px;padding-top:5px;border-top:1px solid var(--border)">
-            <span class="calc-ms-name" style="color:var(--text3)">% del total son intereses</span>
-            <span class="calc-ms-val gold">${pctBenefit.toFixed(1)}%</span>
+            <span class="calc-ms-name" style="color:var(--text3)">Rentabilidad sobre depositado</span>
+            <span class="calc-ms-val gold">${totalDepos > 0 ? (intereses / totalDepos * 100).toFixed(1) : '0.0'}%</span>
           </div>
         </div>
       </div>`;
@@ -6520,8 +6526,9 @@ function _drawCalcChart(capital, aportacion, m, tasa, maxAnos, progress) {
   years.push(maxAnos);
 
   const data = years.map(y => {
-    const { fvCapital, totalAportado, intereses } = _calcIC_at(capital, aportacion, m, tasa, y);
-    return { year: y, cap: Math.max(0, fvCapital), ap: Math.max(0, totalAportado), int: Math.max(0, intereses) };
+    const { totalAportado, intereses } = _calcIC_at(capital, aportacion, m, tasa, y);
+    // Segmentos: capital nominal + aportaciones nominales + intereses = total (exacto)
+    return { year: y, cap: Math.max(0, capital), ap: Math.max(0, totalAportado), int: Math.max(0, intereses) };
   });
 
   const maxVal = Math.max(...data.map(d => d.cap + d.ap + d.int), 1);
