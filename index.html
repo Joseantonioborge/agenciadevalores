@@ -318,28 +318,50 @@ main{padding-top:60px}
   overflow-y:auto;scrollbar-width:none;
 }
 #invSidebar::-webkit-scrollbar{display:none}
-#invSidebar.collapsed{width:58px;overflow:hidden}
+#invSidebar.collapsed{width:54px;overflow:hidden}
 #invContent{flex:1;min-width:0;padding-left:18px}
+
+/* ── Header ── */
 .inv-sidebar-header{
   display:flex;align-items:center;justify-content:space-between;
-  padding:14px 14px 10px;border-bottom:1px solid var(--border);
-  gap:8px;
+  padding:13px 12px 11px;border-bottom:1px solid var(--border);
+  gap:8px;cursor:pointer;
+  transition:background .15s;
 }
+.inv-sidebar-header:hover{background:rgba(255,255,255,.03)}
 .inv-sidebar-label{
-  font-size:.65rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;
-  color:var(--text2);white-space:nowrap;overflow:hidden;
-  transition:opacity .2s,max-width .28s;max-width:160px;
+  font-size:.63rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--text2);white-space:nowrap;
+  transition:opacity .22s,max-width .28s;max-width:160px;overflow:hidden;
 }
-#invSidebar.collapsed .inv-sidebar-label{opacity:0;max-width:0}
+#invSidebar.collapsed .inv-sidebar-label{opacity:0;max-width:0;pointer-events:none}
+
+/* Toggle button */
 .inv-sidebar-toggle{
-  width:28px;height:28px;flex-shrink:0;
-  background:transparent;border:1px solid var(--border);border-radius:7px;
-  cursor:pointer;color:var(--text2);font-size:.9rem;
+  width:30px;height:30px;flex-shrink:0;
+  background:transparent;border:1px solid var(--border);border-radius:8px;
+  cursor:pointer;color:var(--text2);font-size:.95rem;
   display:flex;align-items:center;justify-content:center;
-  transition:background .15s,color .15s;
+  transition:background .18s,color .18s,border-color .18s,box-shadow .18s;
 }
 .inv-sidebar-toggle:hover{background:var(--hover);color:var(--text)}
-.inv-sidebar-nav{display:flex;flex-direction:column;padding:8px 0 10px}
+
+/* Collapsed: botón centrado, llamativo */
+#invSidebar.collapsed .inv-sidebar-header{
+  justify-content:center;padding:13px 0 11px;
+}
+#invSidebar.collapsed .inv-sidebar-toggle{
+  width:34px;height:34px;font-size:1.05rem;
+  background:rgba(37,99,235,.15);
+  border-color:var(--accent);color:var(--accent);
+  box-shadow:0 0 0 2px rgba(37,99,235,.18);
+}
+#invSidebar.collapsed .inv-sidebar-toggle:hover{
+  background:rgba(37,99,235,.28);box-shadow:0 0 0 3px rgba(37,99,235,.28);
+}
+
+/* Nav */
+.inv-sidebar-nav{display:flex;flex-direction:column;padding:6px 0 10px}
 .inv-tab{
   display:flex;align-items:center;gap:11px;
   padding:10px 14px;border:none;background:transparent;cursor:pointer;
@@ -347,9 +369,22 @@ main{padding-top:60px}
   text-align:left;white-space:nowrap;overflow:hidden;
   transition:background .15s,color .15s;border-radius:0;width:100%;
 }
-.inv-tab-icon{font-size:1rem;flex-shrink:0;width:22px;text-align:center}
+.inv-tab-icon{font-size:1.05rem;flex-shrink:0;width:22px;text-align:center;transition:transform .15s}
 .inv-tab-label{overflow:hidden;transition:opacity .2s,max-width .28s;max-width:180px}
 #invSidebar.collapsed .inv-tab-label{opacity:0;max-width:0}
+#invSidebar.collapsed .inv-tab{padding:10px 0;justify-content:center;gap:0}
+#invSidebar.collapsed .inv-tab:hover .inv-tab-icon{transform:scale(1.18)}
+/* Tooltip de nombre al hover en modo colapsado */
+#invSidebar.collapsed .inv-tab{position:relative}
+#invSidebar.collapsed .inv-tab::after{
+  content:attr(data-label);
+  position:absolute;left:calc(100% + 10px);top:50%;transform:translateY(-50%);
+  background:var(--card);border:1px solid var(--border);border-radius:7px;
+  padding:5px 10px;font-size:.75rem;color:var(--text);white-space:nowrap;
+  pointer-events:none;opacity:0;transition:opacity .15s;z-index:200;
+  box-shadow:0 4px 12px rgba(0,0,0,.35);
+}
+#invSidebar.collapsed .inv-tab:hover::after{opacity:1}
 .inv-tab:hover{background:var(--hover);color:var(--text2)}
 .inv-tab.active{background:rgba(37,99,235,.12);color:var(--accent);font-weight:600}
 .inv-tab.active .inv-tab-icon{filter:none}
@@ -1745,19 +1780,19 @@ tr:hover td{background:rgba(255,255,255,.02)}
 
     <!-- ── Sidebar de navegación ── -->
     <nav id="invSidebar">
-      <div class="inv-sidebar-header">
+      <div class="inv-sidebar-header" onclick="toggleInvSidebar()">
         <span class="inv-sidebar-label">Menú Principal</span>
-        <button class="inv-sidebar-toggle" id="invSidebarToggle" onclick="toggleInvSidebar()" title="Colapsar menú">☰</button>
+        <button class="inv-sidebar-toggle" id="invSidebarToggle" title="Colapsar menú" onclick="event.stopPropagation();toggleInvSidebar()">☰</button>
       </div>
       <div class="inv-sidebar-nav">
-        <button class="inv-tab active" id="invTabMercados"    onclick="switchInvTab('mercados')">    <span class="inv-tab-icon">📊</span><span class="inv-tab-label" data-i18n="tab_mercados">Mis Mercados</span></button>
-        <button class="inv-tab"        id="invTabCarteras"    onclick="switchInvTab('carteras')">    <span class="inv-tab-icon">💼</span><span class="inv-tab-label" data-i18n="tab_carteras">Mis Inversiones</span></button>
-        <button class="inv-tab"        id="invTabAnalisis"    onclick="switchInvTab('analisis')">    <span class="inv-tab-icon">📰</span><span class="inv-tab-label" data-i18n="tab_analisis">Análisis</span></button>
-        <button class="inv-tab"        id="invTabTrading"     onclick="switchInvTab('trading')">     <span class="inv-tab-icon">🎯</span><span class="inv-tab-label" data-i18n="tab_trading">Inside Trading</span></button>
-        <button class="inv-tab"        id="invTabCrypto"      onclick="switchInvTab('crypto')">      <span class="inv-tab-icon">₿</span><span class="inv-tab-label" data-i18n="tab_crypto">Crypto</span></button>
-        <button class="inv-tab"        id="invTabFondos"      onclick="switchInvTab('fondos')">      <span class="inv-tab-icon">📂</span><span class="inv-tab-label" data-i18n="tab_fondos">Comparador de Fondos</span></button>
-        <button class="inv-tab"        id="invTabBancos"      onclick="switchInvTab('bancos')">      <span class="inv-tab-icon">🏦</span><span class="inv-tab-label" data-i18n="tab_bancos">Entidades Financieras</span></button>
-        <button class="inv-tab"        id="invTabCalculadora" onclick="switchInvTab('calculadora')"> <span class="inv-tab-icon">🧮</span><span class="inv-tab-label" data-i18n="tab_calculadora">Calculadora</span></button>
+        <button class="inv-tab active" id="invTabMercados"    data-label="Mis Mercados"          onclick="switchInvTab('mercados')">    <span class="inv-tab-icon">📊</span><span class="inv-tab-label" data-i18n="tab_mercados">Mis Mercados</span></button>
+        <button class="inv-tab"        id="invTabCarteras"    data-label="Mis Inversiones"        onclick="switchInvTab('carteras')">    <span class="inv-tab-icon">💼</span><span class="inv-tab-label" data-i18n="tab_carteras">Mis Inversiones</span></button>
+        <button class="inv-tab"        id="invTabAnalisis"    data-label="Análisis"               onclick="switchInvTab('analisis')">    <span class="inv-tab-icon">📰</span><span class="inv-tab-label" data-i18n="tab_analisis">Análisis</span></button>
+        <button class="inv-tab"        id="invTabTrading"     data-label="Inside Trading"         onclick="switchInvTab('trading')">     <span class="inv-tab-icon">🎯</span><span class="inv-tab-label" data-i18n="tab_trading">Inside Trading</span></button>
+        <button class="inv-tab"        id="invTabCrypto"      data-label="Crypto"                 onclick="switchInvTab('crypto')">      <span class="inv-tab-icon">₿</span><span class="inv-tab-label" data-i18n="tab_crypto">Crypto</span></button>
+        <button class="inv-tab"        id="invTabFondos"      data-label="Comparador de Fondos"   onclick="switchInvTab('fondos')">      <span class="inv-tab-icon">📂</span><span class="inv-tab-label" data-i18n="tab_fondos">Comparador de Fondos</span></button>
+        <button class="inv-tab"        id="invTabBancos"      data-label="Entidades Financieras"  onclick="switchInvTab('bancos')">      <span class="inv-tab-icon">🏦</span><span class="inv-tab-label" data-i18n="tab_bancos">Entidades Financieras</span></button>
+        <button class="inv-tab"        id="invTabCalculadora" data-label="Calculadora"            onclick="switchInvTab('calculadora')"> <span class="inv-tab-icon">🧮</span><span class="inv-tab-label" data-i18n="tab_calculadora">Calculadora</span></button>
       </div>
     </nav>
 
@@ -4206,7 +4241,10 @@ function toggleInvSidebar() {
   if (!sb) return;
   _sidebarCollapsed = !_sidebarCollapsed;
   sb.classList.toggle('collapsed', _sidebarCollapsed);
-  if (btn) btn.title = _sidebarCollapsed ? 'Expandir menú' : 'Colapsar menú';
+  if (btn) {
+    btn.innerHTML    = _sidebarCollapsed ? '▶' : '☰';
+    btn.title        = _sidebarCollapsed ? 'Expandir menú' : 'Colapsar menú';
+  }
 }
 
 function switchInvTab(tab) {
