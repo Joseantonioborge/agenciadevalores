@@ -1,7 +1,8 @@
-// api/chat.js — FinBot v2.0: asistente financiero IA con herramientas en tiempo real
-// POST /api/chat  { message, username, portfolioContext }  →  { ok, reply, toolsUsed }
-// GET  /api/chat?username=X                                →  { ok, messages }
-// DELETE /api/chat?username=X                             →  { ok }
+// api/chat.js — FinBot v3.0: asistente financiero IA con herramientas + contexto enriquecido
+// POST /api/chat  { message, username, portfolioContext, marketContext, insideTradingContext, cryptoContext, fundsContext }
+//                →  { ok, reply, toolsUsed }
+// GET  /api/chat?username=X  →  { ok, messages }
+// DELETE /api/chat?username=X  →  { ok }
 
 const Anthropic                   = require('@anthropic-ai/sdk');
 const { requireRole }             = require('../lib/auth');
@@ -295,29 +296,46 @@ async function executeTool(name, input) {
 }
 
 // ── SYSTEM PROMPT ──────────────────────────────────────────────────────────
-function buildSystem(portfolioCtx) {
+function buildSystem({ portfolioCtx, marketCtx, insideTradingCtx, cryptoCtx, fundsCtx } = {}) {
   let sys = `Eres **FinBot**, el asistente financiero IA de **Agencia de Valores Generación Z**. Ayudas a inversores minoristas españoles a tomar mejores decisiones de inversión.
 
-## Capacidades
-Tienes acceso a herramientas en tiempo real que DEBES usar proactivamente:
+## Capacidades y herramientas
+Tienes acceso a herramientas en tiempo real que DEBES usar proactivamente cuando no dispongas ya del dato en contexto:
 - **get_market_data**: cotizaciones de los 9 índices globales en tiempo real
 - **get_stock_quotes**: precio de cualquier acción o ETF (tickers Yahoo Finance)
 - **get_financial_news**: noticias financieras recientes
 - **get_technical_analysis**: RSI, MACD, medias móviles, señales y **escenarios futuros** (alcista/base/bajista)
 - **search_investment_funds**: base de datos de 90 fondos (50 nacionales CNMV + 40 internacionales CSSF/CBI)
 
+Además, el portal ya te proporciona contexto pre-cargado (ver secciones abajo) con datos actuales del usuario. **Úsalo directamente** antes de llamar a herramientas externas para datos que ya están disponibles.
+
 ## Reglas
 - Responde SIEMPRE en español, con formato markdown claro
-- Usa las herramientas antes de responder preguntas sobre mercados, precios o fondos — no alucines datos
-- Para preguntas sobre tendencias futuras: usa get_technical_analysis y presenta los 3 escenarios (alcista/base/bajista) con probabilidades cualitativas
-- Sé conciso pero completo (máximo 400 palabras). Usa emojis con moderación para facilitar la lectura
-- Al dar escenarios futuros, explica los catalizadores y riesgos de cada uno
+- Si tienes el dato en el contexto pre-cargado (mercados, crypto, Inside Trading, fondos, cartera), úsalo directamente sin llamar a herramientas externas redundantes
+- Usa las herramientas para enriquecer o ampliar cuando el contexto no sea suficiente
+- Para tendencias futuras: presenta 3 escenarios (alcista/base/bajista) con probabilidades cualitativas y catalizadores
+- Sé conciso pero completo (máximo 450 palabras). Usa emojis con moderación
+- Para el **AV Macro Signal**: explica la lectura (score -100 a +100), las categorías más destacadas y cómo puede afectar a la cartera del usuario
+- Para **crypto**: analiza tendencia, dominancia de BTC, correlación con mercados tradicionales
+- Para **fondos**: siempre incluye TER, rentabilidad 1A/3A y Morningstar rating al recomendar
 - Para preguntas fiscales (IRPF, plusvalías) orienta pero recomienda consultar asesor fiscal
 - NUNCA predices precios exactos — usa rangos y escenarios
 - Termina análisis de inversión con: ⚠️ *Información orientativa, no asesoramiento financiero personalizado.*`;
 
+  if (marketCtx) {
+    sys += `\n\n## 📊 Mercados en tiempo real (datos del portal)\n${marketCtx}`;
+  }
+  if (insideTradingCtx) {
+    sys += `\n\n## 🔮 Inside Trading — AV Macro Signal (datos del portal)\n${insideTradingCtx}\n\nEl **AV Macro Signal** es un indicador propietario calculado a partir de mercados de predicción (Polymarket + Kalshi). Score de -100 (extremo bajista) a +100 (extremo alcista). Score entre -15 y +15 = neutral.`;
+  }
+  if (cryptoCtx) {
+    sys += `\n\n## 🪙 Mercado Crypto en tiempo real (datos del portal)\n${cryptoCtx}`;
+  }
+  if (fundsCtx) {
+    sys += `\n\n## 🌍 Fondos de Inversión — Resumen top performers (datos del portal)\n${fundsCtx}`;
+  }
   if (portfolioCtx) {
-    sys += `\n\n## 💼 Cartera actual del inversor\n${portfolioCtx}`;
+    sys += `\n\n## 💼 Cartera personal del inversor (datos del portal)\n${portfolioCtx}`;
   }
   return sys;
 }
@@ -350,7 +368,14 @@ module.exports = async function handler(req, res) {
   // ── POST: chat ───────────────────────────────────────────────────
   if (req.method !== 'POST') return res.status(405).json({ error: 'Método no permitido' });
 
-  const { message, portfolioContext } = req.body || {};
+  const {
+    message,
+    portfolioContext,
+    marketContext,
+    insideTradingContext,
+    cryptoContext,
+    fundsContext,
+  } = req.body || {};
   if (!message?.trim()) return res.status(400).json({ error: 'Mensaje requerido' });
 
   // Cargar historial de MongoDB
@@ -362,16 +387,24 @@ module.exports = async function handler(req, res) {
     { role: 'user', content: message.trim() },
   ];
 
+  const systemPrompt = buildSystem({
+    portfolioCtx:      portfolioContext      || null,
+    marketCtx:         marketContext         || null,
+    insideTradingCtx:  insideTradingContext  || null,
+    cryptoCtx:         cryptoContext         || null,
+    fundsCtx:          fundsContext          || null,
+  });
+
   const toolsUsed = [];
   let finalText   = '';
-  const MAX_ITERS = 4;
+  const MAX_ITERS = 5;
 
   try {
     for (let iter = 0; iter < MAX_ITERS; iter++) {
       const response = await anthropic.messages.create({
         model:      'claude-sonnet-4-5',
         max_tokens: 2048,
-        system:     buildSystem(portfolioContext || null),
+        system:     systemPrompt,
         tools:      TOOLS,
         messages,
       });

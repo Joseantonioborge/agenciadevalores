@@ -363,14 +363,14 @@ main{padding-top:60px}
 /* Nav */
 .inv-sidebar-nav{display:flex;flex-direction:column;padding:6px 0 10px}
 .inv-tab{
-  display:flex;align-items:center;gap:11px;
-  padding:10px 14px;border:none;background:transparent;cursor:pointer;
+  display:flex;align-items:flex-start;gap:11px;
+  padding:9px 14px;border:none;background:transparent;cursor:pointer;
   font-size:.82rem;font-weight:500;color:var(--text3);font-family:var(--font);
-  text-align:left;white-space:nowrap;overflow:hidden;
+  text-align:left;white-space:normal;overflow:visible;
   transition:background .15s,color .15s;border-radius:0;width:100%;
 }
-.inv-tab-icon{font-size:1.05rem;flex-shrink:0;width:22px;text-align:center;transition:transform .15s}
-.inv-tab-label{overflow:hidden;transition:opacity .2s,max-width .28s;max-width:180px}
+.inv-tab-icon{font-size:1.05rem;flex-shrink:0;width:22px;text-align:center;transition:transform .15s;margin-top:1px}
+.inv-tab-label{overflow:hidden;white-space:normal;line-height:1.35;transition:opacity .2s,max-width .28s;max-width:120px}
 #invSidebar.collapsed .inv-tab-label{opacity:0;max-width:0}
 #invSidebar.collapsed .inv-tab{padding:10px 0;justify-content:center;gap:0}
 #invSidebar.collapsed .inv-tab:hover .inv-tab-icon{transform:scale(1.18)}
@@ -1792,7 +1792,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
         <button class="inv-tab"        id="invTabCrypto"      data-label="Crypto"                 onclick="switchInvTab('crypto')">      <span class="inv-tab-icon">₿</span><span class="inv-tab-label" data-i18n="tab_crypto">Crypto</span></button>
         <button class="inv-tab"        id="invTabFondos"      data-label="Comparador de Fondos"   onclick="switchInvTab('fondos')">      <span class="inv-tab-icon">📂</span><span class="inv-tab-label" data-i18n="tab_fondos">Comparador de Fondos</span></button>
         <button class="inv-tab"        id="invTabBancos"      data-label="Entidades Financieras"  onclick="switchInvTab('bancos')">      <span class="inv-tab-icon">🏦</span><span class="inv-tab-label" data-i18n="tab_bancos">Entidades Financieras</span></button>
-        <button class="inv-tab"        id="invTabCalculadora" data-label="Calculadora"            onclick="switchInvTab('calculadora')"> <span class="inv-tab-icon">🧮</span><span class="inv-tab-label" data-i18n="tab_calculadora">Calculadora</span></button>
+        <button class="inv-tab"        id="invTabCalculadora" data-label="Calculadora de interés compuesto" onclick="switchInvTab('calculadora')"> <span class="inv-tab-icon">🧮</span><span class="inv-tab-label" data-i18n="tab_calculadora">Calculadora de interés compuesto</span></button>
       </div>
     </nav>
 
@@ -2898,9 +2898,9 @@ let _lang = 'es';
 
 const STRINGS = {
   es: {
-    tab_calculadora:'🧮 Calculadora de interés compuesto', tab_mercados:'📊 Mis Mercados',
-    tab_carteras:'💼 Mis Inversiones', tab_analisis:'📰 Análisis',
-    tab_bancos:'🏦 Entidades Financieras', tab_fondos:'📂 Comparador de Fondos', tab_crypto:'₿ Crypto',
+    tab_calculadora:'Calculadora de interés compuesto', tab_mercados:'Mis Mercados',
+    tab_carteras:'Mis Inversiones', tab_analisis:'Análisis',
+    tab_bancos:'Entidades Financieras', tab_fondos:'Comparador de Fondos', tab_crypto:'Crypto',
     mi_portal:'Mi Portal', resumen_mercado:'RESUMEN DEL MERCADO', mi_watchlist:'MI WATCHLIST',
     cambiar_password:'CAMBIAR CONTRASEÑA', pass_actual:'Contraseña actual', pass_nueva:'Nueva contraseña',
     btn_actualizar:'Actualizar', cerrar_sesion:'Cerrar sesión',
@@ -2949,7 +2949,7 @@ const STRINGS = {
     fondos_todos:'🌍 Todos', fondos_nac:'🇪🇸 Nacionales CNMV', fondos_int:'🇪🇺 Internacionales CSSF / CBI',
     badge_opor:'🟢 Oportunidad', badge_riesgo:'🔴 Riesgo', badge_tendencia:'🔵 Tendencia',
     buscar_fondo_ph:'🔍 Buscar fondo o gestora...', cargando:'Cargando...', guardar:'Guardar',
-    tab_trading:'🎯 Inside Trading',
+    tab_trading:'Inside Trading',
     it_titulo:'Inside Trading · Predicciones de Mercado',
     it_sub:'Probabilidades agregadas de Polymarket & Kalshi',
     it_actualizar:'↻ Actualizar',
@@ -2964,9 +2964,9 @@ const STRINGS = {
     it_act_pfx:'Actualizado: ',
   },
   en: {
-    tab_calculadora:'🧮 Compound Interest Calculator', tab_mercados:'📊 My Markets',
-    tab_carteras:'💼 My Investments', tab_analisis:'📰 Analysis',
-    tab_bancos:'🏦 Financial Entities', tab_fondos:'📂 Fund Comparator', tab_crypto:'₿ Crypto',
+    tab_calculadora:'Compound Interest Calculator', tab_mercados:'My Markets',
+    tab_carteras:'My Investments', tab_analisis:'Analysis',
+    tab_bancos:'Financial Entities', tab_fondos:'Fund Comparator', tab_crypto:'Crypto',
     mi_portal:'My Profile', resumen_mercado:'MARKET SUMMARY', mi_watchlist:'MY WATCHLIST',
     cambiar_password:'CHANGE PASSWORD', pass_actual:'Current password', pass_nueva:'New password',
     btn_actualizar:'Update', cerrar_sesion:'Log out',
@@ -3015,7 +3015,7 @@ const STRINGS = {
     fondos_todos:'🌍 All', fondos_nac:'🇪🇸 National CNMV', fondos_int:'🇪🇺 International CSSF / CBI',
     badge_opor:'🟢 Opportunity', badge_riesgo:'🔴 Risk', badge_tendencia:'🔵 Trend',
     buscar_fondo_ph:'🔍 Search fund or manager...', cargando:'Loading...', guardar:'Save',
-    tab_trading:'🎯 Inside Trading',
+    tab_trading:'Inside Trading',
     it_titulo:'Inside Trading · Market Predictions',
     it_sub:'Aggregated probabilities from Polymarket & Kalshi',
     it_actualizar:'↻ Refresh',
@@ -3091,7 +3091,9 @@ let _newsData      = [];         // artículos del feed de noticias cargados
 let _bancosLoaded  = false;      // flag: ya se renderizó el panel de entidades financieras
 let _fondosLoaded  = false;      // flag: ya se renderizó el comparador de fondos
 let _cryptoLoaded  = false;      // flag: ya se inició el panel crypto
-let _tradingLoaded = false;      // flag: ya se cargó Inside Trading
+let _tradingLoaded  = false;      // flag: ya se cargó Inside Trading
+let _itLastEvents   = [];         // últimos eventos Inside Trading (para FinBot)
+let _itLastSignal   = null;       // { globalSignal, catScores, eventCount } (para FinBot)
 let _cryptoData    = [];         // lista de coins del mercado
 let _cryptoCurrency = 'eur';     // 'eur' | 'usd'
 let _cryptoFilter   = 'todos';   // 'todos'|'top10'|'l1'|'l2'|'defi'|'stablecoins'
@@ -4121,6 +4123,9 @@ async function loadInsideTrading(forceRefresh = false) {
   events.sort((a, b) => b.volume - a.volume);
 
   const { globalSignal, catScores, eventCount } = _itComputeSignal(events);
+  // Persistir para que FinBot pueda acceder como contexto
+  _itLastEvents = events;
+  _itLastSignal = { globalSignal, catScores, eventCount };
   _renderITSignal(globalSignal, eventCount, srcLabel);
   _renderITCategories(catScores);
   _renderITImpact(catScores);
@@ -8074,7 +8079,7 @@ async function finbotLoadHistory() {
 }
 
 function _finbotShowWelcome() {
-  _finbotAppendBot(`¡Hola${_session?.name?', **'+_session.name+'**':''}! 👋 Soy **FinBot**, asistente financiero IA con datos en tiempo real.\n\nTengo acceso directo a:\n- 📊 Cotizaciones en vivo de índices y acciones\n- 📰 Últimas noticias financieras\n- 📈 Análisis técnico + **escenarios futuros** (alcista/base/bajista)\n- 🌍 90 fondos de inversión (CNMV + CSSF Luxemburgo + CBI Irlanda)\n- 💼 Tu cartera personal\n\n¿Sobre qué quieres hablar hoy?`);
+  _finbotAppendBot(`¡Hola${_session?.name?', **'+_session.name+'**':''}! 👋 Soy **FinBot**, asistente financiero IA con datos en tiempo real.\n\nTengo acceso directo a:\n- 📊 **Mercados en vivo** — índices, acciones, análisis técnico y escenarios\n- 🔮 **Inside Trading** — AV Macro Signal y mercados de predicción (Polymarket + Kalshi)\n- 🪙 **Crypto** — precios en tiempo real, capitalización y tendencias\n- 🌍 **Fondos de inversión** — más de 90 fondos CNMV, CSSF y CBI con métricas completas\n- 💼 **Tu cartera personal** — análisis de rentabilidad, diversificación y riesgo\n- 📰 **Últimas noticias** financieras con impacto de mercado\n\n¿Sobre qué quieres hablar hoy?`);
   finbotShowCtxBadge();
 }
 
@@ -8092,16 +8097,22 @@ async function finbotClearHistory() {
 
 // Badge de contexto disponible
 function finbotShowCtxBadge() {
-  const hasMkt   = _marketData?.length > 0;
-  const hasCart  = _carteras?.length > 0;
-  if (!hasMkt && !hasCart) return;
+  const hasMkt    = _marketData?.length > 0;
+  const hasCart   = _carteras?.length > 0;
+  const hasCrypto = _cryptoData?.length > 0;
+  const hasIT     = !!_itLastSignal;
+  const hasFunds  = typeof FONDOS_DATA !== 'undefined' && FONDOS_DATA?.length > 0;
+  if (!hasMkt && !hasCart && !hasCrypto && !hasIT && !hasFunds) return;
   const msgs = document.getElementById('finbotMsgs');
   if (!msgs) return;
   const badge = document.createElement('div');
   badge.className = 'finbot-ctx-badge';
   const parts = [];
-  if (hasMkt)  parts.push(`📊 ${_marketData.length} índices en tiempo real`);
-  if (hasCart) parts.push(`💼 ${_carteras.length} cartera${_carteras.length!==1?'s':''} cargada${_carteras.length!==1?'s':''}`);
+  if (hasMkt)    parts.push(`📊 ${_marketData.length} índices`);
+  if (hasCart)   parts.push(`💼 ${_carteras.length} cartera${_carteras.length!==1?'s':''}`);
+  if (hasCrypto) parts.push(`🪙 ${_cryptoData.length} cryptos`);
+  if (hasIT)     parts.push(`🔮 AV Signal: ${_itLastSignal.globalSignal>=0?'+':''}${Math.round(_itLastSignal.globalSignal)}`);
+  if (hasFunds)  parts.push(`🌍 ${FONDOS_DATA.length} fondos`);
   badge.innerHTML = `🔗 Contexto activo: ${parts.join(' · ')}`;
   msgs.appendChild(badge);
 }
@@ -8149,7 +8160,7 @@ async function finbotSend() {
   if (sendBtn) sendBtn.disabled = true;
   const typingId = _finbotShowTyping('🔍 Consultando datos en tiempo real…');
 
-  // Construir contexto de cartera como texto (más eficiente que JSON en el system prompt)
+  // ── Contexto: Cartera personal ──────────────────────────────────
   let portfolioContext = null;
   if (_carteras?.length) {
     const lines = [];
@@ -8167,11 +8178,74 @@ async function finbotSend() {
     portfolioContext = `Total invertido: €${totalInv.toFixed(0)} | Valor actual: €${totalAct.toFixed(0)} | Rentabilidad global: ${gl>=0?'+':''}${gl.toFixed(2)}%\n` + lines.join('\n');
   }
 
+  // ── Contexto: Mercados en tiempo real ───────────────────────────
+  let marketContext = null;
+  if (_marketData?.length) {
+    const lines = _marketData.map(m =>
+      `${m.name} (${m.symbol}): ${m.price?.toFixed(2) ?? '—'} ${m.changePct>=0?'+':''}${m.changePct?.toFixed(2) ?? '—'}% [${m.marketState==='REGULAR'?'Abierto':'Cerrado'}]`
+    );
+    marketContext = `Fecha: ${new Date().toLocaleDateString('es-ES')}\n` + lines.join('\n');
+  }
+
+  // ── Contexto: Inside Trading / AV Macro Signal ──────────────────
+  let insideTradingContext = null;
+  if (_itLastSignal && _itLastEvents?.length) {
+    const sig = _itLastSignal;
+    const sigLabel = sig.globalSignal >= 40 ? 'ALCISTA FUERTE' : sig.globalSignal >= 15 ? 'Alcista moderado' :
+                     sig.globalSignal >= -15 ? 'Neutral' : sig.globalSignal >= -40 ? 'Bajista moderado' : 'BAJISTA FUERTE';
+    const catLines = Object.entries(sig.catScores||{})
+      .filter(([,v]) => v !== null && v !== undefined)
+      .map(([k,v]) => `  · ${k}: ${v>=0?'+':''}${Math.round(v)}`);
+    const topEvents = _itLastEvents.slice(0, 8).map(e =>
+      `  · [${e.source}] "${e.question}" → prob. ${Math.round(e.prob*100)}% | vol. $${(e.volume/1000).toFixed(0)}k`
+    );
+    insideTradingContext = [
+      `AV Macro Signal: ${sig.globalSignal>=0?'+':''}${Math.round(sig.globalSignal)} (${sigLabel}) — ${sig.eventCount} eventos analizados`,
+      `Señales por categoría:`,
+      ...catLines,
+      `Top eventos de mercados de predicción (Polymarket + Kalshi):`,
+      ...topEvents
+    ].join('\n');
+  }
+
+  // ── Contexto: Crypto (top 10 por capitalización) ────────────────
+  let cryptoContext = null;
+  if (_cryptoData?.length) {
+    const sym = _cryptoCurrency === 'usd' ? '$' : '€';
+    const lines = _cryptoData.slice(0, 10).map(c =>
+      `${c.name} (${c.symbol?.toUpperCase()}): ${sym}${c.current_price?.toLocaleString('es-ES')} | 24h ${c.price_change_percentage_24h>=0?'+':''}${c.price_change_percentage_24h?.toFixed(2)}% | Cap. ${sym}${(c.market_cap/1e9).toFixed(1)}B`
+    );
+    cryptoContext = `Precios crypto (${_cryptoCurrency?.toUpperCase()}) — ${new Date().toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'})}:\n` + lines.join('\n');
+  }
+
+  // ── Contexto: Fondos de inversión (top por rentabilidad) ─────────
+  let fundsContext = null;
+  if (typeof FONDOS_DATA !== 'undefined' && FONDOS_DATA?.length) {
+    const byR1y  = [...FONDOS_DATA].sort((a,b)=>b.r1y-a.r1y).slice(0,5);
+    const byRYTD = [...FONDOS_DATA].sort((a,b)=>b.rYTD-a.rYTD).slice(0,5);
+    const fmtF = f => `${f.nombre} (${f.isin}) — ${f.cat} — 1a:${f.r1y>=0?'+':''}${f.r1y}% YTD:${f.rYTD>=0?'+':''}${f.rYTD}% TER:${f.ter}% Sharpe:${f.sharpe}`;
+    fundsContext = [
+      `Base de fondos: ${FONDOS_DATA.length} fondos registrados (CNMV + CSSF + CBI).`,
+      `Top 5 por rentabilidad 1 año:`,
+      ...byR1y.map(f=>`  · ${fmtF(f)}`),
+      `Top 5 por rentabilidad YTD:`,
+      ...byRYTD.map(f=>`  · ${fmtF(f)}`)
+    ].join('\n');
+  }
+
   try {
     const resp = await fetch(`${API_BASE}/chat`, {
       method:  'POST',
       headers: { 'Content-Type':'application/json', 'x-api-key': API_KEY_INVESTOR },
-      body:    JSON.stringify({ message: msg, username: _session?.username, portfolioContext }),
+      body:    JSON.stringify({
+        message: msg,
+        username: _session?.username,
+        portfolioContext,
+        marketContext,
+        insideTradingContext,
+        cryptoContext,
+        fundsContext
+      }),
     });
     const data = await resp.json();
     _finbotRemoveTyping(typingId);
@@ -8180,10 +8254,14 @@ async function finbotSend() {
       _finbotAppendBot(data.reply);
       _finbotHistory.push({ role:'user', content:msg });
       _finbotHistory.push({ role:'assistant', content:data.reply });
-      // Badge de herramientas usadas
+      // Badge de herramientas / fuentes de contexto usadas
       if (data.toolsUsed?.length) {
-        const TOOL_LABELS = { get_market_data:'📊 Mercados', get_stock_quotes:'💹 Cotizaciones',
-          get_financial_news:'📰 Noticias', get_technical_analysis:'📈 Análisis técnico', search_investment_funds:'🌍 Fondos' };
+        const TOOL_LABELS = {
+          get_market_data:'📊 Mercados', get_stock_quotes:'💹 Cotizaciones',
+          get_financial_news:'📰 Noticias', get_technical_analysis:'📈 Análisis técnico',
+          search_investment_funds:'🌍 Fondos', get_crypto_data:'🪙 Crypto',
+          get_inside_trading:'🔮 Inside Trading', portfolio_analysis:'💼 Cartera'
+        };
         const msgs = document.getElementById('finbotMsgs');
         if (msgs) {
           const badge = document.createElement('div');
@@ -8318,12 +8396,14 @@ init();
     </div>
     <div class="finbot-msgs" id="finbotMsgs"></div>
     <div class="finbot-suggestions" id="finbotSugs">
-      <button class="finbot-sug" onclick="finbotSuggest(this)">📊 ¿Cómo están los mercados?</button>
+      <button class="finbot-sug" onclick="finbotSuggest(this)">📊 ¿Cómo están los mercados hoy?</button>
+      <button class="finbot-sug" onclick="finbotSuggest(this)">🔮 ¿Qué dice el AV Macro Signal ahora?</button>
+      <button class="finbot-sug" onclick="finbotSuggest(this)">🪙 Análisis del mercado crypto</button>
       <button class="finbot-sug" onclick="finbotSuggest(this)">💼 Analiza mi cartera</button>
-      <button class="finbot-sug" onclick="finbotSuggest(this)">📈 ¿Qué es el interés compuesto?</button>
-      <button class="finbot-sug" onclick="finbotSuggest(this)">🌍 Mejores fondos indexados</button>
+      <button class="finbot-sug" onclick="finbotSuggest(this)">🌍 Mejores fondos por rentabilidad</button>
       <button class="finbot-sug" onclick="finbotSuggest(this)">⚖️ Diversificación de cartera</button>
       <button class="finbot-sug" onclick="finbotSuggest(this)">🔍 ¿Qué es el Sharpe ratio?</button>
+      <button class="finbot-sug" onclick="finbotSuggest(this)">📈 ¿Qué es el interés compuesto?</button>
     </div>
     <div class="finbot-input-row">
       <textarea class="finbot-input" id="finbotInput" rows="1" placeholder="Pregunta sobre mercados, fondos, proyecciones..." onkeydown="finbotKeydown(event)" oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'"></textarea>
