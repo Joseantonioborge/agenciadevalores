@@ -1476,6 +1476,83 @@ tr:hover td{background:rgba(255,255,255,.02)}
   .crypto-coin-name{font-size:.78rem}
   .crypto-tbl .crypto-mcap-col{display:none}
 }
+/* ── INSIDE TRADING ─────────────────────────────────────────── */
+#invTradingPanel{padding:20px 0}
+.it-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;flex-wrap:wrap;gap:10px}
+.it-title{font-size:1.1rem;font-weight:700;margin:0 0 4px}
+.it-sub{font-size:.79rem;color:var(--text2);margin:0}
+.it-header-right{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.it-updated{font-size:.73rem;color:var(--text2)}
+.it-refresh-btn{background:var(--accent);color:#fff;border:none;border-radius:8px;padding:6px 14px;font-size:.79rem;cursor:pointer;transition:opacity .2s}
+.it-refresh-btn:hover{opacity:.82}
+.it-signal-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:22px 24px;margin-bottom:20px;transition:border-color .4s}
+.it-signal-card.it-signal-bull-strong{border-color:#10B981}
+.it-signal-card.it-signal-bull-mid{border-color:#84CC16}
+.it-signal-card.it-signal-bear-mid{border-color:#F59E0B}
+.it-signal-card.it-signal-bear-strong{border-color:#EF4444}
+.it-signal-label{font-size:.65rem;font-weight:700;letter-spacing:.09em;color:var(--text2);text-transform:uppercase;margin-bottom:6px}
+.it-signal-value{font-size:2.8rem;font-weight:800;line-height:1;margin-bottom:16px}
+.it-signal-bar{position:relative;height:10px;background:linear-gradient(to right,#EF4444 0%,#F59E0B 25%,#94a3b8 50%,#84CC16 75%,#10B981 100%);border-radius:5px;margin-bottom:5px}
+.it-signal-needle{position:absolute;top:-4px;width:4px;height:18px;background:#fff;border-radius:2px;box-shadow:0 0 6px rgba(0,0,0,.5);transition:left .7s cubic-bezier(.4,0,.2,1)}
+.it-signal-labels{display:flex;justify-content:space-between;font-size:.63rem;color:var(--text2)}
+.it-signal-desc{font-size:.76rem;color:var(--text2);margin-top:10px}
+.it-categories{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:11px;margin-bottom:24px}
+.it-cat-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:13px}
+.it-cat-nd{opacity:.4}
+.it-cat-icon{font-size:1.35rem;margin-bottom:5px}
+.it-cat-name{font-size:.67rem;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px}
+.it-cat-score{font-size:1.25rem;font-weight:700;margin-bottom:5px}
+.it-cat-bar-wrap{background:var(--border);border-radius:3px;height:4px;margin-bottom:5px}
+.it-cat-bar{height:4px;border-radius:3px;transition:width .55s ease}
+.it-cat-desc{font-size:.64rem;color:var(--text2);line-height:1.3}
+.it-section-title{font-size:.88rem;font-weight:700;margin:0 0 11px}
+.it-impact-section{margin-bottom:24px}
+.it-impact-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:9px}
+.it-impact-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px}
+.it-impact-asset{font-size:.72rem;font-weight:600;color:var(--text2);margin-bottom:4px}
+.it-impact-signal{font-size:1.05rem;font-weight:700;margin-bottom:5px}
+.it-impact-bar-wrap{background:var(--border);border-radius:3px;height:3px}
+.it-impact-bar{height:3px;border-radius:3px;transition:width .55s ease}
+.it-events-section{margin-bottom:22px}
+.it-events-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:11px;flex-wrap:wrap;gap:8px}
+.it-source-badges{display:flex;gap:6px}
+.it-src-badge{padding:3px 9px;border-radius:20px;font-size:.63rem;font-weight:600}
+.it-src-pm{background:rgba(139,92,246,.18);color:#A78BFA}
+.it-src-ka{background:rgba(16,185,129,.15);color:#34D399}
+.it-src-av{background:rgba(37,99,235,.15);color:#60A5FA}
+.it-events-table{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.it-events-thead,.it-events-row{display:grid;grid-template-columns:1fr 130px 68px 82px 100px 90px;padding:10px 16px;align-items:center}
+.it-events-thead{background:rgba(255,255,255,.03);font-size:.63rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text2);border-bottom:1px solid var(--border)}
+.it-events-row{border-bottom:1px solid var(--border);transition:background .15s}
+.it-events-row:last-child{border-bottom:none}
+.it-events-row:hover{background:rgba(255,255,255,.03)}
+.it-event-q{font-size:.74rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding-right:8px}
+.it-event-cat{font-size:.7rem;color:var(--text2)}
+.it-event-prob{font-size:.8rem}
+.it-event-vol{font-size:.7rem;color:var(--text2)}
+.it-badge{padding:3px 8px;border-radius:20px;font-size:.63rem;font-weight:600}
+.it-badge.bull{background:rgba(16,185,129,.15);color:#34D399}
+.it-badge.bear{background:rgba(239,68,68,.15);color:#F87171}
+.it-badge.neutral{background:rgba(148,163,184,.1);color:#94a3b8}
+.it-loading{padding:32px;text-align:center;color:var(--text2);font-size:.84rem}
+.it-metodologia{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:13px 17px;margin-bottom:12px}
+.it-metodologia summary{cursor:pointer;font-size:.79rem;font-weight:600;color:var(--text2);outline:none;list-style:none}
+.it-metodologia summary::-webkit-details-marker{display:none}
+.it-metodologia summary::before{content:'▶  ';font-size:.6rem;transition:content .2s}
+.it-metodologia[open] summary::before{content:'▼  '}
+.it-metodologia summary:hover{color:var(--text)}
+.it-formula{margin-top:12px;font-size:.77rem;line-height:1.75;color:var(--text2)}
+.it-formula strong{color:var(--text)}
+.it-formula code{background:rgba(255,255,255,.07);padding:1px 5px;border-radius:4px;font-family:monospace;font-size:.72rem}
+.it-formula ul{padding-left:18px;margin:8px 0}
+.it-disclaimer{margin-top:12px;padding:10px 13px;background:rgba(239,68,68,.08);border-radius:8px;border-left:3px solid #EF4444;color:#F87171;font-size:.71rem;line-height:1.5}
+@media(max-width:700px){
+  .it-events-thead,.it-events-row{grid-template-columns:1fr 68px 68px 95px}
+  .it-events-thead span:nth-child(2),.it-events-row span:nth-child(2),
+  .it-events-thead span:nth-child(4),.it-events-row span:nth-child(4),
+  .it-events-thead span:nth-child(6),.it-events-row span:nth-child(6){display:none}
+  .it-categories{grid-template-columns:repeat(auto-fill,minmax(130px,1fr))}
+}
 </style>
 </head>
 <body>
@@ -1618,6 +1695,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <button class="inv-tab" id="invTabBancos" onclick="switchInvTab('bancos')" data-i18n="tab_bancos">🏦 Entidades Financieras</button>
       <button class="inv-tab" id="invTabFondos" onclick="switchInvTab('fondos')" data-i18n="tab_fondos">📂 Comparador de Fondos</button>
       <button class="inv-tab" id="invTabCrypto" onclick="switchInvTab('crypto')" data-i18n="tab_crypto">₿ Crypto</button>
+      <button class="inv-tab" id="invTabTrading" onclick="switchInvTab('trading')" data-i18n="tab_trading">🎯 Inside Trading</button>
     </div>
 
     <!-- ── Contenido: Mis Mercados ── -->
@@ -2050,6 +2128,72 @@ tr:hover td{background:rgba(255,255,255,.02)}
       </div><!-- /crypto-table-wrap -->
 
     </div><!-- /invCryptoPanel -->
+
+    <!-- ── Inside Trading Panel ── -->
+    <div id="invTradingPanel" style="display:none">
+
+      <!-- Cabecera -->
+      <div class="it-header">
+        <div>
+          <h3 class="it-title" data-i18n="it_titulo">🎯 Inside Trading · Predicciones de Mercado</h3>
+          <p class="it-sub" data-i18n="it_sub">Probabilidades agregadas de Polymarket &amp; Kalshi</p>
+        </div>
+        <div class="it-header-right">
+          <span class="it-updated" id="itUpdated">—</span>
+          <button class="it-refresh-btn" onclick="loadInsideTrading(true)" data-i18n="it_actualizar">↻ Actualizar</button>
+        </div>
+      </div>
+
+      <!-- Señal macro AV -->
+      <div class="it-signal-card" id="itSignalCard">
+        <div class="it-signal-label" data-i18n="it_señal_av">SEÑAL AV MACRO</div>
+        <div class="it-signal-value" id="itSignalValue">—</div>
+        <div class="it-signal-bar-wrap">
+          <div class="it-signal-bar">
+            <div class="it-signal-needle" id="itSignalNeedle" style="left:50%"></div>
+          </div>
+          <div class="it-signal-labels"><span>BAJISTA</span><span>NEUTRAL</span><span>ALCISTA</span></div>
+        </div>
+        <div class="it-signal-desc" id="itSignalDesc"></div>
+      </div>
+
+      <!-- Categorías -->
+      <div class="it-categories" id="itCategories"></div>
+
+      <!-- Impacto en activos -->
+      <div class="it-impact-section">
+        <h4 class="it-section-title" data-i18n="it_impacto">🗺️ Impacto en Activos</h4>
+        <div class="it-impact-grid" id="itImpactGrid"></div>
+      </div>
+
+      <!-- Tabla de eventos -->
+      <div class="it-events-section">
+        <div class="it-events-header">
+          <h4 class="it-section-title" data-i18n="it_eventos">📋 Eventos con Mayor Liquidez</h4>
+          <div class="it-source-badges">
+            <span class="it-src-badge it-src-pm">🔮 Polymarket</span>
+            <span class="it-src-badge it-src-ka">📊 Kalshi</span>
+          </div>
+        </div>
+        <div id="itEventsBody"></div>
+      </div>
+
+      <!-- Metodología -->
+      <details class="it-metodologia">
+        <summary data-i18n="it_metodologia">🧮 Metodología de la Señal AV</summary>
+        <div class="it-formula">
+          <p><strong>Fórmula:</strong> AV_Signal = Σ(s<sub>i</sub> × (p<sub>i</sub> – 0.5) × 2 × v<sub>i</sub>) / Σ(|v<sub>i</sub>|) × 100</p>
+          <ul>
+            <li><code>p<sub>i</sub></code> Probabilidad implícita del evento (0–1)</li>
+            <li><code>v<sub>i</sub></code> Volumen en USD del mercado (peso por liquidez, escala logarítmica)</li>
+            <li><code>s<sub>i</sub></code> Sentimiento: +1 alcista / –1 bajista según clasificación temática</li>
+          </ul>
+          <p>Rango: <strong>–100</strong> (muy bajista) → <strong>0</strong> (neutral) → <strong>+100</strong> (muy alcista). Zona neutra: –15 a +15.</p>
+          <p class="it-disclaimer">⚠️ Herramienta puramente informativa. Las probabilidades de mercados de predicción no garantizan resultados financieros. No constituye asesoramiento de inversión. Agencia de Valores no se responsabiliza de las decisiones tomadas en base a esta información.</p>
+        </div>
+      </details>
+
+    </div><!-- /invTradingPanel -->
 
   </div>
 
@@ -2702,6 +2846,19 @@ const STRINGS = {
     fondos_todos:'🌍 Todos', fondos_nac:'🇪🇸 Nacionales CNMV', fondos_int:'🇪🇺 Internacionales CSSF / CBI',
     badge_opor:'🟢 Oportunidad', badge_riesgo:'🔴 Riesgo', badge_tendencia:'🔵 Tendencia',
     buscar_fondo_ph:'🔍 Buscar fondo o gestora...', cargando:'Cargando...', guardar:'Guardar',
+    tab_trading:'🎯 Inside Trading',
+    it_titulo:'Inside Trading · Predicciones de Mercado',
+    it_sub:'Probabilidades agregadas de Polymarket & Kalshi',
+    it_actualizar:'↻ Actualizar',
+    it_señal_av:'SEÑAL AV MACRO',
+    it_eventos:'📋 Eventos con Mayor Liquidez',
+    it_impacto:'🗺️ Impacto en Activos',
+    it_metodologia:'🧮 Metodología de la Señal AV',
+    it_bajista_fuerte:'🔴 BAJISTA FUERTE', it_bajista_mod:'🟠 BAJISTA MODERADO',
+    it_neutral:'⚪ NEUTRAL', it_alcista_mod:'🟡 ALCISTA MODERADO', it_alcista_fuerte:'🟢 ALCISTA FUERTE',
+    it_eventos_analizados:' eventos analizados · Fuente: ',
+    it_consultando:'⏳ Consultando mercados de predicción…',
+    it_act_pfx:'Actualizado: ',
   },
   en: {
     tab_calculadora:'🧮 Compound Interest Calculator', tab_mercados:'📊 My Markets',
@@ -2755,6 +2912,19 @@ const STRINGS = {
     fondos_todos:'🌍 All', fondos_nac:'🇪🇸 National CNMV', fondos_int:'🇪🇺 International CSSF / CBI',
     badge_opor:'🟢 Opportunity', badge_riesgo:'🔴 Risk', badge_tendencia:'🔵 Trend',
     buscar_fondo_ph:'🔍 Search fund or manager...', cargando:'Loading...', guardar:'Save',
+    tab_trading:'🎯 Inside Trading',
+    it_titulo:'Inside Trading · Market Predictions',
+    it_sub:'Aggregated probabilities from Polymarket & Kalshi',
+    it_actualizar:'↻ Refresh',
+    it_señal_av:'AV MACRO SIGNAL',
+    it_eventos:'📋 Highest Liquidity Events',
+    it_impacto:'🗺️ Asset Impact Map',
+    it_metodologia:'🧮 AV Signal Methodology',
+    it_bajista_fuerte:'🔴 STRONG BEARISH', it_bajista_mod:'🟠 MODERATE BEARISH',
+    it_neutral:'⚪ NEUTRAL', it_alcista_mod:'🟡 MODERATE BULLISH', it_alcista_fuerte:'🟢 STRONG BULLISH',
+    it_eventos_analizados:' events analysed · Source: ',
+    it_consultando:'⏳ Querying prediction markets…',
+    it_act_pfx:'Updated: ',
   }
 };
 
@@ -2799,6 +2969,7 @@ function setLang(lang) {
   if (_invTab === 'analisis') renderNewsFeed(_newsData);
   if (_invTab === 'carteras') renderCarteras();
   if (_invTab === 'crypto' && _cryptoData.length) { _renderCryptoTable(); _renderCryptoSelectorList(); _updateCryptoStaticLabels(); }
+  if (_invTab === 'trading' && _tradingLoaded) loadInsideTrading(true);
 }
 
 // ================================================================
@@ -2817,6 +2988,7 @@ let _newsData      = [];         // artículos del feed de noticias cargados
 let _bancosLoaded  = false;      // flag: ya se renderizó el panel de entidades financieras
 let _fondosLoaded  = false;      // flag: ya se renderizó el comparador de fondos
 let _cryptoLoaded  = false;      // flag: ya se inició el panel crypto
+let _tradingLoaded = false;      // flag: ya se cargó Inside Trading
 let _cryptoData    = [];         // lista de coins del mercado
 let _cryptoCurrency = 'eur';     // 'eur' | 'usd'
 let _cryptoFilter   = 'todos';   // 'todos'|'top10'|'l1'|'l2'|'defi'|'stablecoins'
@@ -3062,6 +3234,7 @@ function _doLogout() {
   _fondosSelected  = new Set();
   _cryptoLoaded    = false;
   _cryptoData      = [];
+  _tradingLoaded   = false;
   _cryptoSelectedId = null;
   if (_cryptoChart) { try { _cryptoChart.remove(); } catch(_){} _cryptoChart = null; _cryptoSeries = null; }
   _finbotHistory   = [];
@@ -3706,6 +3879,255 @@ function togglePendingFav(key) {
 }
 
 // ================================================================
+// INSIDE TRADING — Predicciones de Mercado (Polymarket + Kalshi)
+// ================================================================
+
+// Clasificación temática de eventos
+const IT_CAT_KEYWORDS = {
+  monetaria:   ['fed','federal reserve','rate','inflation','bce','ecb','interest rate','fomc','boe','boj','tipo de inter','tipos de inter'],
+  economia:    ['recession','gdp','unemployment','jobs report','growth','pib','desempleo','economía','crecimiento','deficit','debt','stagflation','stagnation'],
+  geopolitica: ['ukraine','russia','china','taiwan','israel','iran','nato','war','military','election','president','congress','senate','trump','harris','biden','xi jinping','putin','geopolit','sanctions'],
+  mercados:    ['s&p','nasdaq','dow jones','stock','market','bitcoin','btc','eth','crypto','gold','silver','commodity'],
+  energia:     ['oil','opec','gas','energy','crude','brent','wti','petróleo'],
+};
+const IT_CAT_META = {
+  monetaria:   { label:'Política Monetaria', labelEn:'Monetary Policy',  icon:'🏦', desc:'Tipos de interés y bancos centrales' },
+  economia:    { label:'Economía Global',    labelEn:'Global Economy',   icon:'📈', desc:'PIB, empleo, inflación y recesión' },
+  geopolitica: { label:'Geopolítica',        labelEn:'Geopolitics',      icon:'🌍', desc:'Conflictos, elecciones y diplomacia' },
+  mercados:    { label:'Mercados',           labelEn:'Financial Markets', icon:'💹', desc:'Bolsa, cripto y commodities' },
+  energia:     { label:'Energía',            labelEn:'Energy',           icon:'⚡', desc:'Petróleo, gas y OPEP' },
+};
+// Keywords: HIGH probability = BULLISH for financial markets
+const IT_BULL_KW = [
+  'rate cut','cut rates','lower rates','dovish','soft landing','gdp growth','growth exceeds','above expectations',
+  'bull market','rally','bitcoin above','btc above','above 100k','above 80k','above 60k',
+  's&p above','nasdaq above','ceasefire','peace deal','recorte de tipos','crecimiento',
+];
+// Keywords: HIGH probability = BEARISH for financial markets
+const IT_BEAR_KW = [
+  'recession','rate hike','hike rates','hawkish','inflation above','stagflation',
+  'unemployment rises','crash','bear market','default','crisis','sanctions','war escalation',
+  'military action','invasion','nuclear','bitcoin below','btc below','below 50k','below 30k',
+  'market crash','recesión','subida de tipos','inflación alta','guerra',
+];
+// Pesos de impacto por categoría sobre cada activo
+const IT_ASSET_WEIGHTS = {
+  'S&P 500':  { monetaria:0.9, economia:0.8, geopolitica:0.5, mercados:1.0, energia:0.3 },
+  'IBEX 35':  { monetaria:0.7, economia:0.8, geopolitica:0.7, mercados:0.9, energia:0.4 },
+  'BTC/USD':  { monetaria:0.5, economia:0.3, geopolitica:0.3, mercados:1.0, energia:0.1 },
+  'EUR/USD':  { monetaria:1.0, economia:0.6, geopolitica:0.6, mercados:0.3, energia:0.2 },
+  'Oro':      { monetaria:0.6, economia:0.5, geopolitica:0.9, mercados:0.4, energia:0.2 },
+  'Petróleo': { monetaria:0.2, economia:0.5, geopolitica:0.9, mercados:0.3, energia:1.0 },
+};
+
+function _itClassify(text) {
+  const q = (text || '').toLowerCase();
+  let cat = 'mercados';
+  for (const [c, kws] of Object.entries(IT_CAT_KEYWORDS)) {
+    if (kws.some(k => q.includes(k))) { cat = c; break; }
+  }
+  let sentiment = 0;
+  if (IT_BULL_KW.some(k => q.includes(k)))      sentiment = 1;
+  else if (IT_BEAR_KW.some(k => q.includes(k))) sentiment = -1;
+  return { cat, sentiment };
+}
+
+function _itComputeSignal(events) {
+  const cats = {};
+  for (const k of Object.keys(IT_CAT_META)) cats[k] = { sum: 0, vol: 0 };
+  let num = 0, den = 0;
+  for (const ev of events) {
+    if (!ev.sentiment) continue;
+    const v = Math.log1p(Math.max(ev.volume || 0, 1));
+    const contribution = ev.sentiment * (ev.prob - 0.5) * 2 * v;
+    num += contribution;
+    den += v;
+    if (cats[ev.cat]) {
+      cats[ev.cat].sum += contribution;
+      cats[ev.cat].vol += v;
+    }
+  }
+  const globalSignal = den > 0 ? Math.max(-100, Math.min(100, (num / den) * 100)) : 0;
+  const catScores = {};
+  for (const [k, d] of Object.entries(cats)) {
+    catScores[k] = d.vol > 0 ? Math.max(-100, Math.min(100, (d.sum / d.vol) * 100)) : null;
+  }
+  return { globalSignal, catScores, eventCount: events.length };
+}
+
+async function _itFetchPolymarket() {
+  try {
+    const res = await fetch('https://gamma-api.polymarket.com/markets?active=true&closed=false&limit=100', { signal: AbortSignal.timeout(9000) });
+    if (!res.ok) return [];
+    const data = await res.json();
+    return (Array.isArray(data) ? data : []).map(m => {
+      let prob = 0.5;
+      try { const p = JSON.parse(m.outcomePrices || '["0.5","0.5"]'); prob = parseFloat(p[0]) || 0.5; } catch(_) {}
+      const { cat, sentiment } = _itClassify(m.question);
+      return { question: m.question || '—', prob, volume: parseFloat(m.volume) || 0, cat, sentiment, source: 'Polymarket' };
+    });
+  } catch(e) { return []; }
+}
+
+async function _itFetchKalshi() {
+  try {
+    const res = await fetch('https://trading-api.kalshi.com/trade-api/v2/events?limit=50&status=open', { signal: AbortSignal.timeout(9000) });
+    if (!res.ok) return [];
+    const data = await res.json();
+    return (data.events || []).map(ev => {
+      const mkt = (ev.markets || [])[0] || {};
+      const prob = ((mkt.yes_ask || mkt.yes_bid || 50)) / 100;
+      const { cat, sentiment } = _itClassify(ev.title || ev.mutually_exclusive_title || '');
+      return { question: ev.title || ev.mutually_exclusive_title || '—', prob, volume: mkt.volume || 0, cat, sentiment, source: 'Kalshi' };
+    });
+  } catch(e) { return []; }
+}
+
+// Datos de referencia actualizados (Q1 2026) — activos si las APIs fallan
+function _itFallbackEvents() {
+  return [
+    { question:'¿Recortará la Fed tipos en 2026?',            prob:0.68, volume:18000000, cat:'monetaria',   sentiment: 1, source:'AV Est.' },
+    { question:'¿Recesión en EE.UU. en 2026?',               prob:0.31, volume:9500000,  cat:'economia',    sentiment:-1, source:'AV Est.' },
+    { question:'¿Recortará el BCE tipos en 2026?',            prob:0.74, volume:7000000,  cat:'monetaria',   sentiment: 1, source:'AV Est.' },
+    { question:'¿Inflación eurozona por encima del 3%?',      prob:0.29, volume:4500000,  cat:'economia',    sentiment:-1, source:'AV Est.' },
+    { question:'¿Bitcoin por encima de $100k en 2026?',       prob:0.52, volume:14000000, cat:'mercados',    sentiment: 1, source:'AV Est.' },
+    { question:'¿S&P 500 cerrará 2026 en positivo?',          prob:0.59, volume:10000000, cat:'mercados',    sentiment: 1, source:'AV Est.' },
+    { question:'¿Conflicto Rusia-Ucrania activo en 2026?',    prob:0.71, volume:6500000,  cat:'geopolitica', sentiment:-1, source:'AV Est.' },
+    { question:'¿Petróleo por encima de $90/barril en 2026?', prob:0.37, volume:5000000,  cat:'energia',     sentiment:-1, source:'AV Est.' },
+    { question:'¿Desempleo UE por encima del 7% en 2026?',    prob:0.34, volume:3200000,  cat:'economia',    sentiment:-1, source:'AV Est.' },
+    { question:'¿Trump impondrá aranceles > 25% a China?',    prob:0.61, volume:8000000,  cat:'geopolitica', sentiment:-1, source:'AV Est.' },
+    { question:'¿IBEX 35 alcanzará 12.000 puntos en 2026?',   prob:0.44, volume:2500000,  cat:'mercados',    sentiment: 1, source:'AV Est.' },
+    { question:'¿Ethereum por encima de $5.000 en 2026?',     prob:0.41, volume:6000000,  cat:'mercados',    sentiment: 1, source:'AV Est.' },
+  ];
+}
+
+async function loadInsideTrading(forceRefresh = false) {
+  if (_tradingLoaded && !forceRefresh) return;
+  _tradingLoaded = true;
+  const evBody  = document.getElementById('itEventsBody');
+  const sigVal  = document.getElementById('itSignalValue');
+  if (evBody)  evBody.innerHTML  = `<div class="it-loading">${t('it_consultando')}</div>`;
+  if (sigVal)  sigVal.textContent = '…';
+
+  const [poly, kalshi] = await Promise.all([_itFetchPolymarket(), _itFetchKalshi()]);
+  let events = [...poly, ...kalshi];
+  const srcLabel = events.length > 0
+    ? `Polymarket (${poly.length}) + Kalshi (${kalshi.length})`
+    : 'AV Estimaciones (datos de referencia)';
+  if (events.length === 0) events = _itFallbackEvents();
+  events.sort((a, b) => b.volume - a.volume);
+
+  const { globalSignal, catScores, eventCount } = _itComputeSignal(events);
+  _renderITSignal(globalSignal, eventCount, srcLabel);
+  _renderITCategories(catScores);
+  _renderITImpact(catScores);
+  _renderITEvents(events.slice(0, 20));
+
+  const updEl = document.getElementById('itUpdated');
+  if (updEl) updEl.textContent = t('it_act_pfx') + new Date().toLocaleTimeString(_lang === 'en' ? 'en-GB' : 'es-ES', { hour:'2-digit', minute:'2-digit' });
+}
+
+function _renderITSignal(score, count, src) {
+  const el       = document.getElementById('itSignalValue');
+  const needleEl = document.getElementById('itSignalNeedle');
+  const descEl   = document.getElementById('itSignalDesc');
+  const cardEl   = document.getElementById('itSignalCard');
+  if (!el) return;
+
+  const rounded = Math.round(score);
+  el.textContent = (score >= 0 ? '+' : '') + rounded;
+
+  let label, color, cls;
+  if      (score >=  40) { label = t('it_alcista_fuerte');  color = '#10B981'; cls = 'it-signal-bull-strong'; }
+  else if (score >=  15) { label = t('it_alcista_mod');     color = '#84CC16'; cls = 'it-signal-bull-mid';    }
+  else if (score >= -15) { label = t('it_neutral');         color = '#94a3b8'; cls = '';                      }
+  else if (score >= -40) { label = t('it_bajista_mod');     color = '#F59E0B'; cls = 'it-signal-bear-mid';    }
+  else                   { label = t('it_bajista_fuerte');  color = '#EF4444'; cls = 'it-signal-bear-strong'; }
+
+  el.style.color = color;
+  if (cardEl) cardEl.className = 'it-signal-card' + (cls ? ' ' + cls : '');
+  // Posición de la aguja: score -100 → 0%, score 0 → 50%, score +100 → 100%
+  const pct = ((score + 100) / 200) * 100;
+  if (needleEl) needleEl.style.left = `calc(${pct}% - 2px)`;
+  if (descEl) descEl.textContent = `${label}  ·  ${count}${t('it_eventos_analizados')}${src}`;
+}
+
+function _renderITCategories(catScores) {
+  const el = document.getElementById('itCategories');
+  if (!el) return;
+  el.innerHTML = Object.entries(IT_CAT_META).map(([key, meta]) => {
+    const score = catScores[key];
+    if (score === null || score === undefined) {
+      return `<div class="it-cat-card it-cat-nd"><div class="it-cat-icon">${meta.icon}</div><div class="it-cat-name">${_lang === 'en' ? meta.labelEn : meta.label}</div><div class="it-cat-score">—</div></div>`;
+    }
+    const pct = Math.min(100, Math.abs(score));
+    const color = score >= 20 ? '#10B981' : score >= -20 ? '#94a3b8' : '#EF4444';
+    return `<div class="it-cat-card">
+      <div class="it-cat-icon">${meta.icon}</div>
+      <div class="it-cat-name">${_lang === 'en' ? meta.labelEn : meta.label}</div>
+      <div class="it-cat-score" style="color:${color}">${score >= 0 ? '+' : ''}${Math.round(score)}</div>
+      <div class="it-cat-bar-wrap"><div class="it-cat-bar" style="width:${pct}%;background:${color}"></div></div>
+      <div class="it-cat-desc">${meta.desc}</div>
+    </div>`;
+  }).join('');
+}
+
+function _renderITImpact(catScores) {
+  const el = document.getElementById('itImpactGrid');
+  if (!el) return;
+  el.innerHTML = Object.entries(IT_ASSET_WEIGHTS).map(([asset, weights]) => {
+    let num = 0, den = 0;
+    for (const [cat, w] of Object.entries(weights)) {
+      const s = catScores[cat];
+      if (s !== null && s !== undefined) { num += s * w; den += w; }
+    }
+    const assetScore = den > 0 ? num / den : 0;
+    const pct   = Math.min(100, Math.abs(assetScore));
+    const color = assetScore >= 15 ? '#10B981' : assetScore >= -15 ? '#94a3b8' : '#EF4444';
+    const arrow = assetScore >= 15 ? '▲' : assetScore >= -15 ? '→' : '▼';
+    return `<div class="it-impact-card">
+      <div class="it-impact-asset">${asset}</div>
+      <div class="it-impact-signal" style="color:${color}">${arrow} ${assetScore >= 0 ? '+' : ''}${Math.round(assetScore)}</div>
+      <div class="it-impact-bar-wrap"><div class="it-impact-bar" style="width:${pct}%;background:${color}"></div></div>
+    </div>`;
+  }).join('');
+}
+
+function _renderITEvents(events) {
+  const el = document.getElementById('itEventsBody');
+  if (!el) return;
+  if (!events.length) { el.innerHTML = '<div class="it-loading">No se pudieron cargar eventos</div>'; return; }
+  el.innerHTML = `<div class="it-events-table">
+    <div class="it-events-thead">
+      <span>Evento</span><span>Categoría</span><span>Prob.</span><span>Volumen</span><span>Señal</span><span>Fuente</span>
+    </div>
+    ${events.map(ev => {
+      const meta = IT_CAT_META[ev.cat] || { icon:'❓', label:'Otro' };
+      const prob = Math.round(ev.prob * 100);
+      const probColor = prob >= 65 ? '#10B981' : prob >= 40 ? '#94a3b8' : '#EF4444';
+      const senBadge = ev.sentiment === 1
+        ? '<span class="it-badge bull">▲ Alcista</span>'
+        : ev.sentiment === -1
+          ? '<span class="it-badge bear">▼ Bajista</span>'
+          : '<span class="it-badge neutral">→ Neutro</span>';
+      const vol = ev.volume >= 1e6 ? `$${(ev.volume/1e6).toFixed(1)}M`
+                : ev.volume >= 1e3 ? `$${Math.round(ev.volume/1e3)}K`
+                : ev.volume > 0    ? `$${Math.round(ev.volume)}`
+                : '—';
+      const srcCls = ev.source === 'Polymarket' ? 'it-src-pm' : ev.source === 'Kalshi' ? 'it-src-ka' : 'it-src-av';
+      return `<div class="it-events-row">
+        <span class="it-event-q" title="${ev.question.replace(/"/g,'&quot;')}">${ev.question}</span>
+        <span class="it-event-cat">${meta.icon} ${_lang === 'en' ? meta.labelEn : meta.label}</span>
+        <span class="it-event-prob" style="color:${probColor}"><strong>${prob}%</strong></span>
+        <span class="it-event-vol">${vol}</span>
+        <span>${senBadge}</span>
+        <span class="it-src-badge ${srcCls}">${ev.source}</span>
+      </div>`;
+    }).join('')}
+  </div>`;
+}
+
+// ================================================================
 // INVESTOR DASHBOARD — ANÁLISIS / NOTICIAS
 // ================================================================
 function switchInvTab(tab) {
@@ -3718,6 +4140,7 @@ function switchInvTab(tab) {
   document.getElementById('invTabBancos').classList.toggle('active',       tab === 'bancos');
   document.getElementById('invTabFondos').classList.toggle('active',       tab === 'fondos');
   document.getElementById('invTabCrypto').classList.toggle('active',       tab === 'crypto');
+  document.getElementById('invTabTrading').classList.toggle('active',      tab === 'trading');
   // Muestra/oculta contenido
   document.getElementById('invMercadosContent').style.display     = tab === 'mercados'    ? 'block' : 'none';
   document.getElementById('invAnalisisPanel').style.display       = tab === 'analisis'    ? 'block' : 'none';
@@ -3726,6 +4149,7 @@ function switchInvTab(tab) {
   document.getElementById('invBancosPanel').style.display         = tab === 'bancos'      ? 'block' : 'none';
   document.getElementById('invFondosPanel').style.display         = tab === 'fondos'      ? 'block' : 'none';
   document.getElementById('invCryptoPanel').style.display         = tab === 'crypto'      ? 'block' : 'none';
+  document.getElementById('invTradingPanel').style.display        = tab === 'trading'     ? 'block' : 'none';
   // Carga noticias la primera vez que se abre la pestaña
   if (tab === 'analisis'   && _newsData.length === 0) loadInvestorNews();
   // Carga carteras la primera vez que se abre la pestaña
@@ -3740,6 +4164,8 @@ function switchInvTab(tab) {
   if (tab === 'crypto' && !_cryptoLoaded) { _cryptoLoaded = true; setTimeout(loadCryptoMarket, 60); }
   // Redimensiona gráfico crypto al volver a la pestaña
   if (tab === 'crypto' && _cryptoChart) { setTimeout(() => { try { _cryptoChart.timeScale().fitContent(); } catch(_){} }, 80); }
+  // Carga Inside Trading la primera vez (o actualiza si ya estaba)
+  if (tab === 'trading') setTimeout(() => loadInsideTrading(false), 60);
 }
 
 async function loadInvestorNews() {
