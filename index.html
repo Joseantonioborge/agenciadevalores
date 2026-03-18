@@ -1638,6 +1638,29 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .it-formula code{background:rgba(255,255,255,.07);padding:1px 5px;border-radius:4px;font-family:monospace;font-size:.72rem}
 .it-formula ul{padding-left:18px;margin:8px 0}
 .it-disclaimer{margin-top:12px;padding:10px 13px;background:rgba(239,68,68,.08);border-radius:8px;border-left:3px solid #EF4444;color:#F87171;font-size:.71rem;line-height:1.5}
+/* ── MAPA DE CALOR ────────────────────────────────────────── */
+.it-heatmap-section{margin-bottom:28px}
+.it-heatmap-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.it-hm-table{border-collapse:separate;border-spacing:3px;width:100%;font-variant-numeric:tabular-nums}
+.it-hm-th{font-size:.59rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text2);padding:6px 4px;text-align:center;white-space:nowrap;min-width:68px}
+.it-hm-th-corner{min-width:80px;text-align:left;color:var(--text3)}
+.it-hm-asset{font-size:.72rem;font-weight:600;color:var(--text2);padding:7px 10px 7px 2px;white-space:nowrap;vertical-align:middle}
+.it-hm-cell{padding:11px 6px;border-radius:8px;text-align:center;font-size:.77rem;font-weight:700;min-width:68px;cursor:default;transition:transform .15s,box-shadow .15s,filter .15s;position:relative;vertical-align:middle;user-select:none}
+.it-hm-cell:hover{transform:scale(1.1);box-shadow:0 6px 20px rgba(0,0,0,.55);z-index:5;filter:brightness(1.18)}
+.it-hm-sub{font-size:.56rem;font-weight:400;opacity:.75;display:block;margin-top:1px;letter-spacing:.01em}
+.it-hm-cell-avg{opacity:.92;border-left:1px solid rgba(255,255,255,.09)}
+.it-hm-cat-total td{opacity:.78}
+.it-hm-legend{display:flex;align-items:center;gap:8px;margin-top:11px;font-size:.64rem;color:var(--text3)}
+.it-hm-legend-grad{height:6px;width:150px;border-radius:3px;flex-shrink:0;background:linear-gradient(to right,#EF4444 0%,#94a3b8 50%,#10B981 100%)}
+.it-hm-legend-note{margin-left:auto;font-style:italic;opacity:.7}
+/* Enhanced cat cards */
+.it-cat-card{transition:border-color .4s,background .4s}
+/* Enhanced impact cards */
+.it-impact-card{transition:border-color .4s,background .4s}
+/* Probability visual bar inside events table */
+.it-prob-wrap{position:relative;display:inline-flex;flex-direction:column;align-items:center;gap:2px;min-width:42px}
+.it-prob-bar-outer{width:38px;height:4px;background:rgba(255,255,255,.08);border-radius:2px;overflow:hidden}
+.it-prob-bar-inner{height:4px;border-radius:2px;transition:width .55s ease}
 @media(max-width:700px){
   .it-events-thead,.it-events-row{grid-template-columns:1fr 68px 68px 95px}
   .it-events-thead span:nth-child(2),.it-events-row span:nth-child(2),
@@ -2260,6 +2283,12 @@ tr:hover td{background:rgba(255,255,255,.02)}
 
       <!-- Categorías -->
       <div class="it-categories" id="itCategories"></div>
+
+      <!-- Mapa de calor: activos × categorías -->
+      <div class="it-heatmap-section">
+        <h4 class="it-section-title">🌡️ Mapa de Calor · Activos × Categorías</h4>
+        <div class="it-heatmap-wrap"><div id="itHeatmap"><div class="it-loading">—</div></div></div>
+      </div>
 
       <!-- Impacto en activos -->
       <div class="it-impact-section">
@@ -4128,6 +4157,7 @@ async function loadInsideTrading(forceRefresh = false) {
   _itLastSignal = { globalSignal, catScores, eventCount };
   _renderITSignal(globalSignal, eventCount, srcLabel);
   _renderITCategories(catScores);
+  _renderITHeatmap(catScores);
   _renderITImpact(catScores);
   _renderITEvents(events.slice(0, 20));
 
@@ -4170,7 +4200,10 @@ function _renderITCategories(catScores) {
     }
     const pct = Math.min(100, Math.abs(score));
     const color = score >= 20 ? '#10B981' : score >= -20 ? '#94a3b8' : '#EF4444';
-    return `<div class="it-cat-card">
+    const bgAlpha = 0.04 + (Math.abs(score) / 100) * 0.13;
+    const bgColor = score >= 20 ? `rgba(16,185,129,${bgAlpha.toFixed(2)})` : score <= -20 ? `rgba(239,68,68,${bgAlpha.toFixed(2)})` : 'transparent';
+    const borderColor = score >= 20 ? `rgba(16,185,129,0.55)` : score <= -20 ? `rgba(239,68,68,0.55)` : 'var(--border)';
+    return `<div class="it-cat-card" style="border-color:${borderColor};background:${bgColor}">
       <div class="it-cat-icon">${meta.icon}</div>
       <div class="it-cat-name">${_lang === 'en' ? meta.labelEn : meta.label}</div>
       <div class="it-cat-score" style="color:${color}">${score >= 0 ? '+' : ''}${Math.round(score)}</div>
@@ -4193,7 +4226,10 @@ function _renderITImpact(catScores) {
     const pct   = Math.min(100, Math.abs(assetScore));
     const color = assetScore >= 15 ? '#10B981' : assetScore >= -15 ? '#94a3b8' : '#EF4444';
     const arrow = assetScore >= 15 ? '▲' : assetScore >= -15 ? '→' : '▼';
-    return `<div class="it-impact-card">
+    const impBgAlpha = 0.06 + (pct / 100) * 0.18;
+    const impBg  = assetScore >= 15 ? `rgba(16,185,129,${impBgAlpha.toFixed(2)})` : assetScore <= -15 ? `rgba(239,68,68,${impBgAlpha.toFixed(2)})` : 'transparent';
+    const impBorder = assetScore >= 15 ? `rgba(16,185,129,0.4)` : assetScore <= -15 ? `rgba(239,68,68,0.4)` : 'var(--border)';
+    return `<div class="it-impact-card" style="border-color:${impBorder};background:${impBg}">
       <div class="it-impact-asset">${asset}</div>
       <div class="it-impact-signal" style="color:${color}">${arrow} ${assetScore >= 0 ? '+' : ''}${Math.round(assetScore)}</div>
       <div class="it-impact-bar-wrap"><div class="it-impact-bar" style="width:${pct}%;background:${color}"></div></div>
@@ -4226,13 +4262,105 @@ function _renderITEvents(events) {
       return `<div class="it-events-row">
         <span class="it-event-q" title="${ev.question.replace(/"/g,'&quot;')}">${ev.question}</span>
         <span class="it-event-cat">${meta.icon} ${_lang === 'en' ? meta.labelEn : meta.label}</span>
-        <span class="it-event-prob" style="color:${probColor}"><strong>${prob}%</strong></span>
+        <span class="it-event-prob">
+          <div class="it-prob-wrap">
+            <strong style="color:${probColor}">${prob}%</strong>
+            <div class="it-prob-bar-outer"><div class="it-prob-bar-inner" style="width:${prob}%;background:${probColor}"></div></div>
+          </div>
+        </span>
         <span class="it-event-vol">${vol}</span>
         <span>${senBadge}</span>
         <span class="it-src-badge ${srcCls}">${ev.source}</span>
       </div>`;
     }).join('')}
   </div>`;
+}
+
+// ── Helper: color de celda de mapa de calor ───────────────────────
+function _itCellBg(score) {
+  const abs = Math.min(100, Math.abs(score));
+  const alpha = 0.10 + (abs / 100) * 0.58;
+  if (score >  5) return `rgba(16,185,129,${alpha.toFixed(2)})`;
+  if (score < -5) return `rgba(239,68,68,${alpha.toFixed(2)})`;
+  return `rgba(148,163,184,0.10)`;
+}
+function _itCellFg(score) {
+  if (Math.abs(score) < 6) return 'var(--text2)';
+  return score > 0 ? '#6EE7B7' : '#FCA5A5';
+}
+
+// ── Mapa de calor: activos × categorías ──────────────────────────
+function _renderITHeatmap(catScores) {
+  const el = document.getElementById('itHeatmap');
+  if (!el) return;
+
+  const cats   = Object.keys(IT_CAT_META);
+  const assets = Object.keys(IT_ASSET_WEIGHTS);
+  const catShortLabel = {
+    monetaria:   '🏦 Mon.',
+    economia:    '📈 Econ.',
+    geopolitica: '🌍 Geo.',
+    mercados:    '💹 Mkt.',
+    energia:     '⚡ Ener.',
+  };
+
+  let html = `<table class="it-hm-table"><thead><tr>`;
+  html += `<th class="it-hm-th it-hm-th-corner">Activo</th>`;
+  cats.forEach(cat => {
+    html += `<th class="it-hm-th" title="${IT_CAT_META[cat]?.label}">${catShortLabel[cat] || cat}</th>`;
+  });
+  html += `<th class="it-hm-th it-hm-cell-avg">Promedio</th></tr></thead><tbody>`;
+
+  for (const asset of assets) {
+    const weights = IT_ASSET_WEIGHTS[asset];
+    let assetTotal = 0, assetWeightSum = 0;
+    let cells = '';
+    for (const cat of cats) {
+      const catScore = catScores[cat];
+      const w        = weights[cat] || 0;
+      const cellScore = (catScore !== null && catScore !== undefined) ? catScore * w : null;
+      if (cellScore !== null) { assetTotal += cellScore; assetWeightSum += w; }
+      const bg       = cellScore !== null ? _itCellBg(cellScore) : 'rgba(255,255,255,0.03)';
+      const fg       = cellScore !== null ? _itCellFg(cellScore) : 'var(--text3)';
+      const display  = cellScore !== null ? (cellScore >= 0 ? '+' : '') + Math.round(cellScore) : '—';
+      const wLabel   = `Peso: ${Math.round(w * 100)}%`;
+      cells += `<td class="it-hm-cell" style="background:${bg};color:${fg}" title="${IT_CAT_META[cat]?.label} → ${asset}&#10;Señal cat.: ${catScore !== null ? (catScore >= 0?'+':'') + Math.round(catScore) : '—'}&#10;${wLabel}&#10;Contribución: ${display}">
+        ${display}<span class="it-hm-sub">${wLabel}</span>
+      </td>`;
+    }
+    const avg     = assetWeightSum > 0 ? assetTotal / assetWeightSum : 0;
+    const avgBg   = _itCellBg(avg);
+    const avgFg   = _itCellFg(avg);
+    const avgDisp = (avg >= 0 ? '+' : '') + Math.round(avg);
+    html += `<tr>
+      <td class="it-hm-asset">${asset}</td>
+      ${cells}
+      <td class="it-hm-cell it-hm-cell-avg" style="background:${avgBg};color:${avgFg}" title="${asset} — señal ponderada: ${avgDisp}">${avgDisp}</td>
+    </tr>`;
+  }
+
+  // Fila de señales por categoría
+  html += `<tr class="it-hm-cat-total"><td class="it-hm-asset" style="font-size:.62rem;color:var(--text3);font-style:italic">Señal cat.</td>`;
+  let globalSum = 0, globalN = 0;
+  for (const cat of cats) {
+    const s  = catScores[cat];
+    const bg = s !== null && s !== undefined ? _itCellBg(s) : 'rgba(255,255,255,.03)';
+    const fg = s !== null && s !== undefined ? _itCellFg(s)  : 'var(--text3)';
+    const d  = s !== null && s !== undefined ? (s >= 0 ? '+' : '') + Math.round(s) : '—';
+    if (s !== null && s !== undefined) { globalSum += s; globalN++; }
+    html += `<td class="it-hm-cell" style="background:${bg};color:${fg};font-size:.7rem">${d}</td>`;
+  }
+  const ga  = globalN > 0 ? globalSum / globalN : 0;
+  html += `<td class="it-hm-cell it-hm-cell-avg" style="background:${_itCellBg(ga)};color:${_itCellFg(ga)};font-size:.7rem">${(ga >= 0?'+':'') + Math.round(ga)}</td>`;
+  html += `</tr></tbody></table>`;
+  html += `<div class="it-hm-legend">
+    <span>Bajista</span>
+    <div class="it-hm-legend-grad"></div>
+    <span>Alcista</span>
+    <span class="it-hm-legend-note">Cada celda = Señal de categoría × Peso del activo</span>
+  </div>`;
+
+  el.innerHTML = html;
 }
 
 // ================================================================
