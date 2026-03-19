@@ -1668,6 +1668,61 @@ tr:hover td{background:rgba(255,255,255,.02)}
   .it-events-thead span:nth-child(6),.it-events-row span:nth-child(6){display:none}
   .it-categories{grid-template-columns:repeat(auto-fill,minmax(130px,1fr))}
 }
+/* ── PROPUESTAS DE CARTERA ────────────────────────────────── */
+#invProuestasPanel{padding:20px 0}
+.prop-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;flex-wrap:wrap;gap:10px}
+.prop-title{font-size:1.1rem;font-weight:700;margin:0 0 4px}
+.prop-sub{font-size:.79rem;color:var(--text2);margin:0}
+.prop-refresh-btn{background:var(--accent);color:#fff;border:none;border-radius:8px;padding:6px 14px;font-size:.79rem;cursor:pointer;transition:opacity .2s}
+.prop-refresh-btn:hover{opacity:.82}
+.prop-updated{font-size:.73rem;color:var(--text2)}
+.prop-algo-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(37,99,235,.10);color:var(--accent);border:1px solid rgba(37,99,235,.25);border-radius:20px;padding:3px 10px;font-size:.72rem;font-weight:600;margin-bottom:14px}
+.prop-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px;margin-bottom:24px}
+.prop-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;transition:box-shadow .2s,border-color .2s;position:relative;overflow:hidden}
+.prop-card:hover{box-shadow:0 4px 24px rgba(0,0,0,.13)}
+.prop-card-corto{border-top:3px solid #10B981}
+.prop-card-medio{border-top:3px solid #F59E0B}
+.prop-card-largo{border-top:3px solid #8B5CF6}
+.prop-card-badge{position:absolute;top:16px;right:16px;font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 9px;border-radius:20px}
+.prop-badge-bajo{background:rgba(16,185,129,.15);color:#10B981}
+.prop-badge-medio{background:rgba(245,158,11,.15);color:#F59E0B}
+.prop-badge-alto{background:rgba(139,92,246,.15);color:#8B5CF6}
+.prop-card-plazo{font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text2);margin-bottom:4px}
+.prop-card-nombre{font-size:1rem;font-weight:700;margin-bottom:2px}
+.prop-card-horizonte{font-size:.76rem;color:var(--text2);margin-bottom:14px}
+.prop-metrics{display:flex;gap:16px;margin-bottom:14px;flex-wrap:wrap}
+.prop-metric{display:flex;flex-direction:column;gap:2px}
+.prop-metric-val{font-size:1.25rem;font-weight:800;line-height:1}
+.prop-metric-label{font-size:.67rem;color:var(--text2);text-transform:uppercase;letter-spacing:.06em}
+.prop-metric-val.green{color:#10B981}
+.prop-metric-val.amber{color:#F59E0B}
+.prop-metric-val.purple{color:#8B5CF6}
+.prop-donut-row{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+.prop-donut-wrap{flex-shrink:0}
+.prop-donut-legend{display:flex;flex-direction:column;gap:5px;flex:1;min-width:0}
+.prop-legend-item{display:flex;align-items:center;gap:6px;font-size:.73rem}
+.prop-legend-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.prop-legend-name{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text2)}
+.prop-legend-pct{font-weight:600;font-size:.72rem;flex-shrink:0}
+.prop-divider{border:none;border-top:1px solid var(--border);margin:12px 0}
+.prop-assets-title{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text2);margin-bottom:8px}
+.prop-asset-list{display:flex;flex-direction:column;gap:5px;max-height:160px;overflow-y:auto}
+.prop-asset-item{display:flex;align-items:center;gap:7px;font-size:.75rem;padding:4px 6px;border-radius:6px;background:var(--hover)}
+.prop-asset-type{font-size:.62rem;font-weight:700;letter-spacing:.05em;padding:2px 6px;border-radius:10px;text-transform:uppercase;flex-shrink:0}
+.prop-asset-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.prop-asset-pct{font-weight:600;color:var(--text2);flex-shrink:0}
+.prop-razon{margin-top:12px;background:rgba(37,99,235,.06);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:8px 12px;font-size:.74rem;color:var(--text2);line-height:1.55}
+.prop-loading{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 20px;gap:14px;color:var(--text2)}
+.prop-spinner{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite}
+.prop-signal-bar{display:flex;gap:10px;align-items:center;padding:12px 16px;background:var(--card);border:1px solid var(--border);border-radius:12px;margin-bottom:18px;flex-wrap:wrap}
+.prop-signal-item{display:flex;flex-direction:column;align-items:center;gap:2px;min-width:60px}
+.prop-signal-val{font-size:.95rem;font-weight:800}
+.prop-signal-lbl{font-size:.62rem;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;text-align:center}
+.prop-disclaimer{font-size:.72rem;color:var(--text3);margin-top:18px;padding:10px 14px;background:var(--hover);border-radius:8px;line-height:1.55}
+@media(max-width:600px){
+  .prop-cards{grid-template-columns:1fr}
+  .prop-metrics{gap:10px}
+}
 </style>
 </head>
 <body>
@@ -1816,6 +1871,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
         <button class="inv-tab"        id="invTabFondos"      data-label="Comparador de Fondos"   onclick="switchInvTab('fondos')">      <span class="inv-tab-icon">📂</span><span class="inv-tab-label" data-i18n="tab_fondos">Comparador de Fondos</span></button>
         <button class="inv-tab"        id="invTabBancos"      data-label="Entidades Financieras"  onclick="switchInvTab('bancos')">      <span class="inv-tab-icon">🏦</span><span class="inv-tab-label" data-i18n="tab_bancos">Entidades Financieras</span></button>
         <button class="inv-tab"        id="invTabCalculadora" data-label="Calculadora de interés compuesto" onclick="switchInvTab('calculadora')"> <span class="inv-tab-icon">🧮</span><span class="inv-tab-label" data-i18n="tab_calculadora">Calculadora de interés compuesto</span></button>
+        <button class="inv-tab"        id="invTabPropuestas"  data-label="Propuestas"                      onclick="switchInvTab('propuestas')">  <span class="inv-tab-icon">🎯</span><span class="inv-tab-label" data-i18n="tab_propuestas">Propuestas</span></button>
       </div>
     </nav>
 
@@ -2324,6 +2380,27 @@ tr:hover td{background:rgba(255,255,255,.02)}
       </details>
 
     </div><!-- /invTradingPanel -->
+
+    <!-- ── Propuestas de Cartera Panel ── -->
+    <div id="invProuestasPanel" style="display:none">
+      <div class="prop-header">
+        <div>
+          <h3 class="prop-title">🎯 Propuestas de Cartera</h3>
+          <p class="prop-sub">Algoritmo AV · Análisis multivariable de mercados, fondos, señales e inside trading</p>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;flex-shrink:0">
+          <span class="prop-updated" id="propUpdated"></span>
+          <button class="prop-refresh-btn" onclick="generatePortfolioProposals(true)">↻ Regenerar</button>
+        </div>
+      </div>
+      <div id="propSignalBar"></div>
+      <div id="propContent">
+        <div class="prop-loading">
+          <div class="prop-spinner"></div>
+          <div>Analizando mercados y generando propuestas…</div>
+        </div>
+      </div>
+    </div><!-- /invProuestasPanel -->
 
     </div><!-- /invContent -->
 
@@ -3121,6 +3198,7 @@ let _bancosLoaded  = false;      // flag: ya se renderizó el panel de entidades
 let _fondosLoaded  = false;      // flag: ya se renderizó el comparador de fondos
 let _cryptoLoaded  = false;      // flag: ya se inició el panel crypto
 let _tradingLoaded  = false;      // flag: ya se cargó Inside Trading
+let _propuestasLoaded = false;    // flag: ya se generaron propuestas de cartera
 let _itLastEvents   = [];         // últimos eventos Inside Trading (para FinBot)
 let _itLastSignal   = null;       // { globalSignal, catScores, eventCount } (para FinBot)
 let _cryptoData    = [];         // lista de coins del mercado
@@ -3369,6 +3447,7 @@ function _doLogout() {
   _cryptoLoaded    = false;
   _cryptoData      = [];
   _tradingLoaded   = false;
+  _propuestasLoaded = false;
   _cryptoSelectedId = null;
   if (_cryptoChart) { try { _cryptoChart.remove(); } catch(_){} _cryptoChart = null; _cryptoSeries = null; }
   _finbotHistory   = [];
@@ -4391,6 +4470,7 @@ function switchInvTab(tab) {
   document.getElementById('invTabFondos').classList.toggle('active',       tab === 'fondos');
   document.getElementById('invTabCrypto').classList.toggle('active',       tab === 'crypto');
   document.getElementById('invTabTrading').classList.toggle('active',      tab === 'trading');
+  document.getElementById('invTabPropuestas').classList.toggle('active',   tab === 'propuestas');
   // Muestra/oculta contenido
   document.getElementById('invMercadosContent').style.display     = tab === 'mercados'    ? 'block' : 'none';
   document.getElementById('invAnalisisPanel').style.display       = tab === 'analisis'    ? 'block' : 'none';
@@ -4400,6 +4480,7 @@ function switchInvTab(tab) {
   document.getElementById('invFondosPanel').style.display         = tab === 'fondos'      ? 'block' : 'none';
   document.getElementById('invCryptoPanel').style.display         = tab === 'crypto'      ? 'block' : 'none';
   document.getElementById('invTradingPanel').style.display        = tab === 'trading'     ? 'block' : 'none';
+  document.getElementById('invProuestasPanel').style.display      = tab === 'propuestas'  ? 'block' : 'none';
   // Carga noticias la primera vez que se abre la pestaña
   if (tab === 'analisis'   && _newsData.length === 0) loadInvestorNews();
   // Carga carteras la primera vez que se abre la pestaña
@@ -4416,6 +4497,8 @@ function switchInvTab(tab) {
   if (tab === 'crypto' && _cryptoChart) { setTimeout(() => { try { _cryptoChart.timeScale().fitContent(); } catch(_){} }, 80); }
   // Carga Inside Trading la primera vez (o actualiza si ya estaba)
   if (tab === 'trading') setTimeout(() => loadInsideTrading(false), 60);
+  // Genera propuestas de cartera la primera vez
+  if (tab === 'propuestas' && !_propuestasLoaded) setTimeout(() => generatePortfolioProposals(false), 60);
 }
 
 async function loadInvestorNews() {
@@ -7272,6 +7355,384 @@ const CAT_TEXT = {
   'RV USA':'#f9a8d4','RV Global':'#f472b6','RV Temático':'#ec4899',
   'Alternativo':'#5eead4','Garantizado':'#94a3b8',
 };
+
+// ══════════════════════════════════════════════════════════════════
+//  ALGORITMO DE PROPUESTAS DE CARTERA — AV Portfolio Engine v1.0
+//  Fuentes: _marketData, _itLastSignal, _itLastEvents,
+//           FONDOS_DATA, _cryptoData, TASA_ANUAL
+// ══════════════════════════════════════════════════════════════════
+
+async function generatePortfolioProposals(forceRefresh = false) {
+  _propuestasLoaded = true;
+  const contentEl = document.getElementById('propContent');
+  const signalEl  = document.getElementById('propSignalBar');
+  const updEl     = document.getElementById('propUpdated');
+  if (!contentEl) return;
+
+  contentEl.innerHTML = `<div class="prop-loading"><div class="prop-spinner"></div><div>Analizando mercados y generando propuestas…</div></div>`;
+
+  // ── 1. Recopilar datos disponibles ──────────────────────────────
+  // Si no hay datos de mercado, intentar cargarlos brevemente
+  let marketData = _marketData && _marketData.length ? _marketData : [];
+  let itSignal   = _itLastSignal;
+  let itEvents   = _itLastEvents && _itLastEvents.length ? _itLastEvents : _itFallbackEvents();
+  let cryptoData = _cryptoData && _cryptoData.length ? _cryptoData : [];
+
+  // Si no hay señal IT, calcularla desde los eventos
+  if (!itSignal && itEvents.length) {
+    itSignal = _itComputeSignal(itEvents);
+  }
+
+  // ── 2. Calcular indicadores del algoritmo ────────────────────────
+  const globalSignal = itSignal ? (itSignal.globalSignal || 0) : 0;
+  const catScores    = itSignal ? (itSignal.catScores || {}) : {};
+
+  // Sentimiento de mercado real (-1 a +1)
+  let mktSentiment = 0;
+  if (marketData.length) {
+    const validMkt = marketData.filter(m => typeof m.changePct === 'number');
+    if (validMkt.length) {
+      const avgChg = validMkt.reduce((s, m) => s + m.changePct, 0) / validMkt.length;
+      mktSentiment = Math.max(-1, Math.min(1, avgChg / 3)); // normalizar ±3% → ±1
+    }
+  }
+
+  // Score compuesto: 60% señal IT + 40% mercado actual
+  const compositeScore = (globalSignal / 100) * 0.6 + mktSentiment * 0.4;
+  // -1 = muy bajista, 0 = neutral, +1 = muy alcista
+
+  // Volatilidad implícita: si hay muchos mercados en caída → alta vol
+  let impliedVol = 'media';
+  if (marketData.length) {
+    const downCount = marketData.filter(m => (m.changePct || 0) < -1).length;
+    const upCount   = marketData.filter(m => (m.changePct || 0) > 1).length;
+    if (downCount > marketData.length * 0.5) impliedVol = 'alta';
+    else if (upCount > marketData.length * 0.5) impliedVol = 'baja';
+  }
+
+  // Señal monetaria (tipos de interés): prob de recorte de tipos
+  const catMon  = catScores['monetaria']  || 0;  // > 0 = bajada tipos (positivo para RF/mixtos)
+  const catGeo  = catScores['geopolitica']|| 0;  // < 0 = tensión geopolítica (riesgo)
+  const catEcon = catScores['economia']   || 0;  // > 0 = economía sana
+  const catMkt  = catScores['mercados']   || 0;  // > 0 = mercados alcistas
+
+  // Mejor crypto (top 3 por market cap)
+  const topCryptos = cryptoData.slice(0, 3).map(c => ({
+    nombre: c.name || c.id,
+    symbol: (c.symbol || '').toUpperCase(),
+    chg7d:  c.price_change_percentage_7d_in_currency || c.price_change_percentage_7d || 0
+  }));
+
+  // Selección de fondos óptimos por categoría (mejor Sharpe ratio)
+  function bestFonds(cats, n = 2) {
+    const pool = FONDOS_DATA.filter(f => cats.includes(f.cat));
+    return pool.sort((a, b) => b.sharpe - a.sharpe).slice(0, n);
+  }
+
+  // ── 3. Construir las 3 propuestas ────────────────────────────────
+
+  // ─── A) CORTO PLAZO (0-2 años) ───────────────────────────────────
+  // Objetivo: preservación de capital + liquidez. RF dominante.
+  // Ajuste alcista: +5% RV, -5% monetario
+  // Ajuste bajista: +5% monetario, -5% mixto defensivo
+
+  const cortoBullAdj = compositeScore > 0.2 ? 5 : (compositeScore < -0.2 ? -5 : 0);
+  const cortoAlloc = [
+    { tipo: 'fondo', cat: 'Monetario',       pct: 38 + (compositeScore < -0.2 ? 5 : 0), label: 'Monetario',         color: '#10B981' },
+    { tipo: 'bono',  cat: 'RF Corto Plazo',  pct: 27,                                    label: 'RF Corto Plazo',    color: '#059669' },
+    { tipo: 'fondo', cat: 'Mixto Defensivo', pct: 18 - (compositeScore < -0.2 ? 5 : 0), label: 'Mixto Defensivo',   color: '#34D399' },
+    { tipo: 'accion',cat: 'RV España',       pct: 8  + cortoBullAdj,                     label: 'RV / ETF España',   color: '#6EE7B7' },
+    { tipo: 'crypto',cat: 'Crypto',          pct: 4  - (compositeScore < -0.2 ? 2 : 0), label: 'Crypto (BTC/ETH)',  color: '#A7F3D0' },
+    { tipo: 'efectivo',cat:'Efectivo',       pct: 5,                                     label: 'Efectivo',          color: '#D1FAE5' },
+  ].map(a => ({ ...a, pct: Math.max(0, a.pct) }));
+  _normAlloc(cortoAlloc);
+
+  const cortoFonds  = bestFonds(['Monetario','RF Corto Plazo'], 2);
+  const cortoDef    = bestFonds(['Mixto Defensivo'], 1);
+  const cortoRV     = bestFonds(['RV España'], 1);
+
+  const cortoAssets = [
+    ...cortoFonds.map(f  => ({ tipo:'fondo',   nombre: f.nombre, pct: _allocPct(cortoAlloc,'Monetario') / 2 + (f.cat==='RF Corto Plazo'? _allocPct(cortoAlloc,'RF Corto Plazo')/2 : 0), isin: f.isin })),
+    ...cortoDef.map(f    => ({ tipo:'fondo',   nombre: f.nombre, pct: _allocPct(cortoAlloc,'Mixto Defensivo'), isin: f.isin })),
+    ...cortoRV.map(f     => ({ tipo:'accion',  nombre: f.nombre, pct: _allocPct(cortoAlloc,'RV España'), isin: f.isin })),
+    { tipo:'crypto',  nombre: topCryptos[0] ? `${topCryptos[0].nombre} (${topCryptos[0].symbol})` : 'Bitcoin (BTC)', pct: _allocPct(cortoAlloc,'Crypto') },
+    { tipo:'efectivo',nombre:'Cuenta remunerada / Depósito', pct: _allocPct(cortoAlloc,'Efectivo') },
+  ];
+
+  const cortoRentab = _calcRentab(cortoAlloc, cortoFonds, cortoDef, cortoRV, cryptoData);
+  const cortoVol    = _calcVol(cortoAlloc, cortoFonds, cortoDef, cortoRV);
+
+  const cortoRazon = `El algoritmo AV detecta un sentimiento de mercado ${_signalLabel(compositeScore)} (score compuesto ${(compositeScore*100).toFixed(0)}/100). ${impliedVol === 'alta' ? 'Con volatilidad implícita elevada, ' : ''}La propuesta prioriza capital garantizado en fondos monetarios con Sharpe > 2 y bonos de corto plazo. ${catMon > 20 ? 'La señal de recorte de tipos favorece posicionarse en RF antes de la bajada.' : ''} La pequeña exposición a RV española y crypto actúa como catalizador de rentabilidad sin comprometer la liquidez.`;
+
+  // ─── B) MEDIO PLAZO (2-5 años) ────────────────────────────────────
+  // Objetivo: crecimiento moderado + diversificación global.
+  const medioRVadj  = compositeScore > 0.2 ? 5 : (compositeScore < -0.2 ? -5 : 0);
+  const medioAlloc = [
+    { tipo:'fondo', cat:'Mixto Moderado',   pct: 22,             label:'Mixto Moderado',    color:'#F59E0B' },
+    { tipo:'fondo', cat:'Mixto Defensivo',  pct: 12,             label:'Mixto Defensivo',   color:'#FCD34D' },
+    { tipo:'accion',cat:'RV Europa',        pct: 18+medioRVadj,  label:'RV Europa',         color:'#FBBF24' },
+    { tipo:'accion',cat:'RV USA',           pct: 18+medioRVadj,  label:'RV USA / S&P 500',  color:'#FDE68A' },
+    { tipo:'bono',  cat:'RF',               pct: 15,             label:'Renta Fija Mixta',  color:'#FEF3C7' },
+    { tipo:'crypto',cat:'Crypto',           pct: 8+medioRVadj/2, label:'Crypto Top-3',      color:'#78350F' },
+    { tipo:'accion',cat:'RV Global',        pct: 7,              label:'ETF Global',        color:'#92400E' },
+  ].map(a => ({ ...a, pct: Math.max(0, a.pct) }));
+  _normAlloc(medioAlloc);
+
+  const medioMod    = bestFonds(['Mixto Moderado'], 2);
+  const medioDef    = bestFonds(['Mixto Defensivo'], 1);
+  const medioEUR    = bestFonds(['RV Europa'], 1);
+  const medioUSA    = bestFonds(['RV USA'], 1);
+  const medioGlob   = bestFonds(['RV Global'], 1);
+
+  const medioAssets = [
+    ...medioMod.map(f  => ({ tipo:'fondo',  nombre: f.nombre, pct: _allocPct(medioAlloc,'Mixto Moderado')/2, isin: f.isin })),
+    ...medioDef.map(f  => ({ tipo:'fondo',  nombre: f.nombre, pct: _allocPct(medioAlloc,'Mixto Defensivo'),  isin: f.isin })),
+    ...medioEUR.map(f  => ({ tipo:'accion', nombre: f.nombre, pct: _allocPct(medioAlloc,'RV Europa'),        isin: f.isin })),
+    ...medioUSA.map(f  => ({ tipo:'accion', nombre: f.nombre, pct: _allocPct(medioAlloc,'RV USA'),           isin: f.isin })),
+    ...medioGlob.map(f => ({ tipo:'etf',    nombre: f.nombre, pct: _allocPct(medioAlloc,'RV Global'),        isin: f.isin })),
+    { tipo:'bono',   nombre:'Renta Fija Mixta / Bonos Gobierno', pct: _allocPct(medioAlloc,'RF') },
+    { tipo:'crypto', nombre: topCryptos.map(c => c.symbol).join(' + ') || 'BTC + ETH + BNB', pct: _allocPct(medioAlloc,'Crypto') },
+  ];
+
+  const medioRentab = _calcRentab(medioAlloc, medioMod, medioDef, medioEUR, cryptoData);
+  const medioVol    = _calcVol(medioAlloc, medioMod, medioDef, medioEUR);
+
+  const medioRazon = `Propuesta equilibrada con exposición global. ${catEcon > 15 ? 'Los indicadores macroeconómicos son positivos, favoreciendo la renta variable.' : catEcon < -15 ? 'El entorno macro aconseja reforzar la parte defensiva.' : 'El entorno macro es mixto.'} ${catMkt > 20 ? 'Los mercados de predicción apuntan a bolsas alcistas, por lo que se aumenta el peso en RV USA y Europa.' : ''} La combinación de fondos de gestión activa (Magallanes, azValor, Bestinver) con exposición a índices (S&P 500, RV Global) ofrece el mejor binomio rentabilidad-riesgo a 3-5 años.`;
+
+  // ─── C) LARGO PLAZO (5+ años) ─────────────────────────────────────
+  // Objetivo: máximo crecimiento patrimonial. Alta exposición a RV y activos de riesgo.
+  const largoRVadj  = compositeScore > 0.1 ? 5 : (compositeScore < -0.1 ? -3 : 0);
+  const largoAlloc = [
+    { tipo:'accion',  cat:'RV USA',         pct: 28+largoRVadj,  label:'RV USA / NASDAQ',    color:'#8B5CF6' },
+    { tipo:'accion',  cat:'RV Temático',    pct: 18,             label:'RV Temático (Tech)',  color:'#7C3AED' },
+    { tipo:'accion',  cat:'RV Global',      pct: 12,             label:'RV Global / ETF',     color:'#A78BFA' },
+    { tipo:'crypto',  cat:'Crypto',         pct: 15+largoRVadj/2,label:'Crypto (BTC/ETH/Alt)',color:'#C4B5FD' },
+    { tipo:'fondo',   cat:'Mixto Agresivo', pct: 12,             label:'Mixto Agresivo',      color:'#DDD6FE' },
+    { tipo:'startup', cat:'Alternativo',    pct: 8,              label:'Alternativos / Startups',color:'#EDE9FE'},
+    { tipo:'bono',    cat:'RF',             pct: 7,              label:'RF Largo Plazo',      color:'#F5F3FF' },
+  ].map(a => ({ ...a, pct: Math.max(0, a.pct) }));
+  _normAlloc(largoAlloc);
+
+  const largoUSA    = bestFonds(['RV USA'], 2);
+  const largoTem    = bestFonds(['RV Temático'], 1);
+  const largoGlob   = bestFonds(['RV Global'], 1);
+  const largoAgr    = bestFonds(['Mixto Agresivo'], 1);
+
+  const largoAssets = [
+    ...largoUSA.map(f  => ({ tipo:'accion', nombre: f.nombre, pct: _allocPct(largoAlloc,'RV USA')/2,         isin: f.isin })),
+    ...largoTem.map(f  => ({ tipo:'accion', nombre: f.nombre, pct: _allocPct(largoAlloc,'RV Temático'),      isin: f.isin })),
+    ...largoGlob.map(f => ({ tipo:'etf',    nombre: f.nombre, pct: _allocPct(largoAlloc,'RV Global'),        isin: f.isin })),
+    ...largoAgr.map(f  => ({ tipo:'fondo',  nombre: f.nombre, pct: _allocPct(largoAlloc,'Mixto Agresivo'),   isin: f.isin })),
+    { tipo:'crypto',  nombre: (topCryptos.map(c => c.symbol).join(' + ') || 'BTC + ETH + SOL') + ' + Altcoins', pct: _allocPct(largoAlloc,'Crypto') },
+    { tipo:'startup', nombre:'Startups / Capital Riesgo / Infraestructura', pct: _allocPct(largoAlloc,'Alternativo') },
+    { tipo:'bono',    nombre:'Bonos ligados a inflación / Largo Plazo', pct: _allocPct(largoAlloc,'RF') },
+  ];
+
+  const largoRentab = _calcRentab(largoAlloc, largoUSA, largoTem, largoGlob, cryptoData);
+  const largoVol    = _calcVol(largoAlloc, largoUSA, largoTem, largoGlob);
+
+  const largoRazon = `Cartera de acumulación máxima a largo plazo. ${catGeo < -20 ? '⚠️ La tensión geopolítica detectada justifica no sobreponderar aún más, pero el horizonte temporal absorbe estos shocks.' : 'El horizonte temporal supera cualquier ciclo bajista histórico.'} La concentración en tecnología (${_allocPct(largoAlloc,'RV Temático')}%) refleja la tendencia estructural de IA y digitalización. El ${_allocPct(largoAlloc,'Crypto')}% en crypto captura la adopción institucional. Los alternativos (startups, capital riesgo) maximizan la prima de iliquidez.`;
+
+  // ── 4. Renderizar ─────────────────────────────────────────────────
+  const proposals = [
+    {
+      id: 'corto', nombre: 'Cartera Conservadora', plazo: 'Corto Plazo', horizonte: '0 – 2 años',
+      riesgo: 'bajo', clsCard: 'prop-card-corto', clsBadge: 'prop-badge-bajo', clsMetric: 'green',
+      alloc: cortoAlloc, assets: cortoAssets, rentab: cortoRentab, vol: cortoVol, razon: cortoRazon,
+    },
+    {
+      id: 'medio', nombre: 'Cartera Equilibrada', plazo: 'Medio Plazo', horizonte: '2 – 5 años',
+      riesgo: 'medio', clsCard: 'prop-card-medio', clsBadge: 'prop-badge-medio', clsMetric: 'amber',
+      alloc: medioAlloc, assets: medioAssets, rentab: medioRentab, vol: medioVol, razon: medioRazon,
+    },
+    {
+      id: 'largo', nombre: 'Cartera Crecimiento', plazo: 'Largo Plazo', horizonte: '5 – 10+ años',
+      riesgo: 'alto', clsCard: 'prop-card-largo', clsBadge: 'prop-badge-alto', clsMetric: 'purple',
+      alloc: largoAlloc, assets: largoAssets, rentab: largoRentab, vol: largoVol, razon: largoRazon,
+    },
+  ];
+
+  // Signal bar
+  if (signalEl) {
+    const sColor = compositeScore > 0.2 ? '#10B981' : compositeScore < -0.2 ? '#EF4444' : '#F59E0B';
+    const sLabel = compositeScore > 0.35 ? '🟢 Muy Alcista' : compositeScore > 0.1 ? '🟡 Alcista' : compositeScore < -0.35 ? '🔴 Muy Bajista' : compositeScore < -0.1 ? '🟠 Bajista' : '⚪ Neutral';
+    const mktBest = marketData.length ? marketData.reduce((a,b) => (a.changePct||0) > (b.changePct||0) ? a : b) : null;
+    const cryptoBestChg = cryptoData.length ? Math.max(...cryptoData.slice(0,5).map(c => c.price_change_percentage_24h || 0)) : null;
+    signalEl.innerHTML = `
+      <div class="prop-algo-badge">⚙️ AV Portfolio Engine · ${new Date().toLocaleDateString('es-ES',{day:'2-digit',month:'short',year:'numeric'})}</div>
+      <div class="prop-signal-bar">
+        <div class="prop-signal-item">
+          <span class="prop-signal-val" style="color:${sColor}">${sLabel}</span>
+          <span class="prop-signal-lbl">Sentimiento Global</span>
+        </div>
+        <div class="prop-signal-item">
+          <span class="prop-signal-val" style="color:${globalSignal>=0?'#10B981':'#EF4444'}">${globalSignal >= 0 ? '+' : ''}${globalSignal.toFixed(0)}</span>
+          <span class="prop-signal-lbl">AV Signal IT</span>
+        </div>
+        <div class="prop-signal-item">
+          <span class="prop-signal-val" style="color:${mktSentiment>=0?'#10B981':'#EF4444'}">${mktSentiment >= 0 ? '+' : ''}${(mktSentiment*100).toFixed(0)}</span>
+          <span class="prop-signal-lbl">Sentim. Mercado</span>
+        </div>
+        ${mktBest ? `<div class="prop-signal-item">
+          <span class="prop-signal-val" style="color:#10B981">${mktBest.name || mktBest.symbol}</span>
+          <span class="prop-signal-lbl">Mejor Índice</span>
+        </div>` : ''}
+        <div class="prop-signal-item">
+          <span class="prop-signal-val" style="color:${impliedVol==='alta'?'#EF4444':impliedVol==='baja'?'#10B981':'#F59E0B'}">${impliedVol.toUpperCase()}</span>
+          <span class="prop-signal-lbl">Vol. Implícita</span>
+        </div>
+        <div class="prop-signal-item">
+          <span class="prop-signal-val">${itEvents.length}</span>
+          <span class="prop-signal-lbl">Eventos Analizados</span>
+        </div>
+        ${cryptoBestChg !== null ? `<div class="prop-signal-item">
+          <span class="prop-signal-val" style="color:${cryptoBestChg>=0?'#10B981':'#EF4444'}">${cryptoBestChg>=0?'+':''}${cryptoBestChg.toFixed(1)}%</span>
+          <span class="prop-signal-lbl">Mejor Crypto 24h</span>
+        </div>` : ''}
+      </div>`;
+  }
+
+  // Cards
+  contentEl.innerHTML = `
+    <div class="prop-cards">
+      ${proposals.map(p => _renderProposalCard(p)).join('')}
+    </div>
+    <p class="prop-disclaimer">⚠️ Las propuestas de cartera son generadas algorítmicamente con fines informativos y no constituyen asesoramiento financiero personalizado. Las rentabilidades pasadas no garantizan resultados futuros. Consulte con un asesor financiero antes de tomar decisiones de inversión.</p>`;
+
+  if (updEl) updEl.textContent = 'Actualizado: ' + new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+}
+
+// ── Helpers del algoritmo ─────────────────────────────────────────
+
+function _normAlloc(alloc) {
+  const total = alloc.reduce((s, a) => s + a.pct, 0);
+  if (total > 0) alloc.forEach(a => { a.pct = Math.round(a.pct / total * 100); });
+  // ajustar redondeo para sumar exactamente 100
+  const diff = 100 - alloc.reduce((s, a) => s + a.pct, 0);
+  if (diff !== 0 && alloc.length) alloc[0].pct += diff;
+}
+
+function _allocPct(alloc, cat) {
+  const a = alloc.find(x => x.cat === cat || x.label === cat);
+  return a ? a.pct : 0;
+}
+
+function _calcRentab(alloc, ...fondGroups) {
+  // Pesos por tipo de activo
+  const weightMap = { 'fondo': null, 'bono': 0.03, 'accion': 0.09, 'crypto': 0.22, 'efectivo': 0.02, 'startup': 0.20, 'etf': 0.08 };
+  let totalW = 0, totalR = 0;
+  for (const a of alloc) {
+    let r = weightMap[a.tipo] !== undefined ? weightMap[a.tipo] : 0.06;
+    if (a.tipo === 'fondo') {
+      // Buscar en FONDOS_DATA fondos de esa categoría
+      const fonds = FONDOS_DATA.filter(f => f.cat === a.cat);
+      if (fonds.length) {
+        const bestFond = fonds.sort((x,y) => y.sharpe - x.sharpe)[0];
+        r = (bestFond.r5y || bestFond.r3y || bestFond.r1y || 4) / 100;
+      }
+    }
+    totalR += a.pct * r;
+    totalW += a.pct;
+  }
+  return totalW > 0 ? (totalR / totalW * 100).toFixed(1) : '—';
+}
+
+function _calcVol(alloc, ...fondGroups) {
+  const volMap = { 'fondo': null, 'bono': 3.5, 'accion': 15, 'crypto': 55, 'efectivo': 0.1, 'startup': 40, 'etf': 14 };
+  let totalW = 0, totalV = 0;
+  for (const a of alloc) {
+    let v = volMap[a.tipo] !== undefined ? volMap[a.tipo] : 10;
+    if (a.tipo === 'fondo') {
+      const fonds = FONDOS_DATA.filter(f => f.cat === a.cat);
+      if (fonds.length) {
+        v = fonds.reduce((s, f) => s + (f.vol || 5), 0) / fonds.length;
+      }
+    }
+    totalV += a.pct * v;
+    totalW += a.pct;
+  }
+  return totalW > 0 ? (totalV / totalW).toFixed(1) : '—';
+}
+
+function _signalLabel(score) {
+  if (score > 0.35) return 'muy alcista';
+  if (score > 0.1)  return 'moderadamente alcista';
+  if (score < -0.35) return 'muy bajista';
+  if (score < -0.1)  return 'moderadamente bajista';
+  return 'neutral';
+}
+
+function _renderProposalCard(p) {
+  const donutSvg = _propDonut(p.alloc, 72);
+  const riesgoLbl = { bajo: '🟢 Riesgo Bajo', medio: '⚡ Riesgo Medio', alto: '🔥 Riesgo Alto' }[p.riesgo] || p.riesgo;
+  const sharpeEst = p.rentab !== '—' && p.vol !== '—' ? ((parseFloat(p.rentab) - 3) / parseFloat(p.vol)).toFixed(2) : '—';
+
+  const assetsHTML = p.assets.map(a => {
+    const c = TIPO_COLORS[a.tipo] || '#64748b';
+    const typeLabel = { fondo:'FI', accion:'RV', etf:'ETF', crypto:'₿', bono:'RF', efectivo:'€', startup:'VC', otro:'—' }[a.tipo] || a.tipo;
+    return `<div class="prop-asset-item">
+      <span class="prop-asset-type" style="background:${c}22;color:${c}">${typeLabel}</span>
+      <span class="prop-asset-name" title="${a.isin ? a.nombre + ' · ' + a.isin : a.nombre}">${a.nombre}</span>
+      <span class="prop-asset-pct">${a.pct ? a.pct.toFixed(0) + '%' : ''}</span>
+    </div>`;
+  }).join('');
+
+  const legendHTML = p.alloc.map(a =>
+    `<div class="prop-legend-item">
+      <span class="prop-legend-dot" style="background:${a.color}"></span>
+      <span class="prop-legend-name">${a.label}</span>
+      <span class="prop-legend-pct">${a.pct}%</span>
+    </div>`
+  ).join('');
+
+  return `<div class="prop-card ${p.clsCard}">
+    <span class="prop-card-badge ${p.clsBadge}">${riesgoLbl}</span>
+    <div class="prop-card-plazo">${p.plazo}</div>
+    <div class="prop-card-nombre">${p.nombre}</div>
+    <div class="prop-card-horizonte">Horizonte temporal: ${p.horizonte}</div>
+    <div class="prop-metrics">
+      <div class="prop-metric">
+        <span class="prop-metric-val ${p.clsMetric}">${p.rentab}%</span>
+        <span class="prop-metric-label">Rent. Esperada Anual</span>
+      </div>
+      <div class="prop-metric">
+        <span class="prop-metric-val">${p.vol}%</span>
+        <span class="prop-metric-label">Volatilidad Est.</span>
+      </div>
+      <div class="prop-metric">
+        <span class="prop-metric-val">${sharpeEst}</span>
+        <span class="prop-metric-label">Sharpe Estimado</span>
+      </div>
+    </div>
+    <div class="prop-donut-row">
+      <div class="prop-donut-wrap">${donutSvg}</div>
+      <div class="prop-donut-legend">${legendHTML}</div>
+    </div>
+    <hr class="prop-divider">
+    <div class="prop-assets-title">Instrumentos seleccionados por el algoritmo</div>
+    <div class="prop-asset-list">${assetsHTML}</div>
+    <div class="prop-razon">💡 ${p.razon}</div>
+  </div>`;
+}
+
+function _propDonut(alloc, size = 72) {
+  const r = size / 2 - 8;
+  const cx = size / 2, cy = size / 2;
+  const circumference = 2 * Math.PI * r;
+  let offset = 0;
+  const slices = alloc.filter(a => a.pct > 0).map(a => {
+    const len = (a.pct / 100) * circumference;
+    const slice = { color: a.color, dasharray: `${len - 1} ${circumference - len + 1}`, offset };
+    offset += len;
+    return slice;
+  });
+  const paths = slices.map(s =>
+    `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${s.color}" stroke-width="10"
+      stroke-dasharray="${s.dasharray}" stroke-dashoffset="${-s.offset + circumference/4}"
+      transform="rotate(-90 ${cx} ${cy})" />`
+  ).join('');
+  return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" style="transform:rotate(0deg)">${paths}</svg>`;
+}
 
 function renderFondosPanel() {
   _fondosLoaded = true;
