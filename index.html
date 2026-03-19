@@ -983,7 +983,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
 /* RESPONSIVE */
 @media(max-width:600px){
   nav{padding:0 14px}
-  .nav-tabs .nav-tab:nth-child(n+4){display:none}
+  .nav-tabs .nav-tab:nth-child(n+5){display:none}
   .indices-grid{grid-template-columns:1fr}
   .section-title{font-size:1.3rem}
   /* Análisis técnico móvil */
@@ -1723,6 +1723,108 @@ tr:hover td{background:rgba(255,255,255,.02)}
   .prop-cards{grid-template-columns:1fr}
   .prop-metrics{gap:10px}
 }
+
+/* ===== TRADING PANEL — Bloomberg Terminal v1.0 ===== */
+#secTrading{padding:0;background:var(--bg)}
+/* Ticker Tape */
+.trd-ticker-wrap{background:#0d1117;border-bottom:1px solid #1a2035;height:30px;overflow:hidden;position:relative}
+.trd-ticker-inner{display:inline-flex;align-items:center;height:100%;white-space:nowrap;animation:trdScroll 80s linear infinite}
+.trd-ticker-inner:hover{animation-play-state:paused}
+.trd-tick-item{display:inline-flex;align-items:center;gap:5px;padding:0 14px;font-family:monospace;font-size:.7rem}
+.trd-tick-sym{color:#94a3b8;font-weight:700;letter-spacing:.04em}
+.trd-tick-val{font-weight:600}
+.trd-tick-sep{color:#2a3050;padding:0 4px;font-size:.6rem}
+@keyframes trdScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+/* Topbar */
+.trd-topbar{display:flex;align-items:center;justify-content:space-between;padding:10px 24px;background:var(--bg2);border-bottom:1px solid var(--border);flex-wrap:wrap;gap:8px}
+.trd-topbar-left{display:flex;align-items:center;gap:12px;flex-wrap:wrap;gap:8px}
+.trd-topbar-title{font-family:monospace;font-weight:800;font-size:.88rem;letter-spacing:.12em;color:var(--text)}
+.trd-live-badge{font-family:monospace;font-size:.67rem;font-weight:700;padding:3px 9px;border-radius:4px;letter-spacing:.05em}
+.trd-live-green{background:rgba(16,185,129,.12);color:#10B981;border:1px solid rgba(16,185,129,.3)}
+.trd-live-amber{background:rgba(245,158,11,.12);color:#F59E0B;border:1px solid rgba(245,158,11,.3);animation:trdBlink .9s infinite}
+.trd-live-red{background:rgba(239,68,68,.12);color:#EF4444;border:1px solid rgba(239,68,68,.3)}
+@keyframes trdBlink{0%,100%{opacity:1}50%{opacity:.4}}
+.trd-timestamp{font-family:monospace;font-size:.65rem;color:var(--text3)}
+.trd-topbar-right{display:flex;align-items:center;gap:8px}
+.trd-refresh-btn{background:var(--card);border:1px solid var(--border);color:var(--text2);border-radius:6px;padding:5px 12px;font-family:monospace;font-size:.7rem;cursor:pointer;transition:.15s;font-family:var(--font)}
+.trd-refresh-btn:hover{border-color:var(--accent);color:var(--text)}
+/* Mode selector */
+.trd-mode-row{display:flex;align-items:center;gap:6px;padding:7px 24px;background:var(--bg2);border-bottom:1px solid var(--border)}
+.trd-mode-label{font-family:monospace;font-size:.68rem;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-right:4px}
+.trd-mode-btn{background:var(--card);border:1px solid var(--border);color:var(--text2);border-radius:4px;padding:4px 13px;font-family:monospace;font-size:.7rem;cursor:pointer;transition:.15s}
+.trd-mode-btn.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.trd-mode-btn:hover:not(.active){border-color:var(--accent);color:var(--text)}
+/* Alert Banner */
+.trd-alert-banner{display:none;align-items:center;gap:8px;padding:8px 24px;background:rgba(245,158,11,.08);border-bottom:1px solid rgba(245,158,11,.22);font-family:monospace;font-size:.73rem}
+.trd-alert-impact{background:rgba(245,158,11,.18);color:#F59E0B;border-radius:4px;padding:2px 8px;font-size:.65rem;font-weight:700;letter-spacing:.04em}
+/* Body */
+.trd-body{padding:18px 24px;display:flex;flex-direction:column;gap:16px}
+/* Decision Row */
+.trd-decision-row{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:start}
+.trd-decision-card{background:var(--card2);border:1px solid var(--border);border-radius:16px;padding:22px 26px;display:flex;flex-direction:column;align-items:center;gap:10px;min-width:190px}
+.trd-decision-label{font-family:monospace;font-size:.65rem;color:var(--text3);text-transform:uppercase;letter-spacing:.12em}
+.trd-decision-badge{font-family:monospace;font-size:2rem;font-weight:900;letter-spacing:.06em;padding:7px 22px;border-radius:10px;text-align:center;transition:all .3s}
+.trd-yes{background:rgba(16,185,129,.14);color:#10B981;border:2px solid rgba(16,185,129,.4);box-shadow:0 0 22px rgba(16,185,129,.18)}
+.trd-caution{background:rgba(245,158,11,.14);color:#F59E0B;border:2px solid rgba(245,158,11,.4);box-shadow:0 0 22px rgba(245,158,11,.18)}
+.trd-no{background:rgba(239,68,68,.11);color:#EF4444;border:2px solid rgba(239,68,68,.35);box-shadow:0 0 22px rgba(239,68,68,.13)}
+.trd-loading{background:rgba(148,163,184,.07);color:var(--text3);border:2px solid var(--border)}
+.trd-score-labels{display:flex;flex-direction:column;align-items:center;gap:4px}
+.trd-score-main-label{font-family:monospace;font-size:.62rem;color:var(--text3);text-transform:uppercase;letter-spacing:.08em}
+.trd-exec-row{display:flex;align-items:center;gap:5px;font-family:monospace;font-size:.7rem;margin-top:2px}
+.trd-exec-label{color:var(--text3);font-size:.62rem}
+.trd-exec-val{color:var(--text2);font-weight:700}
+/* Summary card */
+.trd-summary-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px 22px;display:flex;flex-direction:column;gap:11px}
+.trd-summary-header{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.trd-summary-title{font-family:monospace;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text3)}
+.trd-regime-badge{font-family:monospace;font-size:.73rem;font-weight:700;background:var(--card2);border:1px solid var(--border);border-radius:6px;padding:3px 10px;color:var(--text2)}
+.trd-summary-text{font-family:monospace;font-size:.79rem;color:var(--text2);line-height:1.65}
+.trd-summary-text strong{color:var(--text)}
+.trd-sum-alert{color:#F59E0B;font-style:italic}
+/* Category Panels Grid */
+.trd-panels-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.trd-panel{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:13px 15px;display:flex;flex-direction:column;gap:7px}
+.trd-panel-header{display:flex;align-items:center;gap:5px;font-family:monospace;font-size:.66rem;font-weight:800;letter-spacing:.1em;color:var(--text3);text-transform:uppercase;border-bottom:1px solid var(--border);padding-bottom:7px;margin-bottom:2px}
+.trd-panel-icon{font-size:.85rem}
+.trd-panel-score{margin-left:auto;font-size:.88rem;font-weight:900;font-family:monospace}
+.trd-metric-row{display:flex;justify-content:space-between;align-items:center;gap:4px}
+.trd-metric-label{font-family:monospace;font-size:.65rem;color:var(--text3);flex-shrink:0}
+.trd-metric-val{font-family:monospace;font-size:.73rem;font-weight:700;text-align:right}
+.trd-panel-interp{font-family:monospace;font-size:.64rem;color:var(--text3);font-style:italic;margin-top:4px;line-height:1.4}
+.trd-fomc-pill{background:rgba(245,158,11,.11);color:#F59E0B;border:1px solid rgba(245,158,11,.25);border-radius:4px;padding:2px 7px;font-size:.64rem;font-family:monospace;font-weight:700;margin-top:3px}
+/* Color helpers */
+.trd-green{color:#10B981!important}
+.trd-red{color:#EF4444!important}
+.trd-amber{color:#F59E0B!important}
+.trd-text2{color:var(--text2)!important}
+.trd-text3{color:var(--text3)!important}
+/* Bottom row */
+.trd-bottom-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+/* Sector Heatmap */
+.trd-heatmap-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:15px 17px}
+.trd-heatmap-title{display:flex;justify-content:space-between;align-items:center;font-family:monospace;font-size:.68rem;font-weight:800;letter-spacing:.1em;color:var(--text3);text-transform:uppercase;margin-bottom:13px}
+.trd-heatmap-sub{font-size:.62rem;color:var(--text3);font-weight:400;letter-spacing:0}
+.trd-heatmap-row{display:flex;align-items:center;gap:7px;margin-bottom:5px}
+.trd-heatmap-sym{font-family:monospace;font-size:.68rem;font-weight:700;color:var(--text2);width:30px;flex-shrink:0}
+.trd-heatmap-name{font-family:monospace;font-size:.64rem;color:var(--text3);width:108px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.trd-heatmap-bar-wrap{flex:1;height:11px;background:rgba(255,255,255,.04);border-radius:3px;overflow:hidden}
+.trd-heatmap-bar{height:100%;border-radius:3px;transition:width .5s;min-width:2px}
+.trd-heatmap-val{font-family:monospace;font-size:.69rem;font-weight:700;width:48px;text-align:right;flex-shrink:0}
+.trd-heatmap-ma50{font-family:monospace;font-size:.62rem;font-weight:700;width:12px;flex-shrink:0}
+/* Score Breakdown */
+.trd-breakdown-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:15px 17px;display:flex;flex-direction:column;gap:9px}
+.trd-breakdown-title{font-family:monospace;font-size:.68rem;font-weight:800;letter-spacing:.1em;color:var(--text3);text-transform:uppercase;margin-bottom:3px}
+.trd-breakdown-row{display:flex;align-items:center;gap:9px}
+.trd-breakdown-label{font-family:monospace;font-size:.68rem;color:var(--text2);width:128px;flex-shrink:0}
+.trd-breakdown-bar-wrap{flex:1;height:7px;background:rgba(255,255,255,.04);border-radius:4px;overflow:hidden}
+.trd-breakdown-bar{height:100%;border-radius:4px;transition:width .6s}
+.trd-breakdown-vals{display:flex;align-items:center;gap:7px;font-family:monospace;font-size:.68rem;font-weight:700;white-space:nowrap;min-width:110px}
+.trd-breakdown-total{font-family:monospace;font-size:.76rem;color:var(--text2);border-top:1px solid var(--border);padding-top:9px;margin-top:2px}
+.trd-breakdown-total strong{color:var(--text)}
+/* Responsive */
+@media(max-width:1280px){.trd-panels-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:960px){.trd-panels-grid{grid-template-columns:repeat(2,1fr)}.trd-bottom-row{grid-template-columns:1fr}.trd-decision-row{grid-template-columns:1fr}}
+@media(max-width:640px){.trd-panels-grid{grid-template-columns:1fr}.trd-body{padding:12px 14px}.trd-topbar{padding:8px 14px}.trd-mode-row{padding:6px 14px}}
 </style>
 </head>
 <body>
@@ -1732,11 +1834,12 @@ tr:hover td{background:rgba(255,255,255,.02)}
   <div class="nav-logo">
     <div class="nav-logo-dot"></div>
     Agencia de Valores Generación Z
-    <span class="nav-version">v3.5.0</span>
+    <span class="nav-version">v3.6.0</span>
   </div>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="showSection('Mercados')">Mercados</button>
     <button class="nav-tab" onclick="showSection('Analisis')">Análisis</button>
+    <button class="nav-tab" onclick="showSection('Trading')">Trading</button>
     <button class="nav-tab" id="tabAdmin" onclick="requireAuth('Admin')" style="display:none">Admin</button>
   </div>
   <div class="nav-right">
@@ -2601,6 +2704,102 @@ tr:hover td{background:rgba(255,255,255,.02)}
 </section>
 
 
+<!-- TRADING — Bloomberg Terminal -->
+<section class="section" id="secTrading">
+  <!-- Ticker Tape -->
+  <div class="trd-ticker-wrap">
+    <div class="trd-ticker-inner" id="trdTickerContent">
+      <span class="trd-tick-item"><span class="trd-tick-sym">SPY</span><span class="trd-tick-val trd-amber">inicializando...</span></span>
+      <span class="trd-tick-item"><span class="trd-tick-sym">QQQ</span><span class="trd-tick-val trd-amber">—</span></span>
+      <span class="trd-tick-item"><span class="trd-tick-sym">VIX</span><span class="trd-tick-val trd-amber">—</span></span>
+      <span class="trd-tick-item"><span class="trd-tick-sym">TNX</span><span class="trd-tick-val trd-amber">—</span></span>
+    </div>
+  </div>
+  <!-- Topbar -->
+  <div class="trd-topbar">
+    <div class="trd-topbar-left">
+      <span class="trd-topbar-title">◉ TRADING TERMINAL</span>
+      <span class="trd-live-badge trd-live-amber" id="trdLiveBadge">◌ INICIANDO</span>
+      <span class="trd-timestamp" id="trdTimestamp">—</span>
+    </div>
+    <div class="trd-topbar-right">
+      <button class="trd-refresh-btn" id="trdRefreshBtn" onclick="refreshTradingPanel()">⟳ Actualizar</button>
+    </div>
+  </div>
+  <!-- Mode selector -->
+  <div class="trd-mode-row">
+    <span class="trd-mode-label">MODO:</span>
+    <button class="trd-mode-btn active" data-mode="swing" onclick="setTrdMode('swing')">📊 Swing Trading</button>
+    <button class="trd-mode-btn" data-mode="day" onclick="setTrdMode('day')">⚡ Day Trading</button>
+  </div>
+  <!-- Alert Banner -->
+  <div class="trd-alert-banner" id="trdAlertBanner"></div>
+  <!-- Body -->
+  <div class="trd-body">
+    <!-- Decision + Summary Row -->
+    <div class="trd-decision-row">
+      <div class="trd-decision-card">
+        <div class="trd-decision-label">¿DEBO OPERAR?</div>
+        <div class="trd-decision-badge trd-loading" id="trdDecisionBadge">...</div>
+        <div id="trdScoreCircle">
+          <svg width="140" height="140" viewBox="0 0 140 140">
+            <circle cx="70" cy="70" r="54" fill="none" stroke="#1e2540" stroke-width="10"/>
+          </svg>
+        </div>
+        <div class="trd-score-labels">
+          <div class="trd-score-main-label">Calidad del Mercado</div>
+          <div style="font-family:monospace;font-size:.95rem;color:var(--text);font-weight:800;margin-top:2px" id="trdCompositeScore">—</div>
+          <div class="trd-exec-row">
+            <span class="trd-exec-label">Ventana ejecución:</span>
+            <span class="trd-exec-val" id="trdExecScore">—</span>
+          </div>
+        </div>
+      </div>
+      <div class="trd-summary-card">
+        <div class="trd-summary-header">
+          <span class="trd-summary-title">⬛ Análisis Terminal</span>
+          <span class="trd-regime-badge" id="trdRegime">—</span>
+        </div>
+        <div class="trd-summary-text" id="trdSummary" style="min-height:80px">Cargando análisis del entorno de mercado...</div>
+      </div>
+    </div>
+    <!-- Category Panels -->
+    <div class="trd-panels-grid">
+      <div class="trd-panel" id="trdVolPanel">
+        <div class="trd-panel-header"><span class="trd-panel-icon">⚡</span>VOLATILIDAD</div>
+        <div style="font-family:monospace;font-size:.7rem;color:var(--text3)">Cargando...</div>
+      </div>
+      <div class="trd-panel" id="trdTrendPanel">
+        <div class="trd-panel-header"><span class="trd-panel-icon">📈</span>TENDENCIA</div>
+        <div style="font-family:monospace;font-size:.7rem;color:var(--text3)">Cargando...</div>
+      </div>
+      <div class="trd-panel" id="trdBreadthPanel">
+        <div class="trd-panel-header"><span class="trd-panel-icon">🌊</span>AMPLITUD</div>
+        <div style="font-family:monospace;font-size:.7rem;color:var(--text3)">Cargando...</div>
+      </div>
+      <div class="trd-panel" id="trdMomentumPanel">
+        <div class="trd-panel-header"><span class="trd-panel-icon">🚀</span>MOMENTUM</div>
+        <div style="font-family:monospace;font-size:.7rem;color:var(--text3)">Cargando...</div>
+      </div>
+      <div class="trd-panel" id="trdMacroPanel">
+        <div class="trd-panel-header"><span class="trd-panel-icon">🏛</span>MACRO</div>
+        <div style="font-family:monospace;font-size:.7rem;color:var(--text3)">Cargando...</div>
+      </div>
+    </div>
+    <!-- Bottom Row: Heatmap + Score Breakdown -->
+    <div class="trd-bottom-row">
+      <div class="trd-heatmap-card" id="trdSectorHeatmap">
+        <div class="trd-heatmap-title"><span>MAPA DE CALOR SECTORIAL</span><span class="trd-heatmap-sub">Rendimiento 1 mes</span></div>
+        <div style="font-family:monospace;font-size:.7rem;color:var(--text3)">Cargando sectores...</div>
+      </div>
+      <div class="trd-breakdown-card" id="trdScoreBreakdown">
+        <div class="trd-breakdown-title">DESGLOSE DE PUNTUACIÓN</div>
+        <div style="font-family:monospace;font-size:.7rem;color:var(--text3)">Cargando...</div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ADMIN -->
 <section class="section" id="secAdmin">
   <div class="section-header">
@@ -3199,6 +3398,14 @@ let _fondosLoaded  = false;      // flag: ya se renderizó el comparador de fond
 let _cryptoLoaded  = false;      // flag: ya se inició el panel crypto
 let _tradingLoaded  = false;      // flag: ya se cargó Inside Trading
 let _propuestasLoaded = false;    // flag: ya se generaron propuestas de cartera
+// ── Trading Panel (Bloomberg Terminal) ──
+let _trdInitialized = false;
+let _trdRefreshTimer = null;
+let _trdLastUpdate  = null;
+let _trdData        = {};
+let _trdScores      = {};
+let _trdMode        = 'swing';
+let _trdUpdating    = false;
 let _itLastEvents   = [];         // últimos eventos Inside Trading (para FinBot)
 let _itLastSignal   = null;       // { globalSignal, catScores, eventCount } (para FinBot)
 let _cryptoData    = [];         // lista de coins del mercado
@@ -3250,6 +3457,7 @@ function showSection(name) {
   event && event.currentTarget && event.currentTarget.classList.add('active');
   if (name === 'Analisis' && !_chart) initChart();
   if (name === 'Admin') loadAdminData();
+  if (name === 'Trading') initTradingPanel();
   closePortalPanel();
 }
 
@@ -8966,6 +9174,456 @@ async function init() {
 }
 
 init();
+
+// ═══════════════════════════════════════════════════════════════════════
+// TRADING PANEL — Bloomberg Terminal v1.0
+// ═══════════════════════════════════════════════════════════════════════
+
+const TRD_SECTOR_ETFS  = ['XLK','XLF','XLE','XLV','XLI','XLY','XLP','XLU','XLB','XLRE','XLC'];
+const TRD_SECTOR_NAMES = {
+  XLK:'Tecnología',XLF:'Financiero',XLE:'Energía',XLV:'Salud',
+  XLI:'Industrial',XLY:'Consumo Disc.',XLP:'Consumo Básico',
+  XLU:'Utilities',XLB:'Materiales',XLRE:'Inmobiliario',XLC:'Comunicación'
+};
+const TRD_WEIGHTS_SWING = { vol:.25, momentum:.25, trend:.20, breadth:.20, macro:.10 };
+const TRD_WEIGHTS_DAY   = { vol:.35, momentum:.30, trend:.20, breadth:.10, macro:.05 };
+const TRD_REFRESH_SECS  = 45;
+const TRD_MACRO_EVENTS  = [
+  { date:'2026-03-19', type:'FOMC', label:'FOMC — Decisión de tipos Fed' },
+  { date:'2026-04-10', type:'CPI',  label:'IPC EEUU (Marzo 2026)' },
+  { date:'2026-04-29', type:'FOMC', label:'FOMC — Decisión de tipos Fed' },
+  { date:'2026-05-13', type:'CPI',  label:'IPC EEUU (Abril 2026)' },
+  { date:'2026-06-11', type:'FOMC', label:'FOMC — Decisión de tipos Fed' },
+];
+
+function initTradingPanel() {
+  if (_trdInitialized) return;
+  _trdInitialized = true;
+  loadTradingData();
+  _trdRefreshTimer = setInterval(loadTradingData, TRD_REFRESH_SECS * 1000);
+  _startTrdTimestamp();
+}
+
+function refreshTradingPanel() {
+  if (_trdUpdating) return;
+  loadTradingData();
+}
+
+function setTrdMode(mode) {
+  _trdMode = mode;
+  document.querySelectorAll('.trd-mode-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.mode === mode);
+  });
+  if (_trdScores && _trdScores.composite != null) _renderTradingPanel();
+}
+
+async function loadTradingData() {
+  if (_trdUpdating) return;
+  _trdUpdating = true;
+  _setTrdStatus('updating');
+  try {
+    const fetches = [
+      fetch(`${API_BASE}/historical?symbol=SPY&period=3mo`).then(r=>r.json()).catch(()=>null),
+      fetch(`${API_BASE}/historical?symbol=%5EVIX&period=1mo`).then(r=>r.json()).catch(()=>null),
+      fetch(`${API_BASE}/historical?symbol=QQQ&period=3mo`).then(r=>r.json()).catch(()=>null),
+      fetch(`${API_BASE}/historical?symbol=%5ETNX&period=1mo`).then(r=>r.json()).catch(()=>null),
+      fetch(`${API_BASE}/historical?symbol=DX-Y.NYB&period=1mo`).then(r=>r.json()).catch(()=>null),
+      ...TRD_SECTOR_ETFS.map(sym =>
+        fetch(`${API_BASE}/historical?symbol=${sym}&period=1mo`).then(r=>r.json()).catch(()=>null)
+      )
+    ];
+    const results = await Promise.all(fetches);
+    const [spyD, vixD, qqqD, tnxD, dxyD, ...sectorResults] = results;
+    _trdData = {
+      spy: spyD, vix: vixD, qqq: qqqD, tnx: tnxD, dxy: dxyD,
+      sectors: Object.fromEntries(TRD_SECTOR_ETFS.map((sym,i) => [sym, sectorResults[i]]))
+    };
+    _trdLastUpdate = new Date();
+    _calcTrdScores();
+    _renderTradingPanel();
+    _setTrdStatus('live');
+  } catch(e) {
+    console.error('[TRD] Error:', e);
+    _setTrdStatus('error');
+  }
+  _trdUpdating = false;
+}
+
+function _calcTrdScores() {
+  const d = _trdData;
+  const w = _trdMode === 'day' ? TRD_WEIGHTS_DAY : TRD_WEIGHTS_SWING;
+
+  // Volatility (25%)
+  const vixClose = _trdGetLastClose(d.vix);
+  const vixLevel = vixClose || 20;
+  let volScore =
+    vixLevel < 12 ? 100 : vixLevel < 15 ? 88 : vixLevel < 18 ? 74 :
+    vixLevel < 22 ? 58 : vixLevel < 28 ? 38 : vixLevel < 35 ? 18 : 5;
+  let vixSlope = 0;
+  if (d.vix?.ohlcv && d.vix.ohlcv.length >= 6) {
+    const c = d.vix.ohlcv.slice(-6).map(x=>x.close);
+    vixSlope = c[5] - c[0];
+    volScore += vixSlope < -2 ? 15 : vixSlope < 0 ? 8 : vixSlope < 1 ? 0 : vixSlope < 3 ? -10 : -18;
+  }
+  volScore = Math.max(0, Math.min(100, volScore));
+
+  // Trend (20%)
+  const si = d.spy?.indicators || {};
+  const spyP = si.currentPrice || 0;
+  let trendScore = 0;
+  if (spyP > 0) {
+    if (si.ma200 && spyP > si.ma200) trendScore += 38;
+    if (si.ma50  && spyP > si.ma50)  trendScore += 30;
+    if (si.ma20  && spyP > si.ma20)  trendScore += 20;
+    const rsi = si.rsi || 50;
+    trendScore += rsi >= 50 && rsi <= 65 ? 12 : rsi >= 40 && rsi < 50 ? 5 : rsi > 70 ? 4 : 0;
+  }
+  trendScore = Math.min(100, trendScore);
+
+  // Breadth (20%)
+  let aboveMA50 = 0, totalSectors = 0;
+  TRD_SECTOR_ETFS.forEach(sym => {
+    const sd = d.sectors[sym]; if (!sd) return;
+    const x = sd.indicators || {};
+    if (x.currentPrice && x.ma50) { totalSectors++; if (x.currentPrice > x.ma50) aboveMA50++; }
+  });
+  const breadthPct = totalSectors > 0 ? (aboveMA50 / totalSectors) * 100 : 50;
+  const breadthScore =
+    breadthPct >= 80 ? 95 : breadthPct >= 65 ? 80 : breadthPct >= 50 ? 62 :
+    breadthPct >= 35 ? 42 : breadthPct >= 20 ? 22 : 10;
+
+  // Momentum (25%)
+  const sectorChanges = TRD_SECTOR_ETFS.map(sym => {
+    const sd = d.sectors[sym]; if (!sd?.ohlcv?.length) return { sym, chg: 0 };
+    const ov = sd.ohlcv;
+    const first = ov[0].close, last = ov[ov.length-1].close;
+    return { sym, chg: first > 0 ? ((last-first)/first)*100 : 0 };
+  });
+  const sorted = sectorChanges.slice().sort((a,b)=>b.chg-a.chg);
+  const top3 = sorted.slice(0,3), bottom3 = sorted.slice(-3);
+  const top3Avg    = top3.reduce((s,x)=>s+x.chg,0) / Math.max(top3.length,1);
+  const bottom3Avg = bottom3.reduce((s,x)=>s+x.chg,0) / Math.max(bottom3.length,1);
+  const spread = top3Avg - bottom3Avg;
+  let momentumScore =
+    top3Avg > 3 && spread > 4 ? 88 : top3Avg > 2 && spread > 3 ? 76 :
+    top3Avg > 1 && spread > 2 ? 63 : top3Avg > 0 ? 52 :
+    top3Avg < -1 ? 22 : 38;
+  const qi = d.qqq?.indicators || {};
+  if (qi.currentPrice && qi.ma50 && qi.currentPrice > qi.ma50) momentumScore = Math.min(100, momentumScore + 8);
+
+  // Macro (10%)
+  const tnxClose = _trdGetLastClose(d.tnx);
+  const tnxLevel = tnxClose || 4.3;
+  let macroScore =
+    tnxLevel < 3.5 ? 80 : tnxLevel < 4.0 ? 68 : tnxLevel < 4.5 ? 52 :
+    tnxLevel < 5.0 ? 35 : 18;
+  let dxySlope = 0;
+  if (d.dxy?.ohlcv && d.dxy.ohlcv.length >= 5) {
+    const c = d.dxy.ohlcv.slice(-5).map(x=>x.close);
+    dxySlope = c[c.length-1] - c[0];
+    macroScore += dxySlope < -1 ? 12 : dxySlope < 0 ? 5 : dxySlope > 1 ? -8 : 0;
+  }
+  macroScore = Math.max(0, Math.min(100, macroScore));
+  const upcoming = _getTrdUpcomingEvent();
+  if (upcoming && upcoming.hoursAway < 72) macroScore = Math.max(0, macroScore - 15);
+
+  // Composite
+  const composite =
+    volScore * w.vol + momentumScore * w.momentum +
+    trendScore * w.trend + breadthScore * w.breadth + macroScore * w.macro;
+
+  // Execution Window Score
+  const execScore = Math.max(0, Math.min(100, Math.round(
+    breadthPct * 0.38 + momentumScore * 0.37 + (100 - Math.min(35,vixLevel)*2.5) * 0.25
+  )));
+
+  // Decision
+  const th = _trdMode === 'day' ? {yes:82,caution:65} : {yes:80,caution:60};
+  const decision = composite >= th.yes ? 'SÍ' : composite >= th.caution ? 'PRECAUCIÓN' : 'NO';
+
+  _trdScores = {
+    composite: Math.round(composite), decision, execScore,
+    categories: {
+      vol:      { score: Math.round(volScore),      label:'Volatilidad',   weight: w.vol },
+      trend:    { score: Math.round(trendScore),    label:'Tendencia',     weight: w.trend },
+      breadth:  { score: Math.round(breadthScore),  label:'Amplitud',      weight: w.breadth },
+      momentum: { score: Math.round(momentumScore), label:'Momentum',      weight: w.momentum },
+      macro:    { score: Math.round(macroScore),    label:'Macro/Liquid.', weight: w.macro },
+    },
+    vixLevel, vixSlope, tnxLevel, dxySlope,
+    sectorChanges: sorted, aboveMA50, totalSectors, breadthPct,
+    spread, top3, bottom3, upcoming
+  };
+}
+
+function _trdGetLastClose(data) {
+  if (!data) return null;
+  if (data.ohlcv && data.ohlcv.length) return data.ohlcv[data.ohlcv.length-1].close;
+  if (data.indicators?.currentPrice) return data.indicators.currentPrice;
+  return null;
+}
+
+function _getTrdUpcomingEvent() {
+  const now = Date.now();
+  for (const ev of TRD_MACRO_EVENTS) {
+    const diff = new Date(ev.date).getTime() - now;
+    if (diff >= 0 && diff < 7 * 86400000)
+      return { ...ev, hoursAway: Math.round(diff / 3600000) };
+  }
+  return null;
+}
+
+function _renderTradingPanel() {
+  const s = _trdScores, d = _trdData;
+  if (!s || s.composite == null) return;
+
+  const badge = document.getElementById('trdDecisionBadge');
+  badge.textContent = s.decision;
+  badge.className = 'trd-decision-badge ' +
+    (s.decision==='SÍ'?'trd-yes':s.decision==='PRECAUCIÓN'?'trd-caution':'trd-no');
+
+  _drawTrdScoreCircle('trdScoreCircle', s.composite, s.decision);
+
+  document.getElementById('trdCompositeScore').textContent = s.composite + '%';
+  document.getElementById('trdExecScore').textContent = s.execScore + '%';
+
+  const si = d.spy?.indicators || {};
+  const regime =
+    si.currentPrice > (si.ma200||0) && si.currentPrice > (si.ma50||0) ? '📈 TENDENCIA ALCISTA' :
+    si.currentPrice > (si.ma200||0) ? '↔ ZONA DE TRANSICIÓN' : '📉 TENDENCIA BAJISTA';
+  document.getElementById('trdRegime').textContent = regime;
+  document.getElementById('trdSummary').innerHTML = _generateTrdSummary(s, d);
+
+  _renderTrdVolPanel(s, d);
+  _renderTrdTrendPanel(s, d);
+  _renderTrdBreadthPanel(s, d);
+  _renderTrdMomentumPanel(s, d);
+  _renderTrdMacroPanel(s, d);
+  _renderTrdSectorHeatmap(s, d);
+  _renderTrdScoreBreakdown(s);
+  _renderTrdAlertBanner(s.upcoming);
+  _updateTrdTicker(s, d);
+}
+
+function _renderTrdVolPanel(s, d) {
+  const vix = s.vixLevel.toFixed(1);
+  const slopeText = s.vixSlope > 1 ? '↑ Subiendo' : s.vixSlope < -1 ? '↓ Bajando' : '→ Estable';
+  const slopeC = s.vixSlope > 1 ? 'trd-red' : s.vixSlope < -1 ? 'trd-green' : 'trd-amber';
+  const vixC = s.vixLevel < 15 ? 'trd-green' : s.vixLevel < 25 ? 'trd-amber' : 'trd-red';
+  const sc = s.categories.vol.score;
+  const scoreC = sc >= 70 ? 'trd-green' : sc >= 45 ? 'trd-amber' : 'trd-red';
+  const pcEst = (0.80 + Math.max(0, s.vixLevel-15)*0.018).toFixed(2);
+  const interp = s.vixLevel < 15 ? 'Baja volatilidad · Favorable' : s.vixLevel < 22 ? 'Volatilidad moderada' : s.vixLevel < 30 ? 'Alta volatilidad · Precaución' : 'Volatilidad extrema · Evitar';
+  document.getElementById('trdVolPanel').innerHTML =
+    `<div class="trd-panel-header"><span class="trd-panel-icon">⚡</span>VOLATILIDAD<span class="trd-panel-score ${scoreC}">${sc}</span></div>
+     <div class="trd-metric-row"><span class="trd-metric-label">VIX nivel</span><span class="trd-metric-val ${vixC}">${vix}</span></div>
+     <div class="trd-metric-row"><span class="trd-metric-label">Tendencia VIX (5d)</span><span class="trd-metric-val ${slopeC}">${slopeText}</span></div>
+     <div class="trd-metric-row"><span class="trd-metric-label">Put/Call est.</span><span class="trd-metric-val trd-amber">${pcEst}</span></div>
+     <div class="trd-metric-row"><span class="trd-metric-label">Régimen vol.</span><span class="trd-metric-val ${s.vixLevel<18?'trd-green':s.vixLevel<28?'trd-amber':'trd-red'}">${s.vixLevel<18?'BAJO':'ELEVADO'}</span></div>
+     <div class="trd-panel-interp">${interp}</div>`;
+}
+
+function _renderTrdTrendPanel(s, d) {
+  const si = d.spy?.indicators || {};
+  const p=si.currentPrice, m200=si.ma200, m50=si.ma50, m20=si.ma20, rsi=si.rsi||50;
+  const a200=p>m200, a50=p>m50, a20=p>m20;
+  const rsiC = rsi > 70 ? 'trd-amber' : rsi > 45 ? 'trd-green' : 'trd-red';
+  const sc = s.categories.trend.score;
+  const scoreC = sc >= 70 ? 'trd-green' : sc >= 45 ? 'trd-amber' : 'trd-red';
+  const qi = d.qqq?.indicators || {};
+  const qAbove = qi.currentPrice > qi.ma50;
+  document.getElementById('trdTrendPanel').innerHTML =
+    `<div class="trd-panel-header"><span class="trd-panel-icon">📈</span>TENDENCIA<span class="trd-panel-score ${scoreC}">${sc}</span></div>
+     <div class="trd-metric-row"><span class="trd-metric-label">SPY vs MA200</span><span class="trd-metric-val ${a200?'trd-green':'trd-red'}">${a200?'▲ Sobre':'▼ Bajo'}</span></div>
+     <div class="trd-metric-row"><span class="trd-metric-label">SPY vs MA50</span><span class="trd-metric-val ${a50?'trd-green':'trd-red'}">${a50?'▲ Sobre':'▼ Bajo'}</span></div>
+     <div class="trd-metric-row"><span class="trd-metric-label">SPY vs MA20</span><span class="trd-metric-val ${a20?'trd-green':'trd-red'}">${a20?'▲ Sobre':'▼ Bajo'}</span></div>
+     <div class="trd-metric-row"><span class="trd-metric-label">RSI 14</span><span class="trd-metric-val ${rsiC}">${rsi.toFixed(1)}</span></div>
+     <div class="trd-metric-row"><span class="trd-metric-label">QQQ vs MA50</span><span class="trd-metric-val ${qAbove?'trd-green':'trd-red'}">${qAbove?'▲ Sobre':'▼ Bajo'}</span></div>`;
+}
+
+function _renderTrdBreadthPanel(s, d) {
+  const pct = s.breadthPct.toFixed(0);
+  const a = s.aboveMA50, t = s.totalSectors;
+  const sc = s.categories.breadth.score;
+  const scoreC = sc >= 70 ? 'trd-green' : sc >= 45 ? 'trd-amber' : 'trd-red';
+  const adR = s.breadthPct > 60 ? '> 1.3 (positivo)' : s.breadthPct > 40 ? '≈ 1.0 (neutral)' : '< 0.8 (negativo)';
+  const adC = s.breadthPct > 60 ? 'trd-green' : s.breadthPct > 40 ? 'trd-amber' : 'trd-red';
+  const interp = s.breadthPct >= 70 ? 'Amplitud fuerte · Participación amplia' : s.breadthPct >= 50 ? 'Amplitud moderada · Mercado mixto' : 'Amplitud débil · Participación reducida';
+  document.getElementById('trdBreadthPanel').innerHTML =
+    `<div class="trd-panel-header"><span class="trd-panel-icon">🌊</span>AMPLITUD<span class="trd-panel-score ${scoreC}">${sc}</span></div>
+     <div class="trd-metric-row"><span class="trd-metric-label">Sectores > MA50</span><span class="trd-metric-val ${a>6?'trd-green':a>4?'trd-amber':'trd-red'}">${a}/${t} (${pct}%)</span></div>
+     <div class="trd-metric-row"><span class="trd-metric-label">Ratio A/D est.</span><span class="trd-metric-val ${adC}">${adR}</span></div>
+     <div class="trd-metric-row"><span class="trd-metric-label">Señal amplitud</span><span class="trd-metric-val ${scoreC}">${sc>=70?'FUERTE':sc>=45?'MODERADA':'DÉBIL'}</span></div>
+     <div class="trd-panel-interp">${interp}</div>`;
+}
+
+function _renderTrdMomentumPanel(s, d) {
+  const top3Str = s.top3.slice(0,3).map(x=>`${x.sym} ${x.chg>=0?'+':''}${x.chg.toFixed(1)}%`).join(' | ');
+  const bot3Str = s.bottom3.slice(-3).map(x=>`${x.sym} ${x.chg>=0?'+':''}${x.chg.toFixed(1)}%`).join(' | ');
+  const sc = s.categories.momentum.score;
+  const scoreC = sc >= 70 ? 'trd-green' : sc >= 45 ? 'trd-amber' : 'trd-red';
+  const spreadC = s.spread > 3 ? 'trd-green' : s.spread > 0 ? 'trd-amber' : 'trd-red';
+  document.getElementById('trdMomentumPanel').innerHTML =
+    `<div class="trd-panel-header"><span class="trd-panel-icon">🚀</span>MOMENTUM<span class="trd-panel-score ${scoreC}">${sc}</span></div>
+     <div class="trd-metric-row"><span class="trd-metric-label">Top sectores (1m)</span><span class="trd-metric-val trd-green" style="font-size:.63rem">${top3Str||'—'}</span></div>
+     <div class="trd-metric-row"><span class="trd-metric-label">Peores sectores</span><span class="trd-metric-val trd-red" style="font-size:.63rem">${bot3Str||'—'}</span></div>
+     <div class="trd-metric-row"><span class="trd-metric-label">Spread líder/rezag.</span><span class="trd-metric-val ${spreadC}">${s.spread>=0?'+':''}${s.spread.toFixed(1)}%</span></div>
+     <div class="trd-metric-row"><span class="trd-metric-label">Señal momentum</span><span class="trd-metric-val ${scoreC}">${sc>=70?'FUERTE':sc>=45?'MODERADO':'DÉBIL'}</span></div>`;
+}
+
+function _renderTrdMacroPanel(s, d) {
+  const tnx = s.tnxLevel.toFixed(2);
+  const sc = s.categories.macro.score;
+  const scoreC = sc >= 70 ? 'trd-green' : sc >= 45 ? 'trd-amber' : 'trd-red';
+  const tnxC = s.tnxLevel < 4 ? 'trd-green' : s.tnxLevel < 4.75 ? 'trd-amber' : 'trd-red';
+  const fedLabel = s.tnxLevel < 4.0 ? 'Dovish / Expansiva' : s.tnxLevel < 4.75 ? 'Neutral' : 'Hawkish / Restrictiva';
+  const fedC = s.tnxLevel < 4.0 ? 'trd-green' : s.tnxLevel < 4.75 ? 'trd-amber' : 'trd-red';
+  const dxyText = s.dxySlope < -0.5 ? '↓ Bajando (pos.)' : s.dxySlope > 0.5 ? '↑ Subiendo (neg.)' : '→ Estable';
+  const dxyC = s.dxySlope < -0.5 ? 'trd-green' : s.dxySlope > 0.5 ? 'trd-red' : 'trd-amber';
+  const fomcHtml = s.upcoming ? `<div class="trd-fomc-pill">⚠ ${s.upcoming.label} en ${s.upcoming.hoursAway}h</div>` : '';
+  document.getElementById('trdMacroPanel').innerHTML =
+    `<div class="trd-panel-header"><span class="trd-panel-icon">🏛</span>MACRO<span class="trd-panel-score ${scoreC}">${sc}</span></div>
+     <div class="trd-metric-row"><span class="trd-metric-label">Bono 10Y (TNX)</span><span class="trd-metric-val ${tnxC}">${tnx}%</span></div>
+     <div class="trd-metric-row"><span class="trd-metric-label">DXY tendencia</span><span class="trd-metric-val ${dxyC}">${dxyText}</span></div>
+     <div class="trd-metric-row"><span class="trd-metric-label">Fed stance</span><span class="trd-metric-val ${fedC}">${fedLabel}</span></div>
+     ${fomcHtml}`;
+}
+
+function _renderTrdSectorHeatmap(s, d) {
+  const sc = s.sectorChanges.slice();
+  const maxAbs = Math.max(...sc.map(x=>Math.abs(x.chg)), 0.1);
+  let html = `<div class="trd-heatmap-title"><span>MAPA DE CALOR SECTORIAL</span><span class="trd-heatmap-sub">Rendimiento 1 mes</span></div>`;
+  sc.forEach(({sym, chg}) => {
+    const w2   = (Math.abs(chg)/maxAbs)*100;
+    const col  = chg >= 0 ? '#10B981' : '#EF4444';
+    const si2  = d.sectors[sym]?.indicators || {};
+    const abv  = si2.currentPrice > si2.ma50;
+    html += `<div class="trd-heatmap-row">
+      <div class="trd-heatmap-sym">${sym}</div>
+      <div class="trd-heatmap-name">${TRD_SECTOR_NAMES[sym]||sym}</div>
+      <div class="trd-heatmap-bar-wrap"><div class="trd-heatmap-bar" style="width:${w2.toFixed(0)}%;background:${col}"></div></div>
+      <div class="trd-heatmap-val" style="color:${col}">${chg>=0?'+':''}${chg.toFixed(1)}%</div>
+      <div class="trd-heatmap-ma50 ${abv?'trd-green':'trd-red'}">${abv?'▲':'▼'}</div>
+    </div>`;
+  });
+  document.getElementById('trdSectorHeatmap').innerHTML = html;
+}
+
+function _renderTrdScoreBreakdown(s) {
+  const cats = [['vol','⚡'],['momentum','🚀'],['trend','📈'],['breadth','🌊'],['macro','🏛']];
+  let html = '<div class="trd-breakdown-title">DESGLOSE DE PUNTUACIÓN</div>';
+  cats.forEach(([key, icon]) => {
+    const cat = s.categories[key];
+    const col = cat.score >= 70 ? '#10B981' : cat.score >= 45 ? '#F59E0B' : '#EF4444';
+    const contrib = (cat.score * cat.weight).toFixed(1);
+    html += `<div class="trd-breakdown-row">
+      <div class="trd-breakdown-label">${icon} ${cat.label}</div>
+      <div class="trd-breakdown-bar-wrap"><div class="trd-breakdown-bar" style="width:${cat.score}%;background:${col}"></div></div>
+      <div class="trd-breakdown-vals"><span style="color:${col}">${cat.score}</span><span class="trd-text3">×${(cat.weight*100).toFixed(0)}%=${contrib}</span></div>
+    </div>`;
+  });
+  html += `<div class="trd-breakdown-total">PUNTUACIÓN TOTAL PONDERADA: <strong>${s.composite}</strong>/100</div>`;
+  document.getElementById('trdScoreBreakdown').innerHTML = html;
+}
+
+function _renderTrdAlertBanner(upcoming) {
+  const banner = document.getElementById('trdAlertBanner'); if (!banner) return;
+  if (!upcoming) { banner.style.display = 'none'; return; }
+  const typeC = upcoming.type==='FOMC'?'#F59E0B':upcoming.type==='CPI'?'#8B5CF6':'#3b82f6';
+  banner.style.display = 'flex';
+  banner.innerHTML = `<span style="color:${typeC};font-weight:800">⚠ EVENTO MACRO</span>&nbsp;&nbsp;<span>${upcoming.label}</span>&nbsp;&nbsp;<span style="color:var(--text3)">en ${upcoming.hoursAway<24?upcoming.hoursAway+'h':Math.ceil(upcoming.hoursAway/24)+'d'}</span>&nbsp;&nbsp;<span class="trd-alert-impact">Reducir tamaño de posición</span>`;
+}
+
+function _updateTrdTicker(s, d) {
+  const tape = document.getElementById('trdTickerContent'); if (!tape) return;
+  const items = [];
+  const add = (sym, val, chg, isVix) => {
+    const isUp = chg >= 0;
+    const c = isVix ? 'trd-amber' : (isUp ? 'trd-green' : 'trd-red');
+    items.push(`<span class="trd-tick-item"><span class="trd-tick-sym">${sym}</span><span class="trd-tick-val ${c}">${val}${chg!=null?` (${chg>=0?'+':''}${chg.toFixed(2)}%)`:''}</span></span>`);
+  };
+  const spyO=d.spy?.ohlcv||[]; if(spyO.length>=2){const f=spyO[0].close,l=spyO[spyO.length-1].close;add('SPY',l.toFixed(2),((l-f)/f)*100,false);}
+  const qqqO=d.qqq?.ohlcv||[]; if(qqqO.length>=2){const f=qqqO[0].close,l=qqqO[qqqO.length-1].close;add('QQQ',l.toFixed(2),((l-f)/f)*100,false);}
+  add('VIX', s.vixLevel.toFixed(1), null, true);
+  add('TNX', s.tnxLevel.toFixed(2)+'%', null, false);
+  s.sectorChanges.forEach(({sym,chg}) => add(sym, (chg>=0?'+':'')+chg.toFixed(1)+'%', null, false));
+  const sep = '<span class="trd-tick-sep">▸</span>';
+  tape.innerHTML = [...items, ...items].join(sep);
+}
+
+function _generateTrdSummary(s, d) {
+  const c=s.composite, v=s.categories.vol.score, t=s.categories.trend.score;
+  const b=s.categories.breadth.score, m=s.categories.momentum.score;
+  const top = s.top3[0]?.sym || 'XLK';
+  let txt = '';
+  if (c >= 80) {
+    txt = `<strong>Entorno favorable para el swing trading.</strong> `;
+    if (t >= 70) txt += `SPY cotiza por encima de sus medias principales, confirmando la tendencia alcista. `;
+    if (b >= 70) txt += `Amplitud robusta: ${s.aboveMA50} de ${s.totalSectors} sectores superan la MA50. `;
+    if (m >= 70) txt += `Liderazgo sectorial concentrado en <strong>${top}</strong> con momentum positivo. `;
+    txt += `Asumir tamaño completo de posición con gestión de riesgo activa.`;
+  } else if (c >= 60) {
+    txt = `<strong>Entorno mixto — operar con selectividad.</strong> `;
+    if (v < 50) txt += `Volatilidad elevada (VIX ${s.vixLevel.toFixed(1)}) exige cautela en tamaño. `;
+    if (t < 50) txt += `Tendencia de SPY muestra señales de debilidad estructural. `;
+    if (b < 50) txt += `Participación limitada: ${s.aboveMA50} sectores sobre MA50. `;
+    txt += `Solo configuraciones A+ con medio tamaño de posición.`;
+  } else {
+    txt = `<strong>Condiciones desfavorables — preservar capital.</strong> `;
+    if (s.vixLevel > 25) txt += `VIX en ${s.vixLevel.toFixed(1)} indica estrés elevado en opciones. `;
+    if (c < 40) txt += `Mayoría de indicadores señalan deterioro del entorno. `;
+    txt += `Reducir exposición y esperar mejora de condiciones antes de operar.`;
+  }
+  if (s.upcoming && s.upcoming.hoursAway < 72)
+    txt += ` <span class="trd-sum-alert">⚠ ${s.upcoming.label} en ${s.upcoming.hoursAway}h</span>`;
+  return txt;
+}
+
+function _drawTrdScoreCircle(containerId, score, decision) {
+  const el = document.getElementById(containerId); if (!el) return;
+  const R=54, cx=70, cy=70;
+  const circ = 2*Math.PI*R;
+  const off   = circ - (score/100)*circ;
+  const col   = decision==='SÍ'?'#10B981':decision==='PRECAUCIÓN'?'#F59E0B':'#EF4444';
+  el.innerHTML = `<svg width="140" height="140" viewBox="0 0 140 140">
+    <circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="#1e2540" stroke-width="10"/>
+    <circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="${col}" stroke-width="10"
+      stroke-dasharray="${circ.toFixed(1)}" stroke-dashoffset="${off.toFixed(1)}"
+      stroke-linecap="round" transform="rotate(-90 ${cx} ${cy})"
+      style="transition:stroke-dashoffset .8s cubic-bezier(.4,0,.2,1)"/>
+    <text x="${cx}" y="${cy-6}" text-anchor="middle" fill="${col}" font-size="28" font-weight="900" font-family="monospace">${score}</text>
+    <text x="${cx}" y="${cy+13}" text-anchor="middle" fill="#64748b" font-size="10" font-family="monospace">/ 100</text>
+  </svg>`;
+}
+
+function _setTrdStatus(state) {
+  const badge = document.getElementById('trdLiveBadge');
+  const btn   = document.getElementById('trdRefreshBtn');
+  if (!badge) return;
+  if (state === 'live') {
+    badge.className = 'trd-live-badge trd-live-green';
+    badge.textContent = '● EN VIVO';
+    if (btn) btn.textContent = '⟳ Actualizar';
+  } else if (state === 'updating') {
+    badge.className = 'trd-live-badge trd-live-amber';
+    badge.textContent = '◌ ACTUALIZANDO';
+    if (btn) btn.textContent = '⟳ ...';
+  } else {
+    badge.className = 'trd-live-badge trd-live-red';
+    badge.textContent = '✕ ERROR';
+  }
+}
+
+function _startTrdTimestamp() {
+  setInterval(() => {
+    const el = document.getElementById('trdTimestamp');
+    if (!el || !_trdLastUpdate) return;
+    const secs = Math.round((Date.now() - _trdLastUpdate) / 1000);
+    el.textContent = secs < 60 ? `actualizado hace ${secs}s` : `actualizado hace ${Math.round(secs/60)}min`;
+  }, 1000);
+}
+// ── End Trading Panel ─────────────────────────────────────────────────────
+
 </script>
 
 <!-- ══════════════════════════════════════════════════════
