@@ -1487,8 +1487,6 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .fondos-flag-badge.es{background:rgba(220,38,38,.15);color:#fca5a5}
 .fondos-flag-badge.lu{background:rgba(37,99,235,.15);color:#93c5fd}
 .fondos-flag-badge.ie{background:rgba(5,150,105,.15);color:#6ee7b7}
-.fondos-finect-link{color:var(--accent);text-decoration:none;font-weight:700;font-size:.82rem;opacity:.7;transition:opacity .15s}
-.fondos-finect-link:hover{opacity:1;text-decoration:underline}
 .fondos-source-bar{display:flex;align-items:center;gap:8px;margin-bottom:12px;padding:8px 14px;background:var(--card);border:1px solid var(--border);border-radius:10px;flex-wrap:wrap;font-size:.74rem}
 .fondos-source-label{font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;font-size:.66rem}
 .fondos-source-link{color:var(--accent);text-decoration:none;font-weight:600;padding:2px 8px;border-radius:12px;background:rgba(37,99,235,.08);transition:background .15s}
@@ -2439,6 +2437,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
           <option value="RV USA">RV USA</option>
           <option value="RV Global">RV Global</option>
           <option value="RV Temático">RV Temático</option>
+          <option value="Indexado">Indexado</option>
           <option value="Alternativo">Alternativo</option>
           <option value="Garantizado">Garantizado</option>
         </select>
@@ -2489,7 +2488,6 @@ tr:hover td{background:rgba(255,255,255,.02)}
               <th onclick="fondosSortBy('sharpe')">Sharpe</th>
               <th onclick="fondosSortBy('ter')">TER %</th>
               <th onclick="fondosSortBy('ms')">⭐</th>
-              <th style="width:30px">🔗</th>
             </tr>
           </thead>
           <tbody id="fondosTableBody"></tbody>
@@ -8179,6 +8177,49 @@ const FONDOS_DATA = [
   // ── MORGAN STANLEY (Luxemburgo) ───────────────────────────────────
   {id:89, nombre:'MS INVF Global Opportunity Fund A EUR',            isin:'LU0552385295', gestora:'Morgan Stanley',  cat:'RV Global',       patM:14200, part:0, origen:'LU', rYTD:12.52,r1y:19.85,r3y:8.52, r5y:14.52,vol:20.50,sharpe:0.88, com:1.50, ter:1.75, ms:4},
   {id:90, nombre:'MS INVF US Growth Fund A EUR',                     isin:'LU0225737302', gestora:'Morgan Stanley',  cat:'RV USA',          patM:9800,  part:0, origen:'LU', rYTD:18.52,r1y:29.85,r3y:14.52,r5y:22.52,vol:24.80,sharpe:1.02, com:1.50, ter:1.75, ms:4},
+
+  // ── FONDOS INDEXADOS NACIONALES ──────────────────────────────────
+  {id:91,  nombre:'MyInvestor Indexado S&P 500 FI',                  isin:'ES0165242019', gestora:'MyInvestor',     cat:'Indexado',        patM:1820,  part:98000,  origen:'ES', rYTD:16.52,r1y:24.85,r3y:14.12,r5y:15.82,vol:15.20,sharpe:1.22, com:0.00, ter:0.18, ms:5},
+  {id:92,  nombre:'MyInvestor Indexado MSCI World FI',               isin:'ES0165242027', gestora:'MyInvestor',     cat:'Indexado',        patM:1420,  part:76000,  origen:'ES', rYTD:14.82,r1y:22.52,r3y:12.85,r5y:14.52,vol:14.50,sharpe:1.18, com:0.00, ter:0.18, ms:5},
+  {id:93,  nombre:'MyInvestor Indexado Nasdaq 100 FI',               isin:'ES0165242035', gestora:'MyInvestor',     cat:'Indexado',        patM:980,   part:52000,  origen:'ES', rYTD:18.85,r1y:28.52,r3y:16.12,r5y:20.82,vol:18.80,sharpe:1.25, com:0.00, ter:0.20, ms:5},
+  {id:94,  nombre:'MyInvestor Indexado Europa FI',                   isin:'ES0165242043', gestora:'MyInvestor',     cat:'Indexado',        patM:520,   part:28000,  origen:'ES', rYTD:8.52, r1y:14.82,r3y:8.12, r5y:7.85, vol:14.20,sharpe:0.72, com:0.00, ter:0.18, ms:4},
+  {id:95,  nombre:'MyInvestor Indexado Emergentes FI',               isin:'ES0165242050', gestora:'MyInvestor',     cat:'Indexado',        patM:310,   part:16000,  origen:'ES', rYTD:5.82, r1y:10.52,r3y:3.85, r5y:4.52, vol:16.80,sharpe:0.42, com:0.00, ter:0.22, ms:3},
+  {id:96,  nombre:'ING Direct Fondo Naranja IBEX 35 FI',            isin:'ES0152743003', gestora:'Amundi Iberia',  cat:'Indexado',        patM:620,   part:42000,  origen:'ES', rYTD:10.52,r1y:16.85,r3y:9.52, r5y:7.82, vol:16.50,sharpe:0.62, com:0.00, ter:0.35, ms:3},
+  {id:97,  nombre:'ING Direct Fondo Naranja S&P 500 FI',            isin:'ES0152743011', gestora:'Amundi Iberia',  cat:'Indexado',        patM:1050,  part:58000,  origen:'ES', rYTD:16.12,r1y:24.52,r3y:13.82,r5y:15.42,vol:15.40,sharpe:1.18, com:0.00, ter:0.35, ms:4},
+  {id:98,  nombre:'Openbank Roboadvisor Indexado Equilibrado FI',    isin:'ES0182000009', gestora:'Santander AM',   cat:'Indexado',        patM:420,   part:22000,  origen:'ES', rYTD:9.52, r1y:14.85,r3y:7.52, r5y:8.12, vol:10.20,sharpe:0.92, com:0.30, ter:0.48, ms:4},
+  {id:99,  nombre:'CaixaBank Índice USA FI',                        isin:'ES0137835002', gestora:'CaixaBank AM',   cat:'Indexado',        patM:2240,  part:68000,  origen:'ES', rYTD:15.82,r1y:23.85,r3y:13.52,r5y:14.85,vol:15.60,sharpe:1.12, com:0.20, ter:0.42, ms:4},
+  {id:100, nombre:'BBVA Bolsa Índice FI',                           isin:'ES0110182039', gestora:'BBVA AM',        cat:'Indexado',        patM:1580,  part:52000,  origen:'ES', rYTD:15.42,r1y:23.18,r3y:12.85,r5y:14.12,vol:15.80,sharpe:1.05, com:0.25, ter:0.52, ms:3},
+
+  // ── FONDOS INDEXADOS INTERNACIONALES ─────────────────────────────
+  {id:101, nombre:'Vanguard Global Stock Index Fund EUR Acc',        isin:'IE00B03HD191', gestora:'Vanguard',       cat:'Indexado',        patM:48200, part:0, origen:'IE', rYTD:14.52,r1y:23.45,r3y:13.12,r5y:15.85,vol:14.20,sharpe:1.28, com:0.00, ter:0.18, ms:5},
+  {id:102, nombre:'Vanguard US 500 Stock Index Fund EUR Acc',        isin:'ES0174244003', gestora:'Vanguard',       cat:'Indexado',        patM:38400, part:0, origen:'IE', rYTD:16.85,r1y:25.12,r3y:14.52,r5y:16.42,vol:15.20,sharpe:1.25, com:0.00, ter:0.10, ms:5},
+  {id:103, nombre:'Vanguard European Stock Index Fund EUR Acc',      isin:'IE0007987708', gestora:'Vanguard',       cat:'Indexado',        patM:18600, part:0, origen:'IE', rYTD:8.82, r1y:15.42,r3y:8.52, r5y:8.12, vol:14.50,sharpe:0.72, com:0.00, ter:0.12, ms:5},
+  {id:104, nombre:'Vanguard Emerging Markets Stock Index EUR Acc',   isin:'IE0031786142', gestora:'Vanguard',       cat:'Indexado',        patM:12400, part:0, origen:'IE', rYTD:6.12, r1y:11.82,r3y:4.52, r5y:5.18, vol:17.20,sharpe:0.48, com:0.00, ter:0.23, ms:4},
+  {id:105, nombre:'Amundi Index MSCI World AE-C',                   isin:'LU0996182563', gestora:'Amundi',         cat:'Indexado',        patM:14200, part:0, origen:'LU', rYTD:14.42,r1y:22.85,r3y:12.82,r5y:14.82,vol:14.40,sharpe:1.18, com:0.10, ter:0.30, ms:5},
+  {id:106, nombre:'Amundi Index S&P 500 AE-C',                      isin:'LU0996179007', gestora:'Amundi',         cat:'Indexado',        patM:16800, part:0, origen:'LU', rYTD:16.52,r1y:24.82,r3y:14.12,r5y:15.85,vol:15.30,sharpe:1.20, com:0.10, ter:0.30, ms:5},
+  {id:107, nombre:'iShares Developed World Index Fund D EUR Acc',    isin:'IE00BD0NCM55', gestora:'BlackRock',      cat:'Indexado',        patM:22400, part:0, origen:'IE', rYTD:14.18,r1y:22.52,r3y:12.52,r5y:14.42,vol:14.30,sharpe:1.15, com:0.10, ter:0.12, ms:5},
+  {id:108, nombre:'iShares US Index Fund D EUR Acc',                 isin:'IE00BD0NCL21', gestora:'BlackRock',      cat:'Indexado',        patM:18200, part:0, origen:'IE', rYTD:16.42,r1y:24.52,r3y:14.18,r5y:15.82,vol:15.40,sharpe:1.20, com:0.10, ter:0.10, ms:5},
+  {id:109, nombre:'Fidelity MSCI World Index Fund P EUR Acc',        isin:'IE00BYX5NX33', gestora:'Fidelity',       cat:'Indexado',        patM:8400,  part:0, origen:'IE', rYTD:14.22,r1y:22.42,r3y:12.42,r5y:14.52,vol:14.20,sharpe:1.18, com:0.00, ter:0.12, ms:5},
+  {id:110, nombre:'Pictet Global Megatrend Selection P EUR',         isin:'LU0386882277', gestora:'Pictet AM',      cat:'RV Temático',     patM:9400,  part:0, origen:'LU', rYTD:12.52,r1y:18.85,r3y:9.82, r5y:14.52,vol:16.80,sharpe:0.98, com:1.20, ter:1.60, ms:4},
+
+  // ── FONDOS NACIONALES ADICIONALES ────────────────────────────────
+  {id:111, nombre:'Caja Ingenieros Environment ISR FI',              isin:'ES0115368039', gestora:'Caja Ing. G.',   cat:'RV Temático',     patM:380,   part:12000,  origen:'ES', rYTD:8.52, r1y:14.52,r3y:6.82, r5y:8.52, vol:15.20,sharpe:0.72, com:1.20, ter:1.52, ms:4},
+  {id:112, nombre:'Indexa Capital Cartera 10 FI',                    isin:'ES0147043009', gestora:'Indexa Capital',  cat:'Indexado',        patM:1850,  part:42000,  origen:'ES', rYTD:15.82,r1y:24.18,r3y:13.85,r5y:15.52,vol:14.80,sharpe:1.22, com:0.15, ter:0.28, ms:5},
+  {id:113, nombre:'Indexa Capital Cartera 6 FI',                     isin:'ES0147043017', gestora:'Indexa Capital',  cat:'Indexado',        patM:1420,  part:38000,  origen:'ES', rYTD:10.52,r1y:16.82,r3y:8.85, r5y:10.12,vol:10.40,sharpe:1.12, com:0.15, ter:0.28, ms:5},
+  {id:114, nombre:'Mutuafondo Tecnológico FI',                      isin:'ES0165237001', gestora:'Mutuactivos',    cat:'RV Temático',     patM:420,   part:18000,  origen:'ES', rYTD:18.82,r1y:28.52,r3y:14.85,r5y:19.52,vol:20.50,sharpe:1.08, com:1.50, ter:1.82, ms:4},
+  {id:115, nombre:'Horos Value Internacional FI',                    isin:'ES0146309002', gestora:'Horos AM',        cat:'RV Internacional',patM:280,   part:8000,   origen:'ES', rYTD:16.82,r1y:22.52,r3y:12.52,r5y:11.82,vol:18.20,sharpe:0.85, com:1.50, ter:1.85, ms:4},
+  {id:116, nombre:'Baelo Patrimonio FI',                             isin:'ES0110407097', gestora:'Andbank WM',     cat:'Mixto Moderado',  patM:520,   part:28000,  origen:'ES', rYTD:8.52, r1y:12.85,r3y:6.52, r5y:7.82, vol:8.80, sharpe:0.95, com:0.59, ter:0.69, ms:4},
+  {id:117, nombre:'Finizens Plan Inversión 5 FI',                    isin:'ES0168798001', gestora:'Finizens',        cat:'Indexado',        patM:380,   part:16000,  origen:'ES', rYTD:14.52,r1y:22.12,r3y:12.18,r5y:13.85,vol:14.00,sharpe:1.15, com:0.15, ter:0.32, ms:4},
+
+  // ── FONDOS INTERNACIONALES ADICIONALES ───────────────────────────
+  {id:118, nombre:'Robeco Global Consumer Trends D EUR',             isin:'LU0187079347', gestora:'Robeco',          cat:'RV Temático',     patM:5200,  part:0, origen:'LU', rYTD:10.82,r1y:16.52,r3y:4.82, r5y:10.52,vol:18.50,sharpe:0.65, com:1.50, ter:1.72, ms:4},
+  {id:119, nombre:'Nordea 1 Global Climate & Envir. Fund BP EUR',    isin:'LU0348926287', gestora:'Nordea AM',       cat:'RV Temático',     patM:8800,  part:0, origen:'LU', rYTD:6.52, r1y:12.85,r3y:2.52, r5y:8.82, vol:17.80,sharpe:0.62, com:1.50, ter:1.75, ms:4},
+  {id:120, nombre:'DWS Invest Top Dividend LC',                      isin:'LU0507265923', gestora:'DWS',             cat:'RV Global',       patM:18200, part:0, origen:'LU', rYTD:7.52, r1y:12.18,r3y:7.52, r5y:8.52, vol:12.80,sharpe:0.78, com:1.20, ter:1.45, ms:4},
+  {id:121, nombre:'Flossbach von Storch Multiple Opportunities II',  isin:'LU1038809049', gestora:'FvS',             cat:'Mixto Moderado',  patM:14800, part:0, origen:'LU', rYTD:6.82, r1y:10.52,r3y:4.18, r5y:5.82, vol:8.50, sharpe:0.78, com:1.05, ter:1.62, ms:4},
+  {id:122, nombre:'Seilern World Growth EUR H R',                    isin:'IE00B2NXKW18', gestora:'Seilern IM',      cat:'RV Global',       patM:4200,  part:0, origen:'IE', rYTD:14.82,r1y:22.52,r3y:10.82,r5y:16.52,vol:17.50,sharpe:1.05, com:1.20, ter:1.55, ms:5},
+  {id:123, nombre:'Capital Group New Perspective Fund B EUR',        isin:'LU1295551573', gestora:'Capital Group',   cat:'RV Global',       patM:32400, part:0, origen:'LU', rYTD:13.52,r1y:21.82,r3y:11.52,r5y:14.82,vol:14.80,sharpe:1.12, com:1.50, ter:1.72, ms:5},
+  {id:124, nombre:'Comgest Growth Europe EUR Acc',                   isin:'IE0004766675', gestora:'Comgest',          cat:'RV Europa',       patM:6800,  part:0, origen:'IE', rYTD:9.82, r1y:16.52,r3y:8.82, r5y:10.52,vol:15.20,sharpe:0.82, com:1.20, ter:1.52, ms:5},
+  {id:125, nombre:'Fundsmith Equity Fund T EUR Acc',                 isin:'LU0690375182', gestora:'Fundsmith',       cat:'RV Global',       patM:28400, part:0, origen:'LU', rYTD:11.52,r1y:18.52,r3y:9.52, r5y:14.18,vol:14.50,sharpe:1.05, com:0.90, ter:1.05, ms:5},
 ];
 
 const FONDOS_COMPARE_COLORS = ['#2563EB','#10B981','#F59E0B','#EF4444','#8B5CF6'];
@@ -8188,14 +8229,14 @@ const CAT_COLORS = {
   'Mixto Defensivo': '#713f12', 'Mixto Moderado':   '#78350f', 'Mixto Agresivo':   '#7c2d12',
   'RV España':       '#4c1d95', 'RV Europa':        '#5b21b6', 'RV Internacional': '#6d28d9',
   'RV USA':          '#831843', 'RV Global':        '#9d174d', 'RV Temático':      '#be185d',
-  'Alternativo':     '#134e4a', 'Garantizado':      '#1e293b',
+  'Indexado':        '#0369a1', 'Alternativo':     '#134e4a', 'Garantizado':      '#1e293b',
 };
 const CAT_TEXT = {
   'Monetario':'#6ee7b7','RF Corto Plazo':'#7dd3fc','Renta Fija':'#93c5fd',
   'Mixto Defensivo':'#fcd34d','Mixto Moderado':'#fbbf24','Mixto Agresivo':'#fb923c',
   'RV España':'#c4b5fd','RV Europa':'#a78bfa','RV Internacional':'#8b5cf6',
   'RV USA':'#f9a8d4','RV Global':'#f472b6','RV Temático':'#ec4899',
-  'Alternativo':'#5eead4','Garantizado':'#94a3b8',
+  'Indexado':'#38bdf8','Alternativo':'#5eead4','Garantizado':'#94a3b8',
 };
 
 // ══════════════════════════════════════════════════════════════════
@@ -8756,7 +8797,7 @@ function _ccRenderStep() {
         <div style="overflow-x:auto">
           <table class="cc-fund-table">
             <thead><tr>
-              <th>Fondo</th><th>ISIN</th><th>Categoría</th><th>Peso</th><th>TER</th><th>R. 5a</th><th>★</th><th>🔗</th>
+              <th>Fondo</th><th>ISIN</th><th>Categoría</th><th>Peso</th><th>TER</th><th>R. 5a</th><th>★</th>
             </tr></thead>
             <tbody>
               ${_ccFunds.map(f => `<tr>
@@ -8767,7 +8808,6 @@ function _ccRenderStep() {
                 <td class="cc-fund-ter">${f.ter ? f.ter.toFixed(2) + '%' : '—'}</td>
                 <td style="color:${(f.r5y||0) >= 0 ? '#10B981':'#EF4444'}">${f.r5y ? f.r5y.toFixed(1) + '%' : '—'}</td>
                 <td class="cc-fund-ms">${f.ms ? '★'.repeat(f.ms) : '—'}</td>
-                <td><a href="${_finectFundUrl(f.isin, f.nombre)}" target="_blank" rel="noopener" class="fondos-finect-link" title="Ver en Finect">↗</a></td>
               </tr>`).join('')}
             </tbody>
           </table>
@@ -8959,12 +8999,6 @@ function _getFilteredFondos() {
   return data;
 }
 
-function _finectFundUrl(isin, nombre) {
-  if (isin && isin !== '—') return `https://www.finect.com/fondos-inversion/${isin}`;
-  const slug = (nombre || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+$/, '');
-  return `https://www.finect.com/fondos-inversion?q=${encodeURIComponent(nombre || '')}`;
-}
-
 function _renderFondosTable() {
   const data  = _getFilteredFondos();
   const tbody = document.getElementById('fondosTableBody');
@@ -9010,7 +9044,6 @@ function _renderFondosTable() {
       <td style="color:${f.sharpe >= 1 ? 'var(--green)' : 'var(--text2)'}">${f.sharpe.toFixed(2)}</td>
       <td style="color:${f.ter > 1.5 ? 'var(--yellow)' : 'var(--text2)'}">${f.ter.toFixed(2)}%</td>
       <td><span class="fondos-stars">${fmtStar(f.ms)}</span></td>
-      <td><a href="${_finectFundUrl(f.isin, f.nombre)}" target="_blank" rel="noopener" class="fondos-finect-link" title="Ver en Finect">↗</a></td>
     </tr>`;
   }).join('');
   if (cnt) cnt.textContent = `${data.length} de ${FONDOS_DATA.length} fondos`;
