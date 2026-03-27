@@ -802,6 +802,100 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .log-time{color:var(--text3)}
 .log-email{color:var(--text2)}
 
+/* ===== REGISTRO WIZARD — Cuestionario de Perfil de Riesgo ===== */
+#modalRegister .modal{max-width:540px;padding:32px}
+.reg-progress{display:flex;align-items:center;justify-content:center;gap:0;margin-bottom:28px}
+.reg-prog-step{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;border:2px solid var(--border);color:var(--text3);background:var(--bg2);transition:.2s;flex-shrink:0}
+.reg-prog-step.done{background:var(--accent);border-color:var(--accent);color:#fff}
+.reg-prog-step.active{background:var(--accent2);border-color:var(--accent);color:#fff;box-shadow:0 0 0 3px rgba(37,99,235,.25)}
+.reg-prog-line{flex:1;height:2px;background:var(--border);max-width:40px;transition:.2s}
+.reg-prog-line.done{background:var(--accent)}
+.reg-step{display:none;animation:regFadeIn .2s ease}
+.reg-step.active{display:block}
+@keyframes regFadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.reg-q-label{font-size:.72rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px}
+.reg-q-title{font-size:1rem;font-weight:600;color:var(--text);margin-bottom:16px;line-height:1.4}
+.reg-q-block{margin-bottom:22px}
+.reg-options-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.reg-option{background:var(--bg2);border:1.5px solid var(--border);border-radius:10px;padding:11px 14px;cursor:pointer;transition:.15s;display:flex;align-items:flex-start;gap:9px;font-size:.83rem;color:var(--text2);line-height:1.3}
+.reg-option:hover{border-color:var(--accent);color:var(--text)}
+.reg-option.selected{border-color:var(--accent);background:rgba(37,99,235,.1);color:var(--text)}
+.reg-option-radio{width:16px;height:16px;border-radius:50%;border:2px solid var(--border);background:var(--bg2);flex-shrink:0;margin-top:1px;transition:.15s;position:relative}
+.reg-option.selected .reg-option-radio{border-color:var(--accent);background:var(--accent)}
+.reg-option.selected .reg-option-radio::after{content:'';position:absolute;inset:3px;border-radius:50%;background:#fff}
+.reg-option-text{flex:1}
+.reg-option-icon{font-size:1rem;flex-shrink:0}
+.reg-multi-grid{display:flex;flex-wrap:wrap;gap:8px}
+.reg-multi-tag{display:inline-flex;align-items:center;gap:5px;padding:7px 13px;border-radius:20px;border:1.5px solid var(--border);background:var(--bg2);color:var(--text2);font-size:.8rem;cursor:pointer;transition:.15s;white-space:nowrap}
+.reg-multi-tag:hover{border-color:var(--accent);color:var(--text)}
+.reg-multi-tag.selected{border-color:var(--accent);background:rgba(37,99,235,.12);color:var(--text)}
+.reg-nav-row{display:flex;gap:8px;margin-top:24px}
+.reg-back-btn{flex:0 0 auto;padding:10px 18px;background:var(--card);border:1px solid var(--border);color:var(--text2);border-radius:8px;font-size:.88rem;font-weight:500;cursor:pointer;transition:.15s;font-family:var(--font)}
+.reg-back-btn:hover{border-color:var(--accent);color:var(--text)}
+.reg-profile-result{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:20px;text-align:center}
+.reg-profile-badge{display:inline-flex;align-items:center;gap:6px;font-size:1.05rem;font-weight:800;letter-spacing:.04em;padding:8px 20px;border-radius:8px;margin-bottom:8px}
+.rpb-conservador{background:rgba(16,185,129,.15);color:#10B981;border:1px solid rgba(16,185,129,.3)}
+.rpb-moderado{background:rgba(37,99,235,.15);color:#60a5fa;border:1px solid rgba(37,99,235,.3)}
+.rpb-equilibrado{background:rgba(245,158,11,.15);color:#F59E0B;border:1px solid rgba(245,158,11,.3)}
+.rpb-agresivo{background:rgba(239,68,68,.15);color:#EF4444;border:1px solid rgba(239,68,68,.3)}
+.reg-profile-desc{font-size:.8rem;color:var(--text2);line-height:1.5;margin-top:4px}
+/* Portal — Perfil de riesgo card */
+.pp-risk-badge{display:inline-flex;align-items:center;gap:5px;font-size:.78rem;font-weight:700;padding:4px 12px;border-radius:20px;letter-spacing:.04em}
+.pp-risk-conservador{background:rgba(16,185,129,.12);color:#10B981;border:1px solid rgba(16,185,129,.25)}
+.pp-risk-moderado{background:rgba(37,99,235,.12);color:#60a5fa;border:1px solid rgba(37,99,235,.25)}
+.pp-risk-equilibrado{background:rgba(245,158,11,.12);color:#F59E0B;border:1px solid rgba(245,158,11,.25)}
+.pp-risk-agresivo{background:rgba(239,68,68,.12);color:#EF4444;border:1px solid rgba(239,68,68,.25)}
+.pp-risk-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px}
+.pp-risk-item{background:var(--bg2);border-radius:7px;padding:7px 9px}
+.pp-risk-item-label{font-size:.62rem;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px}
+.pp-risk-item-val{font-size:.78rem;color:var(--text);font-weight:600}
+.pp-risk-update-btn{width:100%;padding:7px;background:transparent;border:1px solid var(--border);color:var(--text2);border-radius:7px;font-size:.75rem;cursor:pointer;transition:.15s;font-family:var(--font);margin-top:8px;text-align:center}
+.pp-risk-update-btn:hover{border-color:var(--accent);color:var(--accent)}
+/* ===== MEJORAS RESPONSIVE MOBILE ===== */
+@media(max-width:600px){
+  /* Nav más compacto */
+  .nav-logo{font-size:.88rem;gap:7px}
+  .nav-logo-dot{width:6px;height:6px}
+  .nav-version{display:none}
+  #btnRegister,#btnLogin{padding:6px 10px;font-size:.78rem}
+  #btnLogout{padding:5px 10px;font-size:.75rem}
+  .nav-time{display:none}
+  .nav-lang-indicator{font-size:.85rem}
+  /* Nav tabs scroll horizontal */
+  .nav-tabs{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;gap:2px;flex-wrap:nowrap}
+  .nav-tabs::-webkit-scrollbar{display:none}
+  .nav-tab{padding:5px 10px;font-size:.78rem;white-space:nowrap}
+  /* Section content */
+  .section{padding-top:70px}
+  .section-header{padding:16px 14px 4px}
+  .section-title{font-size:1.1rem}
+  .section-sub{font-size:.8rem}
+  /* Indices grid ya 1col en 600px, mejorar cards */
+  .index-card{padding:14px 14px 12px}
+  .card-price{font-size:1.2rem}
+  /* Modal full-width on mobile */
+  .modal{padding:24px 20px;border-radius:14px;max-width:calc(100vw - 24px)!important;margin:12px}
+  .modal-overlay{align-items:flex-end;padding:0}
+  .modal{border-radius:18px 18px 0 0;margin:0;max-width:100vw!important}
+  #modalPlanPersonalizado .modal,.modal-overlay:not(#modalRegister) .modal{border-radius:18px 18px 0 0}
+  /* Register wizard */
+  .reg-options-grid{grid-template-columns:1fr}
+  .reg-multi-grid{gap:6px}
+  .reg-progress{gap:0}
+  .reg-prog-line{max-width:28px}
+  /* Portal panel */
+  #portalPanel{top:60px}
+  .pp-risk-grid{grid-template-columns:1fr}
+  /* Bottom ticker */
+  .ticker-bar{bottom:0;left:0;right:0}
+}
+@media(max-width:400px){
+  nav{height:54px}
+  .nav-logo{font-size:.8rem}
+  #btnRegister{display:none}
+  .nav-tab{padding:4px 8px;font-size:.72rem}
+}
+
 /* Nuevo inversor modal */
 #modalNewInvestor .modal{max-width:460px}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
@@ -1834,7 +1928,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
   <div class="nav-logo">
     <div class="nav-logo-dot"></div>
     Agencia de Valores Generación Z
-    <span class="nav-version">v3.6.0</span>
+    <span class="nav-version">v3.7.0</span>
   </div>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="showSection('Mercados')">Mercados</button>
@@ -1913,6 +2007,15 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <div id="watchlistItems">
         <div class="watchlist-item"><span class="wl-name" style="color:var(--text3)" data-i18n="cargando">Cargando...</span></div>
       </div>
+    </div>
+
+    <!-- Perfil de Riesgo -->
+    <div class="pp-card" id="ppRiskCard" style="display:none">
+      <div class="pp-card-title">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        PERFIL DE RIESGO
+      </div>
+      <div id="ppRiskContent"></div>
     </div>
 
     <!-- Cambiar contraseña (colapsable) -->
@@ -2981,33 +3084,164 @@ tr:hover td{background:rgba(255,255,255,.02)}
   </div>
 </div>
 
-<!-- REGISTRO PÚBLICO MODAL -->
+<!-- REGISTRO PÚBLICO MODAL — Wizard con cuestionario de perfil de riesgo -->
 <div class="modal-overlay" id="modalRegister">
   <div class="modal">
     <button class="modal-close" onclick="closeRegisterModal()">✕</button>
-    <h2 class="modal-title">Crear cuenta</h2>
-    <p class="modal-sub">Regístrate para acceder a tu dashboard de inversión</p>
-    <div class="form-group">
-      <label class="form-label">Nombre completo</label>
-      <input class="form-input" type="text" id="regName" placeholder="Carlos García" autocomplete="name">
+
+    <!-- Indicador de progreso -->
+    <div class="reg-progress">
+      <div class="reg-prog-step active" id="rpStep1">1</div>
+      <div class="reg-prog-line" id="rpLine1"></div>
+      <div class="reg-prog-step" id="rpStep2">2</div>
+      <div class="reg-prog-line" id="rpLine2"></div>
+      <div class="reg-prog-step" id="rpStep3">3</div>
+      <div class="reg-prog-line" id="rpLine3"></div>
+      <div class="reg-prog-step" id="rpStep4">4</div>
     </div>
-    <div class="form-group">
-      <label class="form-label">Email</label>
-      <input class="form-input" type="email" id="regEmail" placeholder="correo@ejemplo.com" autocomplete="email">
+
+    <!-- STEP 1 — Datos básicos -->
+    <div class="reg-step active" id="regStep1">
+      <h2 class="modal-title">Crear cuenta</h2>
+      <p class="modal-sub">Regístrate para acceder a tu dashboard de inversión</p>
+      <div class="form-group">
+        <label class="form-label">Nombre completo</label>
+        <input class="form-input" type="text" id="regName" placeholder="Carlos García" autocomplete="name">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input class="form-input" type="email" id="regEmail" placeholder="correo@ejemplo.com" autocomplete="email">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Contraseña</label>
+        <input class="form-input" type="password" id="regPass" placeholder="Mínimo 6 caracteres" autocomplete="new-password">
+      </div>
+      <div class="form-group" style="margin-bottom:6px">
+        <label class="form-label">Confirmar contraseña</label>
+        <input class="form-input" type="password" id="regPass2" placeholder="Repite la contraseña" autocomplete="new-password" onkeydown="if(event.key==='Enter')regNextStep(1)">
+      </div>
+      <div class="form-error" id="regError"></div>
+      <div class="reg-nav-row">
+        <button class="btn-primary" onclick="regNextStep(1)">Continuar →</button>
+      </div>
+      <p style="text-align:center;margin-top:14px;font-size:.82rem;color:var(--text3)">
+        ¿Ya tienes cuenta? <a href="#" style="color:var(--accent);text-decoration:none" onclick="closeRegisterModal();openLoginModal();return false">Acceder</a>
+      </p>
     </div>
-    <div class="form-group">
-      <label class="form-label">Contraseña</label>
-      <input class="form-input" type="password" id="regPass" placeholder="Mínimo 6 caracteres" autocomplete="new-password">
+
+    <!-- STEP 2 — Experiencia inversora -->
+    <div class="reg-step" id="regStep2">
+      <h2 class="modal-title">Tu experiencia</h2>
+      <p class="modal-sub">Cuéntanos sobre tu trayectoria como inversor</p>
+
+      <div class="reg-q-block">
+        <div class="reg-q-label">Pregunta 1 de 6</div>
+        <div class="reg-q-title">¿Cuánto tiempo llevas invirtiendo?</div>
+        <div class="reg-options-grid" id="rqTiempo">
+          <div class="reg-option" data-q="tiempo" data-v="menos1" onclick="regSelect(this,'tiempo')"><span class="reg-option-radio"></span><span class="reg-option-text">Menos de 1 año</span></div>
+          <div class="reg-option" data-q="tiempo" data-v="1a3" onclick="regSelect(this,'tiempo')"><span class="reg-option-radio"></span><span class="reg-option-text">1 – 3 años</span></div>
+          <div class="reg-option" data-q="tiempo" data-v="3a5" onclick="regSelect(this,'tiempo')"><span class="reg-option-radio"></span><span class="reg-option-text">3 – 5 años</span></div>
+          <div class="reg-option" data-q="tiempo" data-v="mas5" onclick="regSelect(this,'tiempo')"><span class="reg-option-radio"></span><span class="reg-option-text">Más de 5 años</span></div>
+        </div>
+      </div>
+
+      <div class="reg-q-block">
+        <div class="reg-q-label">Pregunta 2 de 6</div>
+        <div class="reg-q-title">¿Cómo describirías tu nivel como inversor?</div>
+        <div class="reg-options-grid" id="rqExperiencia">
+          <div class="reg-option" data-q="experiencia" data-v="principiante" onclick="regSelect(this,'experiencia')"><span class="reg-option-radio"></span><span class="reg-option-text">🌱 Principiante</span></div>
+          <div class="reg-option" data-q="experiencia" data-v="intermedio" onclick="regSelect(this,'experiencia')"><span class="reg-option-radio"></span><span class="reg-option-text">📈 Intermedio</span></div>
+          <div class="reg-option" data-q="experiencia" data-v="avanzado" onclick="regSelect(this,'experiencia')"><span class="reg-option-radio"></span><span class="reg-option-text">🎯 Avanzado</span></div>
+          <div class="reg-option" data-q="experiencia" data-v="experto" onclick="regSelect(this,'experiencia')"><span class="reg-option-radio"></span><span class="reg-option-text">🏆 Experto</span></div>
+        </div>
+      </div>
+
+      <div class="form-error" id="regError2"></div>
+      <div class="reg-nav-row">
+        <button class="reg-back-btn" onclick="regGoStep(1)">← Atrás</button>
+        <button class="btn-primary" onclick="regNextStep(2)">Continuar →</button>
+      </div>
     </div>
-    <div class="form-group">
-      <label class="form-label">Confirmar contraseña</label>
-      <input class="form-input" type="password" id="regPass2" placeholder="Repite la contraseña" autocomplete="new-password" onkeydown="if(event.key==='Enter')doRegister()">
+
+    <!-- STEP 3 — Preferencias de inversión -->
+    <div class="reg-step" id="regStep3">
+      <h2 class="modal-title">Tus preferencias</h2>
+      <p class="modal-sub">Selecciona todos los que apliquen</p>
+
+      <div class="reg-q-block">
+        <div class="reg-q-label">Pregunta 3 de 6</div>
+        <div class="reg-q-title">¿Qué instrumentos utilizas o te interesan?</div>
+        <div class="reg-multi-grid" id="rqInstrumentos">
+          <div class="reg-multi-tag" data-v="acciones" onclick="regToggle(this,'instrumentos')">📊 Acciones</div>
+          <div class="reg-multi-tag" data-v="fondos" onclick="regToggle(this,'instrumentos')">📂 Fondos</div>
+          <div class="reg-multi-tag" data-v="etf" onclick="regToggle(this,'instrumentos')">🌍 ETFs</div>
+          <div class="reg-multi-tag" data-v="cripto" onclick="regToggle(this,'instrumentos')">₿ Criptomonedas</div>
+          <div class="reg-multi-tag" data-v="rf" onclick="regToggle(this,'instrumentos')">🏛 Renta Fija</div>
+          <div class="reg-multi-tag" data-v="derivados" onclick="regToggle(this,'instrumentos')">⚡ Derivados</div>
+        </div>
+      </div>
+
+      <div class="reg-q-block">
+        <div class="reg-q-label">Pregunta 4 de 6</div>
+        <div class="reg-q-title">¿En qué sectores prefieres invertir?</div>
+        <div class="reg-multi-grid" id="rqSectores">
+          <div class="reg-multi-tag" data-v="tech" onclick="regToggle(this,'sectores')">💻 Tecnología</div>
+          <div class="reg-multi-tag" data-v="salud" onclick="regToggle(this,'sectores')">🏥 Salud</div>
+          <div class="reg-multi-tag" data-v="energia" onclick="regToggle(this,'sectores')">⚡ Energía</div>
+          <div class="reg-multi-tag" data-v="financiero" onclick="regToggle(this,'sectores')">🏦 Financiero</div>
+          <div class="reg-multi-tag" data-v="consumo" onclick="regToggle(this,'sectores')">🛒 Consumo</div>
+          <div class="reg-multi-tag" data-v="industrial" onclick="regToggle(this,'sectores')">🏭 Industrial</div>
+          <div class="reg-multi-tag" data-v="inmobiliario" onclick="regToggle(this,'sectores')">🏠 Inmobiliario</div>
+        </div>
+      </div>
+
+      <div class="form-error" id="regError3"></div>
+      <div class="reg-nav-row">
+        <button class="reg-back-btn" onclick="regGoStep(2)">← Atrás</button>
+        <button class="btn-primary" onclick="regNextStep(3)">Continuar →</button>
+      </div>
     </div>
-    <div class="form-error" id="regError"></div>
-    <button class="btn-primary" id="regBtn" onclick="doRegister()">Crear cuenta</button>
-    <p style="text-align:center;margin-top:14px;font-size:.82rem;color:var(--text3)">
-      ¿Ya tienes cuenta? <a href="#" style="color:var(--accent);text-decoration:none" onclick="closeRegisterModal();openLoginModal();return false">Acceder</a>
-    </p>
+
+    <!-- STEP 4 — Perfil de riesgo -->
+    <div class="reg-step" id="regStep4">
+      <h2 class="modal-title">Perfil de riesgo</h2>
+      <p class="modal-sub">Últimas preguntas para personalizar tu experiencia</p>
+
+      <div class="reg-q-block">
+        <div class="reg-q-label">Pregunta 5 de 6</div>
+        <div class="reg-q-title">Si tu cartera cayera un 20%, ¿qué harías?</div>
+        <div class="reg-options-grid" id="rqReaccion">
+          <div class="reg-option" data-q="reaccion" data-v="vende" onclick="regSelect(this,'reaccion')"><span class="reg-option-radio"></span><span class="reg-option-text">Vendería todo para limitar pérdidas</span></div>
+          <div class="reg-option" data-q="reaccion" data-v="vendeParte" onclick="regSelect(this,'reaccion')"><span class="reg-option-radio"></span><span class="reg-option-text">Vendería parte para reducir riesgo</span></div>
+          <div class="reg-option" data-q="reaccion" data-v="espera" onclick="regSelect(this,'reaccion')"><span class="reg-option-radio"></span><span class="reg-option-text">No haría nada, esperaría</span></div>
+          <div class="reg-option" data-q="reaccion" data-v="compra" onclick="regSelect(this,'reaccion')"><span class="reg-option-radio"></span><span class="reg-option-text">Compraría más aprovechando el precio</span></div>
+        </div>
+      </div>
+
+      <div class="reg-q-block">
+        <div class="reg-q-label">Pregunta 6 de 6</div>
+        <div class="reg-q-title">¿Cuál es tu objetivo principal de inversión?</div>
+        <div class="reg-options-grid" id="rqObjetivo">
+          <div class="reg-option" data-q="objetivo" data-v="preservar" onclick="regSelect(this,'objetivo')"><span class="reg-option-radio"></span><span class="reg-option-text">🛡 Preservar el capital</span></div>
+          <div class="reg-option" data-q="objetivo" data-v="ingresos" onclick="regSelect(this,'objetivo')"><span class="reg-option-radio"></span><span class="reg-option-text">💰 Ingresos pasivos</span></div>
+          <div class="reg-option" data-q="objetivo" data-v="crecimiento" onclick="regSelect(this,'objetivo')"><span class="reg-option-radio"></span><span class="reg-option-text">📈 Crecimiento a largo plazo</span></div>
+          <div class="reg-option" data-q="objetivo" data-v="agresivo" onclick="regSelect(this,'objetivo')"><span class="reg-option-radio"></span><span class="reg-option-text">🚀 Rentabilidad agresiva</span></div>
+        </div>
+      </div>
+
+      <!-- Preview del perfil calculado -->
+      <div class="reg-profile-result" id="regProfilePreview" style="display:none">
+        <div id="regProfileBadge" class="reg-profile-badge"></div>
+        <div class="reg-profile-desc" id="regProfileDesc"></div>
+      </div>
+
+      <div class="form-error" id="regError4"></div>
+      <div class="reg-nav-row">
+        <button class="reg-back-btn" onclick="regGoStep(3)">← Atrás</button>
+        <button class="btn-primary" id="regBtn" onclick="doRegister()">✓ Crear cuenta</button>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -3685,50 +3919,161 @@ function openLoginModal()  { document.getElementById('modalLogin').classList.add
 function closeLoginModal() { document.getElementById('modalLogin').classList.remove('show'); }
 document.getElementById('modalLogin').addEventListener('click', e => { if (e.target === e.currentTarget) closeLoginModal(); });
 
+// ── Wizard de Registro — Estado ──────────────────────────────────
+let _regAnswers = { tiempo:null, experiencia:null, instrumentos:[], sectores:[], reaccion:null, objetivo:null };
+let _regCurrentStep = 1;
+
 function openRegisterModal() {
+  _regCurrentStep = 1;
+  _regAnswers = { tiempo:null, experiencia:null, instrumentos:[], sectores:[], reaccion:null, objetivo:null };
   document.getElementById('modalRegister').classList.add('show');
-  document.getElementById('regName').focus();
-  document.getElementById('regError').style.display = 'none';
+  regGoStep(1);
+  setTimeout(() => { const n = document.getElementById('regName'); if(n) n.focus(); }, 100);
 }
+
 function closeRegisterModal() {
   document.getElementById('modalRegister').classList.remove('show');
-  ['regName','regEmail','regPass','regPass2'].forEach(id => document.getElementById(id).value = '');
-  document.getElementById('regError').style.display = 'none';
+  ['regName','regEmail','regPass','regPass2'].forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
+  ['regError','regError2','regError3','regError4'].forEach(id => { const el = document.getElementById(id); if(el) el.style.display = 'none'; });
+  // Reset selecciones
+  document.querySelectorAll('.reg-option').forEach(el => el.classList.remove('selected'));
+  document.querySelectorAll('.reg-multi-tag').forEach(el => el.classList.remove('selected'));
+  document.getElementById('regProfilePreview').style.display = 'none';
+  regGoStep(1);
 }
 document.getElementById('modalRegister').addEventListener('click', e => { if (e.target === e.currentTarget) closeRegisterModal(); });
 
+function regGoStep(n) {
+  _regCurrentStep = n;
+  for (let i = 1; i <= 4; i++) {
+    const step = document.getElementById('regStep' + i);
+    const dot  = document.getElementById('rpStep' + i);
+    if (step) step.classList.toggle('active', i === n);
+    if (dot) {
+      dot.classList.toggle('active', i === n);
+      dot.classList.toggle('done', i < n);
+    }
+    if (i < 4) {
+      const line = document.getElementById('rpLine' + i);
+      if (line) line.classList.toggle('done', i < n);
+    }
+  }
+}
+
+function regSelect(el, question) {
+  // Single-select: deselect siblings
+  el.closest('.reg-options-grid').querySelectorAll('.reg-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  _regAnswers[question] = el.dataset.v;
+  // Si cambia reaccion u objetivo, actualizar preview
+  if (question === 'reaccion' || question === 'objetivo') _updateRegPreview();
+}
+
+function regToggle(el, group) {
+  el.classList.toggle('selected');
+  const vals = [...el.closest('.reg-multi-grid').querySelectorAll('.reg-multi-tag.selected')].map(t => t.dataset.v);
+  _regAnswers[group] = vals;
+}
+
+function regNextStep(from) {
+  // Validar el paso actual antes de avanzar
+  if (from === 1) {
+    const name  = document.getElementById('regName').value.trim();
+    const email = document.getElementById('regEmail').value.trim();
+    const pass  = document.getElementById('regPass').value;
+    const pass2 = document.getElementById('regPass2').value;
+    const err   = document.getElementById('regError');
+    err.style.display = 'none';
+    if (!email || !pass) { err.textContent = 'Email y contraseña son obligatorios'; err.style.display = 'block'; return; }
+    if (pass.length < 6) { err.textContent = 'Mínimo 6 caracteres'; err.style.display = 'block'; return; }
+    if (pass !== pass2)  { err.textContent = 'Las contraseñas no coinciden'; err.style.display = 'block'; return; }
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { err.textContent = 'Email no válido'; err.style.display = 'block'; return; }
+  }
+  if (from === 2) {
+    const err = document.getElementById('regError2');
+    err.style.display = 'none';
+    if (!_regAnswers.tiempo) { err.textContent = 'Selecciona cuánto tiempo llevas invirtiendo'; err.style.display = 'block'; return; }
+    if (!_regAnswers.experiencia) { err.textContent = 'Selecciona tu nivel de experiencia'; err.style.display = 'block'; return; }
+  }
+  if (from === 3) {
+    const err = document.getElementById('regError3');
+    err.style.display = 'none';
+    if (_regAnswers.instrumentos.length === 0) { err.textContent = 'Selecciona al menos un instrumento'; err.style.display = 'block'; return; }
+  }
+  regGoStep(from + 1);
+}
+
+function _updateRegPreview() {
+  if (!_regAnswers.reaccion && !_regAnswers.objetivo) return;
+  const rp   = _calcRiskProfile(_regAnswers);
+  const prev = document.getElementById('regProfilePreview');
+  const badge= document.getElementById('regProfileBadge');
+  const desc = document.getElementById('regProfileDesc');
+  if (!prev || !badge || !desc) return;
+  const styles = { CONSERVADOR:'rpb-conservador', MODERADO:'rpb-moderado', EQUILIBRADO:'rpb-equilibrado', AGRESIVO:'rpb-agresivo' };
+  const icons  = { CONSERVADOR:'🛡', MODERADO:'📊', EQUILIBRADO:'⚖️', AGRESIVO:'🚀' };
+  const descs  = {
+    CONSERVADOR:'Priorizas la seguridad. El capital es lo primero. Preferirás inversiones estables con bajo riesgo.',
+    MODERADO:'Buscas equilibrio entre seguridad y rentabilidad. Toleras volatilidad moderada.',
+    EQUILIBRADO:'Asumes riesgo controlado para maximizar el crecimiento a medio plazo.',
+    AGRESIVO:'Buscas máxima rentabilidad y asumes volatilidad alta. Largo plazo y convicción.',
+  };
+  badge.className = 'reg-profile-badge ' + (styles[rp.perfil] || '');
+  badge.innerHTML = `${icons[rp.perfil]||''} ${rp.perfil}`;
+  desc.textContent = descs[rp.perfil] || '';
+  prev.style.display = 'block';
+}
+
+function _calcRiskProfile(ans) {
+  const scoreMap = {
+    experiencia: { principiante:1, intermedio:2, avanzado:3, experto:4 },
+    tiempo:      { menos1:1, '1a3':2, '3a5':3, mas5:4 },
+    reaccion:    { vende:1, vendeParte:2, espera:3, compra:4 },
+    objetivo:    { preservar:1, ingresos:2, crecimiento:3, agresivo:4 },
+  };
+  const s = (scoreMap.experiencia[ans.experiencia]||2) + (scoreMap.tiempo[ans.tiempo]||2)
+           + (scoreMap.reaccion[ans.reaccion]||2)     + (scoreMap.objetivo[ans.objetivo]||2);
+  const perfil = s <= 7 ? 'CONSERVADOR' : s <= 10 ? 'MODERADO' : s <= 13 ? 'EQUILIBRADO' : 'AGRESIVO';
+  return { score: s, perfil };
+}
+
 async function doRegister() {
+  const err4 = document.getElementById('regError4');
+  err4.style.display = 'none';
+  if (!_regAnswers.reaccion) { err4.textContent = 'Responde cómo reaccionarías ante una caída'; err4.style.display = 'block'; return; }
+  if (!_regAnswers.objetivo) { err4.textContent = 'Selecciona tu objetivo principal'; err4.style.display = 'block'; return; }
+
   const name  = document.getElementById('regName').value.trim();
   const email = document.getElementById('regEmail').value.trim();
   const pass  = document.getElementById('regPass').value;
-  const pass2 = document.getElementById('regPass2').value;
-  const err   = document.getElementById('regError');
   const btn   = document.getElementById('regBtn');
-  err.style.display = 'none';
 
-  if (!email || !pass) { err.textContent = 'Email y contraseña son obligatorios'; err.style.display = 'block'; return; }
-  if (pass.length < 6) { err.textContent = 'La contraseña debe tener al menos 6 caracteres'; err.style.display = 'block'; return; }
-  if (pass !== pass2)  { err.textContent = 'Las contraseñas no coinciden'; err.style.display = 'block'; return; }
+  const rp = _calcRiskProfile(_regAnswers);
+  const riskProfile = {
+    ..._regAnswers,
+    score: rp.score,
+    perfil: rp.perfil,
+    completedAt: new Date().toISOString(),
+  };
 
   btn.disabled = true; btn.textContent = 'Creando cuenta...';
   try {
     const res = await fetch(API_BASE + '/auth', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'register', email, password: pass, name }),
+      body: JSON.stringify({ action: 'register', email, password: pass, name, riskProfile }),
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Error al registrarse');
     closeRegisterModal();
-    // Abrir login con el email pre-rellenado
     openLoginModal();
     document.getElementById('loginUser').value = email;
-    toast('Cuenta creada. Ya puedes acceder con tu email.', 'ok');
+    toast(`Cuenta creada · Perfil ${rp.perfil}. Ya puedes acceder.`, 'ok');
   } catch (e) {
-    err.textContent = e.message;
-    err.style.display = 'block';
+    err4.textContent = e.message;
+    err4.style.display = 'block';
   } finally {
-    btn.disabled = false; btn.textContent = 'Crear cuenta';
+    btn.disabled = false; btn.textContent = '✓ Crear cuenta';
   }
 }
 
@@ -5123,7 +5468,192 @@ function renderPortal() {
     }).join('') || '<div style="color:var(--text3);font-size:.82rem">Sin índices en watchlist</div>';
   }
 
+  // Risk profile card
+  const riskCard = document.getElementById('ppRiskCard');
+  const riskContent = document.getElementById('ppRiskContent');
+  if (riskCard && riskContent) {
+    const rp = u.riskProfile;
+    if (rp && rp.perfil) {
+      const perfilKey = rp.perfil.toLowerCase();
+      const perfilLabels = { conservador: 'Conservador', moderado: 'Moderado', equilibrado: 'Equilibrado', agresivo: 'Agresivo' };
+      const perfilLabel = perfilLabels[perfilKey] || rp.perfil;
+      const tiempoLabels = { menos1: 'Menos de 1 año', '1a3': '1-3 años', '3a5': '3-5 años', mas5: 'Más de 5 años' };
+      const expLabels = { principiante: 'Principiante', intermedio: 'Intermedio', avanzado: 'Avanzado', experto: 'Experto' };
+      const objLabels = { preservar: 'Preservar capital', ingresos: 'Generar ingresos', crecimiento: 'Crecimiento', agresivo: 'Máx. rentabilidad' };
+      const instrList = (rp.instrumentos || []).join(', ').toUpperCase() || '—';
+      const updatedStr = rp.completedAt ? new Date(rp.completedAt).toLocaleDateString('es-ES') : '';
+      riskContent.innerHTML = `
+        <div class="pp-risk-badge pp-risk-${perfilKey}">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          ${perfilLabel}${rp.score ? ` · ${rp.score}/16` : ''}
+        </div>
+        <div class="pp-risk-grid">
+          <div class="pp-risk-item"><div class="pp-risk-lbl">Experiencia</div><div class="pp-risk-val">${expLabels[rp.experiencia] || rp.experiencia || '—'}</div></div>
+          <div class="pp-risk-item"><div class="pp-risk-lbl">Horizonte</div><div class="pp-risk-val">${tiempoLabels[rp.tiempo] || rp.tiempo || '—'}</div></div>
+          <div class="pp-risk-item"><div class="pp-risk-lbl">Objetivo</div><div class="pp-risk-val">${objLabels[rp.objetivo] || rp.objetivo || '—'}</div></div>
+          <div class="pp-risk-item"><div class="pp-risk-lbl">Instrumentos</div><div class="pp-risk-val" style="font-size:.7rem">${instrList}</div></div>
+        </div>
+        ${updatedStr ? `<div style="font-size:.7rem;color:var(--text3);margin-top:6px">Completado el ${updatedStr}</div>` : ''}
+        <button class="pp-risk-update-btn" onclick="openRiskUpdateModal()">✏️ Actualizar perfil</button>`;
+      riskCard.style.display = 'block';
+    } else {
+      riskContent.innerHTML = `
+        <div style="color:var(--text3);font-size:.82rem;margin-bottom:10px">Aún no has completado tu perfil de riesgo.</div>
+        <button class="pp-risk-update-btn" onclick="openRiskUpdateModal()">📋 Completar perfil</button>`;
+      riskCard.style.display = 'block';
+    }
+  }
+
   updatePortalMarketSummary();
+}
+
+function openRiskUpdateModal() {
+  // Reset wizard state
+  _regAnswers = { tiempo: null, experiencia: null, instrumentos: [], sectores: [], reaccion: null, objetivo: null };
+  _regCurrentStep = 1;
+  // Pre-fill existing data if available
+  if (_session && _session.riskProfile) {
+    const rp = _session.riskProfile;
+    if (rp.tiempo) _regAnswers.tiempo = rp.tiempo;
+    if (rp.experiencia) _regAnswers.experiencia = rp.experiencia;
+    if (rp.instrumentos) _regAnswers.instrumentos = [...rp.instrumentos];
+    if (rp.sectores) _regAnswers.sectores = [...rp.sectores];
+    if (rp.reaccion) _regAnswers.reaccion = rp.reaccion;
+    if (rp.objetivo) _regAnswers.objetivo = rp.objetivo;
+  }
+  // Open a simplified modal: reuse register modal steps 2-4 only
+  // For simplicity, open a dedicated minimal modal
+  const existing = document.getElementById('modalRiskUpdate');
+  if (existing) { existing.classList.add('show'); _renderRiskUpdateWizard(); return; }
+
+  const m = document.createElement('div');
+  m.id = 'modalRiskUpdate';
+  m.className = 'modal-overlay show';
+  m.innerHTML = `<div class="modal" style="max-width:520px;padding:28px">
+    <h3 style="margin:0 0 18px;font-size:1.1rem;letter-spacing:.5px">ACTUALIZAR PERFIL DE RIESGO</h3>
+    <div id="riskWizardBody"></div>
+    <div style="display:flex;gap:8px;margin-top:20px">
+      <button class="reg-back-btn" id="riskWizardBack" onclick="_riskWizardBack()" style="display:none">← Atrás</button>
+      <button id="riskWizardNext" onclick="_riskWizardNext()" style="flex:1;padding:11px;background:var(--accent);border:none;border-radius:8px;color:#fff;font-weight:600;cursor:pointer">Continuar →</button>
+    </div>
+  </div>`;
+  m.addEventListener('click', e => { if (e.target === m) m.classList.remove('show'); });
+  document.body.appendChild(m);
+  _renderRiskUpdateWizard();
+}
+
+let _riskWizardStep = 1;
+const _RISK_STEPS = 3;
+
+function _renderRiskUpdateWizard() {
+  _riskWizardStep = 1;
+  _riskWizardDraw();
+}
+
+function _riskWizardNext() {
+  if (_riskWizardStep === 1) {
+    if (!_regAnswers.tiempo || !_regAnswers.experiencia) { toast('Selecciona las dos opciones', 'err'); return; }
+  } else if (_riskWizardStep === 2) {
+    if (!_regAnswers.instrumentos.length) { toast('Selecciona al menos un instrumento', 'err'); return; }
+  } else if (_riskWizardStep === 3) {
+    if (!_regAnswers.reaccion || !_regAnswers.objetivo) { toast('Selecciona las dos opciones', 'err'); return; }
+    _saveRiskProfile(); return;
+  }
+  _riskWizardStep++;
+  _riskWizardDraw();
+}
+
+function _riskWizardBack() {
+  if (_riskWizardStep > 1) { _riskWizardStep--; _riskWizardDraw(); }
+}
+
+function _riskWizardDraw() {
+  const body = document.getElementById('riskWizardBody');
+  const backBtn = document.getElementById('riskWizardBack');
+  const nextBtn = document.getElementById('riskWizardNext');
+  if (!body) return;
+  backBtn.style.display = _riskWizardStep > 1 ? '' : 'none';
+  nextBtn.textContent = _riskWizardStep === _RISK_STEPS ? '✓ Guardar perfil' : 'Continuar →';
+
+  const sel = (group, v) => _regAnswers[group] === v ? 'selected' : '';
+  const selM = (group, v) => (_regAnswers[group] || []).includes(v) ? 'selected' : '';
+
+  if (_riskWizardStep === 1) {
+    body.innerHTML = `
+      <p class="reg-q-label">¿Cuánto tiempo llevas invirtiendo?</p>
+      <div class="reg-options-grid">
+        <div class="reg-option ${sel('tiempo','menos1')}" onclick="regSelect(this,'tiempo')" data-v="menos1">Menos de 1 año</div>
+        <div class="reg-option ${sel('tiempo','1a3')}" onclick="regSelect(this,'tiempo')" data-v="1a3">1 a 3 años</div>
+        <div class="reg-option ${sel('tiempo','3a5')}" onclick="regSelect(this,'tiempo')" data-v="3a5">3 a 5 años</div>
+        <div class="reg-option ${sel('tiempo','mas5')}" onclick="regSelect(this,'tiempo')" data-v="mas5">Más de 5 años</div>
+      </div>
+      <p class="reg-q-label" style="margin-top:16px">¿Cómo valorarías tu nivel como inversor?</p>
+      <div class="reg-options-grid">
+        <div class="reg-option ${sel('experiencia','principiante')}" onclick="regSelect(this,'experiencia')" data-v="principiante">🌱 Principiante</div>
+        <div class="reg-option ${sel('experiencia','intermedio')}" onclick="regSelect(this,'experiencia')" data-v="intermedio">📈 Intermedio</div>
+        <div class="reg-option ${sel('experiencia','avanzado')}" onclick="regSelect(this,'experiencia')" data-v="avanzado">🎯 Avanzado</div>
+        <div class="reg-option ${sel('experiencia','experto')}" onclick="regSelect(this,'experiencia')" data-v="experto">🏆 Experto</div>
+      </div>`;
+  } else if (_riskWizardStep === 2) {
+    body.innerHTML = `
+      <p class="reg-q-label">¿En qué instrumentos inviertes? (selección múltiple)</p>
+      <div class="reg-multi-grid">
+        <div class="reg-multi-tag ${selM('instrumentos','acciones')}" onclick="regToggle(this,'instrumentos')" data-v="acciones">Acciones</div>
+        <div class="reg-multi-tag ${selM('instrumentos','fondos')}" onclick="regToggle(this,'instrumentos')" data-v="fondos">Fondos</div>
+        <div class="reg-multi-tag ${selM('instrumentos','etf')}" onclick="regToggle(this,'instrumentos')" data-v="etf">ETFs</div>
+        <div class="reg-multi-tag ${selM('instrumentos','cripto')}" onclick="regToggle(this,'instrumentos')" data-v="cripto">Crypto</div>
+        <div class="reg-multi-tag ${selM('instrumentos','rf')}" onclick="regToggle(this,'instrumentos')" data-v="rf">Renta Fija</div>
+        <div class="reg-multi-tag ${selM('instrumentos','derivados')}" onclick="regToggle(this,'instrumentos')" data-v="derivados">Derivados</div>
+      </div>
+      <p class="reg-q-label" style="margin-top:16px">¿Qué sectores te interesan? (selección múltiple)</p>
+      <div class="reg-multi-grid">
+        <div class="reg-multi-tag ${selM('sectores','tech')}" onclick="regToggle(this,'sectores')" data-v="tech">Tecnología</div>
+        <div class="reg-multi-tag ${selM('sectores','salud')}" onclick="regToggle(this,'sectores')" data-v="salud">Salud</div>
+        <div class="reg-multi-tag ${selM('sectores','energia')}" onclick="regToggle(this,'sectores')" data-v="energia">Energía</div>
+        <div class="reg-multi-tag ${selM('sectores','financiero')}" onclick="regToggle(this,'sectores')" data-v="financiero">Financiero</div>
+        <div class="reg-multi-tag ${selM('sectores','consumo')}" onclick="regToggle(this,'sectores')" data-v="consumo">Consumo</div>
+        <div class="reg-multi-tag ${selM('sectores','industrial')}" onclick="regToggle(this,'sectores')" data-v="industrial">Industrial</div>
+        <div class="reg-multi-tag ${selM('sectores','inmobiliario')}" onclick="regToggle(this,'sectores')" data-v="inmobiliario">Inmobiliario</div>
+      </div>`;
+  } else {
+    const rp = _calcRiskProfile(_regAnswers);
+    body.innerHTML = `
+      <p class="reg-q-label">Si tu cartera cayera un 20%, ¿qué harías?</p>
+      <div class="reg-options-grid">
+        <div class="reg-option ${sel('reaccion','vende')}" onclick="regSelect(this,'reaccion')" data-v="vende">Vendería todo</div>
+        <div class="reg-option ${sel('reaccion','vendeParte')}" onclick="regSelect(this,'reaccion')" data-v="vendeParte">Vendería parte</div>
+        <div class="reg-option ${sel('reaccion','espera')}" onclick="regSelect(this,'reaccion')" data-v="espera">Esperaría a recuperar</div>
+        <div class="reg-option ${sel('reaccion','compra')}" onclick="regSelect(this,'reaccion')" data-v="compra">Compraría más</div>
+      </div>
+      <p class="reg-q-label" style="margin-top:16px">¿Cuál es tu objetivo principal?</p>
+      <div class="reg-options-grid">
+        <div class="reg-option ${sel('objetivo','preservar')}" onclick="regSelect(this,'objetivo')" data-v="preservar">Preservar capital</div>
+        <div class="reg-option ${sel('objetivo','ingresos')}" onclick="regSelect(this,'objetivo')" data-v="ingresos">Generar ingresos</div>
+        <div class="reg-option ${sel('objetivo','crecimiento')}" onclick="regSelect(this,'objetivo')" data-v="crecimiento">Crecimiento a largo plazo</div>
+        <div class="reg-option ${sel('objetivo','agresivo')}" onclick="regSelect(this,'objetivo')" data-v="agresivo">Máxima rentabilidad</div>
+      </div>
+      ${rp ? `<div class="reg-profile-result" style="margin-top:16px"><div class="reg-profile-badge rpb-${rp.perfil.toLowerCase()}">Perfil estimado: ${rp.perfil} (${rp.score}/16)</div></div>` : ''}`;
+  }
+}
+
+async function _saveRiskProfile() {
+  if (!_session) return;
+  const { score, perfil } = _calcRiskProfile(_regAnswers);
+  const rp = { ..._regAnswers, score, perfil, completedAt: new Date().toISOString() };
+  try {
+    const res = await fetch(API_BASE + '/investors', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'x-api-key': API_KEY_INVESTOR },
+      body: JSON.stringify({ username: _session.username, riskProfile: rp })
+    });
+    const data = await res.json();
+    if (!res.ok) { toast(data.error || 'Error al guardar', 'err'); return; }
+    _session.riskProfile = rp;
+    localStorage.setItem('avSession', JSON.stringify(_session));
+    document.getElementById('modalRiskUpdate')?.classList.remove('show');
+    renderPortal();
+    toast(`✅ Perfil actualizado: ${perfil}`, 'ok');
+  } catch (e) { toast('Error de conexión', 'err'); }
 }
 
 function updatePortalMarketSummary() {

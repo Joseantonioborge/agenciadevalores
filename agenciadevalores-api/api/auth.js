@@ -16,7 +16,7 @@ module.exports = async (req, res) => {
 
   // ── REGISTRO ──────────────────────────────────────────────────────
   if (body.action === 'register') {
-    const { email, password, name } = body;
+    const { email, password, name, riskProfile } = body;
     if (!email || !password) return res.status(400).json({ error: 'email y password son requeridos' });
     if (password.length < 6) return res.status(400).json({ error: 'La contraseña debe tener al menos 6 caracteres' });
     const emailClean = email.toLowerCase().trim();
@@ -36,7 +36,9 @@ module.exports = async (req, res) => {
       const displayName = (name && name.trim()) ? name.trim() : username;
       await col.insertOne({
         username, password: sha256(password), name: displayName, email: emailClean,
-        role: 'investor', watchlist: ['^IBEX', '^GSPC', '^IXIC'], createdAt: new Date(),
+        role: 'investor', watchlist: ['^IBEX', '^GSPC', '^IXIC'],
+        riskProfile: riskProfile || null,
+        createdAt: new Date(),
       });
       return res.status(201).json({ ok: true, username });
     } catch (err) { return res.status(500).json({ error: err.message }); }
@@ -51,7 +53,7 @@ module.exports = async (req, res) => {
     const lookup = username.toLowerCase().trim();
     const user   = await db.collection('inversores').findOne(
       { $or: [{ username: lookup }, { email: lookup }] },
-      { projection: { password:1, username:1, name:1, email:1, role:1, watchlist:1, lang:1 } }
+      { projection: { password:1, username:1, name:1, email:1, role:1, watchlist:1, lang:1, riskProfile:1 } }
     );
     if (!user) return res.status(401).json({ error: 'Usuario no encontrado' });
     if (user.password !== sha256(password)) return res.status(401).json({ error: 'Contraseña incorrecta' });
@@ -60,6 +62,7 @@ module.exports = async (req, res) => {
       ok: true, username: user.username || username,
       name: user.name, email: user.email, role: user.role,
       watchlist: user.watchlist || [], lang: user.lang || 'es',
+      riskProfile: user.riskProfile || null,
     });
   } catch (err) { return res.status(500).json({ error: err.message }); }
 };

@@ -45,9 +45,9 @@ module.exports = async (req, res) => {
       return res.status(201).json({ ok: true, username: username.toLowerCase().trim() });
     }
 
-    // PUT — actualizar (investor puede cambiar su contraseña, watchlist e idioma; admin puede editar todo)
+    // PUT — actualizar (investor puede cambiar su contraseña, watchlist, idioma y riskProfile; admin puede editar todo)
     if (req.method === 'PUT') {
-      const { username, password, newPassword, name, email, watchlist, lang } = req.body || {};
+      const { username, password, newPassword, name, email, watchlist, lang, riskProfile } = req.body || {};
       if (!username) return res.status(400).json({ error: 'username requerido' });
 
       const user = await col.findOne({ username: username.toLowerCase().trim() });
@@ -67,6 +67,8 @@ module.exports = async (req, res) => {
         if (lang && ['es', 'en'].includes(lang)) update.lang = lang;
         // Investor puede actualizar watchlist sin contraseña
         if (watchlist) update.watchlist = watchlist;
+        // Investor puede actualizar su perfil de riesgo
+        if (riskProfile && typeof riskProfile === 'object') update.riskProfile = riskProfile;
         // Para cambiar contraseña sí requiere la actual
         if (newPassword) {
           if (!password) return res.status(400).json({ error: 'password actual requerida para cambiar contraseña' });
