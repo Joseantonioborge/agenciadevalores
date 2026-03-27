@@ -1998,9 +1998,56 @@ tr:hover td{background:rgba(255,255,255,.02)}
 @media(max-width:1280px){.trd-panels-grid{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:960px){.trd-panels-grid{grid-template-columns:repeat(2,1fr)}.trd-bottom-row{grid-template-columns:1fr}.trd-decision-row{grid-template-columns:1fr}}
 @media(max-width:640px){.trd-panels-grid{grid-template-columns:1fr}.trd-body{padding:12px 14px}.trd-topbar{padding:8px 14px}.trd-mode-row{padding:6px 14px}}
+
+/* ── PROMO OVERLAY (usuarios no registrados) ────────────── */
+#promoOverlay{position:fixed;inset:0;z-index:400;background:rgba(6,10,26,.82);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s}
+#promoOverlay.show{opacity:1;pointer-events:auto}
+.promo-card{background:linear-gradient(145deg,#111830 0%,#0d1225 100%);border:1px solid rgba(37,99,235,.25);border-radius:20px;padding:36px 32px 30px;max-width:520px;width:90%;text-align:center;animation:promoIn .35s ease-out;box-shadow:0 24px 80px rgba(0,0,0,.5),0 0 60px rgba(37,99,235,.08)}
+@keyframes promoIn{from{opacity:0;transform:translateY(24px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+.promo-icons{font-size:2.2rem;letter-spacing:8px;margin-bottom:14px;filter:drop-shadow(0 2px 8px rgba(37,99,235,.2))}
+.promo-title{font-size:1.35rem;font-weight:800;color:#fff;margin-bottom:8px;line-height:1.3}
+.promo-title span{background:linear-gradient(90deg,#2563EB,#10B981);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.promo-sub{font-size:.88rem;color:#94a3b8;margin-bottom:22px;line-height:1.6}
+.promo-features{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:24px;text-align:left}
+.promo-feat{display:flex;align-items:center;gap:8px;font-size:.78rem;color:#cbd5e1;padding:8px 12px;background:rgba(37,99,235,.06);border:1px solid rgba(37,99,235,.1);border-radius:10px}
+.promo-feat-icon{font-size:1rem;flex-shrink:0}
+.promo-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.promo-btn-register{background:linear-gradient(135deg,#2563EB,#1d4ed8);color:#fff;border:none;border-radius:10px;padding:12px 28px;font-size:.88rem;font-weight:700;cursor:pointer;transition:transform .15s,box-shadow .15s;box-shadow:0 4px 20px rgba(37,99,235,.3)}
+.promo-btn-register:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(37,99,235,.4)}
+.promo-btn-login{background:transparent;color:#93c5fd;border:1px solid rgba(37,99,235,.3);border-radius:10px;padding:12px 28px;font-size:.88rem;font-weight:600;cursor:pointer;transition:background .15s}
+.promo-btn-login:hover{background:rgba(37,99,235,.1)}
+.promo-close{position:absolute;top:12px;right:14px;background:none;border:none;color:#475569;font-size:1.2rem;cursor:pointer;padding:4px 8px;border-radius:6px;transition:color .15s}
+.promo-close:hover{color:#fff}
+.promo-note{font-size:.68rem;color:#475569;margin-top:16px}
+@media(max-width:480px){.promo-card{padding:28px 20px 24px}.promo-features{grid-template-columns:1fr}.promo-icons{font-size:1.8rem}.promo-title{font-size:1.15rem}}
 </style>
 </head>
 <body>
+
+<!-- PROMO OVERLAY -->
+<div id="promoOverlay" onclick="if(event.target===this)closePromo()">
+  <div class="promo-card" style="position:relative">
+    <button class="promo-close" onclick="closePromo()">✕</button>
+    <div class="promo-icons">📊 ₿ 📈 🏦</div>
+    <div class="promo-title">Accede a <span>todo el potencial</span> del portal</div>
+    <div class="promo-sub">Regístrate gratis y desbloquea herramientas exclusivas para tomar las mejores decisiones de inversión</div>
+    <div class="promo-features">
+      <div class="promo-feat"><span class="promo-feat-icon">📈</span>Trading Terminal en tiempo real</div>
+      <div class="promo-feat"><span class="promo-feat-icon">🎯</span>Inside Trading · Predicciones</div>
+      <div class="promo-feat"><span class="promo-feat-icon">💼</span>Carteras recomendadas con IA</div>
+      <div class="promo-feat"><span class="promo-feat-icon">₿</span>Mercado Crypto · Top 20</div>
+      <div class="promo-feat"><span class="promo-feat-icon">📂</span>Comparador de 125+ fondos</div>
+      <div class="promo-feat"><span class="promo-feat-icon">🤖</span>FinBot — Asistente financiero IA</div>
+      <div class="promo-feat"><span class="promo-feat-icon">🧮</span>Calculadora de interés compuesto</div>
+      <div class="promo-feat"><span class="promo-feat-icon">🏦</span>Balances de entidades financieras</div>
+    </div>
+    <div class="promo-btns">
+      <button class="promo-btn-register" onclick="closePromo();openRegisterModal()">Crear cuenta gratis</button>
+      <button class="promo-btn-login" onclick="closePromo();openLoginModal()">Ya tengo cuenta</button>
+    </div>
+    <div class="promo-note">100% gratuito · Sin compromiso · Acceso inmediato</div>
+  </div>
+</div>
 
 <!-- NAV -->
 <nav>
@@ -3777,6 +3824,8 @@ const INDEX_MAP = {
 // NAV & TIEMPO
 // ================================================================
 function showSection(name) {
+  // Sección Análisis requiere login → mostrar promo
+  if (name === 'Analisis' && !_session) { showPromo(); return; }
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
   document.getElementById('sec' + name).classList.add('active');
@@ -3789,6 +3838,18 @@ function showSection(name) {
 function requireAuth(name) {
   if (!_session) { openLoginModal(); return; }
   showSection(name);
+}
+
+// ── Promo overlay para usuarios no registrados ──────────────
+let _promoShownCount = 0;
+function showPromo() {
+  _promoShownCount++;
+  document.getElementById('promoOverlay').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+function closePromo() {
+  document.getElementById('promoOverlay').classList.remove('show');
+  document.body.style.overflow = '';
 }
 
 // ================================================================
@@ -5401,6 +5462,7 @@ function openAnalysis(symbol) {
 }
 
 function selectIndex(symbol) {
+  if (!_session) { showPromo(); return; }
   _currentSymbol = symbol;
   document.querySelectorAll('.idx-btn').forEach(b => {
     b.classList.toggle('active', b.textContent === INDEX_MAP[symbol]?.name);
@@ -6550,6 +6612,7 @@ let _tmSymbol  = '';
 let _tmPeriod  = '3mo';
 
 function openTickerChart(ticker, name) {
+  if (!_session) { showPromo(); return; }
   _tmSymbol = ticker;
   const modal = document.getElementById('tickerChartModal');
   modal.classList.add('show');
