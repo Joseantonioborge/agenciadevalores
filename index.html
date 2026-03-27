@@ -5143,8 +5143,8 @@ function switchInvTab(tab) {
   if (tab === 'crypto' && _cryptoChart) { setTimeout(() => { try { _cryptoChart.timeScale().fitContent(); } catch(_){} }, 80); }
   // Carga Inside Trading la primera vez (o actualiza si ya estaba)
   if (tab === 'trading') setTimeout(() => loadInsideTrading(false), 60);
-  // Genera propuestas de cartera la primera vez
-  if (tab === 'propuestas' && !_propuestasLoaded) setTimeout(() => generatePortfolioProposals(false), 60);
+  // Genera/regenera propuestas de cartera cada vez que se entra en la pestaña
+  if (tab === 'propuestas') setTimeout(() => generatePortfolioProposals(false), 60);
 }
 
 async function loadInvestorNews() {
@@ -8684,6 +8684,7 @@ const CC_PROVIDERS = [
 let _ccStep = 1;
 let _ccSelectedProfile = null;
 let _ccFunds = [];
+let _ccMarketContext = null;
 
 function openCrearCarteraModal() {
   _ccStep = 1;
@@ -8748,14 +8749,36 @@ function _ccRenderStep() {
   } else if (_ccStep === 2) {
     _ccBuildFunds();
     const profile = CC_PROFILES.find(p => p.id === _ccSelectedProfile);
-    const donut = _propDonut(profile.alloc.map(a => ({ ...a, label: a.cat })), 90);
+    // Reconstruir asignaciones reales desde _ccFunds (agrupadas por cat)
+    const realAlloc = [];
+    const catMap = {};
+    for (const f of _ccFunds) {
+      if (!catMap[f.cat]) { catMap[f.cat] = { cat: f.cat, pct: 0, color: (profile.alloc.find(a => a.cat === f.cat) || {}).color || '#64748b' }; realAlloc.push(catMap[f.cat]); }
+      catMap[f.cat].pct += f.pct;
+    }
+    const donut = _propDonut(realAlloc.map(a => ({ ...a, label: a.cat })), 90);
     const totalTER = _ccFunds.reduce((s, f) => s + (f.ter || 0) * (f.pct / 100), 0);
     const expRent = _ccFunds.reduce((s, f) => s + ((f.r5y || f.r3y || f.r1y || 2) / 100) * (f.pct / 100), 0) * 100;
     const expVol = _ccFunds.reduce((s, f) => s + (f.vol || 5) * (f.pct / 100), 0);
 
+    // Contexto de mercado para el badge
+    const ctx = _ccMarketContext || {};
+    const cs = ctx.compositeScore || 0;
+    const sColor = cs > 0.15 ? '#10B981' : cs < -0.15 ? '#EF4444' : '#F59E0B';
+    const sLabel = cs > 0.35 ? 'Muy Alcista' : cs > 0.15 ? 'Alcista' : cs < -0.35 ? 'Muy Bajista' : cs < -0.15 ? 'Bajista' : 'Neutral';
+    const adjusted = Math.abs(cs) > 0.15;
+
     contentEl.innerHTML = `
       <div class="cc-section active">
         <div class="cc-section-title">${profile.icon} Cartera ${profile.name} — Composición Detallada</div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;padding:6px 12px;background:rgba(37,99,235,.06);border:1px solid var(--border);border-radius:8px;font-size:.72rem;flex-wrap:wrap">
+          <span style="font-weight:700;color:var(--text2)">⚙️ Mercado:</span>
+          <span style="color:${sColor};font-weight:700">${sLabel}</span>
+          <span style="color:var(--text3)">·</span>
+          <span style="color:var(--text2)">Score: <b style="color:${sColor}">${(cs*100).toFixed(0)}</b></span>
+          ${adjusted ? '<span style="color:var(--text3)">·</span><span style="color:var(--accent);font-weight:600">Asignaciones ajustadas al mercado actual</span>' : ''}
+          <span style="color:var(--text3);margin-left:auto">${new Date().toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'})}</span>
+        </div>
         <div class="cc-summary-grid">
           <div class="cc-summary-card">
             <div class="cc-sc-label">Rent. esperada anual</div>
@@ -8777,7 +8800,7 @@ function _ccRenderStep() {
         <div style="display:flex;gap:20px;align-items:flex-start;margin-bottom:18px;flex-wrap:wrap">
           <div style="flex-shrink:0">${donut}</div>
           <div style="flex:1;min-width:200px">
-            ${profile.alloc.map(a => `<div style="display:flex;align-items:center;gap:6px;font-size:.74rem;padding:3px 0">
+            ${realAlloc.map(a => `<div style="display:flex;align-items:center;gap:6px;font-size:.74rem;padding:3px 0">
               <span style="width:9px;height:9px;border-radius:50%;background:${a.color};flex-shrink:0"></span>
               <span style="flex:1;color:var(--text2)">${a.cat}</span>
               <span style="font-weight:600">${a.pct}%</span>
@@ -8898,7 +8921,52 @@ function _ccBuildFunds() {
   if (!profile) return;
   _ccFunds = [];
 
-  for (const alloc of profile.alloc) {
+  // ── Ajuste dinámico de asignaciones según mercado actual ────────
+  const marketData = _marketData && _marketData.length ? _marketData : [];
+  const itSignal   = _itLastSignal;
+  const globalSignal = itSignal ? (itSignal.globalSignal || 0) : 0;
+  let mktSentiment = 0;
+  if (marketData.length) {
+    const validMkt = marketData.filter(m => typeof m.changePct === 'number');
+    if (validMkt.length) mktSentiment = Math.max(-1, Math.min(1, validMkt.reduce((s, m) => s + m.changePct, 0) / validMkt.length / 3));
+  }
+  const compositeScore = (globalSignal / 100) * 0.6 + mktSentiment * 0.4;
+
+  // Crear copia ajustada de las asignaciones del perfil
+  const adjAlloc = profile.alloc.map(a => ({ ...a }));
+  const isDefensive = cat => ['Monetario','Renta Fija','RF Corto Plazo','Mixto Defensivo','Efectivo'].includes(cat);
+  const isRisk      = cat => cat.startsWith('RV') || cat === 'Mixto Agresivo';
+
+  if (Math.abs(compositeScore) > 0.15) {
+    const shift = Math.round(Math.abs(compositeScore) * 8); // hasta ~8pp de ajuste
+    const defItems  = adjAlloc.filter(a => isDefensive(a.cat));
+    const riskItems = adjAlloc.filter(a => isRisk(a.cat));
+    if (compositeScore > 0 && riskItems.length && defItems.length) {
+      // Alcista: mover de defensivo a RV
+      const cut = Math.min(shift, Math.max(...defItems.map(a => a.pct)) - 5);
+      if (cut > 0) {
+        defItems.sort((a,b) => b.pct - a.pct)[0].pct -= cut;
+        riskItems.sort((a,b) => b.pct - a.pct)[0].pct += cut;
+      }
+    } else if (compositeScore < 0 && defItems.length && riskItems.length) {
+      // Bajista: mover de RV a defensivo
+      const cut = Math.min(shift, Math.max(...riskItems.map(a => a.pct)) - 5);
+      if (cut > 0) {
+        riskItems.sort((a,b) => b.pct - a.pct)[0].pct -= cut;
+        defItems.sort((a,b) => b.pct - a.pct)[0].pct += cut;
+      }
+    }
+  }
+  // Normalizar a 100%
+  const totalPct = adjAlloc.reduce((s, a) => s + a.pct, 0);
+  if (totalPct > 0 && totalPct !== 100) {
+    adjAlloc.forEach(a => { a.pct = Math.round(a.pct / totalPct * 100); });
+    const diff = 100 - adjAlloc.reduce((s, a) => s + a.pct, 0);
+    if (diff !== 0) adjAlloc[0].pct += diff;
+  }
+
+  // ── Construir lista de fondos ────────────────────────────────────
+  for (const alloc of adjAlloc) {
     if (alloc.cat === 'Efectivo') {
       _ccFunds.push({ nombre: 'Cuenta remunerada / Depósito', isin: '—', cat: 'Efectivo', pct: alloc.pct, ter: 0, r5y: 1.5, vol: 0.1, ms: 0 });
       continue;
@@ -8925,6 +8993,9 @@ function _ccBuildFunds() {
       _ccFunds.push({ ...sorted[0], pct: alloc.pct });
     }
   }
+
+  // Guardar contexto de mercado para mostrar en el resumen
+  _ccMarketContext = { compositeScore, mktSentiment, globalSignal, impliedVol: marketData.length ? (marketData.filter(m => (m.changePct||0) < -1).length > marketData.length * 0.5 ? 'alta' : 'media') : 'sin datos' };
 }
 
 function renderFondosPanel() {
