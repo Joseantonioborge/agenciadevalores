@@ -1818,6 +1818,80 @@ tr:hover td{background:rgba(255,255,255,.02)}
   .prop-metrics{gap:10px}
 }
 
+/* ── CREAR CARTERA MODAL ──────────────────────────────────── */
+.prop-create-btn{background:linear-gradient(135deg,#10B981,#059669);color:#fff;border:none;border-radius:8px;padding:6px 14px;font-size:.79rem;cursor:pointer;font-weight:600;transition:opacity .2s,transform .15s}
+.prop-create-btn:hover{opacity:.88;transform:translateY(-1px)}
+#crearCarteraModal{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.65);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s}
+#crearCarteraModal.show{opacity:1;pointer-events:auto}
+.cc-modal{background:var(--card);border:1px solid var(--border);border-radius:18px;width:min(940px,96vw);max-height:90vh;overflow-y:auto;padding:0;animation:tmFadeUp .25s ease}
+.cc-header{display:flex;align-items:center;justify-content:space-between;padding:20px 24px 16px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--card);z-index:2;border-radius:18px 18px 0 0}
+.cc-header h3{font-size:1.05rem;font-weight:700;margin:0;display:flex;align-items:center;gap:8px}
+.cc-close{background:none;border:none;color:var(--text2);font-size:1.2rem;cursor:pointer;padding:4px 8px;border-radius:6px}
+.cc-close:hover{background:var(--hover)}
+.cc-body{padding:24px}
+.cc-step-indicator{display:flex;align-items:center;gap:6px;margin-bottom:22px;justify-content:center}
+.cc-step-dot{width:28px;height:28px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:var(--text3);transition:all .2s}
+.cc-step-dot.active{background:var(--accent);color:#fff}
+.cc-step-dot.done{background:#10B981;color:#fff}
+.cc-step-line{width:32px;height:2px;background:var(--border);border-radius:2px}
+.cc-step-line.done{background:#10B981}
+.cc-section{display:none;animation:regFadeIn .2s ease}
+.cc-section.active{display:block}
+.cc-section-title{font-size:.82rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text2);margin:0 0 14px;display:flex;align-items:center;gap:6px}
+.cc-profile-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}
+.cc-profile-card{background:var(--hover);border:2px solid var(--border);border-radius:12px;padding:16px;cursor:pointer;transition:all .15s;text-align:center}
+.cc-profile-card:hover{border-color:var(--accent);background:rgba(37,99,235,.06)}
+.cc-profile-card.selected{border-color:var(--accent);background:rgba(37,99,235,.1);box-shadow:0 0 0 2px rgba(37,99,235,.2)}
+.cc-profile-card .cc-pc-icon{font-size:1.6rem;margin-bottom:6px}
+.cc-profile-card .cc-pc-name{font-weight:700;font-size:.85rem;margin-bottom:3px}
+.cc-profile-card .cc-pc-desc{font-size:.7rem;color:var(--text2);line-height:1.4}
+.cc-fund-table{width:100%;border-collapse:collapse;font-size:.76rem}
+.cc-fund-table th{text-align:left;padding:8px 10px;color:var(--text2);font-size:.68rem;text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--border);font-weight:600}
+.cc-fund-table td{padding:8px 10px;border-bottom:1px solid rgba(255,255,255,.04)}
+.cc-fund-table tr:hover td{background:var(--hover)}
+.cc-fund-pct{font-weight:700;color:var(--accent);font-size:.8rem}
+.cc-fund-isin{font-family:monospace;font-size:.68rem;color:var(--text3)}
+.cc-fund-ter{color:var(--text2)}
+.cc-fund-ms{color:#F59E0B}
+.cc-summary-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:18px}
+.cc-summary-card{background:var(--hover);border:1px solid var(--border);border-radius:10px;padding:12px 14px}
+.cc-summary-card .cc-sc-label{font-size:.68rem;text-transform:uppercase;letter-spacing:.06em;color:var(--text2);margin-bottom:4px}
+.cc-summary-card .cc-sc-value{font-size:1.1rem;font-weight:800}
+.cc-provider-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-bottom:18px}
+.cc-provider-card{background:var(--hover);border:1px solid var(--border);border-radius:12px;padding:16px;position:relative}
+.cc-provider-card .cc-pv-name{font-weight:700;font-size:.9rem;margin-bottom:2px}
+.cc-provider-card .cc-pv-type{font-size:.68rem;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+.cc-pv-row{display:flex;justify-content:space-between;font-size:.76rem;padding:3px 0;border-bottom:1px dashed rgba(255,255,255,.06)}
+.cc-pv-row:last-child{border:none}
+.cc-pv-label{color:var(--text2)}
+.cc-pv-val{font-weight:600}
+.cc-pv-badge{position:absolute;top:12px;right:12px;font-size:.62rem;font-weight:700;padding:2px 8px;border-radius:12px;text-transform:uppercase;letter-spacing:.04em}
+.cc-pv-badge.recommended{background:rgba(16,185,129,.15);color:#10B981}
+.cc-pv-badge.premium{background:rgba(139,92,246,.15);color:#8B5CF6}
+.cc-pv-badge.classic{background:rgba(245,158,11,.15);color:#F59E0B}
+.cc-impl-steps{display:flex;flex-direction:column;gap:12px;margin-bottom:18px}
+.cc-impl-step{display:flex;gap:12px;align-items:flex-start}
+.cc-impl-num{width:28px;height:28px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.75rem;flex-shrink:0}
+.cc-impl-text{flex:1;font-size:.8rem;line-height:1.55}
+.cc-impl-text strong{color:var(--text)}
+.cc-rebalance-box{background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2);border-radius:10px;padding:14px 16px;margin-bottom:18px}
+.cc-rebalance-box .cc-rb-title{font-weight:700;font-size:.82rem;margin-bottom:6px;color:#F59E0B}
+.cc-rebalance-box p{font-size:.76rem;color:var(--text2);margin:4px 0;line-height:1.5}
+.cc-nav-row{display:flex;gap:8px;margin-top:22px;justify-content:flex-end}
+.cc-nav-back{background:transparent;border:1px solid var(--border);color:var(--text2);padding:10px 18px;border-radius:8px;font-size:.82rem;cursor:pointer;font-weight:600}
+.cc-nav-back:hover{background:var(--hover)}
+.cc-nav-next{background:var(--accent);color:#fff;border:none;padding:10px 22px;border-radius:8px;font-size:.82rem;cursor:pointer;font-weight:600;transition:opacity .15s}
+.cc-nav-next:hover{opacity:.85}
+.cc-nav-next.green{background:linear-gradient(135deg,#10B981,#059669)}
+@media(max-width:600px){
+  .cc-modal{border-radius:16px 16px 0 0;max-height:95vh}
+  .cc-profile-grid{grid-template-columns:1fr}
+  .cc-fund-table{font-size:.7rem}
+  .cc-fund-table th,.cc-fund-table td{padding:6px 6px}
+  .cc-provider-grid{grid-template-columns:1fr}
+  .cc-summary-grid{grid-template-columns:1fr 1fr}
+}
+
 /* ===== TRADING PANEL — Bloomberg Terminal v1.0 ===== */
 #secTrading{padding:0;background:var(--bg)}
 /* Ticker Tape */
@@ -1928,7 +2002,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
   <div class="nav-logo">
     <div class="nav-logo-dot"></div>
     Agencia de Valores Generación Z
-    <span class="nav-version">v3.7.0</span>
+    <span class="nav-version">v3.8.0</span>
   </div>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="showSection('Mercados')">Mercados</button>
@@ -2077,7 +2151,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
         <button class="inv-tab"        id="invTabFondos"      data-label="Comparador de Fondos"   onclick="switchInvTab('fondos')">      <span class="inv-tab-icon">📂</span><span class="inv-tab-label" data-i18n="tab_fondos">Comparador de Fondos</span></button>
         <button class="inv-tab"        id="invTabBancos"      data-label="Entidades Financieras"  onclick="switchInvTab('bancos')">      <span class="inv-tab-icon">🏦</span><span class="inv-tab-label" data-i18n="tab_bancos">Entidades Financieras</span></button>
         <button class="inv-tab"        id="invTabCalculadora" data-label="Calculadora de interés compuesto" onclick="switchInvTab('calculadora')"> <span class="inv-tab-icon">🧮</span><span class="inv-tab-label" data-i18n="tab_calculadora">Calculadora de interés compuesto</span></button>
-        <button class="inv-tab"        id="invTabPropuestas"  data-label="Propuestas"                      onclick="switchInvTab('propuestas')">  <span class="inv-tab-icon">🎯</span><span class="inv-tab-label" data-i18n="tab_propuestas">Propuestas</span></button>
+        <button class="inv-tab"        id="invTabPropuestas"  data-label="Carteras"                      onclick="switchInvTab('propuestas')">  <span class="inv-tab-icon">💼</span><span class="inv-tab-label" data-i18n="tab_propuestas">Carteras</span></button>
       </div>
     </nav>
 
@@ -2591,12 +2665,13 @@ tr:hover td{background:rgba(255,255,255,.02)}
     <div id="invProuestasPanel" style="display:none">
       <div class="prop-header">
         <div>
-          <h3 class="prop-title">🎯 Propuestas de Cartera</h3>
+          <h3 class="prop-title">💼 Carteras Recomendadas</h3>
           <p class="prop-sub">Algoritmo AV · Análisis multivariable de mercados, fondos, señales e inside trading</p>
         </div>
-        <div style="display:flex;align-items:center;gap:10px;flex-shrink:0">
+        <div style="display:flex;align-items:center;gap:10px;flex-shrink:0;flex-wrap:wrap">
           <span class="prop-updated" id="propUpdated"></span>
           <button class="prop-refresh-btn" onclick="generatePortfolioProposals(true)">↻ Regenerar</button>
+          <button class="prop-create-btn" onclick="openCrearCarteraModal()">＋ Crear Cartera</button>
         </div>
       </div>
       <div id="propSignalBar"></div>
@@ -8470,6 +8545,325 @@ function _propDonut(alloc, size = 72) {
       transform="rotate(-90 ${cx} ${cy})" />`
   ).join('');
   return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" style="transform:rotate(0deg)">${paths}</svg>`;
+}
+
+// ================================================================
+// CREAR CARTERA MODAL — Wizard 3 pasos
+// ================================================================
+
+const CC_PROFILES = [
+  {
+    id: 'conservador', icon: '🛡️', name: 'Conservadora', desc: 'Preservar capital con baja volatilidad. Ideal para perfiles prudentes u horizontes cortos (1-3 años).',
+    alloc: [
+      { cat: 'Monetario', pct: 35, color: '#10B981' },
+      { cat: 'Renta Fija', pct: 25, color: '#059669' },
+      { cat: 'Mixto Defensivo', pct: 20, color: '#34D399' },
+      { cat: 'RV España', pct: 10, color: '#6EE7B7' },
+      { cat: 'RV Global', pct: 5, color: '#A7F3D0' },
+      { cat: 'Efectivo', pct: 5, color: '#D1FAE5' },
+    ],
+  },
+  {
+    id: 'equilibrada', icon: '⚖️', name: 'Equilibrada', desc: 'Crecimiento moderado diversificado globalmente. Para horizontes de 3-7 años.',
+    alloc: [
+      { cat: 'Mixto Moderado', pct: 20, color: '#F59E0B' },
+      { cat: 'RV Europa', pct: 18, color: '#FBBF24' },
+      { cat: 'RV USA', pct: 18, color: '#FDE68A' },
+      { cat: 'Renta Fija', pct: 15, color: '#FCD34D' },
+      { cat: 'Mixto Defensivo', pct: 12, color: '#FEF3C7' },
+      { cat: 'RV Global', pct: 10, color: '#92400E' },
+      { cat: 'Efectivo', pct: 7, color: '#78350F' },
+    ],
+  },
+  {
+    id: 'crecimiento', icon: '🚀', name: 'Crecimiento', desc: 'Máxima rentabilidad a largo plazo. Alta exposición a renta variable. Horizonte 7+ años.',
+    alloc: [
+      { cat: 'RV USA', pct: 30, color: '#8B5CF6' },
+      { cat: 'RV Global', pct: 18, color: '#7C3AED' },
+      { cat: 'RV Europa', pct: 15, color: '#A78BFA' },
+      { cat: 'RV Temático', pct: 12, color: '#C4B5FD' },
+      { cat: 'Mixto Agresivo', pct: 10, color: '#DDD6FE' },
+      { cat: 'Renta Fija', pct: 8, color: '#EDE9FE' },
+      { cat: 'Efectivo', pct: 7, color: '#F5F3FF' },
+    ],
+  },
+];
+
+const CC_PROVIDERS = [
+  {
+    name: 'MyInvestor', type: 'Neobanco · Gestión Pasiva e Indexada',
+    badge: 'recommended', badgeLabel: 'Recomendado',
+    minInversion: '150 €', comGestion: '0.15 – 0.30 %', comCustodia: '0 %',
+    comCompra: '0 €', planAportacion: 'Sí · Desde 150 €/mes', rebalanceo: 'Automático',
+    fondos: 'Vanguard, iShares, Amundi', nota: 'Mejor relación coste-calidad. Sin comisiones de custodia ni de compra. Ideal para carteras indexadas.',
+  },
+  {
+    name: 'Indexa Capital', type: 'Robo-Advisor · Gestión Automatizada',
+    badge: 'premium', badgeLabel: 'Premium',
+    minInversion: '3.000 €', comGestion: '0.18 – 0.44 %', comCustodia: 'Incluida',
+    comCompra: '0 €', planAportacion: 'Sí · Desde 150 €/mes', rebalanceo: 'Automático + Fiscal',
+    fondos: 'Vanguard Institutional', nota: 'Gestión 100% automatizada con optimización fiscal. Rebalanceo inteligente. Clases institucionales Vanguard con TER ultra-bajo.',
+  },
+  {
+    name: 'Openbank', type: 'Banco Digital · Grupo Santander',
+    badge: 'classic', badgeLabel: 'Clásico',
+    minInversion: '500 €', comGestion: '0.50 – 1.20 %', comCustodia: '0.10 %',
+    comCompra: '0 – 10 €', planAportacion: 'Sí · Desde 50 €/mes', rebalanceo: 'Manual',
+    fondos: 'Santander AM, Amundi, BlackRock', nota: 'Amplio catálogo de fondos nacionales e internacionales. Seguridad de gran banco. Mayor coste que opciones indexadas.',
+  },
+  {
+    name: 'Renta 4', type: 'Broker Nacional · Fondos + Acciones',
+    badge: 'classic', badgeLabel: 'Tradicional',
+    minInversion: '100 €', comGestion: '0.50 – 1.50 %', comCustodia: '0.033 %/mes',
+    comCompra: '0 € (fondos)', planAportacion: 'Sí · Sin mínimo', rebalanceo: 'Manual',
+    fondos: '10.000+ fondos · Todas las gestoras', nota: 'Mayor catálogo de fondos de España. Permite combinar fondos, ETFs y acciones en una sola cuenta. Ideal si quieres personalización máxima.',
+  },
+];
+
+let _ccStep = 1;
+let _ccSelectedProfile = null;
+let _ccFunds = [];
+
+function openCrearCarteraModal() {
+  _ccStep = 1;
+  _ccSelectedProfile = null;
+  _ccFunds = [];
+  let m = document.getElementById('crearCarteraModal');
+  if (!m) {
+    m = document.createElement('div');
+    m.id = 'crearCarteraModal';
+    m.addEventListener('click', e => { if (e.target === m) closeCrearCarteraModal(); });
+    m.innerHTML = `<div class="cc-modal">
+      <div class="cc-header">
+        <h3>💼 Crear Cartera Recomendada</h3>
+        <button class="cc-close" onclick="closeCrearCarteraModal()">✕</button>
+      </div>
+      <div class="cc-body">
+        <div class="cc-step-indicator" id="ccStepIndicator"></div>
+        <div id="ccStepContent"></div>
+        <div class="cc-nav-row" id="ccNavRow"></div>
+      </div>
+    </div>`;
+    document.body.appendChild(m);
+  }
+  requestAnimationFrame(() => { m.classList.add('show'); _ccRenderStep(); });
+}
+
+function closeCrearCarteraModal() {
+  const m = document.getElementById('crearCarteraModal');
+  if (m) m.classList.remove('show');
+}
+
+function _ccRenderStep() {
+  // Step indicator
+  const indEl = document.getElementById('ccStepIndicator');
+  const labels = ['Perfil', 'Cartera', 'Proveedores'];
+  indEl.innerHTML = labels.map((l, i) => {
+    const n = i + 1;
+    const cls = n < _ccStep ? 'done' : n === _ccStep ? 'active' : '';
+    const lineCls = n < _ccStep ? 'done' : '';
+    return (i > 0 ? `<div class="cc-step-line ${lineCls}"></div>` : '') +
+      `<div class="cc-step-dot ${cls}">${n < _ccStep ? '✓' : n}</div>`;
+  }).join('');
+
+  const contentEl = document.getElementById('ccStepContent');
+  const navEl = document.getElementById('ccNavRow');
+
+  if (_ccStep === 1) {
+    contentEl.innerHTML = `
+      <div class="cc-section active">
+        <div class="cc-section-title">Elige el perfil de tu cartera</div>
+        <div class="cc-profile-grid">
+          ${CC_PROFILES.map(p => `
+            <div class="cc-profile-card ${_ccSelectedProfile === p.id ? 'selected' : ''}" onclick="_ccSelectProfile('${p.id}')">
+              <div class="cc-pc-icon">${p.icon}</div>
+              <div class="cc-pc-name">${p.name}</div>
+              <div class="cc-pc-desc">${p.desc}</div>
+            </div>
+          `).join('')}
+        </div>
+      </div>`;
+    navEl.innerHTML = `<button class="cc-nav-next" onclick="_ccNextStep()">Continuar →</button>`;
+  } else if (_ccStep === 2) {
+    _ccBuildFunds();
+    const profile = CC_PROFILES.find(p => p.id === _ccSelectedProfile);
+    const donut = _propDonut(profile.alloc.map(a => ({ ...a, label: a.cat })), 90);
+    const totalTER = _ccFunds.reduce((s, f) => s + (f.ter || 0) * (f.pct / 100), 0);
+    const expRent = _ccFunds.reduce((s, f) => s + ((f.r5y || f.r3y || f.r1y || 2) / 100) * (f.pct / 100), 0) * 100;
+    const expVol = _ccFunds.reduce((s, f) => s + (f.vol || 5) * (f.pct / 100), 0);
+
+    contentEl.innerHTML = `
+      <div class="cc-section active">
+        <div class="cc-section-title">${profile.icon} Cartera ${profile.name} — Composición Detallada</div>
+        <div class="cc-summary-grid">
+          <div class="cc-summary-card">
+            <div class="cc-sc-label">Rent. esperada anual</div>
+            <div class="cc-sc-value" style="color:#10B981">${expRent.toFixed(1)}%</div>
+          </div>
+          <div class="cc-summary-card">
+            <div class="cc-sc-label">Volatilidad estimada</div>
+            <div class="cc-sc-value">${expVol.toFixed(1)}%</div>
+          </div>
+          <div class="cc-summary-card">
+            <div class="cc-sc-label">Coste medio (TER)</div>
+            <div class="cc-sc-value" style="color:#F59E0B">${totalTER.toFixed(2)}%</div>
+          </div>
+          <div class="cc-summary-card">
+            <div class="cc-sc-label">Nº de fondos</div>
+            <div class="cc-sc-value">${_ccFunds.length}</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:20px;align-items:flex-start;margin-bottom:18px;flex-wrap:wrap">
+          <div style="flex-shrink:0">${donut}</div>
+          <div style="flex:1;min-width:200px">
+            ${profile.alloc.map(a => `<div style="display:flex;align-items:center;gap:6px;font-size:.74rem;padding:3px 0">
+              <span style="width:9px;height:9px;border-radius:50%;background:${a.color};flex-shrink:0"></span>
+              <span style="flex:1;color:var(--text2)">${a.cat}</span>
+              <span style="font-weight:600">${a.pct}%</span>
+            </div>`).join('')}
+          </div>
+        </div>
+        <div class="cc-section-title" style="margin-top:10px">Fondos seleccionados</div>
+        <div style="overflow-x:auto">
+          <table class="cc-fund-table">
+            <thead><tr>
+              <th>Fondo</th><th>ISIN</th><th>Categoría</th><th>Peso</th><th>TER</th><th>R. 5a</th><th>★</th>
+            </tr></thead>
+            <tbody>
+              ${_ccFunds.map(f => `<tr>
+                <td style="font-weight:600;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${f.nombre}">${f.nombre}</td>
+                <td class="cc-fund-isin">${f.isin || '—'}</td>
+                <td>${f.cat}</td>
+                <td class="cc-fund-pct">${f.pct}%</td>
+                <td class="cc-fund-ter">${f.ter ? f.ter.toFixed(2) + '%' : '—'}</td>
+                <td style="color:${(f.r5y||0) >= 0 ? '#10B981':'#EF4444'}">${f.r5y ? f.r5y.toFixed(1) + '%' : '—'}</td>
+                <td class="cc-fund-ms">${f.ms ? '★'.repeat(f.ms) : '—'}</td>
+              </tr>`).join('')}
+            </tbody>
+          </table>
+        </div>
+        <div class="cc-rebalance-box" style="margin-top:18px">
+          <div class="cc-rb-title">⚙️ Ajustes y Rebalanceo</div>
+          <p><strong>Aportaciones periódicas:</strong> Se recomienda invertir mediante aportaciones mensuales automáticas (DCA — Dollar Cost Averaging) para suavizar la volatilidad de entrada. Mínimo recomendado: 150-300 €/mes.</p>
+          <p><strong>Rebalanceo:</strong> Revisar la cartera cada 6-12 meses. Si algún activo se desvía más de ±5% de su peso objetivo, rebalancear vendiendo lo que sobrepondere y comprando lo infraponderado. En proveedores como Indexa Capital esto es automático.</p>
+          <p><strong>Personalización:</strong> Para ajustar los pesos, modifica las aportaciones mensuales hacia las categorías que quieras reforzar. Por ejemplo, si quieres más exposición a USA, destina una mayor parte de la aportación al fondo de RV USA.</p>
+        </div>
+      </div>`;
+    navEl.innerHTML = `
+      <button class="cc-nav-back" onclick="_ccPrevStep()">← Atrás</button>
+      <button class="cc-nav-next" onclick="_ccNextStep()">Ver Proveedores →</button>`;
+  } else if (_ccStep === 3) {
+    const profile = CC_PROFILES.find(p => p.id === _ccSelectedProfile);
+    contentEl.innerHTML = `
+      <div class="cc-section active">
+        <div class="cc-section-title">Dónde contratar tu Cartera ${profile.name}</div>
+        <div class="cc-provider-grid">
+          ${CC_PROVIDERS.map(pv => `
+            <div class="cc-provider-card">
+              <span class="cc-pv-badge ${pv.badge}">${pv.badgeLabel}</span>
+              <div class="cc-pv-name">${pv.name}</div>
+              <div class="cc-pv-type">${pv.type}</div>
+              <div class="cc-pv-row"><span class="cc-pv-label">Inversión mínima</span><span class="cc-pv-val">${pv.minInversion}</span></div>
+              <div class="cc-pv-row"><span class="cc-pv-label">Com. Gestión</span><span class="cc-pv-val">${pv.comGestion}</span></div>
+              <div class="cc-pv-row"><span class="cc-pv-label">Custodia</span><span class="cc-pv-val">${pv.comCustodia}</span></div>
+              <div class="cc-pv-row"><span class="cc-pv-label">Com. Compra</span><span class="cc-pv-val">${pv.comCompra}</span></div>
+              <div class="cc-pv-row"><span class="cc-pv-label">Plan aportación</span><span class="cc-pv-val">${pv.planAportacion}</span></div>
+              <div class="cc-pv-row"><span class="cc-pv-label">Rebalanceo</span><span class="cc-pv-val">${pv.rebalanceo}</span></div>
+              <div class="cc-pv-row"><span class="cc-pv-label">Fondos</span><span class="cc-pv-val" style="font-size:.7rem">${pv.fondos}</span></div>
+              <div style="margin-top:10px;padding-top:8px;border-top:1px solid var(--border);font-size:.72rem;color:var(--text2);line-height:1.5">${pv.nota}</div>
+            </div>
+          `).join('')}
+        </div>
+
+        <div class="cc-section-title" style="margin-top:6px">Cómo implementar tu cartera paso a paso</div>
+        <div class="cc-impl-steps">
+          <div class="cc-impl-step">
+            <div class="cc-impl-num">1</div>
+            <div class="cc-impl-text"><strong>Elige tu proveedor</strong> — Para la cartera ${profile.name}, recomendamos <strong>MyInvestor</strong> (máximo control, coste ultra-bajo) o <strong>Indexa Capital</strong> (100% automatizado, sin preocuparte de nada).</div>
+          </div>
+          <div class="cc-impl-step">
+            <div class="cc-impl-num">2</div>
+            <div class="cc-impl-text"><strong>Abre cuenta</strong> — El proceso es 100% online. Necesitarás DNI/NIE + selfie + datos bancarios. En 24-48h tendrás la cuenta activa.</div>
+          </div>
+          <div class="cc-impl-step">
+            <div class="cc-impl-num">3</div>
+            <div class="cc-impl-text"><strong>Contrata los fondos</strong> — Busca cada fondo por su ISIN (ver tabla) y suscribe el porcentaje indicado. En Indexa, ellos asignan automáticamente.</div>
+          </div>
+          <div class="cc-impl-step">
+            <div class="cc-impl-num">4</div>
+            <div class="cc-impl-text"><strong>Configura aportación automática</strong> — Domicilia un ingreso mensual (mín. 150 €) distribuido según los pesos de la cartera. Esto activa el DCA (Dollar Cost Averaging).</div>
+          </div>
+          <div class="cc-impl-step">
+            <div class="cc-impl-num">5</div>
+            <div class="cc-impl-text"><strong>Revisa cada 6 meses</strong> — Compara los pesos actuales con los objetivos. Si hay desviaciones > 5%, rebalancea. Con Indexa es automático. Con MyInvestor puedes hacerlo manualmente en "Mi cartera".</div>
+          </div>
+        </div>
+
+        <div class="cc-rebalance-box">
+          <div class="cc-rb-title">💡 Consejo fiscal</div>
+          <p>Los <strong>traspasos entre fondos de inversión</strong> están exentos de tributación en España (art. 94 LIRPF). Esto significa que puedes rebalancear tu cartera sin pagar impuestos, a diferencia de ETFs o acciones. Aprovecha esta ventaja seleccionando fondos de inversión siempre que sea posible.</p>
+        </div>
+
+        <p class="prop-disclaimer">⚠️ Esta cartera es una recomendación algorítmica con fines informativos. No constituye asesoramiento financiero personalizado. Las rentabilidades pasadas no garantizan resultados futuros. Los proveedores mencionados son a título informativo — verifica condiciones actualizadas en sus webs oficiales. Consulte con un asesor financiero antes de invertir.</p>
+      </div>`;
+    navEl.innerHTML = `
+      <button class="cc-nav-back" onclick="_ccPrevStep()">← Atrás</button>
+      <button class="cc-nav-next green" onclick="closeCrearCarteraModal()">✓ Entendido</button>`;
+  }
+}
+
+function _ccSelectProfile(id) {
+  _ccSelectedProfile = id;
+  document.querySelectorAll('.cc-profile-card').forEach(c => c.classList.toggle('selected', c.onclick.toString().includes(`'${id}'`)));
+  // Re-render cards for visual update
+  const cards = document.querySelectorAll('.cc-profile-card');
+  cards.forEach(c => {
+    const isSelected = c.querySelector('.cc-pc-name')?.textContent === CC_PROFILES.find(p => p.id === id)?.name;
+    c.classList.toggle('selected', isSelected);
+  });
+}
+
+function _ccNextStep() {
+  if (_ccStep === 1 && !_ccSelectedProfile) { toast('Selecciona un perfil de cartera', 'err'); return; }
+  if (_ccStep < 3) { _ccStep++; _ccRenderStep(); }
+}
+
+function _ccPrevStep() {
+  if (_ccStep > 1) { _ccStep--; _ccRenderStep(); }
+}
+
+function _ccBuildFunds() {
+  const profile = CC_PROFILES.find(p => p.id === _ccSelectedProfile);
+  if (!profile) return;
+  _ccFunds = [];
+
+  for (const alloc of profile.alloc) {
+    if (alloc.cat === 'Efectivo') {
+      _ccFunds.push({ nombre: 'Cuenta remunerada / Depósito', isin: '—', cat: 'Efectivo', pct: alloc.pct, ter: 0, r5y: 1.5, vol: 0.1, ms: 0 });
+      continue;
+    }
+    // Find best funds by Sharpe ratio for this category
+    const pool = FONDOS_DATA.filter(f => f.cat === alloc.cat);
+    if (pool.length === 0) {
+      // Try partial match
+      const partial = FONDOS_DATA.filter(f => f.cat.toLowerCase().includes(alloc.cat.toLowerCase().split(' ')[0]));
+      if (partial.length) {
+        const best = partial.sort((a, b) => (b.sharpe || 0) - (a.sharpe || 0))[0];
+        _ccFunds.push({ ...best, pct: alloc.pct });
+      }
+      continue;
+    }
+    const sorted = pool.sort((a, b) => (b.sharpe || 0) - (a.sharpe || 0));
+    if (alloc.pct >= 18 && sorted.length >= 2) {
+      // Split between top 2 funds
+      const pct1 = Math.round(alloc.pct * 0.6);
+      const pct2 = alloc.pct - pct1;
+      _ccFunds.push({ ...sorted[0], pct: pct1 });
+      _ccFunds.push({ ...sorted[1], pct: pct2 });
+    } else {
+      _ccFunds.push({ ...sorted[0], pct: alloc.pct });
+    }
+  }
 }
 
 function renderFondosPanel() {
