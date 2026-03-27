@@ -8245,8 +8245,32 @@ async function generatePortfolioProposals(forceRefresh = false) {
 
   contentEl.innerHTML = `<div class="prop-loading"><div class="prop-spinner"></div><div>Analizando mercados y generando propuestas…</div></div>`;
 
-  // ── 1. Recopilar datos disponibles ──────────────────────────────
-  // Si no hay datos de mercado, intentar cargarlos brevemente
+  // ── 1. Fetch fresco de datos de mercado, IT y crypto ────────────
+  try {
+    const [mktRes, cryptoRes] = await Promise.all([
+      fetch(API_BASE + '/market', { signal: AbortSignal.timeout(12000) }).then(r => r.json()).catch(() => null),
+      (!_cryptoData.length || forceRefresh)
+        ? fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=eur&order=market_cap_desc&per_page=20&sparkline=false&price_change_percentage=7d', { signal: AbortSignal.timeout(10000) }).then(r => r.json()).catch(() => null)
+        : Promise.resolve(null),
+    ]);
+    if (mktRes && mktRes.data && mktRes.data.length) {
+      _marketData = mktRes.data;
+      renderMainSection(_marketData);
+      updateTicker(_marketData);
+      updatePortalMarketSummary();
+    }
+    if (cryptoRes && Array.isArray(cryptoRes) && cryptoRes.length) _cryptoData = cryptoRes;
+    // Refrescar Inside Trading si no hay señal o es forceRefresh
+    if (!_itLastSignal || forceRefresh) {
+      const [poly, kalshi] = await Promise.all([_itFetchPolymarket(), _itFetchKalshi()]);
+      const events = [...poly, ...kalshi];
+      if (events.length) {
+        _itLastEvents = events;
+        _itLastSignal = _itComputeSignal(events);
+      }
+    }
+  } catch (e) { console.warn('Propuestas: error refrescando datos:', e.message); }
+
   let marketData = _marketData && _marketData.length ? _marketData : [];
   let itSignal   = _itLastSignal;
   let itEvents   = _itLastEvents && _itLastEvents.length ? _itLastEvents : _itFallbackEvents();
