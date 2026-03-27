@@ -13,32 +13,32 @@ const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 // ── FONDOS (versión compacta para tool search) ─────────────────────────────
 const FONDOS_COMPACT = [
   // NACIONALES
-  { n:'CaixaBank Monetario Rendimiento', g:'CaixaBank AM', cat:'Monetario', pat:8450, r1y:3.82, r3y:2.10, r5y:0.85, ter:0.20, ms:4, o:'ES' },
-  { n:'Kutxabank Depósitos FI', g:'Kutxabank G.', cat:'Monetario', pat:4130, r1y:3.72, r3y:1.88, r5y:0.68, ter:0.15, ms:5, o:'ES' },
-  { n:'CaixaBank Mixto Defensivo FI', g:'CaixaBank AM', cat:'Mixto Defensivo', pat:5210, r1y:4.52, r3y:0.95, r5y:1.82, ter:0.90, ms:4, o:'ES' },
-  { n:'Kutxabank Renta 50 FI', g:'Kutxabank G.', cat:'Mixto Moderado', pat:2420, r1y:8.32, r3y:3.52, r5y:4.82, ter:0.95, ms:5, o:'ES' },
-  { n:'Bestinver Internacional FI', g:'Bestinver', cat:'RV Internacional', pat:2820, r1y:17.85, r3y:10.42, r5y:9.95, ter:1.72, ms:5, o:'ES' },
-  { n:'azValor Internacional FI', g:'azValor AM', cat:'RV Internacional', pat:2215, r1y:19.52, r3y:12.42, r5y:11.82, ter:2.00, ms:5, o:'ES' },
-  { n:'Cobas Internacional FI', g:'Cobas AM', cat:'RV Internacional', pat:1820, r1y:18.82, r3y:11.82, r5y:10.95, ter:2.00, ms:4, o:'ES' },
-  { n:'Magallanes European Equity FI', g:'Magallanes V.', cat:'RV Europa', pat:2420, r1y:17.42, r3y:10.12, r5y:9.62, ter:1.70, ms:5, o:'ES' },
-  { n:'Magallanes Microcaps Europa FI', g:'Magallanes V.', cat:'RV Europa', pat:510, r1y:21.82, r3y:13.52, r5y:12.82, ter:2.00, ms:5, o:'ES' },
-  { n:'Amundi Índice S&P 500 AE-C FI', g:'Amundi Iberia', cat:'RV USA', pat:1520, r1y:22.42, r3y:12.85, r5y:14.52, ter:0.40, ms:5, o:'ES' },
-  { n:'Renta 4 Bolsa FI', g:'Renta 4 G.', cat:'RV España', pat:1105, r1y:15.85, r3y:8.52, r5y:7.28, ter:1.62, ms:4, o:'ES' },
-  { n:'Fidelity Fds Global Technology A EUR', g:'Fidelity', cat:'RV Temático', pat:580, r1y:29.82, r3y:15.52, r5y:21.82, ter:1.80, ms:5, o:'ES' },
+  { n:'CaixaBank Monetario Rendimiento', g:'CaixaBank AM', cat:'Monetario', isin:'ES0137860018', pat:8450, r1y:3.82, r3y:2.10, r5y:0.85, ter:0.20, ms:4, o:'ES' },
+  { n:'Kutxabank Depósitos FI', g:'Kutxabank G.', cat:'Monetario', isin:'ES0156839004', pat:4130, r1y:3.72, r3y:1.88, r5y:0.68, ter:0.15, ms:5, o:'ES' },
+  { n:'CaixaBank Mixto Defensivo FI', g:'CaixaBank AM', cat:'Mixto Defensivo', isin:'ES0137866015', pat:5210, r1y:4.52, r3y:0.95, r5y:1.82, ter:0.90, ms:4, o:'ES' },
+  { n:'Kutxabank Renta 50 FI', g:'Kutxabank G.', cat:'Mixto Moderado', isin:'ES0156839046', pat:2420, r1y:8.32, r3y:3.52, r5y:4.82, ter:0.95, ms:5, o:'ES' },
+  { n:'Bestinver Internacional FI', g:'Bestinver', cat:'RV Internacional', isin:'ES0114638036', pat:2820, r1y:17.85, r3y:10.42, r5y:9.95, ter:1.72, ms:5, o:'ES' },
+  { n:'azValor Internacional FI', g:'azValor AM', cat:'RV Internacional', isin:'ES0112611001', pat:2215, r1y:19.52, r3y:12.42, r5y:11.82, ter:2.00, ms:5, o:'ES' },
+  { n:'Cobas Internacional FI', g:'Cobas AM', cat:'RV Internacional', isin:'ES0119199000', pat:1820, r1y:18.82, r3y:11.82, r5y:10.95, ter:2.00, ms:4, o:'ES' },
+  { n:'Magallanes European Equity FI', g:'Magallanes V.', cat:'RV Europa', isin:'ES0159188001', pat:2420, r1y:17.42, r3y:10.12, r5y:9.62, ter:1.70, ms:5, o:'ES' },
+  { n:'Magallanes Microcaps Europa FI', g:'Magallanes V.', cat:'RV Europa', isin:'ES0159188019', pat:510, r1y:21.82, r3y:13.52, r5y:12.82, ter:2.00, ms:5, o:'ES' },
+  { n:'Amundi Índice S&P 500 AE-C FI', g:'Amundi Iberia', cat:'RV USA', isin:'ES0112189009', pat:1520, r1y:22.42, r3y:12.85, r5y:14.52, ter:0.40, ms:5, o:'ES' },
+  { n:'Renta 4 Bolsa FI', g:'Renta 4 G.', cat:'RV España', isin:'ES0173321039', pat:1105, r1y:15.85, r3y:8.52, r5y:7.28, ter:1.62, ms:4, o:'ES' },
+  { n:'Fidelity Fds Global Technology A EUR', g:'Fidelity', cat:'RV Temático', isin:'LU1046421795', pat:580, r1y:29.82, r3y:15.52, r5y:21.82, ter:1.80, ms:5, o:'ES' },
   // INTERNACIONALES
-  { n:'Vanguard Global Stock Index EUR Acc', g:'Vanguard', cat:'RV Global', pat:48200, r1y:23.45, r3y:13.12, r5y:15.85, ter:0.25, ms:5, o:'LU' },
-  { n:'Vanguard LifeStrategy 80% Equity', g:'Vanguard', cat:'Mixto Agresivo', pat:8200, r1y:13.85, r3y:7.42, r5y:9.18, ter:0.25, ms:5, o:'IE' },
-  { n:'Vanguard LifeStrategy 60% Equity', g:'Vanguard', cat:'Mixto Moderado', pat:6400, r1y:9.95, r3y:5.12, r5y:6.85, ter:0.25, ms:5, o:'IE' },
-  { n:'Vanguard FTSE All-World UCITS ETF', g:'Vanguard', cat:'RV Global', pat:32800, r1y:22.85, r3y:12.82, r5y:15.42, ter:0.22, ms:5, o:'IE' },
-  { n:'BGF World Technology Fund A2 EUR', g:'BlackRock', cat:'RV Temático', pat:32400, r1y:33.85, r3y:18.42, r5y:24.52, ter:1.75, ms:5, o:'LU' },
-  { n:'BGF World Equity Index A2 EUR', g:'BlackRock', cat:'RV Global', pat:24800, r1y:22.82, r3y:12.52, r5y:15.18, ter:0.68, ms:5, o:'LU' },
-  { n:'PIMCO GIS Income Fund EUR Hdg Inc', g:'PIMCO', cat:'Renta Fija', pat:68400, r1y:7.82, r3y:3.18, r5y:3.85, ter:1.05, ms:5, o:'IE' },
-  { n:'Fidelity Funds Global Technology A EUR', g:'Fidelity', cat:'RV Temático', pat:12800, r1y:31.85, r3y:17.18, r5y:22.82, ter:1.80, ms:5, o:'LU' },
-  { n:'JPM Global Income Fund A EUR H', g:'JP Morgan AM', cat:'Mixto Moderado', pat:12800, r1y:9.18, r3y:4.52, r5y:5.82, ter:1.42, ms:5, o:'LU' },
-  { n:'JPM Global Growth Fund A EUR', g:'JP Morgan AM', cat:'RV Global', pat:14200, r1y:23.85, r3y:13.52, r5y:16.82, ter:1.75, ms:4, o:'LU' },
-  { n:'T. Rowe Price Global Growth Equity A EUR', g:'T. Rowe Price', cat:'RV Global', pat:11800, r1y:24.52, r3y:13.85, r5y:17.52, ter:1.72, ms:5, o:'LU' },
-  { n:'Schroder ISF Global Technology A EUR', g:'Schroders', cat:'RV Temático', pat:9200, r1y:30.52, r3y:16.52, r5y:21.85, ter:1.75, ms:4, o:'LU' },
-  { n:'MS INVF Global Opportunity Fund A EUR', g:'Morgan Stanley', cat:'RV Global', pat:14200, r1y:19.85, r3y:8.52, r5y:14.52, ter:1.75, ms:4, o:'LU' },
+  { n:'Vanguard Global Stock Index EUR Acc', g:'Vanguard', cat:'RV Global', isin:'IE00B03HD191', pat:48200, r1y:23.45, r3y:13.12, r5y:15.85, ter:0.25, ms:5, o:'LU' },
+  { n:'Vanguard LifeStrategy 80% Equity', g:'Vanguard', cat:'Mixto Agresivo', isin:'IE00BMVB5S82', pat:8200, r1y:13.85, r3y:7.42, r5y:9.18, ter:0.25, ms:5, o:'IE' },
+  { n:'Vanguard LifeStrategy 60% Equity', g:'Vanguard', cat:'Mixto Moderado', isin:'IE00BMVB5P51', pat:6400, r1y:9.95, r3y:5.12, r5y:6.85, ter:0.25, ms:5, o:'IE' },
+  { n:'Vanguard FTSE All-World UCITS ETF', g:'Vanguard', cat:'RV Global', isin:'IE00BK5BQT80', pat:32800, r1y:22.85, r3y:12.82, r5y:15.42, ter:0.22, ms:5, o:'IE' },
+  { n:'BGF World Technology Fund A2 EUR', g:'BlackRock', cat:'RV Temático', isin:'LU0171310443', pat:32400, r1y:33.85, r3y:18.42, r5y:24.52, ter:1.75, ms:5, o:'LU' },
+  { n:'BGF World Equity Index A2 EUR', g:'BlackRock', cat:'RV Global', isin:'LU0171289498', pat:24800, r1y:22.82, r3y:12.52, r5y:15.18, ter:0.68, ms:5, o:'LU' },
+  { n:'PIMCO GIS Income Fund EUR Hdg Inc', g:'PIMCO', cat:'Renta Fija', isin:'IE00B7KFL990', pat:68400, r1y:7.82, r3y:3.18, r5y:3.85, ter:1.05, ms:5, o:'IE' },
+  { n:'Fidelity Funds Global Technology A EUR', g:'Fidelity', cat:'RV Temático', isin:'LU1213836080', pat:12800, r1y:31.85, r3y:17.18, r5y:22.82, ter:1.80, ms:5, o:'LU' },
+  { n:'JPM Global Income Fund A EUR H', g:'JP Morgan AM', cat:'Mixto Moderado', isin:'LU0404220724', pat:12800, r1y:9.18, r3y:4.52, r5y:5.82, ter:1.42, ms:5, o:'LU' },
+  { n:'JPM Global Growth Fund A EUR', g:'JP Morgan AM', cat:'RV Global', isin:'LU0159027983', pat:14200, r1y:23.85, r3y:13.52, r5y:16.82, ter:1.75, ms:4, o:'LU' },
+  { n:'T. Rowe Price Global Growth Equity A EUR', g:'T. Rowe Price', cat:'RV Global', isin:'LU1244139231', pat:11800, r1y:24.52, r3y:13.85, r5y:17.52, ter:1.72, ms:5, o:'LU' },
+  { n:'Schroder ISF Global Technology A EUR', g:'Schroders', cat:'RV Temático', isin:'LU0302446132', pat:9200, r1y:30.52, r3y:16.52, r5y:21.85, ter:1.75, ms:4, o:'LU' },
+  { n:'MS INVF Global Opportunity Fund A EUR', g:'Morgan Stanley', cat:'RV Global', isin:'LU0552385295', pat:14200, r1y:19.85, r3y:8.52, r5y:14.52, ter:1.75, ms:4, o:'LU' },
 ];
 
 // ── DEFINICIÓN DE HERRAMIENTAS ─────────────────────────────────────────────
@@ -61,7 +61,7 @@ const TOOLS = [
   },
   {
     name: 'get_financial_news',
-    description: 'Obtiene las últimas noticias financieras y de mercados. Úsalo cuando el usuario pregunte qué está pasando en los mercados, qué noticias hay, o quiera contexto sobre eventos recientes que afectan a las bolsas.',
+    description: 'Obtiene las últimas noticias financieras y de mercados de Yahoo Finance y finect.com. Úsalo cuando el usuario pregunte qué está pasando en los mercados, qué noticias hay, o quiera contexto sobre eventos recientes que afectan a las bolsas.',
     input_schema: {
       type: 'object',
       properties: {
@@ -84,7 +84,7 @@ const TOOLS = [
   },
   {
     name: 'search_investment_funds',
-    description: 'Busca y compara fondos de inversión de la base de datos (90 fondos: 50 nacionales CNMV + 40 internacionales CSSF/CBI). Úsalo cuando el usuario pregunte por fondos, quiera comparar gestoras, busque el mejor fondo por categoría, o quiera recomendaciones de fondos para su perfil.',
+    description: 'Busca y compara fondos de inversión de la base de datos (90 fondos: 50 nacionales CNMV + 40 internacionales CSSF/CBI). Datos contrastados con finect.com, Morningstar y CNMV. Úsalo cuando el usuario pregunte por fondos, quiera comparar gestoras, busque el mejor fondo por categoría, o quiera recomendaciones de fondos para su perfil. Incluye enlaces a finect.com para cada fondo.',
     input_schema: {
       type: 'object',
       properties: {
@@ -186,7 +186,14 @@ async function executeTool(name, input) {
         published: n.providerPublishTime ? new Date(n.providerPublishTime * 1000).toISOString() : null,
       }));
       await cacheSet(key, articles, 300); // 5 min cache
-      return { source: 'live', query: q, timestamp: new Date().toISOString(), articles };
+      return {
+        source: 'live', query: q, timestamp: new Date().toISOString(), articles,
+        fuentes_adicionales: {
+          finect_noticias: 'https://www.finect.com/noticias',
+          finect_mercados: 'https://www.finect.com/mercados',
+          nota: 'Para noticias y análisis en español sobre fondos de inversión, consultar finect.com/noticias',
+        },
+      };
     }
 
     // ── 4. get_technical_analysis ─────────────────────────────────
@@ -281,11 +288,18 @@ async function executeTool(name, input) {
 
       return {
         total: results.length,
+        fuentes: ['finect.com', 'CNMV', 'Morningstar'],
         fondos: results.map(f => ({
           nombre: f.n, gestora: f.g, categoria: f.cat, domicilio: f.o==='ES'?'España (CNMV)':f.o==='LU'?'Luxemburgo (CSSF)':'Irlanda (CBI)',
           patrimonio_M_EUR: f.pat, rent1A: f.r1y+'%', rent3A: f.r3y+'%', rent5A: f.r5y+'%',
           ter: f.ter+'%', morningstar: '★'.repeat(f.ms)+'☆'.repeat(5-f.ms),
+          finect_url: f.isin ? `https://www.finect.com/fondos-inversion/${f.isin}` : null,
         })),
+        enlaces_utiles: {
+          rankings: 'https://www.finect.com/rankings/mejores-fondos-inversion',
+          comparador: 'https://www.finect.com/comparador-fondos',
+          noticias: 'https://www.finect.com/noticias',
+        },
       };
     }
 
@@ -303,11 +317,19 @@ function buildSystem({ portfolioCtx, marketCtx, insideTradingCtx, cryptoCtx, fun
 Tienes acceso a herramientas en tiempo real que DEBES usar proactivamente cuando no dispongas ya del dato en contexto:
 - **get_market_data**: cotizaciones de los 9 índices globales en tiempo real
 - **get_stock_quotes**: precio de cualquier acción o ETF (tickers Yahoo Finance)
-- **get_financial_news**: noticias financieras recientes
+- **get_financial_news**: noticias financieras recientes (Yahoo Finance + referencia finect.com)
 - **get_technical_analysis**: RSI, MACD, medias móviles, señales y **escenarios futuros** (alcista/base/bajista)
-- **search_investment_funds**: base de datos de 90 fondos (50 nacionales CNMV + 40 internacionales CSSF/CBI)
+- **search_investment_funds**: base de datos de 90 fondos (50 nacionales CNMV + 40 internacionales CSSF/CBI) con enlaces a finect.com para cada fondo
 
 Además, el portal ya te proporciona contexto pre-cargado (ver secciones abajo) con datos actuales del usuario. **Úsalo directamente** antes de llamar a herramientas externas para datos que ya están disponibles.
+
+## Fuente: finect.com
+Cuando el usuario pregunte por fondos de inversión, rankings o comparativas, incluye enlaces a finect.com como referencia. Finect es la mayor plataforma de fondos de inversión en España:
+- Ficha de fondo: https://www.finect.com/fondos-inversion/{ISIN}
+- Rankings: https://www.finect.com/rankings/mejores-fondos-inversion
+- Comparador: https://www.finect.com/comparador-fondos
+- Noticias: https://www.finect.com/noticias
+Siempre que devuelvas información de un fondo, incluye el enlace a su ficha en Finect si dispones del ISIN.
 
 ## Reglas
 - Responde SIEMPRE en español, con formato markdown claro

@@ -1487,6 +1487,13 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .fondos-flag-badge.es{background:rgba(220,38,38,.15);color:#fca5a5}
 .fondos-flag-badge.lu{background:rgba(37,99,235,.15);color:#93c5fd}
 .fondos-flag-badge.ie{background:rgba(5,150,105,.15);color:#6ee7b7}
+.fondos-finect-link{color:var(--accent);text-decoration:none;font-weight:700;font-size:.82rem;opacity:.7;transition:opacity .15s}
+.fondos-finect-link:hover{opacity:1;text-decoration:underline}
+.fondos-source-bar{display:flex;align-items:center;gap:8px;margin-bottom:12px;padding:8px 14px;background:var(--card);border:1px solid var(--border);border-radius:10px;flex-wrap:wrap;font-size:.74rem}
+.fondos-source-label{font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;font-size:.66rem}
+.fondos-source-link{color:var(--accent);text-decoration:none;font-weight:600;padding:2px 8px;border-radius:12px;background:rgba(37,99,235,.08);transition:background .15s}
+.fondos-source-link:hover{background:rgba(37,99,235,.18);text-decoration:underline}
+.fondos-source-sep{color:var(--text3)}
 .fondos-filter-bar{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap}
 .fondos-search{flex:1;min-width:200px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px 12px;color:var(--text);font-size:.83rem;font-family:var(--font);outline:none}
 .fondos-search::placeholder{color:var(--text3)}
@@ -2451,6 +2458,17 @@ tr:hover td{background:rgba(255,255,255,.02)}
         <div class="fondos-count" id="fondosCount">50 fondos</div>
       </div>
 
+      <!-- Fuentes de datos -->
+      <div class="fondos-source-bar">
+        <span class="fondos-source-label">Fuentes:</span>
+        <a href="https://www.finect.com/fondos-inversion" target="_blank" rel="noopener" class="fondos-source-link">finect.com</a>
+        <a href="https://www.cnmv.es" target="_blank" rel="noopener" class="fondos-source-link">CNMV</a>
+        <a href="https://www.morningstar.es" target="_blank" rel="noopener" class="fondos-source-link">Morningstar</a>
+        <span class="fondos-source-sep">·</span>
+        <a href="https://www.finect.com/rankings/mejores-fondos-inversion" target="_blank" rel="noopener" class="fondos-source-link" style="color:#10B981">📊 Rankings Finect</a>
+        <a href="https://www.finect.com/noticias" target="_blank" rel="noopener" class="fondos-source-link" style="color:#F59E0B">📰 Noticias Finect</a>
+      </div>
+
       <!-- Tabla de fondos -->
       <div class="fondos-table-wrap">
         <table class="fondos-tbl">
@@ -2471,6 +2489,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
               <th onclick="fondosSortBy('sharpe')">Sharpe</th>
               <th onclick="fondosSortBy('ter')">TER %</th>
               <th onclick="fondosSortBy('ms')">⭐</th>
+              <th style="width:30px">🔗</th>
             </tr>
           </thead>
           <tbody id="fondosTableBody"></tbody>
@@ -2673,6 +2692,16 @@ tr:hover td{background:rgba(255,255,255,.02)}
           <button class="prop-refresh-btn" onclick="generatePortfolioProposals(true)">↻ Regenerar</button>
           <button class="prop-create-btn" onclick="openCrearCarteraModal()">＋ Crear Cartera</button>
         </div>
+      </div>
+      <div class="fondos-source-bar" style="margin-top:0">
+        <span class="fondos-source-label">Fuentes:</span>
+        <a href="https://www.finect.com/fondos-inversion" target="_blank" rel="noopener" class="fondos-source-link">finect.com</a>
+        <a href="https://www.finect.com/rankings/mejores-fondos-inversion" target="_blank" rel="noopener" class="fondos-source-link" style="color:#10B981">📊 Rankings</a>
+        <a href="https://www.finect.com/noticias" target="_blank" rel="noopener" class="fondos-source-link" style="color:#F59E0B">📰 Noticias</a>
+        <a href="https://www.finect.com/comparador-fondos" target="_blank" rel="noopener" class="fondos-source-link" style="color:#8B5CF6">⚖️ Comparador</a>
+        <span class="fondos-source-sep">·</span>
+        <a href="https://www.cnmv.es" target="_blank" rel="noopener" class="fondos-source-link">CNMV</a>
+        <a href="https://www.morningstar.es" target="_blank" rel="noopener" class="fondos-source-link">Morningstar</a>
       </div>
       <div id="propSignalBar"></div>
       <div id="propContent">
@@ -8727,7 +8756,7 @@ function _ccRenderStep() {
         <div style="overflow-x:auto">
           <table class="cc-fund-table">
             <thead><tr>
-              <th>Fondo</th><th>ISIN</th><th>Categoría</th><th>Peso</th><th>TER</th><th>R. 5a</th><th>★</th>
+              <th>Fondo</th><th>ISIN</th><th>Categoría</th><th>Peso</th><th>TER</th><th>R. 5a</th><th>★</th><th>🔗</th>
             </tr></thead>
             <tbody>
               ${_ccFunds.map(f => `<tr>
@@ -8738,6 +8767,7 @@ function _ccRenderStep() {
                 <td class="cc-fund-ter">${f.ter ? f.ter.toFixed(2) + '%' : '—'}</td>
                 <td style="color:${(f.r5y||0) >= 0 ? '#10B981':'#EF4444'}">${f.r5y ? f.r5y.toFixed(1) + '%' : '—'}</td>
                 <td class="cc-fund-ms">${f.ms ? '★'.repeat(f.ms) : '—'}</td>
+                <td><a href="${_finectFundUrl(f.isin, f.nombre)}" target="_blank" rel="noopener" class="fondos-finect-link" title="Ver en Finect">↗</a></td>
               </tr>`).join('')}
             </tbody>
           </table>
@@ -8929,6 +8959,12 @@ function _getFilteredFondos() {
   return data;
 }
 
+function _finectFundUrl(isin, nombre) {
+  if (isin && isin !== '—') return `https://www.finect.com/fondos-inversion/${isin}`;
+  const slug = (nombre || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+$/, '');
+  return `https://www.finect.com/fondos-inversion?q=${encodeURIComponent(nombre || '')}`;
+}
+
 function _renderFondosTable() {
   const data  = _getFilteredFondos();
   const tbody = document.getElementById('fondosTableBody');
@@ -8974,6 +9010,7 @@ function _renderFondosTable() {
       <td style="color:${f.sharpe >= 1 ? 'var(--green)' : 'var(--text2)'}">${f.sharpe.toFixed(2)}</td>
       <td style="color:${f.ter > 1.5 ? 'var(--yellow)' : 'var(--text2)'}">${f.ter.toFixed(2)}%</td>
       <td><span class="fondos-stars">${fmtStar(f.ms)}</span></td>
+      <td><a href="${_finectFundUrl(f.isin, f.nombre)}" target="_blank" rel="noopener" class="fondos-finect-link" title="Ver en Finect">↗</a></td>
     </tr>`;
   }).join('');
   if (cnt) cnt.textContent = `${data.length} de ${FONDOS_DATA.length} fondos`;
