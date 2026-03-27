@@ -2012,7 +2012,6 @@ tr:hover td{background:rgba(255,255,255,.02)}
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="showSection('Mercados')">Mercados</button>
     <button class="nav-tab" onclick="showSection('Analisis')">Análisis</button>
-    <button class="nav-tab" onclick="showSection('Trading')">Trading</button>
     <button class="nav-tab" id="tabAdmin" onclick="requireAuth('Admin')" style="display:none">Admin</button>
   </div>
   <div class="nav-right">
@@ -2151,6 +2150,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
         <button class="inv-tab active" id="invTabMercados"    data-label="Mis Mercados"          onclick="switchInvTab('mercados')">    <span class="inv-tab-icon">📊</span><span class="inv-tab-label" data-i18n="tab_mercados">Mis Mercados</span></button>
         <button class="inv-tab"        id="invTabCarteras"    data-label="Mis Inversiones"        onclick="switchInvTab('carteras')">    <span class="inv-tab-icon">💼</span><span class="inv-tab-label" data-i18n="tab_carteras">Mis Inversiones</span></button>
         <button class="inv-tab"        id="invTabAnalisis"    data-label="Análisis"               onclick="switchInvTab('analisis')">    <span class="inv-tab-icon">📰</span><span class="inv-tab-label" data-i18n="tab_analisis">Análisis</span></button>
+        <button class="inv-tab"        id="invTabBloomberg"   data-label="Trading"                onclick="switchInvTab('bloomberg')">   <span class="inv-tab-icon">📈</span><span class="inv-tab-label" data-i18n="tab_bloomberg">Trading</span></button>
         <button class="inv-tab"        id="invTabTrading"     data-label="Inside Trading"         onclick="switchInvTab('trading')">     <span class="inv-tab-icon">🎯</span><span class="inv-tab-label" data-i18n="tab_trading">Inside Trading</span></button>
         <button class="inv-tab"        id="invTabCrypto"      data-label="Crypto"                 onclick="switchInvTab('crypto')">      <span class="inv-tab-icon">₿</span><span class="inv-tab-label" data-i18n="tab_crypto">Crypto</span></button>
         <button class="inv-tab"        id="invTabFondos"      data-label="Comparador de Fondos"   onclick="switchInvTab('fondos')">      <span class="inv-tab-icon">📂</span><span class="inv-tab-label" data-i18n="tab_fondos">Comparador de Fondos</span></button>
@@ -2602,6 +2602,99 @@ tr:hover td{background:rgba(255,255,255,.02)}
 
     </div><!-- /invCryptoPanel -->
 
+    <!-- ── Bloomberg Trading Panel ── -->
+    <div id="invBloombergPanel" style="display:none">
+      <!-- Ticker Tape -->
+      <div class="trd-ticker-wrap">
+        <div class="trd-ticker-inner" id="trdTickerContent">
+          <span class="trd-tick-item"><span class="trd-tick-sym">SPY</span><span class="trd-tick-val trd-amber">inicializando...</span></span>
+          <span class="trd-tick-item"><span class="trd-tick-sym">QQQ</span><span class="trd-tick-val trd-amber">—</span></span>
+          <span class="trd-tick-item"><span class="trd-tick-sym">VIX</span><span class="trd-tick-val trd-amber">—</span></span>
+          <span class="trd-tick-item"><span class="trd-tick-sym">TNX</span><span class="trd-tick-val trd-amber">—</span></span>
+        </div>
+      </div>
+      <!-- Topbar -->
+      <div class="trd-topbar">
+        <div class="trd-topbar-left">
+          <span class="trd-topbar-title">◉ TRADING TERMINAL</span>
+          <span class="trd-live-badge trd-live-amber" id="trdLiveBadge">◌ INICIANDO</span>
+          <span class="trd-timestamp" id="trdTimestamp">—</span>
+        </div>
+        <div class="trd-topbar-right">
+          <button class="trd-refresh-btn" id="trdRefreshBtn" onclick="refreshTradingPanel()">⟳ Actualizar</button>
+        </div>
+      </div>
+      <!-- Mode selector -->
+      <div class="trd-mode-row">
+        <span class="trd-mode-label">MODO:</span>
+        <button class="trd-mode-btn active" data-mode="swing" onclick="setTrdMode('swing')">📊 Swing Trading</button>
+        <button class="trd-mode-btn" data-mode="day" onclick="setTrdMode('day')">⚡ Day Trading</button>
+      </div>
+      <!-- Alert Banner -->
+      <div class="trd-alert-banner" id="trdAlertBanner"></div>
+      <!-- Body -->
+      <div class="trd-body">
+        <div class="trd-decision-row">
+          <div class="trd-decision-card">
+            <div class="trd-decision-label">¿DEBO OPERAR?</div>
+            <div class="trd-decision-badge trd-loading" id="trdDecisionBadge">...</div>
+            <div id="trdScoreCircle">
+              <svg width="140" height="140" viewBox="0 0 140 140">
+                <circle cx="70" cy="70" r="54" fill="none" stroke="#1e2540" stroke-width="10"/>
+              </svg>
+            </div>
+            <div class="trd-score-labels">
+              <div class="trd-score-main-label">Calidad del Mercado</div>
+              <div style="font-family:monospace;font-size:.95rem;color:var(--text);font-weight:800;margin-top:2px" id="trdCompositeScore">—</div>
+              <div class="trd-exec-row">
+                <span class="trd-exec-label">Ventana ejecución:</span>
+                <span class="trd-exec-val" id="trdExecScore">—</span>
+              </div>
+            </div>
+          </div>
+          <div class="trd-summary-card">
+            <div class="trd-summary-header">
+              <span class="trd-summary-title">⬛ Análisis Terminal</span>
+              <span class="trd-regime-badge" id="trdRegime">—</span>
+            </div>
+            <div class="trd-summary-text" id="trdSummary" style="min-height:80px">Cargando análisis del entorno de mercado...</div>
+          </div>
+        </div>
+        <div class="trd-panels-grid">
+          <div class="trd-panel" id="trdVolPanel">
+            <div class="trd-panel-header"><span class="trd-panel-icon">⚡</span>VOLATILIDAD</div>
+            <div style="font-family:monospace;font-size:.7rem;color:var(--text3)">Cargando...</div>
+          </div>
+          <div class="trd-panel" id="trdTrendPanel">
+            <div class="trd-panel-header"><span class="trd-panel-icon">📈</span>TENDENCIA</div>
+            <div style="font-family:monospace;font-size:.7rem;color:var(--text3)">Cargando...</div>
+          </div>
+          <div class="trd-panel" id="trdBreadthPanel">
+            <div class="trd-panel-header"><span class="trd-panel-icon">🌊</span>AMPLITUD</div>
+            <div style="font-family:monospace;font-size:.7rem;color:var(--text3)">Cargando...</div>
+          </div>
+          <div class="trd-panel" id="trdMomentumPanel">
+            <div class="trd-panel-header"><span class="trd-panel-icon">🚀</span>MOMENTUM</div>
+            <div style="font-family:monospace;font-size:.7rem;color:var(--text3)">Cargando...</div>
+          </div>
+          <div class="trd-panel" id="trdMacroPanel">
+            <div class="trd-panel-header"><span class="trd-panel-icon">🏛</span>MACRO</div>
+            <div style="font-family:monospace;font-size:.7rem;color:var(--text3)">Cargando...</div>
+          </div>
+        </div>
+        <div class="trd-bottom-row">
+          <div class="trd-heatmap-card" id="trdSectorHeatmap">
+            <div class="trd-heatmap-title"><span>MAPA DE CALOR SECTORIAL</span><span class="trd-heatmap-sub">Rendimiento 1 mes</span></div>
+            <div style="font-family:monospace;font-size:.7rem;color:var(--text3)">Cargando sectores...</div>
+          </div>
+          <div class="trd-breakdown-card" id="trdScoreBreakdown">
+            <div class="trd-breakdown-title">DESGLOSE DE PUNTUACIÓN</div>
+            <div style="font-family:monospace;font-size:.7rem;color:var(--text3)">Cargando...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- ── Inside Trading Panel ── -->
     <div id="invTradingPanel" style="display:none">
 
@@ -2900,101 +2993,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
 </section>
 
 
-<!-- TRADING — Bloomberg Terminal -->
-<section class="section" id="secTrading">
-  <!-- Ticker Tape -->
-  <div class="trd-ticker-wrap">
-    <div class="trd-ticker-inner" id="trdTickerContent">
-      <span class="trd-tick-item"><span class="trd-tick-sym">SPY</span><span class="trd-tick-val trd-amber">inicializando...</span></span>
-      <span class="trd-tick-item"><span class="trd-tick-sym">QQQ</span><span class="trd-tick-val trd-amber">—</span></span>
-      <span class="trd-tick-item"><span class="trd-tick-sym">VIX</span><span class="trd-tick-val trd-amber">—</span></span>
-      <span class="trd-tick-item"><span class="trd-tick-sym">TNX</span><span class="trd-tick-val trd-amber">—</span></span>
-    </div>
-  </div>
-  <!-- Topbar -->
-  <div class="trd-topbar">
-    <div class="trd-topbar-left">
-      <span class="trd-topbar-title">◉ TRADING TERMINAL</span>
-      <span class="trd-live-badge trd-live-amber" id="trdLiveBadge">◌ INICIANDO</span>
-      <span class="trd-timestamp" id="trdTimestamp">—</span>
-    </div>
-    <div class="trd-topbar-right">
-      <button class="trd-refresh-btn" id="trdRefreshBtn" onclick="refreshTradingPanel()">⟳ Actualizar</button>
-    </div>
-  </div>
-  <!-- Mode selector -->
-  <div class="trd-mode-row">
-    <span class="trd-mode-label">MODO:</span>
-    <button class="trd-mode-btn active" data-mode="swing" onclick="setTrdMode('swing')">📊 Swing Trading</button>
-    <button class="trd-mode-btn" data-mode="day" onclick="setTrdMode('day')">⚡ Day Trading</button>
-  </div>
-  <!-- Alert Banner -->
-  <div class="trd-alert-banner" id="trdAlertBanner"></div>
-  <!-- Body -->
-  <div class="trd-body">
-    <!-- Decision + Summary Row -->
-    <div class="trd-decision-row">
-      <div class="trd-decision-card">
-        <div class="trd-decision-label">¿DEBO OPERAR?</div>
-        <div class="trd-decision-badge trd-loading" id="trdDecisionBadge">...</div>
-        <div id="trdScoreCircle">
-          <svg width="140" height="140" viewBox="0 0 140 140">
-            <circle cx="70" cy="70" r="54" fill="none" stroke="#1e2540" stroke-width="10"/>
-          </svg>
-        </div>
-        <div class="trd-score-labels">
-          <div class="trd-score-main-label">Calidad del Mercado</div>
-          <div style="font-family:monospace;font-size:.95rem;color:var(--text);font-weight:800;margin-top:2px" id="trdCompositeScore">—</div>
-          <div class="trd-exec-row">
-            <span class="trd-exec-label">Ventana ejecución:</span>
-            <span class="trd-exec-val" id="trdExecScore">—</span>
-          </div>
-        </div>
-      </div>
-      <div class="trd-summary-card">
-        <div class="trd-summary-header">
-          <span class="trd-summary-title">⬛ Análisis Terminal</span>
-          <span class="trd-regime-badge" id="trdRegime">—</span>
-        </div>
-        <div class="trd-summary-text" id="trdSummary" style="min-height:80px">Cargando análisis del entorno de mercado...</div>
-      </div>
-    </div>
-    <!-- Category Panels -->
-    <div class="trd-panels-grid">
-      <div class="trd-panel" id="trdVolPanel">
-        <div class="trd-panel-header"><span class="trd-panel-icon">⚡</span>VOLATILIDAD</div>
-        <div style="font-family:monospace;font-size:.7rem;color:var(--text3)">Cargando...</div>
-      </div>
-      <div class="trd-panel" id="trdTrendPanel">
-        <div class="trd-panel-header"><span class="trd-panel-icon">📈</span>TENDENCIA</div>
-        <div style="font-family:monospace;font-size:.7rem;color:var(--text3)">Cargando...</div>
-      </div>
-      <div class="trd-panel" id="trdBreadthPanel">
-        <div class="trd-panel-header"><span class="trd-panel-icon">🌊</span>AMPLITUD</div>
-        <div style="font-family:monospace;font-size:.7rem;color:var(--text3)">Cargando...</div>
-      </div>
-      <div class="trd-panel" id="trdMomentumPanel">
-        <div class="trd-panel-header"><span class="trd-panel-icon">🚀</span>MOMENTUM</div>
-        <div style="font-family:monospace;font-size:.7rem;color:var(--text3)">Cargando...</div>
-      </div>
-      <div class="trd-panel" id="trdMacroPanel">
-        <div class="trd-panel-header"><span class="trd-panel-icon">🏛</span>MACRO</div>
-        <div style="font-family:monospace;font-size:.7rem;color:var(--text3)">Cargando...</div>
-      </div>
-    </div>
-    <!-- Bottom Row: Heatmap + Score Breakdown -->
-    <div class="trd-bottom-row">
-      <div class="trd-heatmap-card" id="trdSectorHeatmap">
-        <div class="trd-heatmap-title"><span>MAPA DE CALOR SECTORIAL</span><span class="trd-heatmap-sub">Rendimiento 1 mes</span></div>
-        <div style="font-family:monospace;font-size:.7rem;color:var(--text3)">Cargando sectores...</div>
-      </div>
-      <div class="trd-breakdown-card" id="trdScoreBreakdown">
-        <div class="trd-breakdown-title">DESGLOSE DE PUNTUACIÓN</div>
-        <div style="font-family:monospace;font-size:.7rem;color:var(--text3)">Cargando...</div>
-      </div>
-    </div>
-  </div>
-</section>
+<!-- TRADING section removed — moved to investor sidebar as invBloombergPanel -->
 
 <!-- ADMIN -->
 <section class="section" id="secAdmin">
@@ -3532,7 +3531,7 @@ const STRINGS = {
   es: {
     tab_calculadora:'Calculadora de interés compuesto', tab_mercados:'Mis Mercados',
     tab_carteras:'Mis Inversiones', tab_analisis:'Análisis',
-    tab_bancos:'Entidades Financieras', tab_fondos:'Comparador de Fondos', tab_crypto:'Crypto', tab_propuestas:'Carteras',
+    tab_bancos:'Entidades Financieras', tab_fondos:'Comparador de Fondos', tab_crypto:'Crypto', tab_bloomberg:'Trading', tab_propuestas:'Carteras',
     mi_portal:'Mi Portal', resumen_mercado:'RESUMEN DEL MERCADO', mi_watchlist:'MI WATCHLIST',
     cambiar_password:'CAMBIAR CONTRASEÑA', pass_actual:'Contraseña actual', pass_nueva:'Nueva contraseña',
     btn_actualizar:'Actualizar', cerrar_sesion:'Cerrar sesión',
@@ -3598,7 +3597,7 @@ const STRINGS = {
   en: {
     tab_calculadora:'Compound Interest Calculator', tab_mercados:'My Markets',
     tab_carteras:'My Investments', tab_analisis:'Analysis',
-    tab_bancos:'Financial Entities', tab_fondos:'Fund Comparator', tab_crypto:'Crypto', tab_propuestas:'Portfolios',
+    tab_bancos:'Financial Entities', tab_fondos:'Fund Comparator', tab_crypto:'Crypto', tab_bloomberg:'Trading', tab_propuestas:'Portfolios',
     mi_portal:'My Profile', resumen_mercado:'MARKET SUMMARY', mi_watchlist:'MY WATCHLIST',
     cambiar_password:'CHANGE PASSWORD', pass_actual:'Current password', pass_nueva:'New password',
     btn_actualizar:'Update', cerrar_sesion:'Log out',
@@ -3784,7 +3783,6 @@ function showSection(name) {
   event && event.currentTarget && event.currentTarget.classList.add('active');
   if (name === 'Analisis' && !_chart) initChart();
   if (name === 'Admin') loadAdminData();
-  if (name === 'Trading') initTradingPanel();
   closePortalPanel();
 }
 
@@ -5115,6 +5113,7 @@ function switchInvTab(tab) {
   document.getElementById('invTabBancos').classList.toggle('active',       tab === 'bancos');
   document.getElementById('invTabFondos').classList.toggle('active',       tab === 'fondos');
   document.getElementById('invTabCrypto').classList.toggle('active',       tab === 'crypto');
+  document.getElementById('invTabBloomberg').classList.toggle('active',    tab === 'bloomberg');
   document.getElementById('invTabTrading').classList.toggle('active',      tab === 'trading');
   document.getElementById('invTabPropuestas').classList.toggle('active',   tab === 'propuestas');
   // Muestra/oculta contenido
@@ -5125,6 +5124,7 @@ function switchInvTab(tab) {
   document.getElementById('invBancosPanel').style.display         = tab === 'bancos'      ? 'block' : 'none';
   document.getElementById('invFondosPanel').style.display         = tab === 'fondos'      ? 'block' : 'none';
   document.getElementById('invCryptoPanel').style.display         = tab === 'crypto'      ? 'block' : 'none';
+  document.getElementById('invBloombergPanel').style.display      = tab === 'bloomberg'   ? 'block' : 'none';
   document.getElementById('invTradingPanel').style.display        = tab === 'trading'     ? 'block' : 'none';
   document.getElementById('invProuestasPanel').style.display      = tab === 'propuestas'  ? 'block' : 'none';
   // Carga noticias la primera vez que se abre la pestaña
@@ -5141,6 +5141,8 @@ function switchInvTab(tab) {
   if (tab === 'crypto' && !_cryptoLoaded) { _cryptoLoaded = true; setTimeout(loadCryptoMarket, 60); }
   // Redimensiona gráfico crypto al volver a la pestaña
   if (tab === 'crypto' && _cryptoChart) { setTimeout(() => { try { _cryptoChart.timeScale().fitContent(); } catch(_){} }, 80); }
+  // Inicia Trading Terminal (Bloomberg) la primera vez
+  if (tab === 'bloomberg') setTimeout(() => initTradingPanel(), 60);
   // Carga Inside Trading la primera vez (o actualiza si ya estaba)
   if (tab === 'trading') setTimeout(() => loadInsideTrading(false), 60);
   // Genera/regenera propuestas de cartera cada vez que se entra en la pestaña
