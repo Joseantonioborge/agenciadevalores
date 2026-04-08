@@ -305,6 +305,10 @@ a:hover{text-decoration:underline}
 }
 .ln-form-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,.1);background:#fff}
 .ln-form-error{display:none;font-size:.8rem;color:var(--red);margin-top:6px}
+.ln-pw-wrap{position:relative}
+.ln-pw-wrap .ln-form-input{padding-right:40px}
+.ln-pw-toggle{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:.85rem;color:var(--text3);padding:4px;line-height:1;transition:.15s}
+.ln-pw-toggle:hover{color:var(--text)}
 .ln-btn-submit{
   width:100%;padding:12px;border-radius:8px;font-size:.95rem;font-weight:700;
   background:var(--accent);color:#fff;border:none;cursor:pointer;transition:.2s;margin-top:4px;
@@ -1103,7 +1107,10 @@ a:hover{text-decoration:underline}
     </div>
     <div class="ln-form-group">
       <label class="ln-form-label">Contraseña</label>
-      <input class="ln-form-input" type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+      <div class="ln-pw-wrap">
+        <input class="ln-form-input" type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+        <button type="button" class="ln-pw-toggle" onclick="togglePw(this)" title="Mostrar contraseña">👁</button>
+      </div>
       <div class="ln-form-error" id="loginError">Credenciales incorrectas</div>
     </div>
     <button class="ln-btn-submit" id="loginBtn" onclick="doLogin()">Entrar</button>
@@ -1265,6 +1272,15 @@ a:hover{text-decoration:underline}
 const API_BASE         = 'https://agenciadevalores-api.vercel.app/api';
 const API_KEY_INVESTOR = '4c0c769c6a9ef5d8530dc84945f71b89429beb1a2d4223ec94e2775ee32f61a9';
 const PORTAL_URL       = 'portal.html';
+
+// ── Toggle password visibility ───────────────────────────────────
+function togglePw(btn) {
+  const input = btn.previousElementSibling;
+  const show = input.type === 'password';
+  input.type = show ? 'text' : 'password';
+  btn.textContent = show ? '🙈' : '👁';
+  btn.title = show ? 'Ocultar contraseña' : 'Mostrar contraseña';
+}
 
 // ── Mobile menu ──────────────────────────────────────────────────
 function toggleMobileMenu() {

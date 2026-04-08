@@ -3216,7 +3216,10 @@ tr:hover td{background:rgba(255,255,255,.02)}
     </div>
     <div class="form-group">
       <label class="form-label">Contraseña</label>
-      <input class="form-input" type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+      <div style="position:relative">
+        <input class="form-input" type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()" style="padding-right:40px">
+        <button type="button" onclick="togglePw(this)" title="Mostrar contraseña" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:.85rem;color:var(--text3);padding:4px;line-height:1">👁</button>
+      </div>
       <div class="form-error" id="loginError">Credenciales incorrectas</div>
     </div>
     <button class="btn-primary" id="loginBtn" onclick="doLogin()">Entrar</button>
@@ -3889,6 +3892,14 @@ updateTime();
 // ================================================================
 // AUTH / SESSION
 // ================================================================
+function togglePw(btn) {
+  const input = btn.previousElementSibling;
+  const show = input.type === 'password';
+  input.type = show ? 'text' : 'password';
+  btn.textContent = show ? '🙈' : '👁';
+  btn.title = show ? 'Ocultar contraseña' : 'Mostrar contraseña';
+}
+
 function apiKey() {
   if (_session?.role === 'admin') return API_KEY_ADMIN;
   return API_KEY_INVESTOR;
