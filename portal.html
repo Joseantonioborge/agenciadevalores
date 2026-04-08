@@ -10318,7 +10318,11 @@ async function init() {
   _refreshInterval = setInterval(loadMarketData, 60 * 1000);
 }
 
-init();
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
 
 // ═══════════════════════════════════════════════════════════════════════
 // TRADING PANEL — Bloomberg Terminal v1.0
