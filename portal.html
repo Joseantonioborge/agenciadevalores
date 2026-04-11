@@ -1687,6 +1687,30 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .it-signal-needle{position:absolute;top:-4px;width:4px;height:18px;background:#fff;border-radius:2px;box-shadow:0 0 6px rgba(0,0,0,.5);transition:left .7s cubic-bezier(.4,0,.2,1)}
 .it-signal-labels{display:flex;justify-content:space-between;font-size:.63rem;color:var(--text2)}
 .it-signal-desc{font-size:.76rem;color:var(--text2);margin-top:10px}
+.it-signal-value-row{display:flex;align-items:baseline;gap:8px;margin-bottom:16px}
+.it-signal-value-row .it-signal-value{margin-bottom:0}
+.it-signal-value-unit{font-size:.85rem;font-weight:600;color:var(--text3);font-family:monospace;letter-spacing:.04em}
+.it-signal-explainer{margin-top:18px;padding:16px 18px;background:rgba(37,99,235,.05);border:1px solid rgba(37,99,235,.18);border-radius:12px}
+.it-signal-explainer-head{display:flex;align-items:center;gap:8px;font-size:.84rem;color:var(--text);margin-bottom:9px}
+.it-signal-explainer-icon{font-size:1rem}
+.it-signal-explainer p{font-size:.77rem;color:var(--text2);line-height:1.65;margin:0 0 10px}
+.it-signal-explainer strong{color:var(--text)}
+.it-signal-rows{display:flex;flex-direction:column;gap:6px;margin:12px 0 4px}
+.it-signal-row{display:grid;grid-template-columns:14px 92px 1fr;align-items:center;gap:10px;font-size:.73rem;color:var(--text2);line-height:1.45;padding:5px 8px;border-radius:6px;background:rgba(255,255,255,.02)}
+.it-sr-bar{width:10px;height:18px;border-radius:3px;flex-shrink:0}
+.it-sr-bear-strong{background:#EF4444}
+.it-sr-bear-mid{background:#F59E0B}
+.it-sr-neutral{background:#94a3b8}
+.it-sr-bull-mid{background:#84CC16}
+.it-sr-bull-strong{background:#10B981}
+.it-sr-range{font-family:monospace;font-size:.7rem;font-weight:700;color:var(--text);letter-spacing:.02em}
+.it-sr-txt{font-size:.72rem}
+.it-signal-warning{margin-top:12px!important;padding:9px 12px;background:rgba(245,158,11,.08);border-left:3px solid #F59E0B;border-radius:0 6px 6px 0;font-size:.72rem!important;color:var(--text2);line-height:1.55}
+@media(max-width:600px){
+  .it-signal-row{grid-template-columns:14px 1fr;gap:8px}
+  .it-sr-range{display:none}
+  .it-sr-txt::before{content:attr(data-range) " · "}
+}
 .it-categories{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:11px;margin-bottom:24px}
 .it-cat-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:13px}
 .it-cat-nd{opacity:.4}
@@ -1954,6 +1978,30 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .trd-summary-text{font-family:monospace;font-size:.79rem;color:var(--text2);line-height:1.65}
 .trd-summary-text strong{color:var(--text)}
 .trd-sum-alert{color:#F59E0B;font-style:italic}
+/* Rationale: por qué operar o no */
+.trd-rationale-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px 20px;display:flex;flex-direction:column;gap:12px}
+.trd-rationale-header{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.trd-rationale-title{font-family:monospace;font-size:.8rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--text)}
+.trd-rationale-sub{font-family:monospace;font-size:.68rem;color:var(--text3);text-transform:uppercase;letter-spacing:.05em}
+.trd-rationale-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.trd-rationale-col{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+.trd-rat-pro{border-left:3px solid #10B981}
+.trd-rat-con{border-left:3px solid #EF4444}
+.trd-rat-col-head{display:flex;align-items:center;gap:6px;font-family:monospace;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text2)}
+.trd-rat-col-icon{font-size:.85rem}
+.trd-rat-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.trd-rat-list li{font-family:monospace;font-size:.72rem;color:var(--text2);line-height:1.5;padding-left:14px;position:relative}
+.trd-rat-list li::before{content:'▸';position:absolute;left:0;top:0;color:var(--text3);font-size:.7rem}
+.trd-rat-pro .trd-rat-list li::before{color:#10B981}
+.trd-rat-con .trd-rat-list li::before{color:#EF4444}
+.trd-rat-list li strong{color:var(--text)}
+.trd-rat-empty{font-style:italic;color:var(--text3)!important}
+.trd-rat-empty::before{display:none}
+.trd-rationale-action{font-family:monospace;font-size:.78rem;line-height:1.55;padding:11px 14px;border-radius:8px;color:var(--text);font-weight:600}
+.trd-rationale-action.act-yes{background:rgba(16,185,129,.10);border:1px solid rgba(16,185,129,.32);color:#10B981}
+.trd-rationale-action.act-caution{background:rgba(245,158,11,.10);border:1px solid rgba(245,158,11,.32);color:#F59E0B}
+.trd-rationale-action.act-no{background:rgba(239,68,68,.10);border:1px solid rgba(239,68,68,.32);color:#EF4444}
+@media(max-width:760px){.trd-rationale-grid{grid-template-columns:1fr}}
 /* Category Panels Grid */
 .trd-panels-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
 .trd-panel{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:13px 15px;display:flex;flex-direction:column;gap:7px}
@@ -2707,6 +2755,25 @@ tr:hover td{background:rgba(255,255,255,.02)}
             <div class="trd-summary-text" id="trdSummary" style="min-height:80px">Cargando análisis del entorno de mercado...</div>
           </div>
         </div>
+
+        <!-- Razones a favor / en contra de operar -->
+        <div class="trd-rationale-card" id="trdRationaleCard">
+          <div class="trd-rationale-header">
+            <span class="trd-rationale-title">🎯 ¿Por qué operar (o no) ahora?</span>
+            <span class="trd-rationale-sub" id="trdRationaleSub">—</span>
+          </div>
+          <div class="trd-rationale-grid">
+            <div class="trd-rationale-col trd-rat-pro">
+              <div class="trd-rat-col-head"><span class="trd-rat-col-icon">✅</span>Razones a favor</div>
+              <ul class="trd-rat-list" id="trdRationalePro"><li class="trd-rat-empty">—</li></ul>
+            </div>
+            <div class="trd-rationale-col trd-rat-con">
+              <div class="trd-rat-col-head"><span class="trd-rat-col-icon">⚠️</span>Razones para evitar</div>
+              <ul class="trd-rat-list" id="trdRationaleCon"><li class="trd-rat-empty">—</li></ul>
+            </div>
+          </div>
+          <div class="trd-rationale-action" id="trdRationaleAction">—</div>
+        </div>
         <div class="trd-panels-grid">
           <div class="trd-panel" id="trdVolPanel">
             <div class="trd-panel-header"><span class="trd-panel-icon">⚡</span>VOLATILIDAD</div>
@@ -2760,14 +2827,53 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <!-- Señal macro AV -->
       <div class="it-signal-card" id="itSignalCard">
         <div class="it-signal-label" data-i18n="it_señal_av">SEÑAL AV MACRO</div>
-        <div class="it-signal-value" id="itSignalValue">—</div>
+        <div class="it-signal-value-row">
+          <div class="it-signal-value" id="itSignalValue">—</div>
+          <div class="it-signal-value-unit">/ 100</div>
+        </div>
         <div class="it-signal-bar-wrap">
           <div class="it-signal-bar">
             <div class="it-signal-needle" id="itSignalNeedle" style="left:50%"></div>
           </div>
-          <div class="it-signal-labels"><span>BAJISTA</span><span>NEUTRAL</span><span>ALCISTA</span></div>
+          <div class="it-signal-labels"><span>−100 BAJISTA</span><span>0 NEUTRAL</span><span>+100 ALCISTA</span></div>
         </div>
         <div class="it-signal-desc" id="itSignalDesc"></div>
+
+        <!-- Explicación clara del valor numérico -->
+        <div class="it-signal-explainer">
+          <div class="it-signal-explainer-head">
+            <span class="it-signal-explainer-icon">ℹ️</span>
+            <strong data-i18n="it_signal_que_es">¿Qué significa este valor?</strong>
+          </div>
+          <p data-i18n="it_signal_que_es_1">
+            La <strong>Señal AV Macro</strong> es un índice agregado que va de
+            <strong style="color:#EF4444">−100</strong> (extremo bajista) a
+            <strong style="color:#10B981">+100</strong> (extremo alcista),
+            con la zona <strong style="color:#94a3b8">−15 / +15</strong> considerada neutral.
+            Resume, en un único número, lo que los apostadores reales de
+            <strong>Polymarket</strong> y <strong>Kalshi</strong> están pagando hoy
+            por la probabilidad de eventos macroeconómicos clave (Fed, BCE, recesión, inflación,
+            geopolítica, energía, etc.), ponderado por el volumen real apostado en cada mercado.
+          </p>
+          <p data-i18n="it_signal_que_es_2">
+            Cuanto <strong>más positivo</strong> es el número, más dinero apuesta el mercado a
+            escenarios <em>favorables para los activos de riesgo</em> (recortes de tipos, soft landing,
+            paz, crecimiento). Cuanto <strong>más negativo</strong>, más dinero apuesta a
+            escenarios <em>adversos</em> (subidas de tipos, recesión, guerra, sanciones, crisis).
+          </p>
+          <div class="it-signal-rows">
+            <div class="it-signal-row"><span class="it-sr-bar it-sr-bear-strong"></span><span class="it-sr-range">−100 a −40</span><span class="it-sr-txt">Riesgo macro elevado · reducir exposición, priorizar liquidez y refugio (oro, bonos cortos).</span></div>
+            <div class="it-signal-row"><span class="it-sr-bar it-sr-bear-mid"></span><span class="it-sr-range">−40 a −15</span><span class="it-sr-txt">Sesgo bajista moderado · cautela con renta variable, evitar apalancamiento.</span></div>
+            <div class="it-signal-row"><span class="it-sr-bar it-sr-neutral"></span><span class="it-sr-range">−15 a +15</span><span class="it-sr-txt">Mercado equilibrado · mantener cartera estratégica, sin sesgos tácticos fuertes.</span></div>
+            <div class="it-signal-row"><span class="it-sr-bar it-sr-bull-mid"></span><span class="it-sr-range">+15 a +40</span><span class="it-sr-txt">Sesgo alcista moderado · favorable para añadir riesgo gradualmente (RV global, crédito).</span></div>
+            <div class="it-signal-row"><span class="it-sr-bar it-sr-bull-strong"></span><span class="it-sr-range">+40 a +100</span><span class="it-sr-txt">Entorno claramente alcista · favorable para sobreponderar renta variable y ciclos.</span></div>
+          </div>
+          <p class="it-signal-warning" data-i18n="it_signal_warning">
+            ⚠️ La Señal AV Macro es una <strong>brújula de sentimiento</strong>, no una orden de compra/venta.
+            Refleja consenso de mercados de predicción y debe combinarse con análisis técnico, fundamentales
+            y tu propio horizonte temporal. <strong>No constituye asesoramiento financiero.</strong>
+          </p>
+        </div>
       </div>
 
       <!-- Categorías -->
@@ -3643,6 +3749,10 @@ const STRINGS = {
     it_eventos_analizados:' eventos analizados · Fuente: ',
     it_consultando:'⏳ Consultando mercados de predicción…',
     it_act_pfx:'Actualizado: ',
+    it_signal_que_es:'¿Qué significa este valor?',
+    it_signal_que_es_1:'La <strong>Señal AV Macro</strong> es un índice agregado que va de <strong style="color:#EF4444">−100</strong> (extremo bajista) a <strong style="color:#10B981">+100</strong> (extremo alcista), con la zona <strong style="color:#94a3b8">−15 / +15</strong> considerada neutral. Resume, en un único número, lo que los apostadores reales de <strong>Polymarket</strong> y <strong>Kalshi</strong> están pagando hoy por la probabilidad de eventos macroeconómicos clave (Fed, BCE, recesión, inflación, geopolítica, energía, etc.), ponderado por el volumen real apostado en cada mercado.',
+    it_signal_que_es_2:'Cuanto <strong>más positivo</strong> es el número, más dinero apuesta el mercado a escenarios <em>favorables para los activos de riesgo</em> (recortes de tipos, soft landing, paz, crecimiento). Cuanto <strong>más negativo</strong>, más dinero apuesta a escenarios <em>adversos</em> (subidas de tipos, recesión, guerra, sanciones, crisis).',
+    it_signal_warning:'⚠️ La Señal AV Macro es una <strong>brújula de sentimiento</strong>, no una orden de compra/venta. Refleja consenso de mercados de predicción y debe combinarse con análisis técnico, fundamentales y tu propio horizonte temporal. <strong>No constituye asesoramiento financiero.</strong>',
   },
   en: {
     tab_calculadora:'Compound Interest Calculator', tab_mercados:'My Markets',
@@ -3709,6 +3819,10 @@ const STRINGS = {
     it_eventos_analizados:' events analysed · Source: ',
     it_consultando:'⏳ Querying prediction markets…',
     it_act_pfx:'Updated: ',
+    it_signal_que_es:'What does this value mean?',
+    it_signal_que_es_1:'The <strong>AV Macro Signal</strong> is an aggregated index from <strong style="color:#EF4444">−100</strong> (extreme bearish) to <strong style="color:#10B981">+100</strong> (extreme bullish), with the <strong style="color:#94a3b8">−15 / +15</strong> band considered neutral. It summarises, in a single number, what real money on <strong>Polymarket</strong> and <strong>Kalshi</strong> is pricing today for key macro events (Fed, ECB, recession, inflation, geopolitics, energy, etc.), weighted by actual market volume.',
+    it_signal_que_es_2:'The <strong>more positive</strong> the number, the more money the market is betting on <em>risk-on scenarios</em> (rate cuts, soft landing, peace, growth). The <strong>more negative</strong>, the more money is betting on <em>adverse scenarios</em> (rate hikes, recession, war, sanctions, crisis).',
+    it_signal_warning:'⚠️ The AV Macro Signal is a <strong>sentiment compass</strong>, not a buy/sell order. It reflects prediction-market consensus and must be combined with technical analysis, fundamentals and your own time horizon. <strong>Not financial advice.</strong>',
   }
 };
 
@@ -4885,31 +4999,75 @@ function _itComputeSignal(events) {
 }
 
 async function _itFetchPolymarket() {
+  // Pedimos un volumen amplio (200) ordenado por volumen para tener señales relevantes
+  // tras el filtrado temático.
   try {
-    const res = await fetch('https://gamma-api.polymarket.com/markets?active=true&closed=false&limit=100', { signal: AbortSignal.timeout(9000) });
+    const res = await fetch('https://gamma-api.polymarket.com/markets?active=true&closed=false&limit=200&order=volumeNum&ascending=false', { signal: AbortSignal.timeout(10000) });
     if (!res.ok) return [];
     const data = await res.json();
-    return (Array.isArray(data) ? data : []).map(m => {
+    const out = [];
+    for (const m of (Array.isArray(data) ? data : [])) {
+      const question = m.question || '';
+      if (!question) continue;
+      const { cat, sentiment } = _itClassify(question);
+      if (sentiment === 0) continue; // descartamos mercados sin sesgo macro/financiero
       let prob = 0.5;
-      try { const p = JSON.parse(m.outcomePrices || '["0.5","0.5"]'); prob = parseFloat(p[0]) || 0.5; } catch(_) {}
-      const { cat, sentiment } = _itClassify(m.question);
-      return { question: m.question || '—', prob, volume: parseFloat(m.volume) || 0, cat, sentiment, source: 'Polymarket' };
-    });
-  } catch(e) { return []; }
+      try {
+        const p = typeof m.outcomePrices === 'string' ? JSON.parse(m.outcomePrices) : m.outcomePrices;
+        if (Array.isArray(p) && p.length) prob = parseFloat(p[0]) || 0.5;
+      } catch(_) {}
+      // Si hay lastTradePrice más reciente lo usamos como mejor estimación
+      const last = parseFloat(m.lastTradePrice);
+      if (!Number.isNaN(last) && last > 0 && last < 1) prob = last;
+      prob = Math.max(0.01, Math.min(0.99, prob));
+      const volume = parseFloat(m.volumeNum ?? m.volume) || 0;
+      if (volume < 1000) continue; // descartamos mercados ilíquidos
+      out.push({ question, prob, volume, cat, sentiment, source: 'Polymarket' });
+    }
+    return out;
+  } catch(e) {
+    console.warn('[Polymarket] fetch failed:', e?.message || e);
+    return [];
+  }
 }
 
 async function _itFetchKalshi() {
+  // Kalshi v2 API (endpoint movido a api.elections.kalshi.com en 2025)
+  // Necesita with_nested_markets=true para incluir markets en cada evento.
   try {
-    const res = await fetch('https://trading-api.kalshi.com/trade-api/v2/events?limit=50&status=open', { signal: AbortSignal.timeout(9000) });
+    const res = await fetch('https://api.elections.kalshi.com/trade-api/v2/events?limit=200&status=open&with_nested_markets=true', { signal: AbortSignal.timeout(10000) });
     if (!res.ok) return [];
     const data = await res.json();
-    return (data.events || []).map(ev => {
-      const mkt = (ev.markets || [])[0] || {};
-      const prob = ((mkt.yes_ask || mkt.yes_bid || 50)) / 100;
-      const { cat, sentiment } = _itClassify(ev.title || ev.mutually_exclusive_title || '');
-      return { question: ev.title || ev.mutually_exclusive_title || '—', prob, volume: mkt.volume || 0, cat, sentiment, source: 'Kalshi' };
-    });
-  } catch(e) { return []; }
+    const events = data.events || [];
+    const out = [];
+    for (const ev of events) {
+      const title = ev.title || ev.sub_title || '';
+      if (!title) continue;
+      // Solo eventos financieros / macro relevantes — filtramos preguntas tipo "¿Visitará Marte?"
+      const { cat, sentiment } = _itClassify(title);
+      if (sentiment === 0) continue; // sin clasificación temática útil
+      // Tomamos el market con mayor volumen para representar el evento
+      const markets = ev.markets || [];
+      if (!markets.length) continue;
+      const mkt = markets.reduce((a, b) => ((b.volume_fp || 0) > (a.volume_fp || 0) ? b : a), markets[0]);
+      const yesAsk = parseFloat(mkt.yes_ask_dollars);
+      const yesBid = parseFloat(mkt.yes_bid_dollars);
+      const lastPx = parseFloat(mkt.last_price_dollars);
+      // Probabilidad implícita (0–1). Preferimos el mid bid/ask, si no last_price, si no 0.5
+      let prob = 0.5;
+      if (!Number.isNaN(yesAsk) && !Number.isNaN(yesBid) && yesAsk > 0 && yesBid > 0) prob = (yesAsk + yesBid) / 2;
+      else if (!Number.isNaN(lastPx) && lastPx > 0)                                   prob = lastPx;
+      else if (!Number.isNaN(yesAsk) && yesAsk > 0)                                   prob = yesAsk;
+      prob = Math.max(0.01, Math.min(0.99, prob));
+      const volume = parseFloat(mkt.volume_fp || mkt.volume_24h_fp || 0) || 0;
+      if (volume < 100) continue; // descartamos mercados ilíquidos
+      out.push({ question: title, prob, volume, cat, sentiment, source: 'Kalshi' });
+    }
+    return out;
+  } catch(e) {
+    console.warn('[Kalshi] fetch failed:', e?.message || e);
+    return [];
+  }
 }
 
 // Datos de referencia actualizados (Q1 2026) — activos si las APIs fallan
@@ -4938,11 +5096,36 @@ async function loadInsideTrading(forceRefresh = false) {
   if (evBody)  evBody.innerHTML  = `<div class="it-loading">${t('it_consultando')}</div>`;
   if (sigVal)  sigVal.textContent = '…';
 
-  const [poly, kalshi] = await Promise.all([_itFetchPolymarket(), _itFetchKalshi()]);
-  let events = [...poly, ...kalshi];
+  // 1) Intento primario: proxy backend (sortea CORS y unifica fuentes)
+  let events = [];
+  let polyCount = 0, kalshiCount = 0;
+  try {
+    const res = await fetch(`${API_BASE}/inside-trading`, { signal: AbortSignal.timeout(12000) });
+    if (res.ok) {
+      const data = await res.json();
+      const raw = Array.isArray(data.events) ? data.events : [];
+      // Aplicamos clasificación temática del lado cliente para mantener iconografía / sentiment
+      events = raw.map(ev => {
+        const { cat, sentiment } = _itClassify(ev.question || '');
+        return { ...ev, cat, sentiment };
+      });
+      polyCount   = data.counts?.polymarket || events.filter(e => e.source === 'Polymarket').length;
+      kalshiCount = data.counts?.kalshi     || events.filter(e => e.source === 'Kalshi').length;
+    }
+  } catch (e) { console.warn('[inside-trading] proxy failed:', e?.message || e); }
+
+  // 2) Fallback: intento directo (puede fallar por CORS, no pasa nada)
+  if (events.length === 0) {
+    const [poly, kalshi] = await Promise.all([_itFetchPolymarket(), _itFetchKalshi()]);
+    events = [...poly, ...kalshi];
+    polyCount = poly.length;
+    kalshiCount = kalshi.length;
+  }
+
   const srcLabel = events.length > 0
-    ? `Polymarket (${poly.length}) + Kalshi (${kalshi.length})`
+    ? `Polymarket (${polyCount}) + Kalshi (${kalshiCount})`
     : 'AV Estimaciones (datos de referencia)';
+  // 3) Último recurso: datos estáticos curados
   if (events.length === 0) events = _itFallbackEvents();
   events.sort((a, b) => b.volume - a.volume);
 
@@ -10383,17 +10566,34 @@ async function loadTradingData() {
   _setTrdStatus('updating');
   try {
     const fetches = [
-      fetch(`${API_BASE}/historical?symbol=SPY&period=3mo`).then(r=>r.json()).catch(()=>null),
+      // 1yd = 1 año en bars diarios (~252 sesiones), suficiente para calcular MA200 — clave para tendencia estructural
+      fetch(`${API_BASE}/historical?symbol=SPY&period=1yd`).then(r=>r.json()).catch(()=>null),
       fetch(`${API_BASE}/historical?symbol=%5EVIX&period=1mo`).then(r=>r.json()).catch(()=>null),
-      fetch(`${API_BASE}/historical?symbol=QQQ&period=3mo`).then(r=>r.json()).catch(()=>null),
+      fetch(`${API_BASE}/historical?symbol=QQQ&period=1yd`).then(r=>r.json()).catch(()=>null),
       fetch(`${API_BASE}/historical?symbol=%5ETNX&period=1mo`).then(r=>r.json()).catch(()=>null),
       fetch(`${API_BASE}/historical?symbol=DX-Y.NYB&period=1mo`).then(r=>r.json()).catch(()=>null),
+      // 3mo es necesario para que el backend pueda calcular MA50 (la breadth depende de ello)
       ...TRD_SECTOR_ETFS.map(sym =>
-        fetch(`${API_BASE}/historical?symbol=${sym}&period=1mo`).then(r=>r.json()).catch(()=>null)
+        fetch(`${API_BASE}/historical?symbol=${sym}&period=3mo`).then(r=>r.json()).catch(()=>null)
       )
     ];
     const results = await Promise.all(fetches);
     const [spyD, vixD, qqqD, tnxD, dxyD, ...sectorResults] = results;
+    // El backend devuelve indicators.currentPrice = null; el precio real vive en meta.currentPrice
+    // o, en su defecto, el último cierre del array ohlcv. Parcheamos los indicadores para que el
+    // resto del código (que lee indicators.currentPrice) siga funcionando sin tener que tocar
+    // cada lugar donde se consulta el precio.
+    const _patchPrice = (d) => {
+      if (!d) return d;
+      d.indicators = d.indicators || {};
+      if (d.indicators.currentPrice == null) {
+        d.indicators.currentPrice =
+          d.meta?.currentPrice ??
+          (d.ohlcv?.length ? d.ohlcv[d.ohlcv.length - 1].close : null);
+      }
+      return d;
+    };
+    [spyD, vixD, qqqD, tnxD, dxyD, ...sectorResults].forEach(_patchPrice);
     _trdData = {
       spy: spyD, vix: vixD, qqq: qqqD, tnx: tnxD, dxy: dxyD,
       sectors: Object.fromEntries(TRD_SECTOR_ETFS.map((sym,i) => [sym, sectorResults[i]]))
@@ -10452,11 +10652,12 @@ function _calcTrdScores() {
     breadthPct >= 80 ? 95 : breadthPct >= 65 ? 80 : breadthPct >= 50 ? 62 :
     breadthPct >= 35 ? 42 : breadthPct >= 20 ? 22 : 10;
 
-  // Momentum (25%)
+  // Momentum (25%) — pedimos 3mo de datos pero medimos rendimiento 1m (~22 sesiones)
   const sectorChanges = TRD_SECTOR_ETFS.map(sym => {
     const sd = d.sectors[sym]; if (!sd?.ohlcv?.length) return { sym, chg: 0 };
     const ov = sd.ohlcv;
-    const first = ov[0].close, last = ov[ov.length-1].close;
+    const window = ov.slice(-22); // ~1 mes de sesiones bursátiles
+    const first = window[0].close, last = window[window.length-1].close;
     return { sym, chg: first > 0 ? ((last-first)/first)*100 : 0 };
   });
   const sorted = sectorChanges.slice().sort((a,b)=>b.chg-a.chg);
@@ -10561,8 +10762,86 @@ function _renderTradingPanel() {
   _renderTrdMacroPanel(s, d);
   _renderTrdSectorHeatmap(s, d);
   _renderTrdScoreBreakdown(s);
+  _renderTrdRationale(s, d);
   _renderTrdAlertBanner(s.upcoming);
   _updateTrdTicker(s, d);
+}
+
+// ── Rationale: razones por las que operar (o no) ahora ─────────────
+function _renderTrdRationale(s, d) {
+  const pros = [], cons = [];
+  const v = s.categories.vol.score, t = s.categories.trend.score;
+  const b = s.categories.breadth.score, m = s.categories.momentum.score;
+  const macro = s.categories.macro.score;
+
+  // ── Pros ──────────────────────────────────────────────────
+  if (s.vixLevel < 18)
+    pros.push(`<strong>VIX bajo (${s.vixLevel.toFixed(1)})</strong> — la volatilidad implícita está contenida, las opciones son baratas y el coste de gestión de riesgo es razonable.`);
+  if (s.vixSlope < -1)
+    pros.push(`<strong>VIX bajando ${Math.abs(s.vixSlope).toFixed(1)} pts en 5 días</strong> — el miedo se está retirando del mercado, históricamente un viento de cola.`);
+  if (t >= 70)
+    pros.push(`<strong>Tendencia alcista confirmada</strong> en SPY (cotiza por encima de MA20/MA50/MA200), señal estructural muy favorable para posiciones largas.`);
+  if (b >= 70)
+    pros.push(`<strong>Amplitud robusta (${s.aboveMA50}/${s.totalSectors} sectores sobre MA50)</strong> — la subida no la sostienen 2-3 megacaps, hay participación amplia, lo que reduce el riesgo de techo frágil.`);
+  if (m >= 70 && s.top3?.length)
+    pros.push(`<strong>Liderazgo sectorial claro</strong>: ${s.top3.slice(0,3).map(x=>x.sym).join(', ')} con momentum positivo (spread líder/rezagado +${s.spread.toFixed(1)}%).`);
+  if (s.tnxLevel < 4.0)
+    pros.push(`<strong>Bono 10Y en ${s.tnxLevel.toFixed(2)}%</strong> — coste de capital bajo, condiciones financieras laxas, favorable para múltiplos de renta variable.`);
+  if (s.dxySlope < -0.5)
+    pros.push(`<strong>Dólar (DXY) debilitándose</strong> — tradicionalmente positivo para activos de riesgo, materias primas y emergentes.`);
+
+  // ── Cons ──────────────────────────────────────────────────
+  if (s.vixLevel >= 22)
+    cons.push(`<strong>VIX elevado (${s.vixLevel.toFixed(1)})</strong> — opciones caras, drawdowns más profundos y mayor riesgo de stops barridos. Reducir tamaño obligatorio.`);
+  if (s.vixSlope > 1)
+    cons.push(`<strong>VIX subiendo ${s.vixSlope.toFixed(1)} pts en 5 días</strong> — el mercado está pagando más por cobertura, suele anticipar episodios de estrés.`);
+  if (t < 50)
+    cons.push(`<strong>Tendencia debilitada</strong>: SPY pierde medias clave. Operar en contra de la tendencia tiene una expectativa negativa estadísticamente.`);
+  if (b < 45)
+    cons.push(`<strong>Amplitud pobre (sólo ${s.aboveMA50}/${s.totalSectors} sectores sobre MA50)</strong> — los rebotes son frágiles cuando la mayoría del mercado no participa.`);
+  if (m < 45)
+    cons.push(`<strong>Sin liderazgo sectorial</strong> — no hay grupos que tiren con fuerza, las rotaciones son erráticas y aumenta el riesgo de whipsaws.`);
+  if (s.tnxLevel >= 4.75)
+    cons.push(`<strong>Bono 10Y en ${s.tnxLevel.toFixed(2)}%</strong> — tipos largos elevados presionan múltiplos y aumentan competencia entre renta fija y variable.`);
+  if (s.dxySlope > 0.5)
+    cons.push(`<strong>Dólar fortaleciéndose</strong> — viento en contra para materias primas, oro, emergentes y exportadoras USA.`);
+  if (s.upcoming && s.upcoming.hoursAway < 72)
+    cons.push(`<strong>Evento macro inminente</strong>: ${s.upcoming.label} en ${s.upcoming.hoursAway}h. Volatilidad pre-evento históricamente alta y direccionalidad impredecible.`);
+
+  // Mensaje si no hay nada que reportar
+  if (!pros.length) pros.push('No se detectan vientos de cola claros en el entorno actual.');
+  if (!cons.length) cons.push('No se detectan riesgos macro o técnicos significativos.');
+
+  // Acción concreta según decisión
+  let actionTxt = '', actionCls = 'act-caution';
+  const modeLabel = _trdMode === 'day' ? 'day trading' : 'swing trading';
+  if (s.decision === 'SÍ') {
+    actionCls = 'act-yes';
+    actionTxt = `🟢 ENTORNO FAVORABLE PARA ${modeLabel.toUpperCase()} → asume tamaño completo en setups A+, mantén stops disciplinados y aprovecha la ventana mientras dure.`;
+  } else if (s.decision === 'PRECAUCIÓN') {
+    actionCls = 'act-caution';
+    actionTxt = `🟡 ENTORNO MIXTO → opera SOLO setups premium, reduce tamaño a la mitad, evita acumular varias posiciones simultáneas y prioriza calidad sobre cantidad.`;
+  } else {
+    actionCls = 'act-no';
+    actionTxt = `🔴 ENTORNO DESFAVORABLE → preserva capital, cierra posiciones débiles, evita abrir nuevas operaciones agresivas y espera a que el composite se recupere por encima de ${_trdMode==='day'?82:80}.`;
+  }
+  if (s.upcoming && s.upcoming.hoursAway < 48)
+    actionTxt += ` Reduce tamaño adicional por ${s.upcoming.label} en ${s.upcoming.hoursAway}h.`;
+
+  // Subtítulo
+  const subEl = document.getElementById('trdRationaleSub');
+  if (subEl) subEl.textContent = `Composite ${s.composite}/100 · ${pros.length} a favor · ${cons.length} en contra`;
+
+  const ulPro = document.getElementById('trdRationalePro');
+  const ulCon = document.getElementById('trdRationaleCon');
+  if (ulPro) ulPro.innerHTML = pros.map(x => `<li>${x}</li>`).join('');
+  if (ulCon) ulCon.innerHTML = cons.map(x => `<li>${x}</li>`).join('');
+
+  const actEl = document.getElementById('trdRationaleAction');
+  if (actEl) {
+    actEl.className = 'trd-rationale-action ' + actionCls;
+    actEl.textContent = actionTxt;
+  }
 }
 
 function _renderTrdVolPanel(s, d) {

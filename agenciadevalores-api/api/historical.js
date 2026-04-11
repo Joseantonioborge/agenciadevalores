@@ -8,6 +8,9 @@ const PERIOD_MAP = {
   '3mo': { range: '3mo', interval: '1d'  },
   '6mo': { range: '6mo', interval: '1d'  },
   '1y':  { range: '1y',  interval: '1wk' },
+  // 1y diario: ~252 sesiones, suficiente para calcular MA200 (necesario para tendencia estructural)
+  '1yd': { range: '1y',  interval: '1d'  },
+  '2y':  { range: '2y',  interval: '1d'  },
   '5y':  { range: '5y',  interval: '1mo' },
 };
 
