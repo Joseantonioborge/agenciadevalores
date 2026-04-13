@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Agencia de Valores Generación Z — Mercados Globales</title>
+<title>GenZ Invest — Mercados Globales</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/lightweight-charts@4.1.3/dist/lightweight-charts.standalone.production.js"></script>
@@ -32,7 +32,8 @@ nav{
   padding:0 24px;height:60px;
 }
 .nav-logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:1.1rem;letter-spacing:-.3px}
-.nav-logo-dot{width:8px;height:8px;background:var(--accent);border-radius:50%;box-shadow:0 0 8px var(--accent)}
+.nav-logo-img{height:30px;width:auto;object-fit:contain;flex-shrink:0}
+.nav-logo-dot{display:none}
 .nav-version{font-size:.65rem;font-weight:500;color:var(--text3);background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:4px;padding:2px 6px;letter-spacing:.3px;font-family:monospace}
 .nav-tabs{display:flex;gap:4px}
 .nav-tab{
@@ -2076,7 +2077,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
 <div id="promoOverlay" onclick="if(event.target===this)closePromo()">
   <div class="promo-card" style="position:relative">
     <button class="promo-close" onclick="closePromo()">✕</button>
-    <div class="promo-icons">📊 ₿ 📈 🏦</div>
+    <img src="assets/logo-genz-invest.svg" alt="GenZ Invest" style="width:140px;height:auto;margin:0 auto 12px;display:block;filter:drop-shadow(0 0 20px rgba(56,189,248,.3))">
     <div class="promo-title">Accede a <span>todo el potencial</span> del portal</div>
     <div class="promo-sub">Regístrate gratis y desbloquea herramientas exclusivas para tomar las mejores decisiones de inversión</div>
     <div class="promo-features">
@@ -2100,8 +2101,8 @@ tr:hover td{background:rgba(255,255,255,.02)}
 <!-- NAV -->
 <nav>
   <div class="nav-logo">
-    <div class="nav-logo-dot"></div>
-    Agencia de Valores Generación Z
+    <img class="nav-logo-img" src="assets/logo-genz-icon.svg" alt="GenZ Invest">
+    GenZ Invest
     <span class="nav-version">v3.8.0</span>
   </div>
   <div class="nav-tabs">
