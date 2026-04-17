@@ -3675,9 +3675,10 @@ tr:hover td{background:rgba(255,255,255,.02)}
 // ================================================================
 // CONFIGURACIÓN — Editar con tus URLs de Vercel tras el deploy
 // ================================================================
+// Las API keys ya no viven en el front — las custodia Vercel (env vars
+// API_KEY_* en el backend). El frontend usa un session token efímero
+// devuelto por `/api/auth` en el login, que viaja en `x-session-token`.
 const API_BASE         = 'https://agenciadevalores-api.vercel.app/api';
-const API_KEY_INVESTOR = '4c0c769c6a9ef5d8530dc84945f71b89429beb1a2d4223ec94e2775ee32f61a9';
-const API_KEY_ADMIN    = '8bb695a1e2adb8530351d9acbfddacf29dcd30f38da2a0d88d9d5c56bb17272a';
 
 // ================================================================
 // INTERNACIONALIZACIÓN (i18n) — ES / EN
@@ -3836,7 +3837,7 @@ async function saveLang(lang) {
   try {
     await fetch(`${API_BASE}/investors`, {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey() },
+      headers: { 'Content-Type': 'application/json', 'x-session-token': apiKey() },
       body: JSON.stringify({ username: _session.username, lang }),
     });
     _session.lang = lang;
@@ -4015,9 +4016,10 @@ function togglePw(btn) {
   btn.title = show ? 'Ocultar contraseña' : 'Mostrar contraseña';
 }
 
+// Devuelve el session token emitido por el backend al hacer login.
+// Se usa en la cabecera `x-session-token` de todas las llamadas autenticadas.
 function apiKey() {
-  if (_session?.role === 'admin') return API_KEY_ADMIN;
-  return API_KEY_INVESTOR;
+  return _session?.sessionToken || '';
 }
 
 async function doLogin() {
@@ -4031,7 +4033,7 @@ async function doLogin() {
   try {
     const res = await fetch(API_BASE + '/auth', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-api-key': API_KEY_INVESTOR },
+      headers: { 'Content-Type': 'application/json', 'x-session-token': apiKey() },
       body: JSON.stringify({ username, password }),
     });
     const data = await res.json();
@@ -4044,7 +4046,7 @@ async function doLogin() {
     // Log de acceso
     fetch(API_BASE + '/access_logs', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-api-key': API_KEY_INVESTOR },
+      headers: { 'Content-Type': 'application/json', 'x-session-token': apiKey() },
       body: JSON.stringify({ username: data.username, name: data.name, email: data.email, ua: navigator.userAgent }),
     }).catch(() => {});
   } catch (e) {
@@ -4122,7 +4124,7 @@ async function _submitRatingAndLogout() {
   try {
     const res = await fetch(`${API_BASE}/ratings`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey() },
+      headers: { 'Content-Type': 'application/json', 'x-session-token': apiKey() },
       body: JSON.stringify({
         username: _session?.username,
         name:     _session?.name,
@@ -4151,6 +4153,15 @@ function _doLogout() {
   const modal = document.getElementById('modalLogoutRating');
   modal.style.display = 'none';
   document.body.style.overflow = '';
+  // Revocar el session token en el backend (no bloqueante).
+  const token = _session?.sessionToken;
+  if (token) {
+    fetch(`${API_BASE}/auth`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-session-token': token },
+      body: JSON.stringify({ action: 'logout' }),
+    }).catch(() => {});
+  }
   // Limpiar sesión
   _session = null;
   localStorage.removeItem('AV_SESSION');
@@ -4372,7 +4383,7 @@ async function loadFavoritesFromServer() {
   if (!_session) return;
   try {
     const res = await fetch(`${API_BASE}/favorites?username=${encodeURIComponent(_session.username)}`, {
-      headers: { 'x-api-key': apiKey() }
+      headers: { 'x-session-token': apiKey() }
     });
     if (!res.ok) return;
     const data = await res.json();
@@ -4406,7 +4417,7 @@ async function saveFavoritesToServer() {
   try {
     await fetch(`${API_BASE}/favorites`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey() },
+      headers: { 'Content-Type': 'application/json', 'x-session-token': apiKey() },
       body: JSON.stringify({ username: _session.username, symbols: [..._favorites] })
     });
   } catch (e) {
@@ -4420,7 +4431,7 @@ async function saveChartTypeToServer() {
   try {
     await fetch(`${API_BASE}/favorites`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey() },
+      headers: { 'Content-Type': 'application/json', 'x-session-token': apiKey() },
       body: JSON.stringify({ username: _session.username, chartType: _chartType })
     });
   } catch (e) {
@@ -5422,7 +5433,7 @@ async function loadInvestorNews() {
   try {
     const res = await fetch(
       `${API_BASE}/news?symbols=${encodeURIComponent(symbols.join(','))}`,
-      { headers: { 'x-api-key': apiKey() }, signal: AbortSignal.timeout(20000) }
+      { headers: { 'x-session-token': apiKey() }, signal: AbortSignal.timeout(20000) }
     );
     if (!res.ok) throw new Error('Error ' + res.status);
     const data = await res.json();
@@ -5995,7 +6006,7 @@ async function _saveRiskProfile() {
   try {
     const res = await fetch(API_BASE + '/investors', {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json', 'x-api-key': API_KEY_INVESTOR },
+      headers: { 'Content-Type': 'application/json', 'x-session-token': apiKey() },
       body: JSON.stringify({ username: _session.username, riskProfile: rp })
     });
     const data = await res.json();
@@ -6058,7 +6069,7 @@ async function changePassword() {
   try {
     const res = await fetch(API_BASE + '/investors', {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json', 'x-api-key': API_KEY_INVESTOR },
+      headers: { 'Content-Type': 'application/json', 'x-session-token': apiKey() },
       body: JSON.stringify({ username: _session.username, password: oldP, newPassword: newP }),
     });
     const data = await res.json();
@@ -6076,7 +6087,7 @@ async function changePassword() {
 // ================================================================
 async function loadAdminData() {
   if (!_session || _session.role !== 'admin') return;
-  const headers = { 'x-api-key': API_KEY_ADMIN };
+  const headers = { 'x-session-token': apiKey() };
 
   // Cargar en paralelo
   const [invRes, logRes, ratRes] = await Promise.allSettled([
@@ -6198,7 +6209,7 @@ async function doResetPassword() {
   try {
     const res = await fetch(API_BASE + '/investors', {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json', 'x-api-key': API_KEY_ADMIN },
+      headers: { 'Content-Type': 'application/json', 'x-session-token': apiKey() },
       body: JSON.stringify({ username, newPassword }),
     });
     const data = await res.json();
@@ -6228,7 +6239,7 @@ async function createInvestor() {
   try {
     const res = await fetch(API_BASE + '/investors', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-api-key': API_KEY_ADMIN },
+      headers: { 'Content-Type': 'application/json', 'x-session-token': apiKey() },
       body: JSON.stringify({ username: user, password: pass, name, email }),
     });
     const data = await res.json();
@@ -6252,7 +6263,7 @@ async function deleteInvestor(username) {
   try {
     const res = await fetch(`${API_BASE}/investors?username=${encodeURIComponent(username)}`, {
       method: 'DELETE',
-      headers: { 'x-api-key': API_KEY_ADMIN },
+      headers: { 'x-session-token': apiKey() },
     });
     if (!res.ok) { const d = await res.json(); throw new Error(d.error); }
     toast('Inversor eliminado', 'ok');
@@ -6618,7 +6629,7 @@ async function searchQuoteTicker() {
   try {
     const res = await fetch(
       `${API_BASE}/quotes?symbols=${encodeURIComponent(tickers)}`,
-      { headers: { 'x-api-key': apiKey() }, signal: AbortSignal.timeout(10000) }
+      { headers: { 'x-session-token': apiKey() }, signal: AbortSignal.timeout(10000) }
     );
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const data = await res.json();
@@ -7204,7 +7215,7 @@ async function loadCarteras() {
   if (panel) panel.innerHTML = '<div class="cart-loading"><div class="cart-spinner"></div><p>Cargando carteras…</p></div>';
   try {
     const res = await fetch(`${API_BASE}/carteras?username=${encodeURIComponent(_session.username)}`, {
-      headers: { 'x-api-key': apiKey() }
+      headers: { 'x-session-token': apiKey() }
     });
     if (!res.ok) throw new Error('Error ' + res.status);
     const data = await res.json();
@@ -7555,7 +7566,7 @@ async function saveCartera() {
   try {
     const res = await fetch(`${API_BASE}/carteras`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey() },
+      headers: { 'Content-Type': 'application/json', 'x-session-token': apiKey() },
       body: JSON.stringify({ username: _session.username, cartera }),
     });
     if (!res.ok) throw new Error('Error ' + res.status);
@@ -7576,7 +7587,7 @@ async function deleteCartera(id) {
   try {
     const res = await fetch(
       `${API_BASE}/carteras?username=${encodeURIComponent(_session.username)}&carteraId=${id}`,
-      { method: 'DELETE', headers: { 'x-api-key': apiKey() } }
+      { method: 'DELETE', headers: { 'x-session-token': apiKey() } }
     );
     if (!res.ok) throw new Error('Error ' + res.status);
     _carteras = _carteras.filter(c => c.id !== id);
@@ -7664,7 +7675,7 @@ async function saveActivo() {
   try {
     const res = await fetch(`${API_BASE}/carteras`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey() },
+      headers: { 'Content-Type': 'application/json', 'x-session-token': apiKey() },
       body: JSON.stringify({ username: _session.username, cartera: updCartera }),
     });
     if (!res.ok) throw new Error('Error ' + res.status);
@@ -7693,7 +7704,7 @@ async function deleteActivo(carteraId, activoId) {
   try {
     const res = await fetch(`${API_BASE}/carteras`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey() },
+      headers: { 'Content-Type': 'application/json', 'x-session-token': apiKey() },
       body: JSON.stringify({ username: _session.username, cartera: updCartera }),
     });
     if (!res.ok) throw new Error();
@@ -10195,7 +10206,7 @@ async function finbotLoadHistory() {
   const loadEl = document.getElementById('finbotMsgs');
   if (loadEl) { const el = document.createElement('div'); el.className='finbot-msg bot'; el.innerHTML='<div class="finbot-typing"><span></span><span></span><span></span></div>'; el.id='finbot-init-load'; loadEl.appendChild(el); }
   try {
-    const r = await fetch(`${API_BASE}/chat?username=${encodeURIComponent(_session.username)}`, { headers: { 'x-api-key': API_KEY_INVESTOR } });
+    const r = await fetch(`${API_BASE}/chat?username=${encodeURIComponent(_session.username)}`, { headers: { 'x-session-token': apiKey() } });
     const d = await r.json();
     document.getElementById('finbot-init-load')?.remove();
     if (d.ok && d.messages?.length > 0) {
@@ -10222,7 +10233,7 @@ function _finbotShowWelcome() {
 
 async function finbotClearHistory() {
   if (!_session?.username || !confirm('¿Borrar el historial completo de conversación con FinBot?')) return;
-  await fetch(`${API_BASE}/chat?username=${encodeURIComponent(_session.username)}`, { method:'DELETE', headers:{'x-api-key':API_KEY_INVESTOR} });
+  await fetch(`${API_BASE}/chat?username=${encodeURIComponent(_session.username)}`, { method:'DELETE', headers:{'x-session-token':apiKey()} });
   _finbotHistory = []; _finbotGreeted = false;
   const msgs = document.getElementById('finbotMsgs');
   if (msgs) msgs.innerHTML = '';
@@ -10373,7 +10384,7 @@ async function finbotSend() {
   try {
     const resp = await fetch(`${API_BASE}/chat`, {
       method:  'POST',
-      headers: { 'Content-Type':'application/json', 'x-api-key': API_KEY_INVESTOR },
+      headers: { 'Content-Type':'application/json', 'x-session-token': apiKey() },
       body:    JSON.stringify({
         message: msg,
         username: _session?.username,

@@ -9,13 +9,13 @@ module.exports = async (req, res) => {
     const col = db.collection('ratings');
 
     if (req.method === 'GET') {
-      if (!requireRole(req, res, 'admin')) return;
+      if (!(await requireRole(req, res, 'admin'))) return;
       const ratings = await col.find({}).sort({ timestamp: -1 }).toArray();
       return res.status(200).json({ ratings });
     }
 
     if (req.method === 'POST') {
-      if (!requireRole(req, res, 'investor')) return;
+      if (!(await requireRole(req, res, 'investor'))) return;
       const { username, name, email, rating, comment } = req.body || {};
       if (!username || !rating) return res.status(400).json({ error: 'username y rating requeridos' });
       if (rating < 1 || rating > 5) return res.status(400).json({ error: 'rating debe ser 1-5' });

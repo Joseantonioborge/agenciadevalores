@@ -1271,8 +1271,11 @@ a:hover{text-decoration:underline}
      ═══════════════════════════════════════════════════════════════ -->
 <script>
 // ── Config ───────────────────────────────────────────────────────
+// Credenciales: ninguna clave de API vive en el front. El backend (Vercel) es
+// quien custodia las API keys (variables de entorno API_KEY_* en Vercel).
+// Tras el login, el backend emite un session token efímero que se usa en las
+// llamadas posteriores vía cabecera `x-session-token`.
 const API_BASE         = 'https://agenciadevalores-api.vercel.app/api';
-const API_KEY_INVESTOR = '4c0c769c6a9ef5d8530dc84945f71b89429beb1a2d4223ec94e2775ee32f61a9';
 const PORTAL_URL       = 'portal.html';
 
 // ── Toggle password visibility ───────────────────────────────────
@@ -1340,18 +1343,18 @@ async function doLogin() {
   try {
     const res = await fetch(API_BASE + '/auth', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-api-key': API_KEY_INVESTOR },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, password }),
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Error de autenticación');
-    // Save session and redirect to portal
+    // Save session (incluye sessionToken emitido por el backend) y redirige al portal
     const session = { ...data, ts: Date.now() };
     localStorage.setItem('AV_SESSION', JSON.stringify(session));
-    // Log access
+    // Log access (autenticado con el session token recién emitido)
     fetch(API_BASE + '/access_logs', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-api-key': API_KEY_INVESTOR },
+      headers: { 'Content-Type': 'application/json', 'x-session-token': data.sessionToken || '' },
       body: JSON.stringify({ username: data.username, name: data.name, email: data.email, ua: navigator.userAgent }),
     }).catch(() => {});
     window.location.href = PORTAL_URL;
@@ -1492,7 +1495,7 @@ async function doRegister() {
   try {
     const res = await fetch(API_BASE + '/auth', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-api-key': API_KEY_INVESTOR },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         action: 'register',
         name,

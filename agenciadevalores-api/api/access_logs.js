@@ -9,13 +9,13 @@ module.exports = async (req, res) => {
     const col = db.collection('access_logs');
 
     if (req.method === 'GET') {
-      if (!requireRole(req, res, 'admin')) return;
+      if (!(await requireRole(req, res, 'admin'))) return;
       const logs = await col.find({}).sort({ timestamp: -1 }).limit(500).toArray();
       return res.status(200).json({ logs });
     }
 
     if (req.method === 'POST') {
-      if (!requireRole(req, res, 'investor')) return;
+      if (!(await requireRole(req, res, 'investor'))) return;
       const { username, name, email, ua } = req.body || {};
       if (!username) return res.status(400).json({ error: 'username requerido' });
       await col.insertOne({ username, name, email, ua: ua || '', timestamp: new Date() });

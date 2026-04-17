@@ -9,12 +9,12 @@ const { requireRole } = require('../lib/auth');
 module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin',  '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, x-api-key');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, x-api-key, x-session-token');
   if (req.method === 'OPTIONS') return res.status(200).end();
 
   // ── GET ──────────────────────────────────────────────────────────
   if (req.method === 'GET') {
-    if (!requireRole(req, res, 'investor')) return;
+    if (!(await requireRole(req, res, 'investor'))) return;
     const { username } = req.query;
     if (!username) return res.status(400).json({ error: 'username requerido' });
     try {
@@ -29,7 +29,7 @@ module.exports = async function handler(req, res) {
   // ── POST ─────────────────────────────────────────────────────────
   // body: { username, cartera: { id?, nombre, color, activos: [...] } }
   if (req.method === 'POST') {
-    if (!requireRole(req, res, 'investor')) return;
+    if (!(await requireRole(req, res, 'investor'))) return;
     const { username, cartera } = req.body || {};
     if (!username || !cartera) return res.status(400).json({ error: 'username y cartera requeridos' });
     if (!cartera.nombre)       return res.status(400).json({ error: 'nombre de cartera requerido' });
@@ -64,7 +64,7 @@ module.exports = async function handler(req, res) {
 
   // ── DELETE ───────────────────────────────────────────────────────
   if (req.method === 'DELETE') {
-    if (!requireRole(req, res, 'investor')) return;
+    if (!(await requireRole(req, res, 'investor'))) return;
     const { username, carteraId } = req.query;
     if (!username || !carteraId) return res.status(400).json({ error: 'username y carteraId requeridos' });
     try {

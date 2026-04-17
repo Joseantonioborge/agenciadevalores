@@ -366,9 +366,9 @@ Siempre que devuelvas información de un fondo, incluye el enlace a su ficha en 
 module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin',  '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, x-api-key');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, x-api-key, x-session-token');
   if (req.method === 'OPTIONS') return res.status(200).end();
-  if (!requireRole(req, res, 'investor')) return;
+  if (!(await requireRole(req, res, 'investor'))) return;
 
   const { username } = req.method === 'GET' || req.method === 'DELETE'
     ? req.query : (req.body || {});

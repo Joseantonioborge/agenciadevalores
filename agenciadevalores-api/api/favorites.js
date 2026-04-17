@@ -10,7 +10,7 @@ module.exports = async (req, res) => {
 
     // GET /api/favorites?username=xxx  → devuelve símbolos favoritos del usuario
     if (req.method === 'GET') {
-      if (!requireRole(req, res, 'investor')) return;
+      if (!(await requireRole(req, res, 'investor'))) return;
       const { username } = req.query;
       if (!username) return res.status(400).json({ error: 'username requerido' });
       const doc = await col.findOne({ username });
@@ -22,7 +22,7 @@ module.exports = async (req, res) => {
 
     // POST /api/favorites  body: { username, symbols: [...] }  → guarda favoritos
     if (req.method === 'POST') {
-      if (!requireRole(req, res, 'investor')) return;
+      if (!(await requireRole(req, res, 'investor'))) return;
       const { username, symbols, chartType } = req.body || {};
       if (!username) return res.status(400).json({ error: 'username requerido' });
 

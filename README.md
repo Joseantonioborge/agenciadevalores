@@ -43,21 +43,36 @@ agenciadevalores/
 4. Ejecutar seed: `MONGODB_URI="tu-uri" node agenciadevalores-api/scripts/seed.js`
 
 ### 2. Vercel API
-1. Conectar carpeta `agenciadevalores-api/` como nuevo proyecto en [vercel.com](https://vercel.com)
-2. Añadir variables de entorno:
-   - `MONGODB_URI` — connection string de MongoDB
-   - `API_KEY_ADMIN` — clave aleatoria para admin (ej: `openssl rand -hex 32`)
-   - `API_KEY_INVESTOR` — clave aleatoria para inversores
-3. Desplegar → obtendrás URL tipo `https://agenciadevalores-api.vercel.app`
+1. Conectar carpeta `agenciadevalores-api/` como nuevo proyecto en [vercel.com](https://vercel.com).
+2. Copia `agenciadevalores-api/.env.example` a `.env` para desarrollo local y
+   configura las mismas variables en Vercel (Project → Settings → Environment Variables):
+   - `MONGODB_URI` — connection string de MongoDB.
+   - `API_KEY_ADMIN` — clave aleatoria (`openssl rand -hex 32`). **Vive solo en el servidor.**
+   - `API_KEY_INVESTOR` — clave aleatoria (`openssl rand -hex 32`). **Vive solo en el servidor.**
+   - `ANTHROPIC_API_KEY` — clave de Anthropic para FinBot (`/api/chat`).
+3. Desplegar → obtendrás una URL tipo `https://agenciadevalores-api.vercel.app`.
 
 ### 3. Frontend
-1. En `index.html`, actualizar:
+1. En `index.html` y `portal.html` solo se configura la URL base de la API:
    ```js
-   const API_BASE         = 'https://agenciadevalores-api.vercel.app/api';
-   const API_KEY_INVESTOR = 'tu-investor-key';
-   const API_KEY_ADMIN    = 'tu-admin-key';  // ⚠️ Solo si el portal es privado
+   const API_BASE = 'https://agenciadevalores-api.vercel.app/api';
    ```
-2. Desplegar `index.html` en Vercel como sitio estático
+   Ya **no** se hardcodean API keys en el HTML: tras el login, `/api/auth`
+   emite un session token efímero (12 h) que el frontend envía en la cabecera
+   `x-session-token`. El backend resuelve el rol a partir de ese token.
+2. Desplegar `index.html` y `portal.html` en Vercel como sitio estático.
+
+### Autenticación — cómo funciona ahora
+- El usuario hace login contra `/api/auth` con `{ username, password }`.
+- El backend valida contra MongoDB y responde con `sessionToken` (aleatorio, 32 bytes)
+  y `role` (`admin` o `investor`).
+- El frontend guarda la sesión (incluido el token) en `localStorage` y adjunta
+  `x-session-token: <token>` en cada llamada a la API.
+- El middleware `lib/auth.js` valida el token contra la colección `sessions`
+  de MongoDB y determina el rol. Los tokens caducan automáticamente (TTL index).
+- Logout → `POST /api/auth { action: 'logout' }` revoca el token en backend.
+- Las claves `API_KEY_*` sobreviven como fallback server-to-server para
+  scripts de administración o migraciones; ningún cliente las expone.
 
 ### Credenciales iniciales (después del seed)
 - Admin: `admin` / `Admin2024!`

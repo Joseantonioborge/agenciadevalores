@@ -1,8 +1,10 @@
-// api/auth.js — Login + Registro en un solo endpoint
-// POST /api/auth  { username, password }             → login
-// POST /api/auth  { action:'register', email, password, name } → registro
+// api/auth.js — Login, registro y logout en un solo endpoint
+// POST /api/auth  { username, password }                        → login  (emite session token)
+// POST /api/auth  { action:'register', email, password, name }  → registro
+// POST /api/auth  { action:'logout' }  + x-session-token        → revoca el token actual
 
 const { getDb } = require('../lib/mongo');
+const { createSession, revokeSession, ensureIndexes } = require('../lib/sessions');
 const crypto    = require('crypto');
 
 function sha256(str)  { return crypto.createHash('sha256').update(str).digest('hex'); }
@@ -13,6 +15,13 @@ module.exports = async (req, res) => {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Método no permitido' });
 
   const body = req.body || {};
+
+  // ── LOGOUT ────────────────────────────────────────────────────────
+  if (body.action === 'logout') {
+    const token = (req.headers['x-session-token'] || '').trim();
+    await revokeSession(token);
+    return res.status(200).json({ ok: true });
+  }
 
   // ── REGISTRO ──────────────────────────────────────────────────────
   if (body.action === 'register') {
@@ -49,6 +58,7 @@ module.exports = async (req, res) => {
   if (!username || !password) return res.status(400).json({ error: 'username y password requeridos' });
 
   try {
+    await ensureIndexes();
     const db     = await getDb();
     const lookup = username.toLowerCase().trim();
     const user   = await db.collection('inversores').findOne(
@@ -58,9 +68,15 @@ module.exports = async (req, res) => {
     if (!user) return res.status(401).json({ error: 'Usuario no encontrado' });
     if (user.password !== sha256(password)) return res.status(401).json({ error: 'Contraseña incorrecta' });
 
+    const role = user.role === 'admin' ? 'admin' : 'investor';
+    const { token, expiresAt } = await createSession(user.username || username, role);
+
     return res.status(200).json({
-      ok: true, username: user.username || username,
-      name: user.name, email: user.email, role: user.role,
+      ok: true,
+      sessionToken: token,
+      expiresAt: expiresAt.toISOString(),
+      username: user.username || username,
+      name: user.name, email: user.email, role,
       watchlist: user.watchlist || [], lang: user.lang || 'es',
       riskProfile: user.riskProfile || null,
     });

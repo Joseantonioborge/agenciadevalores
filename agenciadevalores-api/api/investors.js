@@ -9,8 +9,8 @@ function sha256(str) {
 module.exports = async (req, res) => {
   if (req.method === 'OPTIONS') return res.status(200).end();
 
-  const role = getRole(req);
-  if (!role) return res.status(401).json({ error: 'API key inválida o ausente' });
+  const role = await getRole(req);
+  if (!role) return res.status(401).json({ error: 'Sesión inválida o ausente' });
 
   try {
     const db = await getDb();
@@ -18,14 +18,14 @@ module.exports = async (req, res) => {
 
     // GET — listar inversores (solo admin)
     if (req.method === 'GET') {
-      if (!requireRole(req, res, 'admin')) return;
+      if (!(await requireRole(req, res, 'admin'))) return;
       const investors = await col.find({}, { projection: { password: 0 } }).toArray();
       return res.status(200).json({ investors });
     }
 
     // POST — crear inversor (solo admin)
     if (req.method === 'POST') {
-      if (!requireRole(req, res, 'admin')) return;
+      if (!(await requireRole(req, res, 'admin'))) return;
       const { username, password, name, email, watchlist } = req.body || {};
       if (!username || !password || !name || !email) {
         return res.status(400).json({ error: 'username, password, name y email son requeridos' });
@@ -87,7 +87,7 @@ module.exports = async (req, res) => {
 
     // DELETE — eliminar inversor (solo admin)
     if (req.method === 'DELETE') {
-      if (!requireRole(req, res, 'admin')) return;
+      if (!(await requireRole(req, res, 'admin'))) return;
       const { username } = req.query;
       if (!username) return res.status(400).json({ error: 'username requerido en query' });
       const result = await col.deleteOne({ username: username.toLowerCase().trim(), role: { $ne: 'admin' } });
