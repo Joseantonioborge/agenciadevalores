@@ -2146,7 +2146,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
   <div class="nav-logo">
     <img class="nav-logo-img" src="assets/logo-genz-icon.svg" alt="GenZ Invest">
     GenZ Invest
-    <span class="nav-version">v3.10.1</span>
+    <span class="nav-version">v3.10.2</span>
   </div>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="showSection('Mercados')">Mercados</button>
@@ -4197,43 +4197,24 @@ function _skipAndLogout() {
 }
 
 function _doLogout() {
-  // Ocultar modal
-  const modal = document.getElementById('modalLogoutRating');
-  modal.style.display = 'none';
-  document.body.style.overflow = '';
-  // Revocar el session token en el backend (no bloqueante).
-  const token = _session?.sessionToken;
-  if (token) {
-    fetch(`${API_BASE}/auth`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-session-token': token },
-      body: JSON.stringify({ action: 'logout' }),
-    }).catch(() => {});
-  }
-  // Limpiar sesión
-  _session = null;
-  localStorage.removeItem('AV_SESSION');
-  _favorites = new Set();
-  localStorage.removeItem('AV_FAVORITES');
-  // Reset tab state
-  _invTab          = 'mercados';
-  _newsData        = [];
-  _newsFilter      = 'todos';
-  _carteras        = [];
-  _carterasLoaded  = false;
-  _fondosLoaded    = false;
-  _fondosSelected  = new Set();
-  _cryptoLoaded    = false;
-  _cryptoData      = [];
-  _tradingLoaded   = false;
-  _propuestasLoaded = false;
-  _cryptoSelectedId = null;
-  if (_cryptoChart) { try { _cryptoChart.remove(); } catch(_){} _cryptoChart = null; _cryptoSeries = null; }
-  _finbotHistory   = [];
-  _finbotGreeted   = false;
-  finbotSetVisible(false);
-  // Redirigir a la landing tras cerrar sesión (la sesión ya se ha limpiado arriba)
-  window.location.href = 'index.html';
+  // Limpieza crítica (persistente): borrar storage y revocar token antes de redirigir.
+  // El resto del estado in-memory se descarta al navegar, así que lo envolvemos
+  // en try/catch para que un fallo del DOM no bloquee la redirección.
+  try {
+    const token = _session?.sessionToken;
+    if (token) {
+      fetch(`${API_BASE}/auth`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-session-token': token },
+        body: JSON.stringify({ action: 'logout' }),
+      }).catch(() => {});
+    }
+    localStorage.removeItem('AV_SESSION');
+    localStorage.removeItem('AV_FAVORITES');
+    _session = null;
+  } catch(_) {}
+  // Redirigir a la landing — usamos replace() para no mantener el portal en el historial.
+  window.location.replace('index.html');
 }
 
 function restoreSession() {
