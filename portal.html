@@ -1899,6 +1899,8 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .cc-pv-badge.recommended{background:rgba(16,185,129,.15);color:#10B981}
 .cc-pv-badge.premium{background:rgba(139,92,246,.15);color:#8B5CF6}
 .cc-pv-badge.classic{background:rgba(245,158,11,.15);color:#F59E0B}
+.cc-pv-cta{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:12px;padding:9px 14px;border-radius:9px;background:linear-gradient(135deg,#2563EB 0%,#10B981 100%);color:#fff;font-size:.82rem;font-weight:700;text-decoration:none;letter-spacing:.02em;box-shadow:0 2px 10px rgba(37,99,235,.22);transition:.18s}
+.cc-pv-cta:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(37,99,235,.32);filter:brightness(1.08)}
 .cc-impl-steps{display:flex;flex-direction:column;gap:12px;margin-bottom:18px}
 .cc-impl-step{display:flex;gap:12px;align-items:flex-start}
 .cc-impl-num{width:28px;height:28px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.75rem;flex-shrink:0}
@@ -2103,7 +2105,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
   <div class="nav-logo">
     <img class="nav-logo-img" src="assets/logo-genz-icon.svg" alt="GenZ Invest">
     GenZ Invest
-    <span class="nav-version">v3.8.0</span>
+    <span class="nav-version">v3.9.0</span>
   </div>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="showSection('Mercados')">Mercados</button>
@@ -2649,6 +2651,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
             </div>
             <div class="crypto-chart-controls">
               <div class="crypto-period-pills">
+                <button class="crypto-period-pill" id="cryptoPeriod1"  onclick="setCryptoPeriod(1)"  >1D</button>
                 <button class="crypto-period-pill" id="cryptoPeriod7"  onclick="setCryptoPeriod(7)"  >7D</button>
                 <button class="crypto-period-pill active" id="cryptoPeriod30" onclick="setCryptoPeriod(30)" >30D</button>
                 <button class="crypto-period-pill" id="cryptoPeriod90" onclick="setCryptoPeriod(90)" >90D</button>
@@ -8952,6 +8955,7 @@ const CC_PROVIDERS = [
     minInversion: '150 €', comGestion: '0.15 – 0.30 %', comCustodia: '0 %',
     comCompra: '0 €', planAportacion: 'Sí · Desde 150 €/mes', rebalanceo: 'Automático',
     fondos: 'Vanguard, iShares, Amundi', nota: 'Mejor relación coste-calidad. Sin comisiones de custodia ni de compra. Ideal para carteras indexadas.',
+    url: 'https://myinvestor.es/inversion/carteras-automatizadas/',
   },
   {
     name: 'Indexa Capital', type: 'Robo-Advisor · Gestión Automatizada',
@@ -8959,6 +8963,7 @@ const CC_PROVIDERS = [
     minInversion: '3.000 €', comGestion: '0.18 – 0.44 %', comCustodia: 'Incluida',
     comCompra: '0 €', planAportacion: 'Sí · Desde 150 €/mes', rebalanceo: 'Automático + Fiscal',
     fondos: 'Vanguard Institutional', nota: 'Gestión 100% automatizada con optimización fiscal. Rebalanceo inteligente. Clases institucionales Vanguard con TER ultra-bajo.',
+    url: 'https://indexacapital.com/es/esp/questions/funds',
   },
   {
     name: 'Openbank', type: 'Banco Digital · Grupo Santander',
@@ -8966,6 +8971,7 @@ const CC_PROVIDERS = [
     minInversion: '500 €', comGestion: '0.50 – 1.20 %', comCustodia: '0.10 %',
     comCompra: '0 – 10 €', planAportacion: 'Sí · Desde 50 €/mes', rebalanceo: 'Manual',
     fondos: 'Santander AM, Amundi, BlackRock', nota: 'Amplio catálogo de fondos nacionales e internacionales. Seguridad de gran banco. Mayor coste que opciones indexadas.',
+    url: 'https://www.openbank.es/inversion/fondos-inversion',
   },
   {
     name: 'Renta 4', type: 'Broker Nacional · Fondos + Acciones',
@@ -8973,6 +8979,7 @@ const CC_PROVIDERS = [
     minInversion: '100 €', comGestion: '0.50 – 1.50 %', comCustodia: '0.033 %/mes',
     comCompra: '0 € (fondos)', planAportacion: 'Sí · Sin mínimo', rebalanceo: 'Manual',
     fondos: '10.000+ fondos · Todas las gestoras', nota: 'Mayor catálogo de fondos de España. Permite combinar fondos, ETFs y acciones en una sola cuenta. Ideal si quieres personalización máxima.',
+    url: 'https://www.renta4.com/fondos-inversion',
   },
 ];
 
@@ -9150,6 +9157,7 @@ function _ccRenderStep() {
               <div class="cc-pv-row"><span class="cc-pv-label">Rebalanceo</span><span class="cc-pv-val">${pv.rebalanceo}</span></div>
               <div class="cc-pv-row"><span class="cc-pv-label">Fondos</span><span class="cc-pv-val" style="font-size:.7rem">${pv.fondos}</span></div>
               <div style="margin-top:10px;padding-top:8px;border-top:1px solid var(--border);font-size:.72rem;color:var(--text2);line-height:1.5">${pv.nota}</div>
+              ${pv.url ? `<a class="cc-pv-cta" href="${pv.url}" target="_blank" rel="noopener noreferrer">Contratar <span style="font-size:.72rem">↗</span></a>` : ''}
             </div>
           `).join('')}
         </div>
@@ -9895,7 +9903,7 @@ function setCryptoFilter(filter) {
 
 function setCryptoPeriod(days) {
   _cryptoPeriod = days;
-  [7,30,90,365].forEach(d => {
+  [1,7,30,90,365].forEach(d => {
     const btn = document.getElementById('cryptoPeriod' + d);
     if (btn) btn.classList.toggle('active', d === days);
   });
