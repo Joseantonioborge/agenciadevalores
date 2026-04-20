@@ -2146,7 +2146,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
   <div class="nav-logo">
     <img class="nav-logo-img" src="assets/logo-genz-icon.svg" alt="GenZ Invest">
     GenZ Invest
-    <span class="nav-version">v3.10.0</span>
+    <span class="nav-version">v3.10.1</span>
   </div>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="showSection('Mercados')">Mercados</button>
@@ -4232,13 +4232,8 @@ function _doLogout() {
   _finbotHistory   = [];
   _finbotGreeted   = false;
   finbotSetVisible(false);
-  if (_marketData.length) { renderMainSection(_marketData); updateTicker(_marketData); }
-  document.getElementById('userBadge').style.display = 'none';
-  document.getElementById('btnRegister').style.display = 'block';
-  document.getElementById('btnLogin').style.display = 'block';
-  document.getElementById('tabAdmin').style.display = 'none';
-  showSection('Mercados');
-  toast('Sesión cerrada', 'ok');
+  // Redirigir a la landing tras cerrar sesión (la sesión ya se ha limpiado arriba)
+  window.location.href = 'index.html';
 }
 
 function restoreSession() {
