@@ -1561,6 +1561,47 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .crypto-refresh-btn{display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:7px;border:1px solid var(--border);background:var(--card);color:var(--text2);font-size:.78rem;font-weight:500;cursor:pointer;font-family:var(--font);transition:.15s}
 .crypto-refresh-btn:hover{background:var(--card2);color:var(--text)}
 .crypto-refresh-btn.spinning svg{animation:spin .7s linear infinite}
+.crypto-buy-btn{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:7px;border:none;background:linear-gradient(135deg,#F7931A 0%,#F59E0B 100%);color:#fff;font-size:.78rem;font-weight:700;cursor:pointer;font-family:var(--font);transition:.18s;box-shadow:0 2px 10px rgba(247,147,26,.28);letter-spacing:.02em}
+.crypto-buy-btn:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(247,147,26,.42);filter:brightness(1.08)}
+
+/* ── BUY CRYPTO MODAL (Exchanges) ─────────────────────────── */
+#buyCryptoModal{position:fixed;inset:0;z-index:320;background:rgba(0,0,0,.65);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s;padding:16px}
+#buyCryptoModal.show{opacity:1;pointer-events:auto}
+.bx-modal{background:var(--card);border:1px solid var(--border);border-radius:18px;width:min(960px,100%);max-height:92vh;overflow-y:auto;padding:0;animation:tmFadeUp .25s ease}
+.bx-header{display:flex;align-items:center;justify-content:space-between;padding:20px 24px 16px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--card);z-index:2;border-radius:18px 18px 0 0}
+.bx-header h3{font-size:1.05rem;font-weight:700;margin:0;display:flex;align-items:center;gap:8px}
+.bx-close{background:none;border:none;color:var(--text2);font-size:1.2rem;cursor:pointer;padding:4px 10px;border-radius:6px}
+.bx-close:hover{background:var(--hover);color:var(--text)}
+.bx-body{padding:20px 24px 24px}
+.bx-sub{font-size:.82rem;color:var(--text2);margin-bottom:18px;line-height:1.55}
+.bx-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+.bx-card{background:var(--hover);border:1px solid var(--border);border-radius:14px;padding:18px;position:relative;display:flex;flex-direction:column;gap:10px;transition:.2s}
+.bx-card:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 6px 22px rgba(0,0,0,.22)}
+.bx-card-head{display:flex;align-items:center;gap:12px}
+.bx-logo{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;font-weight:800;color:#fff;flex-shrink:0}
+.bx-logo.kraken{background:linear-gradient(135deg,#5841D8,#7B68EE)}
+.bx-logo.binance{background:linear-gradient(135deg,#F0B90B,#F8D12F);color:#181A20}
+.bx-logo.coinbase{background:linear-gradient(135deg,#0052FF,#1652F0)}
+.bx-logo.bit2me{background:linear-gradient(135deg,#00D094,#00A676)}
+.bx-name{font-weight:700;font-size:1rem;color:var(--text)}
+.bx-rank{font-size:.64rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:10px;display:inline-block;margin-top:3px}
+.bx-rank.low{background:rgba(16,185,129,.15);color:#10B981}
+.bx-rank.mid{background:rgba(245,158,11,.15);color:#F59E0B}
+.bx-rank.high{background:rgba(99,102,241,.15);color:#818CF8}
+.bx-rows{display:flex;flex-direction:column;gap:4px;font-size:.76rem}
+.bx-row{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px dashed rgba(255,255,255,.06)}
+.bx-row:last-child{border:none}
+.bx-row-lbl{color:var(--text3)}
+.bx-row-val{color:var(--text);font-weight:600;font-family:monospace}
+.bx-note{font-size:.72rem;color:var(--text2);line-height:1.5;padding-top:8px;border-top:1px solid var(--border)}
+.bx-cta{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:4px;padding:10px 14px;border-radius:9px;background:linear-gradient(135deg,#2563EB 0%,#10B981 100%);color:#fff;font-size:.85rem;font-weight:700;text-decoration:none;letter-spacing:.02em;box-shadow:0 2px 10px rgba(37,99,235,.22);transition:.18s}
+.bx-cta:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(37,99,235,.32);filter:brightness(1.08)}
+.bx-disclaimer{margin-top:18px;padding:12px 14px;background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.22);border-radius:10px;font-size:.72rem;color:var(--text2);line-height:1.55}
+@media(max-width:600px){
+  .bx-modal{border-radius:16px 16px 0 0;max-height:95vh}
+  #buyCryptoModal{align-items:flex-end;padding:0}
+  .bx-grid{grid-template-columns:1fr}
+}
 /* Currency toggle */
 .crypto-currency-row{display:flex;align-items:center;gap:8px;margin-bottom:16px}
 .crypto-currency-label{font-size:.78rem;color:var(--text3);font-weight:500}
@@ -2105,7 +2146,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
   <div class="nav-logo">
     <img class="nav-logo-img" src="assets/logo-genz-icon.svg" alt="GenZ Invest">
     GenZ Invest
-    <span class="nav-version">v3.9.0</span>
+    <span class="nav-version">v3.10.0</span>
   </div>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="showSection('Mercados')">Mercados</button>
@@ -2599,6 +2640,10 @@ tr:hover td{background:rgba(255,255,255,.02)}
         <div class="crypto-topbar-right">
           <span class="crypto-src-badge" data-i18n="fuente_cg">📡 CoinGecko</span>
           <span class="crypto-updated" id="cryptoUpdated">—</span>
+          <button class="crypto-buy-btn" onclick="openBuyCryptoModal()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+            <span>Comprar Crypto</span>
+          </button>
           <button class="crypto-refresh-btn" id="cryptoRefreshBtn" onclick="refreshCryptoData()">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
             <span data-i18n="btn_actualizar">Actualizar</span>
@@ -9880,6 +9925,94 @@ async function refreshCryptoData() {
   await loadCryptoMarket();
   _cryptoRefreshing = false;
   if (btn) btn.classList.remove('spinning');
+}
+
+/* ── Buy Crypto Modal (Exchanges) ────────────────────────── */
+const CRYPTO_EXCHANGES = [
+  {
+    id: 'binance', name: 'Binance', logo: 'B', logoCls: 'binance',
+    rank: 'low', rankLabel: 'Comisiones más bajas',
+    spot: '0.10 % / 0.10 %', spotWithToken: '0.075 % con BNB',
+    deposito: 'Gratis (SEPA)', retiro: 'Variable · desde 0,8 €',
+    minDeposito: '1 €',
+    nota: 'Mayor volumen mundial. Comisiones ultra-bajas si pagas con BNB. Regulada como MiCA en la UE. +350 criptos disponibles.',
+    url: 'https://www.binance.com/es',
+  },
+  {
+    id: 'kraken', name: 'Kraken', logo: 'K', logoCls: 'kraken',
+    rank: 'low', rankLabel: 'Seguridad + coste',
+    spot: '0.16 % maker / 0.26 % taker', spotWithToken: '—',
+    deposito: 'Gratis (SEPA)', retiro: '0,90 € (SEPA)',
+    minDeposito: '1 €',
+    nota: 'Reconocido por su seguridad y reservas auditadas (Proof-of-Reserves). Comisiones competitivas en Pro. Soporte 24/7 en español.',
+    url: 'https://www.kraken.com/es-es',
+  },
+  {
+    id: 'bit2me', name: 'Bit2Me', logo: '₿', logoCls: 'bit2me',
+    rank: 'mid', rankLabel: 'Español · MiCA',
+    spot: '0.99 % (retail) · desde 0,10 % (Pro)', spotWithToken: 'Descuentos con B2M',
+    deposito: 'Gratis (SEPA) · 1,5 % tarjeta', retiro: 'Variable',
+    minDeposito: '1 €',
+    nota: 'Exchange español con licencia MiCA. Registrado en el Banco de España. Interfaz en español y soporte local. Ideal para iniciarse.',
+    url: 'https://bit2me.com/es',
+  },
+  {
+    id: 'coinbase', name: 'Coinbase', logo: 'C', logoCls: 'coinbase',
+    rank: 'high', rankLabel: 'Premium · NASDAQ',
+    spot: '0.40 % maker / 0.60 % taker (Advanced)', spotWithToken: '1,49 % (Simple)',
+    deposito: 'Gratis (SEPA)', retiro: '0,15 € (SEPA)',
+    minDeposito: '2 €',
+    nota: 'Cotiza en NASDAQ (COIN). Máxima confianza institucional y seguro FDIC sobre saldos USD. Comisiones más altas en la app básica — usa Advanced Trade.',
+    url: 'https://www.coinbase.com/es',
+  },
+];
+
+function openBuyCryptoModal() {
+  let m = document.getElementById('buyCryptoModal');
+  if (!m) {
+    m = document.createElement('div');
+    m.id = 'buyCryptoModal';
+    m.addEventListener('click', e => { if (e.target === m) closeBuyCryptoModal(); });
+    m.innerHTML = `<div class="bx-modal">
+      <div class="bx-header">
+        <h3>🛒 Comprar Crypto · Mejores Exchanges</h3>
+        <button class="bx-close" onclick="closeBuyCryptoModal()">✕</button>
+      </div>
+      <div class="bx-body">
+        <p class="bx-sub">Comparativa de los 4 exchanges más utilizados en España, ordenados por coste total de operar. Haz clic en <strong>Operar</strong> para abrir su plataforma en una pestaña nueva.</p>
+        <div class="bx-grid">
+          ${CRYPTO_EXCHANGES.map(ex => `
+            <div class="bx-card">
+              <div class="bx-card-head">
+                <div class="bx-logo ${ex.logoCls}">${ex.logo}</div>
+                <div>
+                  <div class="bx-name">${ex.name}</div>
+                  <span class="bx-rank ${ex.rank}">${ex.rankLabel}</span>
+                </div>
+              </div>
+              <div class="bx-rows">
+                <div class="bx-row"><span class="bx-row-lbl">Spot (maker/taker)</span><span class="bx-row-val">${ex.spot}</span></div>
+                <div class="bx-row"><span class="bx-row-lbl">Con token propio</span><span class="bx-row-val">${ex.spotWithToken}</span></div>
+                <div class="bx-row"><span class="bx-row-lbl">Depósito</span><span class="bx-row-val">${ex.deposito}</span></div>
+                <div class="bx-row"><span class="bx-row-lbl">Retiro</span><span class="bx-row-val">${ex.retiro}</span></div>
+                <div class="bx-row"><span class="bx-row-lbl">Mínimo</span><span class="bx-row-val">${ex.minDeposito}</span></div>
+              </div>
+              <div class="bx-note">${ex.nota}</div>
+              <a class="bx-cta" href="${ex.url}" target="_blank" rel="noopener noreferrer">Operar en ${ex.name} <span style="font-size:.72rem">↗</span></a>
+            </div>
+          `).join('')}
+        </div>
+        <div class="bx-disclaimer">⚠️ Las comisiones indicadas son orientativas y pueden variar según el nivel de actividad, método de pago o promociones vigentes. Verifica siempre las condiciones actualizadas en la web oficial del exchange antes de operar. Invertir en criptoactivos conlleva riesgo de pérdida total.</div>
+      </div>
+    </div>`;
+    document.body.appendChild(m);
+  }
+  requestAnimationFrame(() => m.classList.add('show'));
+}
+
+function closeBuyCryptoModal() {
+  const m = document.getElementById('buyCryptoModal');
+  if (m) m.classList.remove('show');
 }
 
 function setCryptoCurrency(cur) {
