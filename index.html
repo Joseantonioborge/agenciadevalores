@@ -365,6 +365,26 @@ a:hover{text-decoration:underline}
 }
 .ln-reg-back:hover{color:var(--text);border-color:var(--text3)}
 
+/* ── MOBILE DRAWER / BACKDROP / BOTTOM-NAV (base) ────── */
+.ln-mobile-backdrop{
+  position:fixed;inset:0;z-index:95;background:rgba(15,23,42,.45);
+  backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);
+  opacity:0;pointer-events:none;transition:opacity .2s;
+}
+.ln-mobile-backdrop.open{opacity:1;pointer-events:auto}
+.ln-bottom-nav{display:none}
+.ln-bottom-nav-item{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:3px;padding:8px 4px;background:none;border:none;cursor:pointer;
+  color:var(--text3);font-size:.64rem;font-weight:600;font-family:var(--font);
+  text-decoration:none;transition:color .15s;min-width:0;
+}
+.ln-bottom-nav-item.active{color:var(--accent)}
+.ln-bottom-nav-item:hover{color:var(--accent);text-decoration:none}
+.ln-bottom-nav-item.primary{color:var(--accent)}
+.ln-bottom-nav-ico{font-size:1.22rem;line-height:1}
+.ln-bottom-nav-label{line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+
 /* ── RESPONSIVE ──────────────────────────────────────── */
 @media(max-width:1024px){
   .ln-hero-inner{grid-template-columns:1fr;text-align:center}
@@ -381,16 +401,132 @@ a:hover{text-decoration:underline}
   .ln-footer-grid{grid-template-columns:1fr 1fr}
 }
 @media(max-width:768px){
-  .ln-nav-links{display:none}
-  .ln-mobile-toggle{display:block}
-  .ln-features-grid{grid-template-columns:1fr}
-  .ln-pricing-grid{grid-template-columns:repeat(2,1fr)}
-  .ln-stats-inner{grid-template-columns:repeat(2,1fr);gap:20px}
-  .ln-footer-grid{grid-template-columns:1fr}
+  /* ── Nav compacta tipo app ─────────────────────────── */
+  .ln-nav{height:56px;padding:0 14px}
+  .ln-logo{font-size:1rem;gap:8px}
+  .ln-logo-img{height:28px}
+  .ln-btn-ghost{display:none}
+  .ln-btn-primary{padding:7px 14px;font-size:.8rem}
+  .ln-mobile-toggle{display:flex;align-items:center;justify-content:center;width:38px;height:38px;font-size:1.3rem;border-radius:10px}
+  .ln-mobile-toggle:hover{background:var(--bg2)}
+  .ln-nav-right{gap:6px}
+
+  /* ── Drawer lateral en lugar de dropdown ───────────── */
+  .ln-nav-links{
+    display:flex;position:fixed;top:0;right:0;bottom:0;
+    width:min(300px,84vw);background:#fff;
+    flex-direction:column;align-items:stretch;gap:4px;
+    padding:74px 14px calc(28px + env(safe-area-inset-bottom));
+    z-index:110;box-shadow:-10px 0 36px rgba(15,23,42,.14);
+    transform:translateX(105%);transition:transform .28s ease;
+    overflow-y:auto;
+  }
+  .ln-nav-links.open{transform:translateX(0)}
+  .ln-nav-link{
+    padding:13px 14px;font-size:.95rem;border-radius:10px;
+    display:flex;align-items:center;gap:10px;color:var(--text);
+  }
+  .ln-nav-link:hover{background:var(--bg2)}
+
+  /* ── Secciones: paddings ajustados ─────────────────── */
+  .ln-section{padding:44px 16px}
+  .ln-section-sub{margin-bottom:26px;font-size:.98rem}
+  .ln-section-title{font-size:1.75rem}
+
+  /* ── Hero más compacto ─────────────────────────────── */
+  .ln-hero{min-height:auto;padding:80px 16px 36px}
+  .ln-hero-text h1{font-size:2rem;margin-bottom:14px}
+  .ln-hero-text p{font-size:1rem;margin-bottom:22px}
+  .ln-hero-logo{width:110px;margin-bottom:12px}
+  .ln-hero-ctas{gap:10px;flex-direction:column;align-items:stretch}
+  .ln-cta-big,.ln-cta-outline{padding:13px 18px;font-size:.95rem;width:100%}
+  .ln-hero-badges{gap:12px 18px;margin-top:24px;justify-content:center}
+  .ln-badge{font-size:.78rem}
+  .ln-dashboard-preview{padding:16px;border-radius:14px}
+  .ln-sparkline-row{gap:8px}
+  .ln-sparkline-card{padding:10px 6px}
+  .ln-spark-val{font-size:1rem}
+
+  /* ── Grids ─────────────────────────────────────────── */
+  .ln-features-grid{grid-template-columns:1fr;gap:14px}
+  .ln-feature-card{padding:20px 18px;border-radius:12px}
+  .ln-pricing-grid{grid-template-columns:repeat(2,1fr);gap:12px}
+  .ln-price-card{padding:22px 14px}
+  .ln-price-value{font-size:1.9rem}
+  .ln-stats-inner{grid-template-columns:repeat(2,1fr);gap:22px}
+  .ln-stats-bar{padding:34px 16px}
+  .ln-stat-num{font-size:1.85rem}
+  .ln-showcase{gap:22px;margin-bottom:40px}
+  .ln-showcase-img{min-height:240px;padding:18px}
+  .ln-showcase-text h3{font-size:1.3rem}
+  .ln-testimonials-grid{grid-template-columns:1fr;gap:14px}
+  .ln-testimonial{padding:22px 20px}
+  .ln-cta-banner{padding:44px 18px}
+  .ln-cta-banner h2{font-size:1.55rem}
+  .ln-cta-banner p{font-size:.95rem}
+  .ln-finbot-demo{margin:0 auto}
+
+  /* ── Ticker strip más compacto ─────────────────────── */
+  .ln-ticker-strip{padding:8px 0}
+  .ln-ticker-item{padding:0 16px;font-size:.75rem}
+
+  /* ── Footer con margen para bottom-nav ─────────────── */
+  .ln-footer{padding:36px 18px 24px}
+  .ln-footer-grid{grid-template-columns:1fr;gap:26px;margin-bottom:26px}
   .ln-footer-bottom{flex-direction:column;text-align:center}
+
+  /* ── Bottom app-nav visible ────────────────────────── */
+  .ln-bottom-nav{
+    display:flex;position:fixed;left:0;right:0;bottom:0;z-index:90;
+    background:rgba(255,255,255,.98);
+    backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+    border-top:1px solid var(--border);
+    box-shadow:0 -4px 20px rgba(15,23,42,.06);
+    padding:6px 4px calc(6px + env(safe-area-inset-bottom));
+  }
+  /* Reservar espacio para que la bottom-nav no tape contenido */
+  body{padding-bottom:calc(66px + env(safe-area-inset-bottom))}
+
+  /* ── Modales como bottom-sheet ─────────────────────── */
+  .ln-modal-overlay{align-items:flex-end}
+  .ln-modal{
+    width:100vw!important;max-width:100vw!important;
+    border-radius:22px 22px 0 0;
+    padding:24px 20px calc(24px + env(safe-area-inset-bottom));
+    max-height:92vh;transform:translateY(100%);transition:transform .28s;
+  }
+  .ln-modal-overlay.show .ln-modal{transform:translateY(0)}
+  .ln-modal::before{
+    content:'';position:absolute;top:8px;left:50%;transform:translateX(-50%);
+    width:42px;height:4px;border-radius:3px;background:var(--border);
+  }
+  .ln-modal-close{top:14px;right:14px}
+
+  /* ── FAQ más legible ───────────────────────────────── */
+  .ln-faq-q{font-size:.95rem}
+  .ln-reg-options-grid,.ln-reg-multi-grid{gap:6px}
 }
 @media(max-width:480px){
+  .ln-logo{font-size:.92rem}
+  .ln-logo-img{height:26px}
   .ln-pricing-grid{grid-template-columns:1fr}
+  .ln-hero-text h1{font-size:1.7rem}
+  .ln-hero-text p{font-size:.95rem}
+  .ln-hero-badges{gap:10px 18px}
+  .ln-section-title{font-size:1.5rem}
+  .ln-section{padding:36px 14px}
+  .ln-stats-inner{gap:14px}
+  .ln-stat-num{font-size:1.55rem}
+  .ln-stat-label{font-size:.78rem}
+  .ln-footer-legal{font-size:.72rem}
+  .ln-bottom-nav-label{font-size:.58rem}
+  .ln-bottom-nav-ico{font-size:1.15rem}
+  .ln-showcase-img{min-height:200px}
+}
+@media(max-width:360px){
+  .ln-btn-primary{padding:6px 10px;font-size:.74rem}
+  .ln-nav{padding:0 10px}
+  .ln-mobile-toggle{width:34px;height:34px}
 }
 </style>
 </head>
@@ -1287,14 +1423,29 @@ function togglePw(btn) {
   btn.title = show ? 'Ocultar contraseña' : 'Mostrar contraseña';
 }
 
-// ── Mobile menu ──────────────────────────────────────────────────
+// ── Mobile menu (drawer lateral con backdrop) ───────────────────
 function toggleMobileMenu() {
   const links = document.querySelector('.ln-nav-links');
-  if (links.style.display === 'flex') {
-    links.style.display = 'none';
-  } else {
-    links.style.cssText = 'display:flex;position:fixed;top:64px;left:0;right:0;background:#fff;flex-direction:column;padding:16px;border-bottom:1px solid var(--border);z-index:99;box-shadow:0 8px 24px rgba(0,0,0,.08)';
-  }
+  const backdrop = document.getElementById('mobileBackdrop');
+  const toggle = document.querySelector('.ln-mobile-toggle');
+  const open = links.classList.toggle('open');
+  if (backdrop) backdrop.classList.toggle('open', open);
+  if (toggle) toggle.textContent = open ? '✕' : '☰';
+  document.body.style.overflow = open ? 'hidden' : '';
+}
+function closeMobileMenu() {
+  const links = document.querySelector('.ln-nav-links');
+  const backdrop = document.getElementById('mobileBackdrop');
+  const toggle = document.querySelector('.ln-mobile-toggle');
+  if (links) links.classList.remove('open');
+  if (backdrop) backdrop.classList.remove('open');
+  if (toggle) toggle.textContent = '☰';
+  document.body.style.overflow = '';
+}
+function mobileScrollTo(selector) {
+  closeMobileMenu();
+  const t = document.querySelector(selector);
+  if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 // ── FAQ toggle ───────────────────────────────────────────────────
@@ -1308,6 +1459,7 @@ document.querySelectorAll('.ln-nav-link[href^="#"]').forEach(a => {
     e.preventDefault();
     const target = document.querySelector(a.getAttribute('href'));
     if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    closeMobileMenu();
   });
 });
 
@@ -1544,6 +1696,59 @@ window.addEventListener('scroll', () => {
   const nav = document.querySelector('.ln-nav');
   nav.style.boxShadow = window.scrollY > 20 ? '0 2px 12px rgba(0,0,0,.06)' : 'none';
 });
+
+// ── Bottom nav: resaltar sección activa al hacer scroll ─────────
+(function(){
+  const map = [
+    { id:'inicio', sel:'.ln-hero' },
+    { id:'mercados', sel:'#markets' },
+    { id:'finbot', sel:'#finbot' },
+    { id:'pricing', sel:'#pricing' }
+  ];
+  function updateActive(){
+    if (window.innerWidth > 768) return;
+    const y = window.scrollY + 120;
+    let active = 'inicio';
+    for (const m of map) {
+      const el = document.querySelector(m.sel);
+      if (el && el.offsetTop <= y) active = m.id;
+    }
+    document.querySelectorAll('.ln-bottom-nav-item[data-bn]').forEach(b => {
+      b.classList.toggle('active', b.getAttribute('data-bn') === active);
+    });
+  }
+  window.addEventListener('scroll', updateActive, { passive:true });
+  window.addEventListener('resize', updateActive);
+  document.addEventListener('DOMContentLoaded', updateActive);
+})();
 </script>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     MOBILE: backdrop del drawer + barra inferior tipo app
+     ═══════════════════════════════════════════════════════════════ -->
+<div class="ln-mobile-backdrop" id="mobileBackdrop" onclick="closeMobileMenu()"></div>
+
+<nav class="ln-bottom-nav" aria-label="Navegación principal móvil">
+  <a class="ln-bottom-nav-item" data-bn="inicio" href="#" onclick="event.preventDefault();mobileScrollTo('body')">
+    <span class="ln-bottom-nav-ico">🏠</span>
+    <span class="ln-bottom-nav-label">Inicio</span>
+  </a>
+  <a class="ln-bottom-nav-item" data-bn="mercados" href="#markets" onclick="event.preventDefault();mobileScrollTo('#markets')">
+    <span class="ln-bottom-nav-ico">📈</span>
+    <span class="ln-bottom-nav-label">Mercados</span>
+  </a>
+  <a class="ln-bottom-nav-item" data-bn="finbot" href="#finbot" onclick="event.preventDefault();mobileScrollTo('#finbot')">
+    <span class="ln-bottom-nav-ico">🤖</span>
+    <span class="ln-bottom-nav-label">FinBot</span>
+  </a>
+  <a class="ln-bottom-nav-item" data-bn="pricing" href="#pricing" onclick="event.preventDefault();mobileScrollTo('#pricing')">
+    <span class="ln-bottom-nav-ico">💎</span>
+    <span class="ln-bottom-nav-label">Tarifas</span>
+  </a>
+  <button class="ln-bottom-nav-item primary" onclick="closeMobileMenu();openLogin()">
+    <span class="ln-bottom-nav-ico">👤</span>
+    <span class="ln-bottom-nav-label">Acceder</span>
+  </button>
+</nav>
 </body>
 </html>
