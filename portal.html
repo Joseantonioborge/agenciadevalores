@@ -1416,6 +1416,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
 /* ===== INFORME DE CARTERA ===== */
 .cart-report-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px}
 .cart-report-title{font-size:1.0rem;font-weight:600;color:var(--text2)}
+.cart-report-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .cart-report-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;background:linear-gradient(135deg,#1e3a8a,#2563EB);color:#fff;border:none;border-radius:10px;font-size:.83rem;font-weight:700;cursor:pointer;transition:.2s;font-family:var(--font);letter-spacing:.02em}
 .cart-report-btn:hover{background:linear-gradient(135deg,#2563EB,#3b82f6);box-shadow:0 4px 18px rgba(37,99,235,.45);transform:translateY(-1px)}
 .cart-report-btn:active{transform:scale(.98)}
@@ -7310,9 +7311,12 @@ function renderCarteras() {
     <!-- ── Barra de acciones ── -->
     <div class="cart-report-bar">
       <div class="cart-report-title">${t('mi_cartera_title')}</div>
-      <button class="cart-report-btn" onclick="generateCarteraReport()">
-        ${t('descargar_informe')}
-      </button>
+      <div class="cart-report-actions">
+        <button class="cart-new-btn" onclick="openCarteraModal()">${t('nueva_cartera')}</button>
+        <button class="cart-report-btn" onclick="generateCarteraReport()">
+          ${t('descargar_informe')}
+        </button>
+      </div>
     </div>
 
     <!-- ── KPIs ── -->
@@ -7417,11 +7421,6 @@ function renderCarteras() {
     <!-- ── Lista de carteras ── -->
     <div class="cart-list">
       ${_carteras.map(c => _renderCarteraCard(c)).join('')}
-    </div>
-
-    <!-- FAB -->
-    <div class="cart-fab">
-      <button class="cart-new-btn" onclick="openCarteraModal()">${t('nueva_cartera')}</button>
     </div>`;
 
   // Dibuja donut y proyección tras render — animado
