@@ -2113,6 +2113,98 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .promo-close:hover{color:#fff}
 .promo-note{font-size:.68rem;color:#475569;margin-top:16px}
 @media(max-width:480px){.promo-card{padding:28px 20px 24px}.promo-features{grid-template-columns:1fr}.promo-icons{font-size:1.8rem}.promo-title{font-size:1.15rem}}
+
+/* ════════════════════════════════════════════════════════════════
+   MOBILE BOTTOM NAV — Experiencia tipo app nativa
+   Oculto en desktop · visible en ≤860px
+═══════════════════════════════════════════════════════════════════ */
+#mobileBottomNav{display:none}
+.mbn-item{
+  flex:1 1 0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:3px;background:transparent;border:none;cursor:pointer;color:var(--text3);
+  padding:8px 4px 6px;border-radius:12px;
+  font-family:var(--font);font-size:.62rem;font-weight:600;letter-spacing:.02em;line-height:1;
+  transition:color .18s,background .18s,transform .12s;
+  -webkit-tap-highlight-color:transparent;position:relative;
+}
+.mbn-item:active{transform:scale(.93)}
+.mbn-icon{font-size:1.25rem;line-height:1;display:block;transition:transform .18s}
+.mbn-label{display:block;line-height:1;text-transform:none}
+.mbn-item:hover{color:var(--text2)}
+.mbn-item.active{color:var(--accent);background:rgba(37,99,235,.12)}
+.mbn-item.active .mbn-icon{transform:scale(1.06)}
+.mbn-item.active::before{
+  content:"";position:absolute;top:3px;left:50%;transform:translateX(-50%);
+  width:22px;height:3px;border-radius:2px;background:var(--accent);
+  box-shadow:0 0 8px rgba(37,99,235,.6);
+}
+
+@media(max-width:860px){
+  /* Mostrar bottom nav fijo abajo. z-index 120: por encima del top-nav (100)
+     pero por debajo de drawer/modales (149+) y promo (400) para no taparlos.
+     Se anulan los estilos heredados del selector global `nav` (top:0, padding lateral). */
+  #mobileBottomNav{
+    display:flex!important;align-items:stretch;justify-content:space-around;
+    position:fixed!important;top:auto!important;bottom:0!important;left:0;right:0;
+    height:auto!important;border-bottom:none!important;border-top:1px solid var(--border)!important;
+    z-index:120!important;
+    background:rgba(10,14,26,.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+    padding:5px 6px calc(5px + env(safe-area-inset-bottom)) 6px;
+    box-shadow:0 -8px 24px rgba(0,0,0,.5);
+    gap:2px;
+  }
+  /* Liberar el header: quitar tabs y CTAs (van al bottom) */
+  .nav-tabs{display:none!important}
+  #btnRegister,#btnLogin{display:none!important}
+  /* Header más compacto en móvil — solo logo + badge */
+  nav{padding:0 14px;height:56px}
+  .nav-logo{font-size:.95rem;gap:8px}
+  .nav-logo-img{height:26px}
+  .nav-version{display:none}
+  .nav-time{display:none}
+  .nav-right{gap:8px}
+  /* Las secciones empiezan justo bajo el header (56px). Se usan IDs para
+     ganar especificidad frente a `#secMercados{padding:0}` (línea 527). */
+  .section,#secMercados,#secAnalisis,#secAdmin{padding-top:60px;min-height:calc(100vh - 56px)}
+  /* Ocultar ticker scrolling en móvil (ruido visual y choca con bottom nav) */
+  .ticker-bar{display:none!important}
+  /* Espacio inferior reservado para el bottom nav (evita que el contenido quede tapado) */
+  html,body{padding-bottom:calc(72px + env(safe-area-inset-bottom))}
+  /* FinBot: levantar la burbuja por encima del bottom nav */
+  #finbotBubble{bottom:calc(82px + env(safe-area-inset-bottom))!important;right:14px!important}
+  .finbot-window{
+    width:calc(100vw - 24px)!important;max-width:380px!important;
+    height:min(72vh,540px)!important;bottom:0!important;
+  }
+  /* Portal panel: ocupa todo entre header y bottom nav */
+  #portalPanel{
+    top:56px!important;
+    height:calc(100vh - 56px - 72px - env(safe-area-inset-bottom))!important;
+  }
+  /* Más respiración general en el contenido */
+  main{padding:0}
+  /* Cards y módulos con menos padding lateral para que respiren */
+  .section-header{padding-left:14px;padding-right:14px}
+  .indices-grid,.cart-kpi-row,.cart-charts-row,.calc-wrapper,.calc-milestone-row{padding-left:10px;padding-right:10px}
+  /* Bottom nav: separar visualmente el contenido del nav */
+  #mobileBottomNav::before{
+    content:"";position:absolute;top:-12px;left:0;right:0;height:12px;
+    background:linear-gradient(to top,rgba(10,14,26,.6),rgba(10,14,26,0));
+    pointer-events:none;
+  }
+}
+
+/* Pantallas pequeñas: ajustes finos */
+@media(max-width:380px){
+  .mbn-item{font-size:.58rem;padding:7px 2px 5px;gap:2px}
+  .mbn-icon{font-size:1.1rem}
+  .mbn-item.active::before{width:18px;height:2px}
+  nav{padding:0 10px;height:54px}
+  .nav-logo{font-size:.88rem}
+  .nav-logo-img{height:24px}
+  .section,#secMercados,#secAnalisis,#secAdmin{padding-top:58px;min-height:calc(100vh - 54px)}
+  #portalPanel{top:54px!important;height:calc(100vh - 54px - 72px - env(safe-area-inset-bottom))!important}
+}
 </style>
 </head>
 <body>
@@ -2147,7 +2239,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
   <div class="nav-logo">
     <img class="nav-logo-img" src="assets/logo-genz-icon.svg" alt="GenZ Invest">
     GenZ Invest
-    <span class="nav-version">v3.10.2</span>
+    <span class="nav-version">v3.11.0</span>
   </div>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="showSection('Mercados')">Mercados</button>
@@ -3994,13 +4086,21 @@ const INDEX_MAP = {
 function showSection(name) {
   // Sección Análisis requiere login → mostrar promo
   if (name === 'Analisis' && !_session) { showPromo(); return; }
+  // Admin requiere autenticación de administrador
+  if (name === 'Admin' && (!_session || _session.role !== 'admin')) { openLoginModal(); return; }
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
   document.getElementById('sec' + name).classList.add('active');
   event && event.currentTarget && event.currentTarget.classList.add('active');
+  // Sincroniza estado activo del bottom nav móvil
+  document.querySelectorAll('#mobileBottomNav .mbn-item[data-mbn]').forEach(b => {
+    b.classList.toggle('active', b.dataset.mbn === name);
+  });
   if (name === 'Analisis' && !_chart) initChart();
   if (name === 'Admin') loadAdminData();
   closePortalPanel();
+  // Scroll al inicio en móvil para que el usuario vea la cabecera del módulo
+  if (window.innerWidth <= 860) window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function requireAuth(name) {
@@ -4116,6 +4216,8 @@ function onLogin() {
   document.getElementById('btnLogin').style.display = 'none';
   document.getElementById('btnLogout').style.display = 'none'; // sustituido por botón en panel
   if (u.role === 'admin') document.getElementById('tabAdmin').style.display = 'block';
+  // Sincroniza el bottom nav móvil con el estado de sesión
+  _mbnUpdateAuthState();
   // Activa vista personalizada si es inversor
   if (_marketData.length) renderMainSection(_marketData);
   toast('Bienvenido, ' + u.name, 'ok');
@@ -4126,6 +4228,18 @@ function onLogin() {
     // Notif: pulsa para abrir
     setTimeout(() => { const n = document.getElementById('finbotNotif'); if (n) n.style.display = 'block'; }, 1200);
   }
+}
+
+// ── Bottom nav móvil: actualiza visibilidad de botones según sesión ──
+function _mbnUpdateAuthState() {
+  const logged  = !!_session;
+  const isAdmin = _session?.role === 'admin';
+  const elL = document.getElementById('mbnLogin');
+  const elP = document.getElementById('mbnPortal');
+  const elA = document.getElementById('mbnAdmin');
+  if (elL) elL.style.display = logged ? 'none' : 'flex';
+  if (elP) elP.style.display = logged ? 'flex' : 'none';
+  if (elA) elA.style.display = isAdmin ? 'flex' : 'none';
 }
 
 // ── Logout con modal de valoración ───────────────────────────────
@@ -10635,6 +10749,8 @@ function _fmtNow() {
 // ================================================================
 async function init() {
   restoreSession();
+  // Asegura que el bottom nav móvil refleja el estado actual de sesión
+  if (typeof _mbnUpdateAuthState === 'function') _mbnUpdateAuthState();
   await loadMarketData();
   // Refresh cada 60 segundos
   _refreshInterval = setInterval(loadMarketData, 60 * 1000);
@@ -11192,6 +11308,32 @@ function _startTrdTimestamp() {
 // ── End Trading Panel ─────────────────────────────────────────────────────
 
 </script>
+
+<!-- ══════════════════════════════════════════════════════
+     BOTTOM NAV MÓVIL — Experiencia tipo app nativa
+══════════════════════════════════════════════════════ -->
+<nav id="mobileBottomNav" aria-label="Navegación principal móvil">
+  <button class="mbn-item active" data-mbn="Mercados" onclick="showSection('Mercados')" type="button">
+    <span class="mbn-icon">📊</span>
+    <span class="mbn-label">Mercados</span>
+  </button>
+  <button class="mbn-item" data-mbn="Analisis" onclick="showSection('Analisis')" type="button">
+    <span class="mbn-icon">📈</span>
+    <span class="mbn-label">Análisis</span>
+  </button>
+  <button class="mbn-item" id="mbnAdmin" data-mbn="Admin" onclick="showSection('Admin')" type="button" style="display:none">
+    <span class="mbn-icon">🛡️</span>
+    <span class="mbn-label">Admin</span>
+  </button>
+  <button class="mbn-item" id="mbnPortal" onclick="togglePortalPanel()" type="button" style="display:none">
+    <span class="mbn-icon">👤</span>
+    <span class="mbn-label">Mi Portal</span>
+  </button>
+  <button class="mbn-item" id="mbnLogin" onclick="openLoginModal()" type="button">
+    <span class="mbn-icon">🔑</span>
+    <span class="mbn-label">Acceder</span>
+  </button>
+</nav>
 
 <!-- ══════════════════════════════════════════════════════
      FINBOT — ASISTENTE FINANCIERO IA (siempre visible en sesión)

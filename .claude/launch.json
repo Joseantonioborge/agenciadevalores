@@ -4,7 +4,7 @@
     {
       "name": "agencia-valores-preview",
       "runtimeExecutable": "node",
-      "runtimeArgs": ["/Users/joseantonioborge/Desktop/AGENCIA DE VALORES/serve.js"],
+      "runtimeArgs": ["serve.js"],
       "port": 3456
     }
   ]
