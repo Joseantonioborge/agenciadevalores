@@ -389,29 +389,56 @@ main{padding-top:60px}
 .inv-tab:hover{background:var(--hover);color:var(--text2)}
 .inv-tab.active{background:rgba(37,99,235,.12);color:var(--accent);font-weight:600}
 .inv-tab.active .inv-tab-icon{filter:none}
-/* ── Sidebar mobile (<860px): grid de botones arriba ── */
+/* ── Sidebar mobile (<860px): desplegable compacto tipo select ── */
+.inv-sidebar-mobile-active{display:none}
 @media(max-width:860px){
   #investorDash{flex-direction:column;gap:12px}
   #invSidebar{
     display:block!important;
     width:100%!important;border-radius:12px;
     position:static!important;align-self:auto!important;
-    overflow:hidden!important;
+    overflow:hidden!important;max-height:none!important;
   }
   #invSidebar.collapsed{width:100%!important}
-  #invSidebar.collapsed{width:100%!important}
-  .inv-sidebar-header{padding:10px 14px 8px}
-  .inv-sidebar-nav{
-    flex-direction:row;flex-wrap:wrap;
-    padding:6px 8px 10px;gap:5px;
+  /* Header: pill con la pestaña activa + chevron (acción de toggle) */
+  .inv-sidebar-header{padding:11px 14px;cursor:pointer;border-bottom:1px solid var(--border)}
+  .inv-sidebar-label{display:none!important}
+  .inv-sidebar-mobile-active{
+    display:flex!important;align-items:center;gap:9px;flex:1;min-width:0;
+    font-size:.85rem;color:var(--text);font-weight:600;line-height:1.2;
+  }
+  .inv-sidebar-mobile-active .ima-icon{font-size:1.1rem;flex-shrink:0;width:22px;text-align:center}
+  .inv-sidebar-mobile-active .ima-label{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:left}
+  .inv-sidebar-mobile-active .ima-chevron{
+    margin-left:auto;font-size:.85rem;color:var(--text2);
+    transition:transform .25s cubic-bezier(.4,0,.2,1);flex-shrink:0;
+  }
+  #invSidebar:not(.mobile-closed) .inv-sidebar-mobile-active .ima-chevron{transform:rotate(180deg);color:var(--accent)}
+  /* Nav cerrado por defecto en móvil */
+  #invSidebar.mobile-closed{border-bottom:none}
+  #invSidebar.mobile-closed .inv-sidebar-header{border-bottom:none}
+  #invSidebar.mobile-closed .inv-sidebar-nav{display:none!important}
+  /* Nav abierto: lista vertical de items con scroll si hace falta */
+  #invSidebar:not(.mobile-closed) .inv-sidebar-nav{
+    display:flex!important;flex-direction:column!important;flex-wrap:nowrap!important;
+    padding:4px 0 6px!important;gap:0!important;
+    max-height:55vh;overflow-y:auto;
+    animation:invSidebarOpen .22s ease-out;
+  }
+  @keyframes invSidebarOpen{
+    from{opacity:0;transform:translateY(-4px)}
+    to{opacity:1;transform:translateY(0)}
   }
   .inv-tab{
-    padding:7px 11px;font-size:.75rem;border-radius:8px;
-    flex:0 0 auto;white-space:nowrap;
+    padding:11px 16px!important;font-size:.85rem!important;border-radius:0!important;
+    flex:none!important;width:100%!important;justify-content:flex-start!important;
+    white-space:nowrap;border-bottom:1px solid rgba(255,255,255,.04);
+    gap:11px!important;
   }
-  .inv-tab-label{opacity:1!important;max-width:none!important}
+  .inv-tab:last-child{border-bottom:none}
+  .inv-tab-label{opacity:1!important;max-width:none!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   #invSidebar.collapsed .inv-tab-label{opacity:1!important;max-width:none!important}
-  .inv-sidebar-toggle{display:none}
+  .inv-sidebar-toggle{display:none!important}
   #invContent{padding-left:0}
 }
 
@@ -2239,7 +2266,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
   <div class="nav-logo">
     <img class="nav-logo-img" src="assets/logo-genz-icon.svg" alt="GenZ Invest">
     GenZ Invest
-    <span class="nav-version">v3.11.0</span>
+    <span class="nav-version">v3.11.1</span>
   </div>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="showSection('Mercados')">Mercados</button>
@@ -2373,9 +2400,14 @@ tr:hover td{background:rgba(255,255,255,.02)}
   <div id="investorDash">
 
     <!-- ── Sidebar de navegación ── -->
-    <nav id="invSidebar">
+    <nav id="invSidebar" class="mobile-closed">
       <div class="inv-sidebar-header" onclick="toggleInvSidebar()">
         <span class="inv-sidebar-label">Menú Principal</span>
+        <span class="inv-sidebar-mobile-active" id="invSidebarMobileActive">
+          <span class="ima-icon">📊</span>
+          <span class="ima-label">Mis Mercados</span>
+          <span class="ima-chevron">▾</span>
+        </span>
         <button class="inv-sidebar-toggle" id="invSidebarToggle" title="Colapsar menú" onclick="event.stopPropagation();toggleInvSidebar()">☰</button>
       </div>
       <div class="inv-sidebar-nav">
@@ -5501,12 +5533,31 @@ function toggleInvSidebar() {
   const sb  = document.getElementById('invSidebar');
   const btn = document.getElementById('invSidebarToggle');
   if (!sb) return;
+  // En móvil (<=860px) el header actúa como un select desplegable.
+  // En desktop conserva el modo "colapsado" lateral.
+  if (window.innerWidth <= 860) {
+    sb.classList.toggle('mobile-closed');
+    return;
+  }
   _sidebarCollapsed = !_sidebarCollapsed;
   sb.classList.toggle('collapsed', _sidebarCollapsed);
   if (btn) {
     btn.innerHTML    = _sidebarCollapsed ? '▶' : '☰';
     btn.title        = _sidebarCollapsed ? 'Expandir menú' : 'Colapsar menú';
   }
+}
+
+// Refresca la pill de la cabecera del sidebar móvil con la pestaña activa.
+function _updateInvSidebarMobileLabel() {
+  const active = document.querySelector('#invSidebar .inv-tab.active');
+  const target = document.getElementById('invSidebarMobileActive');
+  if (!active || !target) return;
+  const icon  = active.querySelector('.inv-tab-icon');
+  const label = active.querySelector('.inv-tab-label');
+  const iconEl = target.querySelector('.ima-icon');
+  const lblEl  = target.querySelector('.ima-label');
+  if (iconEl && icon)  iconEl.textContent = icon.textContent;
+  if (lblEl  && label) lblEl.textContent  = label.textContent;
 }
 
 function switchInvTab(tab) {
@@ -5553,6 +5604,12 @@ function switchInvTab(tab) {
   if (tab === 'trading') setTimeout(() => loadInsideTrading(false), 60);
   // Genera/regenera propuestas de cartera cada vez que se entra en la pestaña
   if (tab === 'propuestas') setTimeout(() => generatePortfolioProposals(false), 60);
+  // Móvil: refresca la pill de la cabecera y cierra el desplegable.
+  _updateInvSidebarMobileLabel();
+  if (window.innerWidth <= 860) {
+    const sb = document.getElementById('invSidebar');
+    if (sb) sb.classList.add('mobile-closed');
+  }
 }
 
 async function loadInvestorNews() {
