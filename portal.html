@@ -2235,7 +2235,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
 
 /* ── GUÍA INTERACTIVA (Tour onboarding) ──────────────── */
 .tour-overlay{
-  position:fixed;inset:0;z-index:9000;pointer-events:none;
+  position:fixed;inset:0;z-index:10000;pointer-events:none;
   opacity:0;transition:opacity .25s ease;
 }
 .tour-overlay.show{opacity:1;pointer-events:auto}
@@ -2246,13 +2246,13 @@ tr:hover td{background:rgba(255,255,255,.02)}
   -webkit-mask:radial-gradient(circle, transparent 0, transparent 0, #000 0);
 }
 .tour-spotlight{
-  position:fixed;border-radius:14px;
+  position:fixed;border-radius:14px;z-index:10001;
   box-shadow:0 0 0 9999px rgba(7,12,28,.62), 0 0 0 4px rgba(56,189,248,.55), 0 0 28px rgba(56,189,248,.45);
   transition:all .3s cubic-bezier(.4,0,.2,1);
   pointer-events:none;
 }
 .tour-tooltip{
-  position:fixed;z-index:9010;
+  position:fixed;z-index:10010;
   width:min(320px,calc(100vw - 32px));
   background:#fff;color:#0f172a;border-radius:14px;
   box-shadow:0 14px 50px rgba(7,12,28,.32),0 4px 14px rgba(7,12,28,.18);
@@ -2318,9 +2318,10 @@ tr:hover td{background:rgba(255,255,255,.02)}
 }
 .tour-tooltip[data-pos="center"] .tour-tooltip-arrow{display:none}
 
-/* Botón flotante para relanzar la guía */
+/* Botón flotante para relanzar la guía
+   — colocado abajo a la izquierda para no solaparse con FinBot (abajo-derecha) */
 .tour-replay-btn{
-  position:fixed;right:22px;bottom:96px;z-index:8500;
+  position:fixed;left:22px;bottom:28px;z-index:8500;
   width:48px;height:48px;border-radius:50%;
   background:linear-gradient(135deg,#3b82f6,#1d4ed8);
   color:#fff;border:none;cursor:pointer;
@@ -2331,7 +2332,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
 }
 .tour-replay-btn:hover{transform:scale(1.08);box-shadow:0 8px 26px rgba(59,130,246,.5)}
 .tour-replay-btn .tour-replay-tip{
-  position:absolute;right:58px;top:50%;transform:translateY(-50%) translateX(8px);
+  position:absolute;left:58px;top:50%;transform:translateY(-50%) translateX(-8px);
   background:#0f172a;color:#fff;font-size:.72rem;font-weight:600;
   padding:6px 10px;border-radius:6px;white-space:nowrap;
   opacity:0;pointer-events:none;transition:.15s;
@@ -2339,13 +2340,20 @@ tr:hover td{background:rgba(255,255,255,.02)}
 }
 .tour-replay-btn:hover .tour-replay-tip{opacity:1;transform:translateY(-50%) translateX(0)}
 .tour-replay-btn .tour-replay-tip::after{
-  content:'';position:absolute;right:-4px;top:50%;transform:translateY(-50%) rotate(45deg);
+  content:'';position:absolute;left:-4px;top:50%;transform:translateY(-50%) rotate(45deg);
   width:8px;height:8px;background:#0f172a;
 }
+/* Mientras el tour está activo, ocultamos el botón para evitar que se cuele
+   en el spotlight; el último paso del tour lo vuelve a mostrar para apuntarlo. */
+body.tour-running .tour-replay-btn{opacity:0;pointer-events:none;transition:opacity .2s}
+body.tour-running.tour-show-replay .tour-replay-btn{opacity:1;pointer-events:auto}
+/* Cuando el tour está activo, dejamos el FinBot por debajo del overlay para que
+   no quede flotando encima del oscurecido ni intercepte clics. */
+body.tour-running #finbotBubble{z-index:5000!important}
 
-/* En móvil: bajar el botón un poco para no superponer con FinBot ni con el bottom-nav */
+/* En móvil: separar del bottom-nav (≈70px alto) y del FAB del FinBot */
 @media(max-width:860px){
-  .tour-replay-btn{right:14px;bottom:140px;width:42px;height:42px;font-size:1.05rem}
+  .tour-replay-btn{left:14px;bottom:calc(82px + env(safe-area-inset-bottom));width:42px;height:42px;font-size:1.05rem}
   .tour-replay-btn .tour-replay-tip{display:none}
   .tour-tooltip{padding:16px 16px 12px}
   .tour-tooltip-title{font-size:.95rem}
@@ -11582,8 +11590,8 @@ const TOUR_STEPS = [
   {
     target:  '#tourReplayBtn',
     title:   '💡 ¿Necesitas repasar?',
-    body:    'Pulsa este botón en cualquier momento para volver a lanzar la guía. Puedes cerrarla cuando quieras.',
-    pos:     'left',
+    body:    'Este botón está en la esquina inferior izquierda. Púlsalo en cualquier momento para volver a lanzar la guía.',
+    pos:     'right',
     final:   true
   }
 ];
@@ -11597,10 +11605,12 @@ function tourStart() {
   _tourActive = true;
   document.getElementById('tourOverlay').classList.add('show');
   document.body.style.overflow = 'hidden';
+  document.body.classList.add('tour-running');
+  document.body.classList.remove('tour-show-replay');
   _tourResizeHandler = () => { if (_tourActive) tourRender(); };
   window.addEventListener('resize', _tourResizeHandler);
   window.addEventListener('scroll', _tourResizeHandler, true);
-  // Asegúrate de que el FAB de relanzar esté visible para los pasos finales
+  // Asegúrate de que el FAB de relanzar exista en el DOM para el último paso
   const replay = document.getElementById('tourReplayBtn');
   if (replay) replay.style.display = 'flex';
   tourRender();
@@ -11610,6 +11620,8 @@ function tourEnd(skipped) {
   _tourActive = false;
   document.getElementById('tourOverlay').classList.remove('show');
   document.body.style.overflow = '';
+  document.body.classList.remove('tour-running');
+  document.body.classList.remove('tour-show-replay');
   if (_tourResizeHandler) {
     window.removeEventListener('resize', _tourResizeHandler);
     window.removeEventListener('scroll', _tourResizeHandler, true);
@@ -11634,6 +11646,9 @@ function tourNext() {
 function tourRender() {
   const step = TOUR_STEPS[_tourStep];
   if (!step) return;
+
+  // Mostrar el botón de relanzar SOLO en su propio paso para que el spotlight lo ilumine
+  document.body.classList.toggle('tour-show-replay', step.target === '#tourReplayBtn');
 
   // Cambia de pestaña si el paso lo requiere
   if (step.tab && typeof switchInvTab === 'function') {
