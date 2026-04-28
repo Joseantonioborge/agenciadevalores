@@ -2232,6 +2232,125 @@ tr:hover td{background:rgba(255,255,255,.02)}
   .section,#secMercados,#secAnalisis,#secAdmin{padding-top:58px;min-height:calc(100vh - 54px)}
   #portalPanel{top:54px!important;height:calc(100vh - 54px - 72px - env(safe-area-inset-bottom))!important}
 }
+
+/* ── GUÍA INTERACTIVA (Tour onboarding) ──────────────── */
+.tour-overlay{
+  position:fixed;inset:0;z-index:9000;pointer-events:none;
+  opacity:0;transition:opacity .25s ease;
+}
+.tour-overlay.show{opacity:1;pointer-events:auto}
+.tour-mask{
+  position:fixed;inset:0;
+  background:rgba(7,12,28,.62);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);
+  pointer-events:auto;
+  -webkit-mask:radial-gradient(circle, transparent 0, transparent 0, #000 0);
+}
+.tour-spotlight{
+  position:fixed;border-radius:14px;
+  box-shadow:0 0 0 9999px rgba(7,12,28,.62), 0 0 0 4px rgba(56,189,248,.55), 0 0 28px rgba(56,189,248,.45);
+  transition:all .3s cubic-bezier(.4,0,.2,1);
+  pointer-events:none;
+}
+.tour-tooltip{
+  position:fixed;z-index:9010;
+  width:min(320px,calc(100vw - 32px));
+  background:#fff;color:#0f172a;border-radius:14px;
+  box-shadow:0 14px 50px rgba(7,12,28,.32),0 4px 14px rgba(7,12,28,.18);
+  padding:18px 18px 14px;
+  transition:all .3s cubic-bezier(.4,0,.2,1);
+  font-family:'Inter',sans-serif;
+  border:1px solid rgba(148,163,184,.25);
+}
+.tour-tooltip-step{
+  font-size:.68rem;font-weight:700;color:#3b82f6;
+  text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px;
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+}
+.tour-tooltip-step-progress{
+  display:flex;gap:4px;
+}
+.tour-tooltip-step-dot{
+  width:6px;height:6px;border-radius:50%;background:#cbd5e1;
+}
+.tour-tooltip-step-dot.active{background:#3b82f6}
+.tour-tooltip-step-dot.done{background:#10b981}
+.tour-tooltip-title{
+  font-size:1rem;font-weight:700;color:#0f172a;margin-bottom:6px;line-height:1.3;
+}
+.tour-tooltip-body{
+  font-size:.85rem;color:#475569;line-height:1.5;margin-bottom:14px;
+}
+.tour-tooltip-actions{
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+}
+.tour-skip-btn{
+  background:none;border:none;cursor:pointer;
+  font-size:.78rem;color:#94a3b8;font-weight:600;
+  padding:6px 4px;font-family:'Inter',sans-serif;
+}
+.tour-skip-btn:hover{color:#475569}
+.tour-nav-btns{display:flex;gap:6px}
+.tour-btn{
+  padding:8px 14px;border-radius:8px;font-size:.82rem;font-weight:600;
+  cursor:pointer;border:1px solid #e2e8f0;background:#fff;color:#475569;
+  font-family:'Inter',sans-serif;transition:.15s;
+}
+.tour-btn:hover{border-color:#94a3b8;color:#0f172a}
+.tour-btn.primary{background:#3b82f6;color:#fff;border-color:#3b82f6;box-shadow:0 4px 12px rgba(59,130,246,.25)}
+.tour-btn.primary:hover{background:#2563eb;border-color:#2563eb;color:#fff}
+.tour-btn:disabled{opacity:.4;cursor:not-allowed}
+.tour-tooltip-arrow{
+  position:absolute;width:14px;height:14px;background:#fff;
+  border:1px solid rgba(148,163,184,.25);
+  transform:rotate(45deg);
+}
+.tour-tooltip[data-pos="bottom"] .tour-tooltip-arrow{
+  top:-7px;left:24px;border-right:none;border-bottom:none;
+}
+.tour-tooltip[data-pos="top"] .tour-tooltip-arrow{
+  bottom:-7px;left:24px;border-left:none;border-top:none;
+}
+.tour-tooltip[data-pos="right"] .tour-tooltip-arrow{
+  left:-7px;top:24px;border-right:none;border-top:none;
+}
+.tour-tooltip[data-pos="left"] .tour-tooltip-arrow{
+  right:-7px;top:24px;border-left:none;border-bottom:none;
+}
+.tour-tooltip[data-pos="center"] .tour-tooltip-arrow{display:none}
+
+/* Botón flotante para relanzar la guía */
+.tour-replay-btn{
+  position:fixed;right:22px;bottom:96px;z-index:8500;
+  width:48px;height:48px;border-radius:50%;
+  background:linear-gradient(135deg,#3b82f6,#1d4ed8);
+  color:#fff;border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.25rem;
+  box-shadow:0 6px 20px rgba(59,130,246,.4),0 2px 8px rgba(7,12,28,.18);
+  transition:all .2s;
+}
+.tour-replay-btn:hover{transform:scale(1.08);box-shadow:0 8px 26px rgba(59,130,246,.5)}
+.tour-replay-btn .tour-replay-tip{
+  position:absolute;right:58px;top:50%;transform:translateY(-50%) translateX(8px);
+  background:#0f172a;color:#fff;font-size:.72rem;font-weight:600;
+  padding:6px 10px;border-radius:6px;white-space:nowrap;
+  opacity:0;pointer-events:none;transition:.15s;
+  font-family:'Inter',sans-serif;
+}
+.tour-replay-btn:hover .tour-replay-tip{opacity:1;transform:translateY(-50%) translateX(0)}
+.tour-replay-btn .tour-replay-tip::after{
+  content:'';position:absolute;right:-4px;top:50%;transform:translateY(-50%) rotate(45deg);
+  width:8px;height:8px;background:#0f172a;
+}
+
+/* En móvil: bajar el botón un poco para no superponer con FinBot ni con el bottom-nav */
+@media(max-width:860px){
+  .tour-replay-btn{right:14px;bottom:140px;width:42px;height:42px;font-size:1.05rem}
+  .tour-replay-btn .tour-replay-tip{display:none}
+  .tour-tooltip{padding:16px 16px 12px}
+  .tour-tooltip-title{font-size:.95rem}
+  .tour-tooltip-body{font-size:.82rem}
+}
 </style>
 </head>
 <body>
@@ -2266,7 +2385,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
   <div class="nav-logo">
     <img class="nav-logo-img" src="assets/logo-genz-icon.svg" alt="GenZ Invest">
     GenZ Invest
-    <span class="nav-version">v3.11.1</span>
+    <span class="nav-version">v3.12.0</span>
   </div>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="showSection('Mercados')">Mercados</button>
@@ -11364,6 +11483,276 @@ function _startTrdTimestamp() {
 }
 // ── End Trading Panel ─────────────────────────────────────────────────────
 
+// ═══════════════════════════════════════════════════════════════
+//  GUÍA INTERACTIVA (Tour onboarding)
+// ═══════════════════════════════════════════════════════════════
+const TOUR_STORAGE_KEY = 'AV_TOUR_DONE_v1';
+
+const TOUR_STEPS = [
+  {
+    target:  '#invTabMercados',
+    tab:     'mercados',
+    title:   '📊 Mis Mercados',
+    body:    'Aquí podrás ver tus índices favoritos y seleccionar los que quieras seguir en tiempo real (IBEX, S&P 500, NASDAQ y más).',
+    pos:     'bottom'
+  },
+  {
+    target:  '#invTabCarteras',
+    tab:     'carteras',
+    title:   '💼 Mis Inversiones',
+    body:    'Aquí podrás crear la composición de tu cartera, añadir activos con su precio de compra y monitorizar tu rentabilidad.',
+    pos:     'bottom'
+  },
+  {
+    target:  '#invTabAnalisis',
+    tab:     'analisis',
+    title:   '📰 Análisis',
+    body:    'Noticias financieras curadas e indicadores técnicos avanzados (RSI, MACD, medias móviles) para tomar mejores decisiones.',
+    pos:     'bottom'
+  },
+  {
+    target:  '#invTabBloomberg',
+    tab:     'bloomberg',
+    title:   '📈 Trading',
+    body:    'Terminal estilo Bloomberg con +9 mercados globales: análisis técnico profesional, swing y day trading en una sola pantalla.',
+    pos:     'bottom'
+  },
+  {
+    target:  '#invTabTrading',
+    tab:     'trading',
+    title:   '🎯 Inside Trading',
+    body:    'Predicciones de mercado de Polymarket y Kalshi para anticiparte a los movimientos antes de que se reflejen en los precios.',
+    pos:     'bottom'
+  },
+  {
+    target:  '#invTabCrypto',
+    tab:     'crypto',
+    title:   '₿ Crypto',
+    body:    'Top 20 criptomonedas por capitalización. Filtros por Layer 1, Layer 2, DeFi y stablecoins, con velas y líneas configurables.',
+    pos:     'bottom'
+  },
+  {
+    target:  '#invTabFondos',
+    tab:     'fondos',
+    title:   '📂 Comparador de Fondos',
+    body:    'Compara más de 125 fondos regulados CNMV / CSSF por rentabilidad, comisiones y rating Morningstar.',
+    pos:     'bottom'
+  },
+  {
+    target:  '#invTabBancos',
+    tab:     'bancos',
+    title:   '🏦 Entidades Financieras',
+    body:    'Balances actualizados de los principales bancos españoles: ratios de solvencia, liquidez y rentabilidad de un vistazo.',
+    pos:     'bottom'
+  },
+  {
+    target:  '#invTabCalculadora',
+    tab:     'calculadora',
+    title:   '🧮 Calculadora de interés compuesto',
+    body:    'Simula cuánto crecerá tu dinero a lo largo del tiempo y diseña tu plan de aportaciones periódicas.',
+    pos:     'bottom'
+  },
+  {
+    target:  '#invTabPropuestas',
+    tab:     'propuestas',
+    title:   '💡 Carteras recomendadas',
+    body:    'Carteras propuestas por el AV Portfolio Engine según tu perfil de riesgo: conservador, equilibrado o agresivo.',
+    pos:     'bottom'
+  },
+  {
+    target:  '.cart-new-btn',
+    tab:     'carteras',
+    title:   '➕ Nueva cartera',
+    body:    'Pulsa este botón para crear una nueva cartera desde cero y empezar a añadir activos.',
+    pos:     'bottom'
+  },
+  {
+    target:  '.cart-report-btn',
+    tab:     'carteras',
+    title:   '📄 Descargar Informe',
+    body:    'Aquí podrás descargar el informe en PDF de tu cartera con KPIs, gráficos de distribución y rentabilidad detallada.',
+    pos:     'bottom'
+  },
+  {
+    target:  '#finbotToggleBtn',
+    title:   '🤖 FinBot IA 24/7',
+    body:    'Tu asistente financiero con IA disponible siempre. Pregúntale sobre mercados, fondos, tu cartera o cualquier concepto financiero.',
+    pos:     'left'
+  },
+  {
+    target:  '#tourReplayBtn',
+    title:   '💡 ¿Necesitas repasar?',
+    body:    'Pulsa este botón en cualquier momento para volver a lanzar la guía. Puedes cerrarla cuando quieras.',
+    pos:     'left',
+    final:   true
+  }
+];
+
+let _tourStep = 0;
+let _tourActive = false;
+let _tourResizeHandler = null;
+
+function tourStart() {
+  _tourStep = 0;
+  _tourActive = true;
+  document.getElementById('tourOverlay').classList.add('show');
+  document.body.style.overflow = 'hidden';
+  _tourResizeHandler = () => { if (_tourActive) tourRender(); };
+  window.addEventListener('resize', _tourResizeHandler);
+  window.addEventListener('scroll', _tourResizeHandler, true);
+  // Asegúrate de que el FAB de relanzar esté visible para los pasos finales
+  const replay = document.getElementById('tourReplayBtn');
+  if (replay) replay.style.display = 'flex';
+  tourRender();
+}
+
+function tourEnd(skipped) {
+  _tourActive = false;
+  document.getElementById('tourOverlay').classList.remove('show');
+  document.body.style.overflow = '';
+  if (_tourResizeHandler) {
+    window.removeEventListener('resize', _tourResizeHandler);
+    window.removeEventListener('scroll', _tourResizeHandler, true);
+    _tourResizeHandler = null;
+  }
+  try { localStorage.setItem(TOUR_STORAGE_KEY, '1'); } catch(_) {}
+  if (skipped) {
+    try { toast('Guía cerrada. Pulsa 💡 para volver a lanzarla.', 'info'); } catch(_) {}
+  }
+}
+
+function tourPrev() {
+  if (_tourStep > 0) { _tourStep--; tourRender(); }
+}
+
+function tourNext() {
+  if (_tourStep >= TOUR_STEPS.length - 1) { tourEnd(false); return; }
+  _tourStep++;
+  tourRender();
+}
+
+function tourRender() {
+  const step = TOUR_STEPS[_tourStep];
+  if (!step) return;
+
+  // Cambia de pestaña si el paso lo requiere
+  if (step.tab && typeof switchInvTab === 'function') {
+    try { switchInvTab(step.tab); } catch(_) {}
+  }
+
+  // Pequeño retraso para esperar a que la pestaña renderice (sobre todo Carteras)
+  setTimeout(() => {
+    const el = document.querySelector(step.target);
+    const spotlight = document.getElementById('tourSpotlight');
+    const tooltip   = document.getElementById('tourTooltip');
+    const titleEl   = document.getElementById('tourTitle');
+    const bodyEl    = document.getElementById('tourBody');
+    const stepLabel = document.getElementById('tourStepLabel');
+    const progress  = document.getElementById('tourStepProgress');
+    const prevBtn   = document.getElementById('tourPrevBtn');
+    const nextBtn   = document.getElementById('tourNextBtn');
+
+    titleEl.textContent = step.title;
+    bodyEl.textContent  = step.body;
+    stepLabel.textContent = `Paso ${_tourStep + 1} de ${TOUR_STEPS.length}`;
+    progress.innerHTML = TOUR_STEPS.map((_, i) => {
+      const cls = i === _tourStep ? 'active' : (i < _tourStep ? 'done' : '');
+      return `<span class="tour-tooltip-step-dot ${cls}"></span>`;
+    }).join('');
+    prevBtn.disabled = _tourStep === 0;
+    nextBtn.textContent = (_tourStep === TOUR_STEPS.length - 1) ? '✓ Finalizar' : 'Siguiente →';
+
+    if (!el) {
+      // Fallback: tooltip centrado si no se encuentra el target
+      spotlight.style.display = 'none';
+      tooltip.dataset.pos = 'center';
+      tooltip.style.left = '50%';
+      tooltip.style.top  = '50%';
+      tooltip.style.transform = 'translate(-50%, -50%)';
+      return;
+    }
+
+    // Asegúrate de que el elemento esté visible (scroll)
+    try { el.scrollIntoView({behavior:'smooth', block:'center', inline:'center'}); } catch(_) {}
+
+    // Reposiciona tras un pequeño retardo para que el scroll termine
+    setTimeout(() => {
+      const r = el.getBoundingClientRect();
+      const pad = 8;
+      spotlight.style.display = 'block';
+      spotlight.style.left   = (r.left   - pad) + 'px';
+      spotlight.style.top    = (r.top    - pad) + 'px';
+      spotlight.style.width  = (r.width  + pad * 2) + 'px';
+      spotlight.style.height = (r.height + pad * 2) + 'px';
+
+      // Coloca el tooltip
+      const ttW = tooltip.offsetWidth || 320;
+      const ttH = tooltip.offsetHeight || 160;
+      const vw  = window.innerWidth, vh = window.innerHeight;
+      const margin = 14;
+
+      let pos = step.pos || 'bottom';
+      // Si no cabe abajo, prueba arriba
+      if (pos === 'bottom' && r.bottom + ttH + margin > vh) pos = 'top';
+      if (pos === 'top'    && r.top - ttH - margin < 0)     pos = 'bottom';
+      if (pos === 'right'  && r.right + ttW + margin > vw)  pos = 'left';
+      if (pos === 'left'   && r.left  - ttW - margin < 0)   pos = 'right';
+
+      let left, top;
+      if (pos === 'bottom') { left = Math.min(Math.max(r.left, margin), vw - ttW - margin); top = r.bottom + margin; }
+      else if (pos === 'top')   { left = Math.min(Math.max(r.left, margin), vw - ttW - margin); top = r.top - ttH - margin; }
+      else if (pos === 'right') { left = r.right + margin; top = Math.min(Math.max(r.top, margin), vh - ttH - margin); }
+      else if (pos === 'left')  { left = r.left - ttW - margin; top = Math.min(Math.max(r.top, margin), vh - ttH - margin); }
+      else { left = (vw - ttW) / 2; top = (vh - ttH) / 2; }
+
+      tooltip.dataset.pos = pos;
+      tooltip.style.transform = '';
+      tooltip.style.left = left + 'px';
+      tooltip.style.top  = top + 'px';
+    }, 120);
+  }, step.tab ? 200 : 30);
+}
+
+// Auto-arranque tras login (solo la primera vez para inversores)
+function tourMaybeAutoStart() {
+  try {
+    if (!_session || _session.role !== 'investor') return;
+    const done = localStorage.getItem(TOUR_STORAGE_KEY);
+    // Mostrar siempre el botón flotante para usuarios autenticados
+    const replay = document.getElementById('tourReplayBtn');
+    if (replay) replay.style.display = 'flex';
+    if (!done) {
+      // Pequeño retardo para que la UI se asiente
+      setTimeout(() => { if (!_tourActive) tourStart(); }, 1400);
+    }
+  } catch(_) {}
+}
+
+// Hook al onLogin existente (mantiene comportamiento original y añade el tour)
+(function hookTourIntoLogin(){
+  try {
+    if (typeof onLogin !== 'function') return;
+    const _origOnLogin = onLogin;
+    window.onLogin = function() {
+      _origOnLogin.apply(this, arguments);
+      tourMaybeAutoStart();
+    };
+  } catch(_) {}
+})();
+
+// Cerrar tour con Escape
+document.addEventListener('keydown', (e) => {
+  if (!_tourActive) return;
+  if (e.key === 'Escape') tourEnd(true);
+  else if (e.key === 'ArrowRight') tourNext();
+  else if (e.key === 'ArrowLeft')  tourPrev();
+});
+
+// Si la sesión ya está restaurada al cargar, evalúa el auto-arranque
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => { if (typeof tourMaybeAutoStart === 'function') tourMaybeAutoStart(); }, 800);
+});
+
 </script>
 
 <!-- ══════════════════════════════════════════════════════
@@ -11431,6 +11820,36 @@ function _startTrdTimestamp() {
     <span class="finbot-notif" id="finbotNotif"></span>
   </button>
 </div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     GUÍA INTERACTIVA (Tour onboarding)
+     ═══════════════════════════════════════════════════════════════ -->
+<div class="tour-overlay" id="tourOverlay" role="dialog" aria-modal="true" aria-labelledby="tourTitle">
+  <div class="tour-mask" id="tourMask"></div>
+  <div class="tour-spotlight" id="tourSpotlight"></div>
+  <div class="tour-tooltip" id="tourTooltip" data-pos="bottom">
+    <div class="tour-tooltip-arrow"></div>
+    <div class="tour-tooltip-step">
+      <span id="tourStepLabel">Paso 1 de 8</span>
+      <div class="tour-tooltip-step-progress" id="tourStepProgress"></div>
+    </div>
+    <div class="tour-tooltip-title" id="tourTitle">Bienvenido</div>
+    <div class="tour-tooltip-body" id="tourBody">Explicación.</div>
+    <div class="tour-tooltip-actions">
+      <button type="button" class="tour-skip-btn" id="tourSkipBtn" onclick="tourEnd(true)">Saltar guía</button>
+      <div class="tour-nav-btns">
+        <button type="button" class="tour-btn" id="tourPrevBtn" onclick="tourPrev()">Anterior</button>
+        <button type="button" class="tour-btn primary" id="tourNextBtn" onclick="tourNext()">Siguiente →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Botón flotante para relanzar la guía -->
+<button type="button" class="tour-replay-btn" id="tourReplayBtn" onclick="tourStart()" aria-label="Reiniciar guía interactiva" style="display:none">
+  <span aria-hidden="true">💡</span>
+  <span class="tour-replay-tip">Guía rápida</span>
+</button>
 
 <!-- TICKER INFERIOR -->
 <div class="ticker-bar" id="tickerBar">
