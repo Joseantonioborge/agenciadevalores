@@ -179,6 +179,125 @@ a:hover{text-decoration:underline}
 .ln-price-value{font-size:2.4rem;font-weight:800;color:var(--green);margin-bottom:4px}
 .ln-price-unit{font-size:.82rem;color:var(--text3)}
 
+/* ── PLAN CARDS (GenZ / GenZPRO) ─────────────────────── */
+.ln-plans-wrap{margin-bottom:48px}
+.ln-plans-heading{
+  font-size:1.05rem;font-weight:700;color:var(--text);
+  text-align:center;margin-bottom:6px;letter-spacing:-.2px;
+}
+.ln-plans-sub{
+  font-size:.9rem;color:var(--text2);text-align:center;margin-bottom:28px;
+}
+.ln-billing-toggle{
+  display:inline-flex;background:var(--card);border:1px solid var(--border);
+  border-radius:999px;padding:4px;margin:0 auto 28px;gap:2px;
+  box-shadow:var(--shadow-card);
+}
+.ln-billing-toggle-wrap{display:flex;justify-content:center}
+.ln-billing-btn{
+  border:none;background:transparent;cursor:pointer;
+  padding:8px 18px;font-size:.85rem;font-weight:600;color:var(--text2);
+  border-radius:999px;transition:.15s;font-family:var(--font);
+  display:inline-flex;align-items:center;gap:8px;
+}
+.ln-billing-btn.active{background:var(--accent);color:#fff;box-shadow:0 2px 8px rgba(37,99,235,.25)}
+.ln-billing-save{
+  font-size:.65rem;font-weight:700;padding:2px 7px;border-radius:999px;
+  background:rgba(5,150,105,.14);color:var(--green);letter-spacing:.3px;
+}
+.ln-billing-btn.active .ln-billing-save{background:rgba(255,255,255,.22);color:#fff}
+
+.ln-plans-grid{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:22px;
+  max-width:880px;margin:0 auto;
+}
+.ln-plan-card{
+  position:relative;background:var(--card);border:1px solid var(--border);
+  border-radius:18px;padding:30px 26px 26px;
+  display:flex;flex-direction:column;
+  transition:.2s;box-shadow:var(--shadow-card);
+}
+.ln-plan-card:hover{box-shadow:var(--shadow-card-hover)}
+.ln-plan-card.featured{
+  border:2px solid var(--accent);
+  background:linear-gradient(180deg,#fff 0%,rgba(37,99,235,.03) 100%);
+  box-shadow:0 8px 28px rgba(37,99,235,.12);
+}
+.ln-plan-badge{
+  position:absolute;top:-12px;right:22px;
+  background:var(--accent);color:#fff;font-size:.68rem;font-weight:700;
+  padding:5px 12px;border-radius:999px;letter-spacing:.4px;text-transform:uppercase;
+  box-shadow:0 4px 14px rgba(37,99,235,.35);
+}
+.ln-plan-name{
+  font-size:1.35rem;font-weight:800;color:var(--text);
+  letter-spacing:-.3px;margin-bottom:4px;
+  display:inline-flex;align-items:center;gap:8px;
+}
+.ln-plan-name .ln-plan-tag-pro{
+  font-size:.62rem;font-weight:700;padding:2px 7px;border-radius:4px;
+  background:rgba(37,99,235,.1);color:var(--accent);letter-spacing:.5px;
+}
+.ln-plan-tagline{font-size:.85rem;color:var(--text2);margin-bottom:18px;line-height:1.5}
+.ln-plan-price-row{
+  display:flex;align-items:baseline;gap:6px;margin-bottom:6px;
+  min-height:54px;flex-wrap:wrap;
+}
+.ln-plan-price{font-size:2.5rem;font-weight:800;color:var(--text);letter-spacing:-1px;line-height:1}
+.ln-plan-price.free{color:var(--green)}
+.ln-plan-price-period{font-size:.88rem;color:var(--text3);font-weight:600}
+.ln-plan-price-strike{
+  font-size:.85rem;color:var(--text3);text-decoration:line-through;
+  margin-left:4px;font-weight:500;
+}
+.ln-plan-trial{
+  font-size:.78rem;font-weight:600;color:var(--green);
+  margin-bottom:14px;display:flex;align-items:center;gap:6px;
+}
+.ln-plan-trial::before{content:'✦';font-size:.9rem}
+.ln-plan-cta{
+  width:100%;padding:12px 16px;border-radius:10px;font-size:.92rem;font-weight:700;
+  cursor:pointer;transition:.2s;border:none;font-family:var(--font);
+  margin-bottom:20px;
+}
+.ln-plan-cta.primary{
+  background:var(--accent);color:#fff;
+  box-shadow:0 4px 16px rgba(37,99,235,.25);
+}
+.ln-plan-cta.primary:hover{background:var(--accent2);transform:translateY(-1px)}
+.ln-plan-cta.ghost{
+  background:transparent;color:var(--text);border:1px solid var(--border);
+}
+.ln-plan-cta.ghost:hover{border-color:var(--accent);color:var(--accent);background:rgba(37,99,235,.04)}
+.ln-plan-features-title{
+  font-size:.7rem;font-weight:700;color:var(--text3);
+  text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px;
+}
+.ln-plan-features{list-style:none;display:flex;flex-direction:column;gap:8px;flex:1}
+.ln-plan-features li{
+  display:flex;align-items:flex-start;gap:9px;
+  font-size:.86rem;color:var(--text2);line-height:1.45;
+}
+.ln-plan-features li::before{
+  content:'✓';color:var(--green);font-weight:800;flex-shrink:0;margin-top:1px;
+}
+.ln-plan-features li.pro::before{content:'★';color:var(--accent)}
+.ln-plan-features li.muted{color:var(--text3)}
+.ln-plan-features li.muted::before{content:'—';color:var(--text3)}
+.ln-plan-divider{
+  height:1px;background:var(--border);margin:14px 0;
+}
+.ln-pro-month,.ln-pro-year{display:none}
+.ln-pro-month.show,.ln-pro-year.show{display:block}
+
+.ln-broker-pricing-title{
+  font-size:1.05rem;font-weight:700;color:var(--text);
+  text-align:center;margin-top:18px;margin-bottom:6px;letter-spacing:-.2px;
+}
+.ln-broker-pricing-sub{
+  font-size:.88rem;color:var(--text2);text-align:center;margin-bottom:24px;
+}
+
 /* ── STATS BAR ───────────────────────────────────────── */
 .ln-stats-bar{
   background:linear-gradient(135deg,#f0f4ff 0%,var(--bg2) 100%);
@@ -394,6 +513,7 @@ a:hover{text-decoration:underline}
   .ln-hero-visual{max-width:500px;margin:0 auto}
   .ln-features-grid{grid-template-columns:repeat(2,1fr)}
   .ln-pricing-grid{grid-template-columns:repeat(2,1fr)}
+  .ln-plans-grid{grid-template-columns:1fr;max-width:520px}
   .ln-stats-inner{grid-template-columns:repeat(2,1fr)}
   .ln-showcase{grid-template-columns:1fr}
   .ln-showcase.reverse{direction:ltr}
@@ -453,6 +573,11 @@ a:hover{text-decoration:underline}
   .ln-pricing-grid{grid-template-columns:repeat(2,1fr);gap:12px}
   .ln-price-card{padding:22px 14px}
   .ln-price-value{font-size:1.9rem}
+  .ln-plans-grid{grid-template-columns:1fr;gap:18px}
+  .ln-plan-card{padding:24px 20px}
+  .ln-plan-name{font-size:1.2rem}
+  .ln-plan-price{font-size:2.1rem}
+  .ln-billing-btn{padding:7px 14px;font-size:.8rem}
   .ln-stats-inner{grid-template-columns:repeat(2,1fr);gap:22px}
   .ln-stats-bar{padding:34px 16px}
   .ln-stat-num{font-size:1.85rem}
@@ -932,8 +1057,91 @@ a:hover{text-decoration:underline}
 <section class="ln-section ln-pricing-section" id="pricing">
   <div class="ln-section-inner">
     <div class="ln-section-tag">Tarifas y acceso</div>
-    <div class="ln-section-title">Transparencia total. Tú decides.</div>
-    <div class="ln-section-sub">Cada proveedor aplica sus propias comisiones. Aquí te mostramos la información para que elijas con criterio.</div>
+    <div class="ln-section-title">Elige tu plan. Cambia cuando quieras.</div>
+    <div class="ln-section-sub">Empieza gratis con GenZ o desbloquea todo el potencial con GenZPRO. Sin permanencia, cancela en un clic.</div>
+
+    <!-- ── Planes de acceso ─────────────────────────────── -->
+    <div class="ln-plans-wrap">
+      <div class="ln-billing-toggle-wrap">
+        <div class="ln-billing-toggle" role="tablist" aria-label="Periodicidad de facturación">
+          <button type="button" class="ln-billing-btn active" data-billing="monthly" onclick="setBilling('monthly')">Mensual</button>
+          <button type="button" class="ln-billing-btn" data-billing="yearly" onclick="setBilling('yearly')">
+            Anual <span class="ln-billing-save">−37%</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="ln-plans-grid">
+        <!-- Plan GenZ (gratuito) -->
+        <div class="ln-plan-card">
+          <div class="ln-plan-name">GenZ</div>
+          <div class="ln-plan-tagline">Acceso completo a información de mercados para empezar a invertir con criterio.</div>
+          <div class="ln-plan-price-row">
+            <span class="ln-plan-price free">0€</span>
+            <span class="ln-plan-price-period">/ siempre</span>
+          </div>
+          <button class="ln-plan-cta ghost" type="button" onclick="subscribePlan('genz_free')">
+            Empezar gratis
+          </button>
+          <div class="ln-plan-features-title">Incluye</div>
+          <ul class="ln-plan-features">
+            <li>Mis Mercados — cotizaciones globales en tiempo real</li>
+            <li>Mis Inversiones — seguimiento de tu portfolio</li>
+            <li>Análisis técnico avanzado (RSI, MACD, medias)</li>
+            <li>Crypto — BTC, ETH y +200 activos digitales</li>
+            <li>Comparador de fondos CNMV / CSSF</li>
+            <li>Entidades financieras — balances bancarios</li>
+            <li>Calculadora de interés compuesto</li>
+          </ul>
+        </div>
+
+        <!-- Plan GenZPRO -->
+        <div class="ln-plan-card featured">
+          <div class="ln-plan-badge">Más completo</div>
+          <div class="ln-plan-name">
+            GenZ <span class="ln-plan-tag-pro">PRO</span>
+          </div>
+          <div class="ln-plan-tagline">Todo lo de GenZ, más herramientas profesionales y FinBot IA 24/7.</div>
+
+          <!-- Mensual -->
+          <div class="ln-pro-month show">
+            <div class="ln-plan-price-row">
+              <span class="ln-plan-price">2€</span>
+              <span class="ln-plan-price-period">/ mes</span>
+            </div>
+            <div class="ln-plan-trial" style="visibility:hidden">placeholder</div>
+            <button class="ln-plan-cta primary" type="button" data-stripe-plan="genzpro_monthly" onclick="subscribePlan('genzpro_monthly')">
+              Contratar GenZPRO mensual
+            </button>
+          </div>
+
+          <!-- Anual -->
+          <div class="ln-pro-year">
+            <div class="ln-plan-price-row">
+              <span class="ln-plan-price">15€</span>
+              <span class="ln-plan-price-period">/ año</span>
+              <span class="ln-plan-price-strike">24€</span>
+            </div>
+            <div class="ln-plan-trial">7 días de prueba gratuita — cancela antes y no se te cobra</div>
+            <button class="ln-plan-cta primary" type="button" data-stripe-plan="genzpro_yearly_trial" onclick="subscribePlan('genzpro_yearly_trial')">
+              Empezar prueba gratis de 7 días
+            </button>
+          </div>
+
+          <div class="ln-plan-features-title">Todo lo de GenZ +</div>
+          <ul class="ln-plan-features">
+            <li class="pro">Trading — Bloomberg Terminal con +9 mercados</li>
+            <li class="pro">Inside Trading — señales de Polymarket y Kalshi</li>
+            <li class="pro">Carteras personalizadas con AV Portfolio Engine</li>
+            <li class="pro">FinBot IA — chatbot financiero 24/7 con Claude</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Tarifas según proveedor ──────────────────────── -->
+    <div class="ln-broker-pricing-title">Comisiones operativas según proveedor</div>
+    <div class="ln-broker-pricing-sub">GenZ Invest es una plataforma de información: las comisiones de compraventa las aplica el broker o gestora que tú elijas.</div>
     <div class="ln-pricing-grid">
       <div class="ln-price-card">
         <div class="ln-price-label">Acciones y ETFs</div>
@@ -946,14 +1154,14 @@ a:hover{text-decoration:underline}
         <div class="ln-price-unit">comisión variable por producto</div>
       </div>
       <div class="ln-price-card">
-        <div class="ln-price-label">Acceso a la plataforma</div>
-        <div class="ln-price-value" style="color:var(--accent)">Gratis</div>
-        <div class="ln-price-unit">por tiempo limitado</div>
+        <div class="ln-price-label">Datos en tiempo real</div>
+        <div class="ln-price-value" style="color:var(--accent)">Incluidos</div>
+        <div class="ln-price-unit">cotizaciones en directo en todos los planes</div>
       </div>
       <div class="ln-price-card">
-        <div class="ln-price-label">Datos en tiempo real</div>
-        <div class="ln-price-value" style="color:var(--accent)">Gratis</div>
-        <div class="ln-price-unit">cotizaciones en directo incluidas</div>
+        <div class="ln-price-label">Permanencia</div>
+        <div class="ln-price-value" style="color:var(--accent)">Sin compromiso</div>
+        <div class="ln-price-unit">cancela cuando quieras</div>
       </div>
     </div>
   </div>
@@ -1462,6 +1670,35 @@ document.querySelectorAll('.ln-nav-link[href^="#"]').forEach(a => {
     closeMobileMenu();
   });
 });
+
+// ── Pricing Plans (GenZ / GenZPRO) ───────────────────────────────
+function setBilling(period) {
+  document.querySelectorAll('.ln-billing-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.billing === period);
+  });
+  const monthlyBlocks = document.querySelectorAll('.ln-pro-month');
+  const yearlyBlocks  = document.querySelectorAll('.ln-pro-year');
+  monthlyBlocks.forEach(el => el.classList.toggle('show', period === 'monthly'));
+  yearlyBlocks.forEach(el => el.classList.toggle('show', period === 'yearly'));
+}
+
+// Botones de contratación — preparados para enlazar con Stripe Checkout
+// en una próxima actualización (data-stripe-plan -> price ID en Stripe).
+function subscribePlan(plan) {
+  if (plan === 'genz_free') {
+    openRegister();
+    return;
+  }
+  // TODO Stripe: sustituir por redirección a Stripe Checkout con el price ID correspondiente.
+  // Ej.: window.location.href = '/api/stripe/checkout?plan=' + encodeURIComponent(plan);
+  alert(
+    'Próximamente: contratación de ' +
+    (plan === 'genzpro_monthly'      ? 'GenZPRO mensual (2€/mes)' :
+     plan === 'genzpro_yearly_trial' ? 'GenZPRO anual (15€/año) con 7 días gratis' :
+     plan) +
+    '.\n\nEl pago seguro con Stripe se activará en la próxima actualización.'
+  );
+}
 
 // ── Login Modal ──────────────────────────────────────────────────
 function openLogin() {
