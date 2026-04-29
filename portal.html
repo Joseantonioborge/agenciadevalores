@@ -2529,7 +2529,7 @@ body.tour-running #finbotBubble{z-index:5000!important}
 <nav>
   <div class="nav-logo">
     <img class="nav-logo-img" src="assets/logo-genz-transparent.png" alt="GenZ Invest">
-    <span class="nav-version">v3.13.1</span>
+    <span class="nav-version">v3.13.2</span>
   </div>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="showSection('Mercados')">Mercados</button>
@@ -3470,6 +3470,7 @@ body.tour-running #finbotBubble{z-index:5000!important}
               <button class="period-tab" onclick="setPeriod('6mo')">6M</button>
               <button class="period-tab" onclick="setPeriod('1y')">1A</button>
             </div>
+            <button class="tm-buy-btn tm-buy-btn-top" onclick="openBrokerCompareModal()" title="Comprar acciones del índice" data-i18n="buy_shares_short">💰 Comprar</button>
           </div>
         </div>
         <div id="mainChart"></div>
@@ -7465,13 +7466,24 @@ const BROKERS_DATA = [
 function openBrokerCompareModal() {
   if (!_session) { showPromo(); return; }
   const modal = document.getElementById('brokerCompareModal');
-  // Subtítulo dinámico con el ticker activo si lo hay
+  // Subtítulo dinámico: usa _tmSymbol (modal de empresa) o el índice activo (gráfico general)
   const subEl = document.getElementById('bkModalSub');
-  if (_tmSymbol && subEl) {
-    const label = _tmSymbol.includes('.') ? _tmSymbol.split('.')[0] : _tmSymbol;
-    subEl.textContent = (_lang === 'en'
-      ? `Compare commissions to buy ${label} on the main brokers`
-      : `Compara comisiones para comprar ${label} en los principales brókers`);
+  if (subEl) {
+    let context = '';
+    const tickerOpen = document.getElementById('tickerChartModal')?.classList.contains('show');
+    if (tickerOpen && _tmSymbol) {
+      context = _tmSymbol.includes('.') ? _tmSymbol.split('.')[0] : _tmSymbol;
+    } else {
+      const idxName = document.getElementById('chartSymbol')?.textContent?.trim();
+      if (idxName && idxName !== '—') context = idxName;
+    }
+    if (context) {
+      subEl.textContent = (_lang === 'en'
+        ? `Compare commissions to buy ${context} on the main brokers`
+        : `Compara comisiones para comprar ${context} en los principales brókers`);
+    } else {
+      subEl.textContent = t('bk_sub');
+    }
   }
   document.getElementById('bkModalBody').innerHTML = BROKERS_DATA.map(_renderBrokerCard).join('');
   modal.classList.add('show');
