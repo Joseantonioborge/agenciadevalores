@@ -1117,10 +1117,16 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .tm-buy-btn:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(16,185,129,.4)}
 .tm-buy-btn:active{transform:translateY(0)}
 .tm-buy-hint{font-size:.72rem;color:var(--text3);font-style:italic}
+/* Variante compacta en cabecera del modal de cotización */
+.tm-buy-btn-top{
+  padding:7px 13px;font-size:.78rem;border-radius:7px;
+  box-shadow:0 2px 8px rgba(16,185,129,.3);flex-shrink:0;
+}
 @media(max-width:600px){
   .ticker-modal-foot{padding:10px 14px;gap:8px}
   .tm-buy-btn{flex:1;justify-content:center;font-size:.8rem;padding:9px 14px}
   .tm-buy-hint{display:none}
+  .tm-buy-btn-top{flex:0 0 auto;padding:6px 10px;font-size:.72rem;gap:4px}
 }
 
 /* BROKER COMPARE MODAL */
@@ -1152,6 +1158,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .bk-modal-body{
   padding:18px 22px;overflow-y:auto;flex:1;
   display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;
+  grid-auto-rows:max-content;align-content:start;
 }
 .bk-modal-foot{
   padding:11px 22px;border-top:1px solid var(--border);background:var(--bg2);flex-shrink:0;
@@ -1161,15 +1168,15 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .bk-card{
   background:var(--card);border:1px solid var(--border);border-radius:14px;
   padding:16px;display:flex;flex-direction:column;gap:10px;transition:.2s;
-  position:relative;overflow:hidden;
+  position:relative;
 }
 .bk-card:hover{border-color:rgba(16,185,129,.4);transform:translateY(-2px);box-shadow:0 8px 22px rgba(0,0,0,.25)}
 .bk-card-recommended{border-color:rgba(16,185,129,.5);background:linear-gradient(180deg,rgba(16,185,129,.06),var(--card))}
 .bk-card-recommended::before{
-  content:'⭐ Recomendado';position:absolute;top:0;right:0;
+  content:'⭐ Recomendado';position:absolute;top:-1px;right:-1px;
   background:linear-gradient(135deg,#10B981,#059669);color:#fff;
   font-size:.62rem;font-weight:700;padding:3px 10px;
-  border-radius:0 0 0 8px;letter-spacing:.3px;
+  border-radius:0 14px 0 8px;letter-spacing:.3px;
 }
 .bk-card-hd{display:flex;align-items:center;gap:10px}
 .bk-logo{
@@ -1200,17 +1207,18 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .bk-pros-item{font-size:.72rem;color:var(--text2);line-height:1.4}
 .bk-pros-item strong{color:#10B981;margin-right:4px}
 
-.bk-action-row{display:flex;gap:8px;margin-top:auto;padding-top:6px}
+.bk-action-row{display:flex;gap:8px;margin-top:4px;padding-top:4px}
 .bk-buy-link{
   flex:1;background:linear-gradient(135deg,#2563EB 0%,#1D4ED8 100%);
-  color:#fff;text-decoration:none;text-align:center;padding:10px 12px;
-  border-radius:9px;font-size:.8rem;font-weight:700;
+  color:#fff !important;text-decoration:none;text-align:center;padding:12px 14px;
+  border-radius:10px;font-size:.85rem;font-weight:800;
   display:inline-flex;align-items:center;justify-content:center;gap:6px;
-  transition:.18s;border:none;cursor:pointer;
+  transition:.18s;border:none;cursor:pointer;letter-spacing:.2px;
+  box-shadow:0 3px 10px rgba(37,99,235,.25);
 }
-.bk-buy-link:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(37,99,235,.4)}
-.bk-card-recommended .bk-buy-link{background:linear-gradient(135deg,#10B981 0%,#059669 100%)}
-.bk-card-recommended .bk-buy-link:hover{box-shadow:0 6px 16px rgba(16,185,129,.45)}
+.bk-buy-link:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(37,99,235,.45)}
+.bk-card-recommended .bk-buy-link{background:linear-gradient(135deg,#10B981 0%,#059669 100%);box-shadow:0 3px 10px rgba(16,185,129,.3)}
+.bk-card-recommended .bk-buy-link:hover{box-shadow:0 6px 18px rgba(16,185,129,.5)}
 
 @media(max-width:700px){
   .bk-modal-box{width:100%;max-height:94vh}
@@ -2521,7 +2529,7 @@ body.tour-running #finbotBubble{z-index:5000!important}
 <nav>
   <div class="nav-logo">
     <img class="nav-logo-img" src="assets/logo-genz-transparent.png" alt="GenZ Invest">
-    <span class="nav-version">v3.13.0</span>
+    <span class="nav-version">v3.13.1</span>
   </div>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="showSection('Mercados')">Mercados</button>
@@ -4089,6 +4097,7 @@ body.tour-running #finbotBubble{z-index:5000!important}
           <button class="period-tab" onclick="tmSetPeriod('6mo')">6M</button>
           <button class="period-tab" onclick="tmSetPeriod('1y')">1A</button>
         </div>
+        <button class="tm-buy-btn tm-buy-btn-top" onclick="openBrokerCompareModal()" title="Comprar acciones" data-i18n="buy_shares_short">💰 Comprar</button>
         <button class="ticker-modal-close" onclick="closeTickerChart()" title="Cerrar">✕</button>
       </div>
     </div>
@@ -4210,6 +4219,7 @@ const STRINGS = {
     it_signal_que_es_2:'Cuanto <strong>más positivo</strong> es el número, más dinero apuesta el mercado a escenarios <em>favorables para los activos de riesgo</em> (recortes de tipos, soft landing, paz, crecimiento). Cuanto <strong>más negativo</strong>, más dinero apuesta a escenarios <em>adversos</em> (subidas de tipos, recesión, guerra, sanciones, crisis).',
     it_signal_warning:'⚠️ La Señal AV Macro es una <strong>brújula de sentimiento</strong>, no una orden de compra/venta. Refleja consenso de mercados de predicción y debe combinarse con análisis técnico, fundamentales y tu propio horizonte temporal. <strong>No constituye asesoramiento financiero.</strong>',
     buy_shares:'💰 Comprar acciones',
+    buy_shares_short:'💰 Comprar',
     buy_shares_hint:'Compara comisiones de los principales brókers',
     bk_title:'Comprar acciones — Comparativa de brókers',
     bk_sub:'Compara comisiones, custodia y spreads antes de operar',
@@ -4285,6 +4295,7 @@ const STRINGS = {
     it_signal_que_es_2:'The <strong>more positive</strong> the number, the more money the market is betting on <em>risk-on scenarios</em> (rate cuts, soft landing, peace, growth). The <strong>more negative</strong>, the more money is betting on <em>adverse scenarios</em> (rate hikes, recession, war, sanctions, crisis).',
     it_signal_warning:'⚠️ The AV Macro Signal is a <strong>sentiment compass</strong>, not a buy/sell order. It reflects prediction-market consensus and must be combined with technical analysis, fundamentals and your own time horizon. <strong>Not financial advice.</strong>',
     buy_shares:'💰 Buy shares',
+    buy_shares_short:'💰 Buy',
     buy_shares_hint:'Compare fees from top brokers',
     bk_title:'Buy shares — Broker comparison',
     bk_sub:'Compare commissions, custody and spreads before trading',
