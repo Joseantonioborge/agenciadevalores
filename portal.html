@@ -1102,6 +1102,129 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .tm-ind-lbl{font-size:.6rem;color:var(--text3);text-transform:uppercase;letter-spacing:.5px}
 .tm-ind-val{font-size:.8rem;font-weight:700;font-variant-numeric:tabular-nums}
 
+/* Ticker modal — Comprar acciones CTA */
+.ticker-modal-foot{
+  padding:12px 18px;border-top:1px solid var(--border);background:var(--card);
+  display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;flex-shrink:0;
+}
+.tm-buy-btn{
+  background:linear-gradient(135deg,#10B981 0%,#059669 100%);
+  color:#fff;border:none;padding:10px 18px;border-radius:9px;
+  font-size:.85rem;font-weight:700;cursor:pointer;
+  display:inline-flex;align-items:center;gap:8px;
+  box-shadow:0 4px 12px rgba(16,185,129,.25);transition:.18s;
+}
+.tm-buy-btn:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(16,185,129,.4)}
+.tm-buy-btn:active{transform:translateY(0)}
+.tm-buy-hint{font-size:.72rem;color:var(--text3);font-style:italic}
+@media(max-width:600px){
+  .ticker-modal-foot{padding:10px 14px;gap:8px}
+  .tm-buy-btn{flex:1;justify-content:center;font-size:.8rem;padding:9px 14px}
+  .tm-buy-hint{display:none}
+}
+
+/* BROKER COMPARE MODAL */
+#brokerCompareModal{
+  position:fixed;inset:0;z-index:320;
+  display:none;align-items:center;justify-content:center;
+  background:rgba(0,0,0,.78);backdrop-filter:blur(8px);padding:16px;
+}
+#brokerCompareModal.show{display:flex}
+.bk-modal-box{
+  background:var(--card2);border:1px solid var(--border);border-radius:18px;
+  width:min(960px,100%);max-height:92vh;overflow:hidden;
+  display:flex;flex-direction:column;
+  animation:tmFadeUp .26s cubic-bezier(.4,0,.2,1);
+}
+.bk-modal-hd{
+  padding:18px 22px;border-bottom:1px solid var(--border);background:var(--card);
+  display:flex;align-items:center;justify-content:space-between;gap:12px;flex-shrink:0;
+}
+.bk-modal-title{display:flex;align-items:center;gap:14px}
+.bk-modal-emoji{
+  font-size:1.6rem;background:rgba(16,185,129,.15);
+  width:44px;height:44px;border-radius:11px;
+  display:flex;align-items:center;justify-content:center;
+  border:1px solid rgba(16,185,129,.3);flex-shrink:0;
+}
+.bk-modal-h{font-size:1.05rem;font-weight:800;color:var(--text);line-height:1.2}
+.bk-modal-sub{font-size:.78rem;color:var(--text3);margin-top:3px}
+.bk-modal-body{
+  padding:18px 22px;overflow-y:auto;flex:1;
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;
+}
+.bk-modal-foot{
+  padding:11px 22px;border-top:1px solid var(--border);background:var(--bg2);flex-shrink:0;
+}
+.bk-disclaimer{font-size:.7rem;color:var(--text3);line-height:1.5}
+
+.bk-card{
+  background:var(--card);border:1px solid var(--border);border-radius:14px;
+  padding:16px;display:flex;flex-direction:column;gap:10px;transition:.2s;
+  position:relative;overflow:hidden;
+}
+.bk-card:hover{border-color:rgba(16,185,129,.4);transform:translateY(-2px);box-shadow:0 8px 22px rgba(0,0,0,.25)}
+.bk-card-recommended{border-color:rgba(16,185,129,.5);background:linear-gradient(180deg,rgba(16,185,129,.06),var(--card))}
+.bk-card-recommended::before{
+  content:'⭐ Recomendado';position:absolute;top:0;right:0;
+  background:linear-gradient(135deg,#10B981,#059669);color:#fff;
+  font-size:.62rem;font-weight:700;padding:3px 10px;
+  border-radius:0 0 0 8px;letter-spacing:.3px;
+}
+.bk-card-hd{display:flex;align-items:center;gap:10px}
+.bk-logo{
+  width:40px;height:40px;border-radius:9px;
+  background:#fff;display:flex;align-items:center;justify-content:center;
+  font-size:1.2rem;font-weight:800;letter-spacing:-.5px;flex-shrink:0;
+  overflow:hidden;border:1px solid var(--border);
+}
+.bk-logo img{width:32px;height:32px;object-fit:contain}
+.bk-name{font-size:1rem;font-weight:800;color:var(--text)}
+.bk-tagline{font-size:.7rem;color:var(--text3);margin-top:1px}
+
+.bk-fee-row{
+  display:grid;grid-template-columns:1fr auto;gap:6px 12px;
+  padding:10px 12px;background:var(--bg2);border-radius:9px;
+  font-size:.78rem;border:1px solid var(--border);
+}
+.bk-fee-lbl{color:var(--text3);font-weight:500}
+.bk-fee-val{color:var(--text);font-weight:700;text-align:right;font-variant-numeric:tabular-nums}
+.bk-fee-val.green{color:#10B981}
+.bk-fee-val.amber{color:#F59E0B}
+
+.bk-pros{
+  display:flex;flex-direction:column;gap:5px;
+  background:rgba(16,185,129,.05);padding:9px 11px;border-radius:8px;
+  border-left:2px solid #10B981;
+}
+.bk-pros-item{font-size:.72rem;color:var(--text2);line-height:1.4}
+.bk-pros-item strong{color:#10B981;margin-right:4px}
+
+.bk-action-row{display:flex;gap:8px;margin-top:auto;padding-top:6px}
+.bk-buy-link{
+  flex:1;background:linear-gradient(135deg,#2563EB 0%,#1D4ED8 100%);
+  color:#fff;text-decoration:none;text-align:center;padding:10px 12px;
+  border-radius:9px;font-size:.8rem;font-weight:700;
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  transition:.18s;border:none;cursor:pointer;
+}
+.bk-buy-link:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(37,99,235,.4)}
+.bk-card-recommended .bk-buy-link{background:linear-gradient(135deg,#10B981 0%,#059669 100%)}
+.bk-card-recommended .bk-buy-link:hover{box-shadow:0 6px 16px rgba(16,185,129,.45)}
+
+@media(max-width:700px){
+  .bk-modal-box{width:100%;max-height:94vh}
+  .bk-modal-hd{padding:14px 16px}
+  .bk-modal-h{font-size:.95rem}
+  .bk-modal-sub{font-size:.72rem}
+  .bk-modal-body{padding:14px 16px;grid-template-columns:1fr;gap:11px}
+  .bk-modal-foot{padding:10px 16px}
+}
+@media(max-width:600px){
+  #brokerCompareModal{padding:0;align-items:flex-end}
+  .bk-modal-box{border-radius:16px 16px 0 0;max-height:90vh}
+}
+
 /* RESPONSIVE */
 @media(max-width:600px){
   nav{padding:0 14px}
@@ -2398,7 +2521,7 @@ body.tour-running #finbotBubble{z-index:5000!important}
 <nav>
   <div class="nav-logo">
     <img class="nav-logo-img" src="assets/logo-genz-transparent.png" alt="GenZ Invest">
-    <span class="nav-version">v3.12.0</span>
+    <span class="nav-version">v3.13.0</span>
   </div>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="showSection('Mercados')">Mercados</button>
@@ -3973,6 +4096,32 @@ body.tour-running #finbotBubble{z-index:5000!important}
     <div class="ticker-modal-inds" id="tmIndicators">
       <span style="color:var(--text3);font-size:.78rem">Cargando...</span>
     </div>
+    <div class="ticker-modal-foot">
+      <button class="tm-buy-btn" onclick="openBrokerCompareModal()" data-i18n="buy_shares">💰 Comprar acciones</button>
+      <span class="tm-buy-hint" data-i18n="buy_shares_hint">Compara comisiones de los principales brókers</span>
+    </div>
+  </div>
+</div>
+
+<!-- BROKER COMPARE MODAL -->
+<div id="brokerCompareModal" onclick="if(event.target===this)closeBrokerCompareModal()">
+  <div class="bk-modal-box">
+    <div class="bk-modal-hd">
+      <div class="bk-modal-title">
+        <span class="bk-modal-emoji">💼</span>
+        <div>
+          <div class="bk-modal-h" data-i18n="bk_title">Comprar acciones — Comparativa de brókers</div>
+          <div class="bk-modal-sub" id="bkModalSub" data-i18n="bk_sub">Compara comisiones, custodia y spreads antes de operar</div>
+        </div>
+      </div>
+      <button class="ticker-modal-close" onclick="closeBrokerCompareModal()" title="Cerrar">✕</button>
+    </div>
+    <div class="bk-modal-body" id="bkModalBody">
+      <!-- Cards se renderizan dinámicamente -->
+    </div>
+    <div class="bk-modal-foot">
+      <span class="bk-disclaimer" data-i18n="bk_disclaimer">⚠️ Datos orientativos basados en información pública de cada bróker. Verifica las comisiones actualizadas en su web antes de operar. Esta comparativa no constituye recomendación de compra.</span>
+    </div>
   </div>
 </div>
 
@@ -4060,6 +4209,11 @@ const STRINGS = {
     it_signal_que_es_1:'La <strong>Señal AV Macro</strong> es un índice agregado que va de <strong style="color:#EF4444">−100</strong> (extremo bajista) a <strong style="color:#10B981">+100</strong> (extremo alcista), con la zona <strong style="color:#94a3b8">−15 / +15</strong> considerada neutral. Resume, en un único número, lo que los apostadores reales de <strong>Polymarket</strong> y <strong>Kalshi</strong> están pagando hoy por la probabilidad de eventos macroeconómicos clave (Fed, BCE, recesión, inflación, geopolítica, energía, etc.), ponderado por el volumen real apostado en cada mercado.',
     it_signal_que_es_2:'Cuanto <strong>más positivo</strong> es el número, más dinero apuesta el mercado a escenarios <em>favorables para los activos de riesgo</em> (recortes de tipos, soft landing, paz, crecimiento). Cuanto <strong>más negativo</strong>, más dinero apuesta a escenarios <em>adversos</em> (subidas de tipos, recesión, guerra, sanciones, crisis).',
     it_signal_warning:'⚠️ La Señal AV Macro es una <strong>brújula de sentimiento</strong>, no una orden de compra/venta. Refleja consenso de mercados de predicción y debe combinarse con análisis técnico, fundamentales y tu propio horizonte temporal. <strong>No constituye asesoramiento financiero.</strong>',
+    buy_shares:'💰 Comprar acciones',
+    buy_shares_hint:'Compara comisiones de los principales brókers',
+    bk_title:'Comprar acciones — Comparativa de brókers',
+    bk_sub:'Compara comisiones, custodia y spreads antes de operar',
+    bk_disclaimer:'⚠️ Datos orientativos basados en información pública de cada bróker. Verifica las comisiones actualizadas en su web antes de operar. Esta comparativa no constituye recomendación de compra.',
   },
   en: {
     tab_calculadora:'Compound Interest Calculator', tab_mercados:'My Markets',
@@ -4130,6 +4284,11 @@ const STRINGS = {
     it_signal_que_es_1:'The <strong>AV Macro Signal</strong> is an aggregated index from <strong style="color:#EF4444">−100</strong> (extreme bearish) to <strong style="color:#10B981">+100</strong> (extreme bullish), with the <strong style="color:#94a3b8">−15 / +15</strong> band considered neutral. It summarises, in a single number, what real money on <strong>Polymarket</strong> and <strong>Kalshi</strong> is pricing today for key macro events (Fed, ECB, recession, inflation, geopolitics, energy, etc.), weighted by actual market volume.',
     it_signal_que_es_2:'The <strong>more positive</strong> the number, the more money the market is betting on <em>risk-on scenarios</em> (rate cuts, soft landing, peace, growth). The <strong>more negative</strong>, the more money is betting on <em>adverse scenarios</em> (rate hikes, recession, war, sanctions, crisis).',
     it_signal_warning:'⚠️ The AV Macro Signal is a <strong>sentiment compass</strong>, not a buy/sell order. It reflects prediction-market consensus and must be combined with technical analysis, fundamentals and your own time horizon. <strong>Not financial advice.</strong>',
+    buy_shares:'💰 Buy shares',
+    buy_shares_hint:'Compare fees from top brokers',
+    bk_title:'Buy shares — Broker comparison',
+    bk_sub:'Compare commissions, custody and spreads before trading',
+    bk_disclaimer:'⚠️ Indicative data based on each broker’s public information. Verify current fees on their website before trading. This comparison is not investment advice.',
   }
 };
 
@@ -7207,6 +7366,145 @@ function closeTickerChart() {
     try { _tmChart.remove(); } catch(_) {}
     _tmChart = null; _tmSeries = null;
   }
+}
+
+// ================================================================
+// BROKER COMPARE MODAL — Comparativa de brókers para comprar acciones
+// ================================================================
+const BROKERS_DATA = [
+  {
+    id: 'degiro',
+    name: 'DeGiro',
+    tagline: 'Bróker low-cost europeo · BaFin',
+    logo: 'https://logo.clearbit.com/degiro.es',
+    recommended: true,
+    fees: {
+      es: { label: 'Acciones España',     value: '€1,00 + 0,03% · máx €5',      tone: 'green' },
+      us: { label: 'Acciones EE.UU.',     value: '€1,00 (sin comisión variable)', tone: 'green' },
+      eu: { label: 'Acciones Europa',     value: '€3,90 + 0,025%',              tone: 'amber' },
+      cu: { label: 'Custodia',            value: 'Gratis',                      tone: 'green' },
+      mn: { label: 'Inversión mínima',    value: 'Sin mínimo',                  tone: 'green' },
+      sp: { label: 'Spread / FX',         value: '0,25% en divisa',             tone: 'amber' },
+    },
+    pros: [
+      { tag: 'Mejor coste', text: 'Comisiones imbatibles para acciones españolas y americanas.' },
+      { tag: 'Sin custodia', text: 'No cobra comisión por mantener tus acciones.' },
+    ],
+    url: 'https://www.degiro.es',
+  },
+  {
+    id: 'myinvestor',
+    name: 'MyInvestor',
+    tagline: 'Neobanco español · CNMV',
+    logo: 'https://logo.clearbit.com/myinvestor.es',
+    fees: {
+      es: { label: 'Acciones España',     value: '€8 fijo por orden',           tone: 'amber' },
+      us: { label: 'Acciones EE.UU.',     value: '€15 fijo por orden',          tone: 'amber' },
+      eu: { label: 'Acciones Europa',     value: '€12 fijo por orden',          tone: 'amber' },
+      cu: { label: 'Custodia',            value: 'Gratis',                      tone: 'green' },
+      mn: { label: 'Inversión mínima',    value: 'Sin mínimo',                  tone: 'green' },
+      sp: { label: 'Spread / FX',         value: '0,30% en divisa',             tone: 'amber' },
+    },
+    pros: [
+      { tag: 'Español', text: 'Banco español con cuenta omnibus integrada y depósito de hasta 100.000 € garantizado.' },
+      { tag: 'Sencillo', text: 'Operativa muy intuitiva, ideal para iniciarse en bolsa.' },
+    ],
+    url: 'https://myinvestor.es/inversion/acciones-y-etfs/',
+  },
+  {
+    id: 'etoro',
+    name: 'eToro',
+    tagline: 'Trading social · CySEC',
+    logo: 'https://logo.clearbit.com/etoro.com',
+    fees: {
+      es: { label: 'Acciones España',     value: '0% comisión',                 tone: 'green' },
+      us: { label: 'Acciones EE.UU.',     value: '0% comisión',                 tone: 'green' },
+      eu: { label: 'Acciones Europa',     value: '0% comisión',                 tone: 'green' },
+      cu: { label: 'Custodia',            value: 'Gratis',                      tone: 'green' },
+      mn: { label: 'Inversión mínima',    value: '$10 (acción fraccionada)',    tone: 'green' },
+      sp: { label: 'Spread / Retirada',   value: 'Spread incluido + $5 retirada', tone: 'amber' },
+    },
+    pros: [
+      { tag: '0% comisión', text: 'Sin comisiones de compra o venta en acciones reales.' },
+      { tag: 'Copy Trading', text: 'Replica automáticamente carteras de inversores top.' },
+    ],
+    url: 'https://www.etoro.com/es/investing/stocks/',
+  },
+  {
+    id: 'ibkr',
+    name: 'Interactive Brokers',
+    tagline: 'Bróker profesional · SEC / FCA',
+    logo: 'https://logo.clearbit.com/interactivebrokers.com',
+    fees: {
+      es: { label: 'Acciones España',     value: '0,05% · mín €1,25',           tone: 'green' },
+      us: { label: 'Acciones EE.UU.',     value: '$0,005/acción · mín $1',      tone: 'green' },
+      eu: { label: 'Acciones Europa',     value: '0,05% · mín €1,25',           tone: 'green' },
+      cu: { label: 'Custodia',            value: 'Gratis (con actividad)',      tone: 'green' },
+      mn: { label: 'Inversión mínima',    value: 'Sin mínimo',                  tone: 'green' },
+      sp: { label: 'Spread / FX',         value: '0,002% mín $2 cambio divisa', tone: 'green' },
+    },
+    pros: [
+      { tag: 'Profesional', text: 'Acceso a 150+ mercados en 33 países y todos los productos derivados.' },
+      { tag: 'Mejor FX',    text: 'Cambio de divisa al precio interbancario, ideal para acciones USA.' },
+    ],
+    url: 'https://www.interactivebrokers.com/es/home.php',
+  },
+];
+
+function openBrokerCompareModal() {
+  if (!_session) { showPromo(); return; }
+  const modal = document.getElementById('brokerCompareModal');
+  // Subtítulo dinámico con el ticker activo si lo hay
+  const subEl = document.getElementById('bkModalSub');
+  if (_tmSymbol && subEl) {
+    const label = _tmSymbol.includes('.') ? _tmSymbol.split('.')[0] : _tmSymbol;
+    subEl.textContent = (_lang === 'en'
+      ? `Compare commissions to buy ${label} on the main brokers`
+      : `Compara comisiones para comprar ${label} en los principales brókers`);
+  }
+  document.getElementById('bkModalBody').innerHTML = BROKERS_DATA.map(_renderBrokerCard).join('');
+  modal.classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeBrokerCompareModal() {
+  const m = document.getElementById('brokerCompareModal');
+  if (m) m.classList.remove('show');
+  document.body.style.overflow = '';
+}
+
+function _renderBrokerCard(b) {
+  const initial = b.name.charAt(0);
+  const f = b.fees;
+  const fee = (k) => `
+    <div class="bk-fee-lbl">${f[k].label}</div>
+    <div class="bk-fee-val ${f[k].tone || ''}">${f[k].value}</div>`;
+  const pros = b.pros.map(p =>
+    `<div class="bk-pros-item"><strong>${p.tag}</strong>· ${p.text}</div>`
+  ).join('');
+  const ctaTxt = _lang === 'en' ? 'Open account →' : 'Contratar →';
+  return `
+    <div class="bk-card ${b.recommended ? 'bk-card-recommended' : ''}">
+      <div class="bk-card-hd">
+        <div class="bk-logo">
+          <img src="${b.logo}" alt="${b.name}"
+               onerror="this.style.display='none';this.parentNode.innerHTML='${initial}'">
+        </div>
+        <div>
+          <div class="bk-name">${b.name}</div>
+          <div class="bk-tagline">${b.tagline}</div>
+        </div>
+      </div>
+      <div class="bk-fee-row">
+        ${fee('es')}${fee('us')}${fee('eu')}${fee('cu')}${fee('mn')}${fee('sp')}
+      </div>
+      <div class="bk-pros">${pros}</div>
+      <div class="bk-action-row">
+        <a class="bk-buy-link" href="${b.url}" target="_blank" rel="noopener noreferrer">
+          ${ctaTxt}
+        </a>
+      </div>
+    </div>`;
 }
 
 function tmSetPeriod(p) {
