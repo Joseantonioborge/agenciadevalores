@@ -1339,6 +1339,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .cart-tipo-badge{font-size:.63rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:2px 5px;border-radius:4px;background:rgba(37,99,235,.15);color:var(--accent)}
 .cart-activo-pl{font-weight:700;font-family:monospace;font-size:.78rem}
 .cart-activo-pl.up{color:var(--green)}.cart-activo-pl.down{color:var(--red)}.cart-activo-pl.flat{color:var(--text3)}
+.cart-activo-isin{font-family:'SF Mono','Monaco','Cascadia Mono',Consolas,monospace;font-size:.66rem;color:var(--text3);letter-spacing:.5px;margin-top:2px;font-weight:500}
 
 .cart-add-activo-btn{margin-top:10px;background:none;border:1px dashed var(--border);color:var(--text3);cursor:pointer;border-radius:8px;padding:8px 14px;font-size:.8rem;width:100%;text-align:left;transition:all .15s;font-family:var(--font)}
 .cart-add-activo-btn:hover{color:var(--accent);border-color:rgba(37,99,235,.4);background:rgba(37,99,235,.05)}
@@ -1648,6 +1649,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .fondos-flag-badge.lu{background:rgba(37,99,235,.15);color:#93c5fd}
 .fondos-flag-badge.ie{background:rgba(5,150,105,.15);color:#6ee7b7}
 .fondos-flag-badge.fr{background:rgba(99,102,241,.15);color:#c7d2fe}
+.fondos-isin{font-family:'SF Mono','Monaco','Cascadia Mono',Consolas,monospace;font-size:.66rem;color:var(--text3);letter-spacing:.5px;margin-top:2px;font-weight:500}
 .fondos-source-bar{display:flex;align-items:center;gap:8px;margin-bottom:12px;padding:8px 14px;background:var(--card);border:1px solid var(--border);border-radius:10px;flex-wrap:wrap;font-size:.74rem}
 .fondos-source-label{font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;font-size:.66rem}
 .fondos-source-link{color:var(--accent);text-decoration:none;font-weight:600;padding:2px 8px;border-radius:12px;background:rgba(37,99,235,.08);transition:background .15s}
@@ -2036,6 +2038,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .prop-asset-type{font-size:.62rem;font-weight:700;letter-spacing:.05em;padding:2px 6px;border-radius:10px;text-transform:uppercase;flex-shrink:0}
 .prop-asset-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .prop-asset-pct{font-weight:600;color:var(--text2);flex-shrink:0}
+.prop-asset-isin{font-family:'SF Mono','Monaco','Cascadia Mono',Consolas,monospace;font-size:.62rem;color:var(--text3);background:rgba(255,255,255,.04);padding:1px 6px;border-radius:3px;letter-spacing:.5px;flex-shrink:0;white-space:nowrap}
 .prop-razon{margin-top:12px;background:rgba(37,99,235,.06);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:8px 12px;font-size:.74rem;color:var(--text2);line-height:1.55}
 .prop-loading{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 20px;gap:14px;color:var(--text2)}
 .prop-spinner{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite}
@@ -2530,7 +2533,7 @@ body.tour-running #finbotBubble{z-index:5000!important}
 <nav>
   <div class="nav-logo">
     <img class="nav-logo-img" src="assets/logo-genz-transparent.png" alt="GenZ Invest">
-    <span class="nav-version">v3.14.0</span>
+    <span class="nav-version">v3.14.1</span>
   </div>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="showSection('Mercados')">Mercados</button>
@@ -3682,6 +3685,10 @@ body.tour-running #finbotBubble{z-index:5000!important}
         <label>Nombre del activo</label>
         <input class="cart-input" id="activoNombre" type="text" placeholder="Apple Inc., Bitcoin…" autocomplete="off">
       </div>
+    </div>
+    <div class="cart-field">
+      <label>ISIN <span style="color:var(--text3);font-weight:400">(opcional · obligatorio para fondos)</span></label>
+      <input class="cart-input" id="activoIsin" type="text" placeholder="ES0137860018, LU1548497983, IE0032620787…" autocomplete="off" maxlength="12" style="font-family:'SF Mono','Monaco',Consolas,monospace;text-transform:uppercase;letter-spacing:.5px">
     </div>
     <div class="cart-input-grid">
       <div class="cart-field">
@@ -8081,7 +8088,10 @@ function _renderCarteraCard(c) {
       : `<span class="cart-badge-recurrente">${tc === 'mensual' ? `${s}${(parseFloat(a.aportacion)||0).toLocaleString('es-ES',{minimumFractionDigits:0,maximumFractionDigits:0})}/mes` : `${s}${(parseFloat(a.aportacion)||0).toLocaleString('es-ES',{minimumFractionDigits:0,maximumFractionDigits:0})}/sem`}</span>`;
     return `<tr>
       <td>${a.ticker || '—'}</td>
-      <td>${a.nombre || '—'}</td>
+      <td>
+        <div>${a.nombre || '—'}</div>
+        ${a.isin ? `<div class="cart-activo-isin">${a.isin}</div>` : ''}
+      </td>
       <td><span class="cart-tipo-badge">${TIPO_LABELS[a.tipo] || a.tipo}</span></td>
       <td>${q.toLocaleString('es-ES')}</td>
       <td>${fmt2(pc)}</td>
@@ -8259,6 +8269,7 @@ function openActivoModal(carteraId, activoId) {
     document.getElementById('activoModalId').value            = activoId;
     document.getElementById('activoTicker').value             = activo.ticker || '';
     document.getElementById('activoNombre').value             = activo.nombre || '';
+    document.getElementById('activoIsin').value               = activo.isin || '';
     document.getElementById('activoTipo').value               = activo.tipo || 'accion';
     document.getElementById('activoDivisa').value             = activo.divisa || 'EUR';
     document.getElementById('activoCantidad').value           = activo.cantidad || '';
@@ -8272,6 +8283,7 @@ function openActivoModal(carteraId, activoId) {
     document.getElementById('activoModalId').value            = '';
     document.getElementById('activoTicker').value             = '';
     document.getElementById('activoNombre').value             = '';
+    document.getElementById('activoIsin').value               = '';
     document.getElementById('activoTipo').value               = 'accion';
     document.getElementById('activoDivisa').value             = 'EUR';
     document.getElementById('activoCantidad').value           = '';
@@ -8295,6 +8307,7 @@ async function saveActivo() {
   const activoId     = document.getElementById('activoModalId').value;
   const ticker       = document.getElementById('activoTicker').value.trim().toUpperCase();
   const nombre       = document.getElementById('activoNombre').value.trim();
+  const isin         = document.getElementById('activoIsin').value.trim().toUpperCase();
   const tipo         = document.getElementById('activoTipo').value;
   const divisa       = document.getElementById('activoDivisa').value;
   const cantidad     = parseFloat(document.getElementById('activoCantidad').value);
@@ -8306,6 +8319,7 @@ async function saveActivo() {
   const msgEl        = document.getElementById('activoModalMsg');
 
   if (!nombre)                           { msgEl.textContent = '⚠️ Introduce el nombre del activo'; return; }
+  if (isin && !/^[A-Z]{2}[A-Z0-9]{9}[0-9]$/.test(isin)) { msgEl.textContent = '⚠️ ISIN inválido (formato: 2 letras + 10 alfanuméricos)'; return; }
   if (isNaN(cantidad) || cantidad <= 0)  { msgEl.textContent = '⚠️ Introduce una cantidad válida'; return; }
   if (isNaN(precioCompra) || precioCompra <= 0) { msgEl.textContent = '⚠️ Introduce el precio de compra'; return; }
   if (isNaN(precioActual) || precioActual <= 0) { msgEl.textContent = '⚠️ Introduce el precio actual'; return; }
@@ -8313,7 +8327,7 @@ async function saveActivo() {
   const cartera = _carteras.find(c => c.id === carteraId);
   if (!cartera) return;
 
-  const activo = { id: activoId || undefined, ticker, nombre, tipo, divisa, cantidad, fechaCompra, precioCompra, precioActual, tipoCompra, aportacion };
+  const activo = { id: activoId || undefined, ticker, nombre, isin, tipo, divisa, cantidad, fechaCompra, precioCompra, precioActual, tipoCompra, aportacion };
   const updActivos = activoId
     ? (cartera.activos || []).map(a => a.id === activoId ? { ...a, ...activo } : a)
     : [...(cartera.activos || []), activo];
@@ -9502,6 +9516,7 @@ function _renderProposalCard(p) {
     return `<div class="prop-asset-item">
       <span class="prop-asset-type" style="background:${c}22;color:${c}">${typeLabel}</span>
       <span class="prop-asset-name" title="${a.isin ? a.nombre + ' · ' + a.isin : a.nombre}">${a.nombre}</span>
+      ${a.isin ? `<span class="prop-asset-isin">${a.isin}</span>` : ''}
       <span class="prop-asset-pct">${a.pct ? a.pct.toFixed(0) + '%' : ''}</span>
     </div>`;
   }).join('');
@@ -10053,7 +10068,10 @@ function _renderFondosTable() {
           ${sel ? '✓' : '+'}
         </button>
       </td>
-      <td title="${f.nombre} · ISIN: ${f.isin}">${f.nombre}</td>
+      <td title="${f.nombre} · ISIN: ${f.isin}">
+        <div style="font-weight:600;color:var(--text)">${f.nombre}</div>
+        <div class="fondos-isin">${f.isin}</div>
+      </td>
       <td>${f.gestora}</td>
       <td title="${dom.full}"><span class="fondos-flag-badge ${dom.cls}">${dom.flag} ${dom.label}</span></td>
       <td><span class="fondos-cat-badge" style="background:${bg};color:${txt}">${f.cat}</span></td>
