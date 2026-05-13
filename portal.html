@@ -2549,7 +2549,7 @@ body.tour-running #finbotBubble{z-index:5000!important}
 <nav>
   <div class="nav-logo">
     <img class="nav-logo-img" src="assets/logo-genz-transparent.png" alt="GenZ Invest">
-    <span class="nav-version">v3.15.0</span>
+    <span class="nav-version">v3.15.1</span>
   </div>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="showSection('Mercados')">Mercados</button>
@@ -10309,7 +10309,7 @@ function closeFondoBrokersModal() {
   if (m) m.classList.remove('show');
 }
 
-function openFondoAddCarteraModal(fondoId) {
+async function openFondoAddCarteraModal(fondoId) {
   const f = FONDOS_DATA.find(x => x.id === fondoId);
   if (!f) return;
   _fondoActionId = fondoId;
@@ -10322,7 +10322,7 @@ function openFondoAddCarteraModal(fondoId) {
     m.innerHTML = `<div class="modal" style="max-width:520px">
       <button class="modal-close" onclick="closeFondoAddCarteraModal()">✕</button>
       <h2 class="modal-title">＋ Añadir fondo a mi cartera</h2>
-      <p class="modal-sub" id="facSubtitle">Selecciona una cartera y los datos de tu compra</p>
+      <p class="modal-sub" id="facSubtitle">Selecciona una cartera existente o crea una nueva</p>
       <div id="facBody"></div>
       <div class="cart-modal-msg" id="facMsg"></div>
       <div class="cart-modal-footer">
@@ -10332,66 +10332,95 @@ function openFondoAddCarteraModal(fondoId) {
     </div>`;
     document.body.appendChild(m);
   }
-  const body = document.getElementById('facBody');
-  const saveBtn = document.getElementById('facSaveBtn');
   document.getElementById('facMsg').textContent = '';
+  requestAnimationFrame(() => m.classList.add('show'));
 
-  if (!_carteras || _carteras.length === 0) {
-    body.innerHTML = `
-      <div style="background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.25);border-radius:8px;padding:14px;font-size:.82rem;color:var(--text2);line-height:1.5">
-        <strong style="color:#F59E0B">⚠️ Aún no tienes ninguna cartera.</strong><br>
-        Crea primero una cartera desde la pestaña <strong>Mis Inversiones</strong> y vuelve aquí para añadir el fondo.
-      </div>`;
-    saveBtn.style.display = 'none';
-  } else {
-    saveBtn.style.display = '';
-    const fechaHoy = new Date().toISOString().slice(0, 10);
-    body.innerHTML = `
-      <div style="background:var(--hover);border-left:3px solid var(--accent);border-radius:6px;padding:10px 12px;margin-bottom:14px">
-        <div style="font-size:.82rem;font-weight:700;color:var(--text)">${f.nombre}</div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;font-size:.7rem;color:var(--text3)">
-          <span class="fondo-action-isin">${f.isin}</span>
-          <span>${f.gestora}</span>
-          <span>·</span>
-          <span>${f.cat}</span>
-        </div>
+  // Lazy-load carteras del inversor si aún no se han cargado en esta sesión.
+  // Esto cubre el caso en el que el usuario abre el comparador antes de visitar
+  // "Mis Inversiones": _carteras sigue vacío hasta que loadCarteras() se ejecuta.
+  const saveBtn = document.getElementById('facSaveBtn');
+  if (!_carterasLoaded && _session && _session.username) {
+    const body = document.getElementById('facBody');
+    if (saveBtn) saveBtn.disabled = true;
+    body.innerHTML = `<div style="text-align:center;padding:24px 0;color:var(--text2);font-size:.82rem">
+      <div class="cart-spinner"></div>
+      <p style="margin:8px 0 0">Cargando tus carteras…</p>
+    </div>`;
+    try { await loadCarteras(); } catch(_) {}
+    if (saveBtn) saveBtn.disabled = false;
+  }
+
+  _renderFacForm(f);
+}
+
+function _renderFacForm(f) {
+  const body = document.getElementById('facBody');
+  if (!body) return;
+  const fechaHoy = new Date().toISOString().slice(0, 10);
+  const tieneCarteras = Array.isArray(_carteras) && _carteras.length > 0;
+  const optsExistentes = tieneCarteras
+    ? _carteras.map(c => `<option value="${c.id}">${c.nombre} (${(c.activos||[]).length} activos)</option>`).join('')
+    : '';
+  const optNueva = `<option value="__new__"${tieneCarteras ? '' : ' selected'}>＋ Crear cartera nueva…</option>`;
+
+  body.innerHTML = `
+    <div style="background:var(--hover);border-left:3px solid var(--accent);border-radius:6px;padding:10px 12px;margin-bottom:14px">
+      <div style="font-size:.82rem;font-weight:700;color:var(--text)">${f.nombre}</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;font-size:.7rem;color:var(--text3)">
+        <span class="fondo-action-isin">${f.isin}</span>
+        <span>${f.gestora}</span>
+        <span>·</span>
+        <span>${f.cat}</span>
+      </div>
+    </div>
+    <div class="cart-field">
+      <label>Cartera de destino</label>
+      <select class="cart-input" id="facCartera" onchange="_facToggleNewName()">
+        ${optsExistentes}${optNueva}
+      </select>
+      ${tieneCarteras ? `<div style="font-size:.7rem;color:var(--text3);margin-top:4px">Tienes ${_carteras.length} cartera${_carteras.length===1?'':'s'} creada${_carteras.length===1?'':'s'}. Selecciona una o crea otra nueva.</div>` : `<div style="font-size:.7rem;color:var(--text3);margin-top:4px">Aún no tienes carteras. Se creará una nueva al guardar.</div>`}
+    </div>
+    <div class="cart-field" id="facNewNameRow" style="display:${tieneCarteras ? 'none' : 'block'}">
+      <label>Nombre de la nueva cartera</label>
+      <input class="cart-input" id="facNewName" type="text" placeholder="Mi cartera de fondos" autocomplete="off" maxlength="60">
+    </div>
+    <div class="cart-input-grid">
+      <div class="cart-field">
+        <label>Cantidad (participaciones)</label>
+        <input class="cart-input" id="facCantidad" type="number" placeholder="10, 0.5…" min="0" step="any">
       </div>
       <div class="cart-field">
-        <label>Cartera de destino</label>
-        <select class="cart-input" id="facCartera">
-          ${_carteras.map(c => `<option value="${c.id}">${c.nombre} (${(c.activos||[]).length} activos)</option>`).join('')}
+        <label>Divisa</label>
+        <select class="cart-input" id="facDivisa">
+          <option value="EUR" selected>EUR €</option>
+          <option value="USD">USD $</option>
+          <option value="GBP">GBP £</option>
         </select>
       </div>
-      <div class="cart-input-grid">
-        <div class="cart-field">
-          <label>Cantidad (participaciones)</label>
-          <input class="cart-input" id="facCantidad" type="number" placeholder="10, 0.5…" min="0" step="any">
-        </div>
-        <div class="cart-field">
-          <label>Divisa</label>
-          <select class="cart-input" id="facDivisa">
-            <option value="EUR" selected>EUR €</option>
-            <option value="USD">USD $</option>
-            <option value="GBP">GBP £</option>
-          </select>
-        </div>
-      </div>
-      <div class="cart-input-grid">
-        <div class="cart-field">
-          <label>Precio compra (€/participación)</label>
-          <input class="cart-input" id="facPrecioCompra" type="number" placeholder="125.00" min="0" step="any">
-        </div>
-        <div class="cart-field">
-          <label>Precio actual (€/participación)</label>
-          <input class="cart-input" id="facPrecioActual" type="number" placeholder="125.00" min="0" step="any">
-        </div>
+    </div>
+    <div class="cart-input-grid">
+      <div class="cart-field">
+        <label>Precio compra (€/participación)</label>
+        <input class="cart-input" id="facPrecioCompra" type="number" placeholder="125.00" min="0" step="any">
       </div>
       <div class="cart-field">
-        <label>Fecha de compra</label>
-        <input class="cart-input" id="facFecha" type="date" value="${fechaHoy}">
-      </div>`;
-  }
-  requestAnimationFrame(() => m.classList.add('show'));
+        <label>Precio actual (€/participación)</label>
+        <input class="cart-input" id="facPrecioActual" type="number" placeholder="125.00" min="0" step="any">
+      </div>
+    </div>
+    <div class="cart-field">
+      <label>Fecha de compra</label>
+      <input class="cart-input" id="facFecha" type="date" value="${fechaHoy}">
+    </div>`;
+}
+
+function _facToggleNewName() {
+  const sel = document.getElementById('facCartera');
+  const row = document.getElementById('facNewNameRow');
+  if (!sel || !row) return;
+  const isNew = sel.value === '__new__';
+  row.style.display = isNew ? 'block' : 'none';
+  if (isNew) setTimeout(() => document.getElementById('facNewName')?.focus(), 50);
 }
 
 function closeFondoAddCarteraModal() {
@@ -10403,21 +10432,34 @@ async function submitFondoToCartera() {
   const f = FONDOS_DATA.find(x => x.id === _fondoActionId);
   if (!f) return;
   const msgEl = document.getElementById('facMsg');
-  const carteraId = document.getElementById('facCartera')?.value;
-  const cantidad  = parseFloat(document.getElementById('facCantidad')?.value);
-  const divisa    = document.getElementById('facDivisa')?.value || 'EUR';
-  const pc        = parseFloat(document.getElementById('facPrecioCompra')?.value);
-  const paRaw     = document.getElementById('facPrecioActual')?.value;
-  const pa        = paRaw ? parseFloat(paRaw) : pc;
-  const fecha     = document.getElementById('facFecha')?.value || new Date().toISOString().slice(0, 10);
+  const saveBtn = document.getElementById('facSaveBtn');
+  const carteraSel = document.getElementById('facCartera')?.value;
+  const cantidad   = parseFloat(document.getElementById('facCantidad')?.value);
+  const divisa     = document.getElementById('facDivisa')?.value || 'EUR';
+  const pc         = parseFloat(document.getElementById('facPrecioCompra')?.value);
+  const paRaw      = document.getElementById('facPrecioActual')?.value;
+  const pa         = paRaw ? parseFloat(paRaw) : pc;
+  const fecha      = document.getElementById('facFecha')?.value || new Date().toISOString().slice(0, 10);
 
-  if (!carteraId) { msgEl.textContent = '⚠️ Selecciona una cartera'; return; }
+  if (!carteraSel) { msgEl.textContent = '⚠️ Selecciona una cartera'; return; }
   if (isNaN(cantidad) || cantidad <= 0) { msgEl.textContent = '⚠️ Introduce una cantidad válida'; return; }
   if (isNaN(pc) || pc <= 0) { msgEl.textContent = '⚠️ Introduce el precio de compra'; return; }
   if (isNaN(pa) || pa <= 0) { msgEl.textContent = '⚠️ Precio actual inválido'; return; }
 
-  const cartera = _carteras.find(c => c.id === carteraId);
-  if (!cartera) { msgEl.textContent = '⚠️ Cartera no encontrada'; return; }
+  // Construir cartera destino (existente o nueva)
+  let cartera;
+  if (carteraSel === '__new__') {
+    const nombre = (document.getElementById('facNewName')?.value || '').trim();
+    if (!nombre) { msgEl.textContent = '⚠️ Introduce el nombre de la nueva cartera'; return; }
+    cartera = {
+      nombre,
+      color: CARTERA_COLORS[(_carteras?.length || 0) % CARTERA_COLORS.length],
+      activos: [],
+    };
+  } else {
+    cartera = _carteras.find(c => c.id === carteraSel);
+    if (!cartera) { msgEl.textContent = '⚠️ Cartera no encontrada'; return; }
+  }
 
   const activo = {
     ticker: '',
@@ -10435,6 +10477,7 @@ async function submitFondoToCartera() {
   const updCartera = { ...cartera, activos: [...(cartera.activos || []), activo] };
 
   msgEl.textContent = 'Guardando…';
+  if (saveBtn) saveBtn.disabled = true;
   try {
     const res = await fetch(`${API_BASE}/carteras`, {
       method: 'POST',
@@ -10443,13 +10486,16 @@ async function submitFondoToCartera() {
     });
     if (!res.ok) throw new Error('Error ' + res.status);
     const data = await res.json();
-    const idx = _carteras.findIndex(c => c.id === carteraId);
+    const idx = _carteras.findIndex(c => c.id === data.cartera.id);
     if (idx >= 0) _carteras[idx] = data.cartera;
+    else          _carteras.push(data.cartera);
     closeFondoAddCarteraModal();
-    if (typeof toast === 'function') toast(`✓ Fondo añadido a "${cartera.nombre}"`, 'ok');
+    if (typeof toast === 'function') toast(`✓ Fondo añadido a "${data.cartera.nombre}"`, 'ok');
     if (typeof renderCarteras === 'function') renderCarteras();
   } catch (err) {
     msgEl.textContent = '⚠️ Error al guardar: ' + (err.message || 'desconocido');
+  } finally {
+    if (saveBtn) saveBtn.disabled = false;
   }
 }
 
