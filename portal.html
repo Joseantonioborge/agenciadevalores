@@ -2529,7 +2529,7 @@ body.tour-running #finbotBubble{z-index:5000!important}
 <nav>
   <div class="nav-logo">
     <img class="nav-logo-img" src="assets/logo-genz-transparent.png" alt="GenZ Invest">
-    <span class="nav-version">v3.13.2</span>
+    <span class="nav-version">v3.13.3</span>
   </div>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="showSection('Mercados')">Mercados</button>
@@ -2981,7 +2981,7 @@ body.tour-running #finbotBubble{z-index:5000!important}
           <option value="ter_asc">TER ↑</option>
           <option value="ms_desc">Rating ↓</option>
         </select>
-        <div class="fondos-count" id="fondosCount">50 fondos</div>
+        <div class="fondos-count" id="fondosCount">125 fondos</div>
       </div>
 
       <!-- Fuentes de datos -->
@@ -9009,7 +9009,7 @@ const FONDOS_DATA = [
   {id:38, nombre:'Bankinter EE.UU. Nasdaq FI',             isin:'ES0100046088', gestora:'Bankinter G.',  cat:'RV USA',          patM:720,   part:18000,  rYTD:15.82,r1y:26.52,r3y:14.52,r5y:18.82,vol:22.50,sharpe:1.05, com:0.75, ter:0.98, ms:4},
   // ── RENTA VARIABLE GLOBAL ─────────────────────────────────────
   {id:39, nombre:'CaixaBank Bolsa Gestión Global FI',      isin:'ES0137864036', gestora:'CaixaBank AM',  cat:'RV Global',       patM:1850,  part:52000,  rYTD:11.52,r1y:19.82,r3y:10.52,r5y:12.52,vol:15.20,sharpe:1.08, com:1.20, ter:1.45, ms:4},
-  {id:40, nombre:'Pictet Global Megatrend Sel R EUR FI',   isin:'ES0164600001', gestora:'Pictet AM',     cat:'RV Global',       patM:720,   part:19000,  rYTD:13.82,r1y:22.82,r3y:11.82,r5y:14.82,vol:17.20,sharpe:1.05, com:1.60, ter:1.90, ms:4},
+  {id:40, nombre:'Pictet Global Megatrend Sel R EUR FI',   isin:'ES0164600001', gestora:'Pictet AM',     cat:'RV Temático',     patM:720,   part:19000,  rYTD:13.82,r1y:22.82,r3y:11.82,r5y:14.82,vol:17.20,sharpe:1.05, com:1.60, ter:1.90, ms:4},
   {id:41, nombre:'BlackRock GF World Equity A2 EUR FI',    isin:'ES0152072003', gestora:'BlackRock',     cat:'RV Global',       patM:680,   part:18000,  rYTD:14.52,r1y:23.52,r3y:12.52,r5y:15.52,vol:16.50,sharpe:1.12, com:1.50, ter:1.78, ms:5},
   {id:42, nombre:'Renta 4 Wertefinder FI',                 isin:'ES0173272040', gestora:'Renta 4 G.',   cat:'RV Global',       patM:480,   part:12000,  rYTD:9.12, r1y:15.82,r3y:8.52, r5y:9.82, vol:13.50,sharpe:0.95, com:1.35, ter:1.58, ms:4},
   // ── RENTA VARIABLE TEMÁTICO ───────────────────────────────────
@@ -9101,7 +9101,7 @@ const FONDOS_DATA = [
 
   // ── FONDOS INDEXADOS INTERNACIONALES ─────────────────────────────
   {id:101, nombre:'Vanguard Global Stock Index Fund EUR Acc',        isin:'IE00B03HD191', gestora:'Vanguard',       cat:'Indexado',        patM:48200, part:0, origen:'IE', rYTD:14.52,r1y:23.45,r3y:13.12,r5y:15.85,vol:14.20,sharpe:1.28, com:0.00, ter:0.18, ms:5},
-  {id:102, nombre:'Vanguard US 500 Stock Index Fund EUR Acc',        isin:'ES0174244003', gestora:'Vanguard',       cat:'Indexado',        patM:38400, part:0, origen:'IE', rYTD:16.85,r1y:25.12,r3y:14.52,r5y:16.42,vol:15.20,sharpe:1.25, com:0.00, ter:0.10, ms:5},
+  {id:102, nombre:'Vanguard US 500 Stock Index Fund EUR Acc',        isin:'IE0032620787', gestora:'Vanguard',       cat:'Indexado',        patM:38400, part:0, origen:'IE', rYTD:16.85,r1y:25.12,r3y:14.52,r5y:16.42,vol:15.20,sharpe:1.25, com:0.00, ter:0.10, ms:5},
   {id:103, nombre:'Vanguard European Stock Index Fund EUR Acc',      isin:'IE0007987708', gestora:'Vanguard',       cat:'Indexado',        patM:18600, part:0, origen:'IE', rYTD:8.82, r1y:15.42,r3y:8.52, r5y:8.12, vol:14.50,sharpe:0.72, com:0.00, ter:0.12, ms:5},
   {id:104, nombre:'Vanguard Emerging Markets Stock Index EUR Acc',   isin:'IE0031786142', gestora:'Vanguard',       cat:'Indexado',        patM:12400, part:0, origen:'IE', rYTD:6.12, r1y:11.82,r3y:4.52, r5y:5.18, vol:17.20,sharpe:0.48, com:0.00, ter:0.23, ms:4},
   {id:105, nombre:'Amundi Index MSCI World AE-C',                   isin:'LU0996182563', gestora:'Amundi',         cat:'Indexado',        patM:14200, part:0, origen:'LU', rYTD:14.42,r1y:22.85,r3y:12.82,r5y:14.82,vol:14.40,sharpe:1.18, com:0.10, ter:0.30, ms:5},
