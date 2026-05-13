@@ -2,15 +2,18 @@
 // Caché en memoria de 60 segundos para evitar rate limiting
 
 const INDICES = [
-  { key: 'sp500',      symbol: '%5EGSPC',   name: 'S&P 500',      region: 'US' },
-  { key: 'nasdaq',     symbol: '%5EIXIC',   name: 'NASDAQ',        region: 'US' },
-  { key: 'dowjones',   symbol: '%5EDJI',    name: 'Dow Jones',     region: 'US' },
-  { key: 'ibex35',     symbol: '%5EIBEX',   name: 'IBEX 35',       region: 'ES' },
-  { key: 'dax40',      symbol: '%5EGDAXI',  name: 'DAX 40',        region: 'DE' },
-  { key: 'nikkei225',  symbol: '%5EN225',   name: 'Nikkei 225',    region: 'JP' },
-  { key: 'hangseng',   symbol: '%5EHSI',    name: 'Hang Seng',     region: 'HK' },
-  { key: 'eurostoxx50',symbol: '%5ESTOXX50E',name: 'Euro Stoxx 50',region: 'EU' },
-  { key: 'msciworld',  symbol: 'URTH',      name: 'MSCI World',    region: 'Global' },
+  { key: 'sp500',           symbol: '%5EGSPC',    name: 'S&P 500',                 region: 'US' },
+  { key: 'nasdaq',          symbol: '%5EIXIC',    name: 'NASDAQ',                  region: 'US' },
+  { key: 'dowjones',        symbol: '%5EDJI',     name: 'Dow Jones',               region: 'US' },
+  { key: 'ibex35',          symbol: '%5EIBEX',    name: 'IBEX 35',                 region: 'ES' },
+  { key: 'mercadocontinuo', symbol: '%5EIGBM',    name: 'Mercado Continuo (IGBM)', region: 'ES' },
+  { key: 'dax40',           symbol: '%5EGDAXI',   name: 'DAX 40',                  region: 'DE' },
+  { key: 'ftse100',         symbol: '%5EFTSE',    name: 'FTSE 100 (LSE)',          region: 'UK' },
+  { key: 'euronext100',     symbol: '%5EN100',    name: 'Euronext 100',            region: 'EU' },
+  { key: 'nikkei225',       symbol: '%5EN225',    name: 'Nikkei 225',              region: 'JP' },
+  { key: 'hangseng',        symbol: '%5EHSI',     name: 'Hang Seng',               region: 'HK' },
+  { key: 'eurostoxx50',     symbol: '%5ESTOXX50E',name: 'Euro Stoxx 50',           region: 'EU' },
+  { key: 'msciworld',       symbol: 'URTH',       name: 'MSCI World',              region: 'Global' },
 ];
 
 // Caché global

@@ -1341,6 +1341,35 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .cart-activo-pl.up{color:var(--green)}.cart-activo-pl.down{color:var(--red)}.cart-activo-pl.flat{color:var(--text3)}
 .cart-activo-isin{font-family:'SF Mono','Monaco','Cascadia Mono',Consolas,monospace;font-size:.66rem;color:var(--text3);letter-spacing:.5px;margin-top:2px;font-weight:500}
 
+/* Autocomplete dropdown (v3.17.0) */
+.ac-dropdown{position:absolute;top:100%;left:0;right:0;z-index:50;margin-top:4px;background:var(--card);border:1px solid var(--border);border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.4);max-height:280px;overflow-y:auto}
+.ac-item{padding:8px 12px;cursor:pointer;border-bottom:1px solid var(--border);transition:background .12s}
+.ac-item:last-child{border-bottom:none}
+.ac-item:hover{background:var(--hover)}
+.ac-row1{display:flex;align-items:center;gap:7px;font-size:.82rem;color:var(--text);font-weight:600}
+.ac-row2{display:flex;align-items:center;gap:7px;font-size:.68rem;color:var(--text3);margin-top:3px;flex-wrap:wrap}
+.ac-icon{font-size:.92rem}
+.ac-ticker{font-family:'SF Mono','Monaco',Consolas,monospace;font-size:.72rem;color:var(--accent);background:rgba(37,99,235,.12);padding:1px 6px;border-radius:3px;letter-spacing:.5px}
+.ac-isin{font-family:'SF Mono','Monaco',Consolas,monospace;font-size:.66rem;color:var(--text2);background:rgba(255,255,255,.05);padding:1px 6px;border-radius:3px;letter-spacing:.5px}
+.ac-name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ac-flag{font-size:.85rem}
+.ac-cat{font-size:.6rem;font-weight:700;color:var(--accent);background:rgba(37,99,235,.1);padding:1px 5px;border-radius:3px;text-transform:uppercase;letter-spacing:.04em}
+
+/* Multi-market alternativas */
+.ac-alts{margin-top:10px;padding:10px 12px;background:rgba(37,99,235,.06);border:1px solid rgba(37,99,235,.18);border-radius:8px}
+.ac-alts-label{font-size:.72rem;color:var(--text2);margin-bottom:8px;font-weight:600}
+.ac-alts-pills{display:flex;flex-wrap:wrap;gap:6px}
+.ac-alt-pill{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;background:var(--card);border:1px solid var(--border);border-radius:18px;font-size:.72rem;color:var(--text2);cursor:pointer;font-family:var(--font);transition:.15s}
+.ac-alt-pill:hover{border-color:var(--accent);color:var(--text);transform:translateY(-1px)}
+.ac-alt-pill.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.ac-alt-ticker{font-family:'SF Mono','Monaco',Consolas,monospace;font-weight:600}
+.ac-alt-mkt{font-size:.66rem;opacity:.8}
+
+/* Botones de período en chart sintético de fondo */
+.fc-period-btn{padding:5px 12px;font-size:.72rem;font-weight:600;background:var(--card);border:1px solid var(--border);border-radius:6px;color:var(--text2);cursor:pointer;font-family:var(--font);transition:.15s}
+.fc-period-btn:hover{border-color:var(--accent);color:var(--text)}
+.fc-period-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+
 .cart-add-activo-btn{margin-top:10px;background:none;border:1px dashed var(--border);color:var(--text3);cursor:pointer;border-radius:8px;padding:8px 14px;font-size:.8rem;width:100%;text-align:left;transition:all .15s;font-family:var(--font)}
 .cart-add-activo-btn:hover{color:var(--accent);border-color:rgba(37,99,235,.4);background:rgba(37,99,235,.05)}
 .cart-fab{display:flex;justify-content:flex-end;margin-top:4px}
@@ -2550,7 +2579,7 @@ body.tour-running #finbotBubble{z-index:5000!important}
 <nav>
   <div class="nav-logo">
     <img class="nav-logo-img" src="assets/logo-genz-transparent.png" alt="GenZ Invest">
-    <span class="nav-version">v3.16.0</span>
+    <span class="nav-version">v3.17.0</span>
   </div>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="showSection('Mercados')">Mercados</button>
@@ -3695,19 +3724,28 @@ body.tour-running #finbotBubble{z-index:5000!important}
     <input type="hidden" id="activoModalCarteraId">
     <input type="hidden" id="activoModalId">
     <div class="cart-input-grid">
-      <div class="cart-field">
+      <div class="cart-field" style="position:relative">
         <label>Ticker / Símbolo</label>
-        <input class="cart-input" id="activoTicker" type="text" placeholder="AAPL, MSFT, BTC…" autocomplete="off">
+        <input class="cart-input" id="activoTicker" type="text" placeholder="AAPL, SAN.MC, BTC…" autocomplete="off"
+          oninput="_acOnInput('ticker', this.value)"
+          onfocus="_acOnInput('ticker', this.value)"
+          onblur="setTimeout(_acCloseAll, 180)">
+        <div class="ac-dropdown" id="acDropdown_ticker" style="display:none"></div>
       </div>
-      <div class="cart-field">
+      <div class="cart-field" style="position:relative">
         <label>Nombre del activo</label>
-        <input class="cart-input" id="activoNombre" type="text" placeholder="Apple Inc., Bitcoin…" autocomplete="off">
+        <input class="cart-input" id="activoNombre" type="text" placeholder="Apple, Santander, Bitcoin…" autocomplete="off"
+          oninput="_acOnInput('nombre', this.value)"
+          onfocus="_acOnInput('nombre', this.value)"
+          onblur="setTimeout(_acCloseAll, 180)">
+        <div class="ac-dropdown" id="acDropdown_nombre" style="display:none"></div>
       </div>
     </div>
     <div class="cart-field">
       <label>ISIN <span style="color:var(--text3);font-weight:400">(opcional · obligatorio para fondos)</span></label>
       <input class="cart-input" id="activoIsin" type="text" placeholder="ES0137860018, LU1548497983, IE0032620787…" autocomplete="off" maxlength="12" style="font-family:'SF Mono','Monaco',Consolas,monospace;text-transform:uppercase;letter-spacing:.5px">
     </div>
+    <div id="activoMarketAlts" class="ac-alts" style="display:none"></div>
     <div class="cart-input-grid">
       <div class="cart-field">
         <label>Tipo de activo</label>
@@ -4430,15 +4468,18 @@ let _lineSeries = null;     // alias para compatibilidad
 let _refreshInterval = null;
 
 const INDEX_MAP = {
-  '^GSPC':    { name: 'S&P 500',       region: 'US',     key: 'sp500'      },
-  '^IXIC':    { name: 'NASDAQ',         region: 'US',     key: 'nasdaq'     },
-  '^DJI':     { name: 'Dow Jones',      region: 'US',     key: 'dowjones'   },
-  '^IBEX':    { name: 'IBEX 35',        region: 'ES',     key: 'ibex35'     },
-  '^GDAXI':   { name: 'DAX 40',         region: 'DE',     key: 'dax40'      },
-  '^N225':    { name: 'Nikkei 225',     region: 'JP',     key: 'nikkei225'  },
-  '^HSI':     { name: 'Hang Seng',      region: 'HK',     key: 'hangseng'   },
-  '^STOXX50E':{ name: 'Euro Stoxx 50',  region: 'EU',     key: 'eurostoxx50'},
-  'URTH':     { name: 'MSCI World',     region: 'Global', key: 'msciworld'  },
+  '^GSPC':    { name: 'S&P 500',                 region: 'US',     key: 'sp500'           },
+  '^IXIC':    { name: 'NASDAQ',                  region: 'US',     key: 'nasdaq'          },
+  '^DJI':     { name: 'Dow Jones',               region: 'US',     key: 'dowjones'        },
+  '^IBEX':    { name: 'IBEX 35',                 region: 'ES',     key: 'ibex35'          },
+  '^IGBM':    { name: 'Mercado Continuo (IGBM)', region: 'ES',     key: 'mercadocontinuo' },
+  '^GDAXI':   { name: 'DAX 40',                  region: 'DE',     key: 'dax40'           },
+  '^FTSE':    { name: 'FTSE 100 (LSE)',          region: 'UK',     key: 'ftse100'         },
+  '^N100':    { name: 'Euronext 100',            region: 'EU',     key: 'euronext100'     },
+  '^N225':    { name: 'Nikkei 225',              region: 'JP',     key: 'nikkei225'       },
+  '^HSI':     { name: 'Hang Seng',               region: 'HK',     key: 'hangseng'        },
+  '^STOXX50E':{ name: 'Euro Stoxx 50',           region: 'EU',     key: 'eurostoxx50'     },
+  'URTH':     { name: 'MSCI World',              region: 'Global', key: 'msciworld'       },
 };
 
 // ================================================================
@@ -7017,6 +7058,81 @@ const CONSTITUENTS = {
       { ticker:'ENI.MI',  name:'ENI',                weight:1.4,  sector:'Energía' },
     ]
   },
+  '^FTSE': {
+    label: 'FTSE 100 (London Stock Exchange) — Top 20 componentes',
+    items: [
+      { ticker:'AZN.L',  name:'AstraZeneca',           weight:8.2, sector:'Salud' },
+      { ticker:'SHEL.L', name:'Shell',                 weight:7.5, sector:'Energía' },
+      { ticker:'HSBA.L', name:'HSBC Holdings',         weight:6.8, sector:'Finanzas' },
+      { ticker:'ULVR.L', name:'Unilever',              weight:4.9, sector:'Consumo' },
+      { ticker:'BP.L',   name:'BP',                    weight:3.8, sector:'Energía' },
+      { ticker:'RIO.L',  name:'Rio Tinto',             weight:3.5, sector:'Materiales' },
+      { ticker:'GSK.L',  name:'GSK',                   weight:3.2, sector:'Salud' },
+      { ticker:'DGE.L',  name:'Diageo',                weight:2.9, sector:'Consumo' },
+      { ticker:'REL.L',  name:'RELX',                  weight:2.7, sector:'Tecnología' },
+      { ticker:'BARC.L', name:'Barclays',              weight:2.4, sector:'Finanzas' },
+      { ticker:'BATS.L', name:'British American Tob.', weight:2.3, sector:'Consumo' },
+      { ticker:'NG.L',   name:'National Grid',         weight:2.1, sector:'Utilities' },
+      { ticker:'LSEG.L', name:'London Stock Exch. Gp', weight:2.0, sector:'Finanzas' },
+      { ticker:'CRH.L',  name:'CRH',                   weight:1.9, sector:'Materiales' },
+      { ticker:'LLOY.L', name:'Lloyds Banking Group',  weight:1.8, sector:'Finanzas' },
+      { ticker:'VOD.L',  name:'Vodafone',              weight:1.7, sector:'Telecom.' },
+      { ticker:'AAL.L',  name:'Anglo American',        weight:1.6, sector:'Materiales' },
+      { ticker:'PRU.L',  name:'Prudential',            weight:1.5, sector:'Finanzas' },
+      { ticker:'IMB.L',  name:'Imperial Brands',       weight:1.4, sector:'Consumo' },
+      { ticker:'TSCO.L', name:'Tesco',                 weight:1.3, sector:'Consumo' },
+    ]
+  },
+  '^IGBM': {
+    label: 'Mercado Continuo Español (IGBM) — Top 20 componentes',
+    items: [
+      { ticker:'ITX.MC',  name:'Inditex',           weight:14.5, sector:'Consumo' },
+      { ticker:'IBE.MC',  name:'Iberdrola',         weight:13.2, sector:'Utilities' },
+      { ticker:'SAN.MC',  name:'Santander',         weight:11.8, sector:'Finanzas' },
+      { ticker:'BBVA.MC', name:'BBVA',              weight:9.6,  sector:'Finanzas' },
+      { ticker:'TEF.MC',  name:'Telefónica',        weight:5.2,  sector:'Telecom.' },
+      { ticker:'AENA.MC', name:'Aena',              weight:4.1,  sector:'Industrial' },
+      { ticker:'AMS.MC',  name:'Amadeus IT',        weight:3.8,  sector:'Tecnología' },
+      { ticker:'FER.MC',  name:'Ferrovial',         weight:3.5,  sector:'Industrial' },
+      { ticker:'REP.MC',  name:'Repsol',            weight:3.2,  sector:'Energía' },
+      { ticker:'CABK.MC', name:'CaixaBank',         weight:3.0,  sector:'Finanzas' },
+      { ticker:'ELE.MC',  name:'Endesa',            weight:2.7,  sector:'Utilities' },
+      { ticker:'NTGY.MC', name:'Naturgy',           weight:2.5,  sector:'Utilities' },
+      { ticker:'MAP.MC',  name:'Mapfre',            weight:2.2,  sector:'Finanzas' },
+      { ticker:'ACS.MC',  name:'ACS',               weight:2.0,  sector:'Industrial' },
+      { ticker:'ANA.MC',  name:'Acciona',           weight:1.8,  sector:'Utilities' },
+      { ticker:'BKT.MC',  name:'Bankinter',         weight:1.6,  sector:'Finanzas' },
+      { ticker:'RED.MC',  name:'Redeia',            weight:1.4,  sector:'Utilities' },
+      { ticker:'MTS.MC',  name:'ArcelorMittal',     weight:1.3,  sector:'Materiales' },
+      { ticker:'ENG.MC',  name:'Enagás',            weight:1.2,  sector:'Utilities' },
+      { ticker:'GRF.MC',  name:'Grifols',           weight:1.1,  sector:'Salud' },
+    ]
+  },
+  '^N100': {
+    label: 'Euronext 100 — Top 20 componentes',
+    items: [
+      { ticker:'ASML.AS', name:'ASML Holding',          weight:9.2, sector:'Tecnología' },
+      { ticker:'MC.PA',   name:'LVMH',                  weight:7.8, sector:'Consumo' },
+      { ticker:'TTE.PA',  name:'TotalEnergies',         weight:5.5, sector:'Energía' },
+      { ticker:'OR.PA',   name:'L\'Oréal',              weight:4.8, sector:'Consumo' },
+      { ticker:'SAN.PA',  name:'Sanofi',                weight:4.2, sector:'Salud' },
+      { ticker:'AIR.PA',  name:'Airbus',                weight:3.6, sector:'Industrial' },
+      { ticker:'RMS.PA',  name:'Hermès',                weight:3.3, sector:'Consumo' },
+      { ticker:'AI.PA',   name:'Air Liquide',           weight:3.0, sector:'Materiales' },
+      { ticker:'BNP.PA',  name:'BNP Paribas',           weight:2.8, sector:'Finanzas' },
+      { ticker:'DG.PA',   name:'Vinci',                 weight:2.6, sector:'Industrial' },
+      { ticker:'SU.PA',   name:'Schneider Electric',    weight:2.4, sector:'Industrial' },
+      { ticker:'EL.PA',   name:'EssilorLuxottica',      weight:2.2, sector:'Consumo' },
+      { ticker:'CS.PA',   name:'AXA',                   weight:2.0, sector:'Finanzas' },
+      { ticker:'KER.PA',  name:'Kering',                weight:1.8, sector:'Consumo' },
+      { ticker:'DSY.PA',  name:'Dassault Systèmes',     weight:1.7, sector:'Tecnología' },
+      { ticker:'ORA.PA',  name:'Orange',                weight:1.6, sector:'Telecom.' },
+      { ticker:'INGA.AS', name:'ING Group',             weight:1.5, sector:'Finanzas' },
+      { ticker:'ENGI.PA', name:'Engie',                 weight:1.4, sector:'Utilities' },
+      { ticker:'ACA.PA',  name:'Crédit Agricole',       weight:1.3, sector:'Finanzas' },
+      { ticker:'BN.PA',   name:'Danone',                weight:1.2, sector:'Consumo' },
+    ]
+  },
   'URTH': {
     label: 'MSCI World ETF (URTH) — Top 20 holdings',
     items: [
@@ -7313,12 +7429,23 @@ const TICKER_LOGOS = {
   '0016.HK':'shkp.com','0001.HK':'ckhutchison.com','0002.HK':'clpgroup.com',
   '0175.HK':'geely.com','0267.HK':'citic.com','2269.HK':'wuxibiologics.com',
   '0003.HK':'towngas.com','9999.HK':'netease.com',
-  // Euro Stoxx
+  // Euro Stoxx / Euronext 100
   'ASML.AS':'asml.com','MC.PA':'lvmh.com','SAN.PA':'sanofi.com',
   'OR.PA':'loreal.com','TTE.PA':'totalenergies.com','AIR.PA':'airbus.com',
   'BNP.PA':'bnpparibas.com','ENEL.MI':'enel.com','ABI.BR':'ab-inbev.com',
   'RMS.PA':'hermes.com','DG.PA':'vinci.com','INGA.AS':'ing.com',
   'CS.PA':'axa.com','ENI.MI':'eni.com',
+  'AI.PA':'airliquide.com','SU.PA':'se.com','EL.PA':'essilorluxottica.com',
+  'KER.PA':'kering.com','DSY.PA':'3ds.com','ORA.PA':'orange.com',
+  'ENGI.PA':'engie.com','ACA.PA':'credit-agricole.com','BN.PA':'danone.com',
+  // FTSE 100 (London Stock Exchange)
+  'AZN.L':'astrazeneca.com','SHEL.L':'shell.com','HSBA.L':'hsbc.com',
+  'ULVR.L':'unilever.com','BP.L':'bp.com','RIO.L':'riotinto.com',
+  'GSK.L':'gsk.com','DGE.L':'diageo.com','REL.L':'relx.com',
+  'BARC.L':'barclays.co.uk','BATS.L':'bat.com','NG.L':'nationalgrid.com',
+  'LSEG.L':'lseg.com','CRH.L':'crh.com','LLOY.L':'lloydsbankinggroup.com',
+  'VOD.L':'vodafone.com','AAL.L':'angloamerican.com','PRU.L':'prudentialplc.com',
+  'IMB.L':'imperialbrandsplc.com','TSCO.L':'tesco.com',
 };
 
 function _tickerLogoEl(ticker, label) {
@@ -8123,6 +8250,9 @@ function _renderCarteraCard(c) {
       <td><span class="cart-activo-pl ${plCls}">${pl > 0 ? '+' : ''}${pl.toFixed(2)}%</span></td>
       <td>${apBadge}</td>
       <td>
+        ${(['accion','etf','fondo','crypto','bono'].includes(a.tipo))
+          ? `<button class="cart-card-btn" onclick="openActivoChart('${c.id}','${a.id}')" title="Ver gráfico (1D · 5D · 1M · 6M · 1A)">📈</button>`
+          : ''}
         <button class="cart-card-btn" onclick="openActivoModal('${c.id}','${a.id}')" title="Editar">✏️</button>
         <button class="cart-card-btn del" onclick="deleteActivo('${c.id}','${a.id}')" title="Eliminar">✕</button>
       </td>
@@ -8331,6 +8461,452 @@ async function _autoRefreshAllCarterasPrecios() {
   renderCarteras();
 }
 
+// ════════════════════════════════════════════════════════════════
+// CATÁLOGO DE ACTIVOS PARA AUTOCOMPLETE + MULTI-MERCADO (v3.17.0)
+// ════════════════════════════════════════════════════════════════
+let _assetCatalog       = null;   // lista plana de entradas
+let _assetCatalogByName = null;   // grupos por nombre normalizado (para alternativas)
+let _acSelectedEntry    = null;   // entrada del catálogo seleccionada actualmente
+
+function _normalizeName(s) {
+  return (s || '').toLowerCase()
+    .normalize('NFD').replace(/[̀-ͯ]/g, '')
+    .replace(/\([^)]*\)/g, ' ')  // elimina paréntesis (ADR), (Acc), etc.
+    .replace(/[^a-z0-9 ]/g, '').replace(/\s+/g, ' ').trim();
+}
+
+function _divisaForTicker(t) {
+  const tk = (t || '').toUpperCase();
+  if (tk.endsWith('.MC') || tk.endsWith('.PA') || tk.endsWith('.AS') ||
+      tk.endsWith('.DE') || tk.endsWith('.MI') || tk.endsWith('.BR')) return 'EUR';
+  if (tk.endsWith('.L'))  return 'GBP';
+  if (tk.endsWith('.T'))  return 'JPY';
+  if (tk.endsWith('.HK')) return 'HKD';
+  return 'USD';
+}
+
+function _buildAssetCatalog() {
+  if (_assetCatalog) return _assetCatalog;
+  const out = [];
+
+  // 1) Acciones desde CONSTITUENTS (todos los índices configurados)
+  const seenTickers = new Set();
+  if (typeof CONSTITUENTS !== 'undefined') {
+    for (const idxSym in CONSTITUENTS) {
+      const idxInfo = (typeof INDEX_MAP !== 'undefined' && INDEX_MAP[idxSym]) || {};
+      const marketLabel = idxInfo.name || idxSym;
+      const region = idxInfo.region || '';
+      for (const item of (CONSTITUENTS[idxSym].items || [])) {
+        if (seenTickers.has(item.ticker)) continue;
+        seenTickers.add(item.ticker);
+        out.push({
+          tipo:   'accion',
+          ticker: item.ticker,
+          nombre: item.name,
+          market: marketLabel,
+          region,
+          divisa: _divisaForTicker(item.ticker),
+        });
+      }
+    }
+  }
+
+  // 2) Fondos desde FONDOS_DATA (ISIN, gestora, categoría)
+  if (typeof FONDOS_DATA !== 'undefined') {
+    const domMap = { ES:'CNMV España', LU:'CSSF Luxemburgo', IE:'CBI Irlanda', FR:'AMF Francia' };
+    for (const f of FONDOS_DATA) {
+      out.push({
+        tipo:   'fondo',
+        ticker: '',
+        nombre: f.nombre,
+        isin:   f.isin,
+        market: domMap[f.origen || 'ES'] || 'España',
+        region: f.origen || 'ES',
+        divisa: 'EUR',
+        cat:    f.cat,
+        gestora:f.gestora,
+      });
+    }
+  }
+
+  // 3) Cryptos — _cryptoData si está cargado, fallback estático en caso contrario
+  const fallbackCryptos = [
+    {symbol:'btc', name:'Bitcoin'},      {symbol:'eth', name:'Ethereum'},
+    {symbol:'bnb', name:'BNB'},          {symbol:'sol', name:'Solana'},
+    {symbol:'xrp', name:'XRP'},          {symbol:'ada', name:'Cardano'},
+    {symbol:'doge',name:'Dogecoin'},     {symbol:'avax',name:'Avalanche'},
+    {symbol:'dot', name:'Polkadot'},     {symbol:'matic',name:'Polygon'},
+    {symbol:'shib',name:'Shiba Inu'},    {symbol:'ltc', name:'Litecoin'},
+    {symbol:'link',name:'Chainlink'},    {symbol:'atom',name:'Cosmos'},
+    {symbol:'uni', name:'Uniswap'},      {symbol:'xlm', name:'Stellar'},
+    {symbol:'algo',name:'Algorand'},     {symbol:'near',name:'NEAR Protocol'},
+    {symbol:'usdt',name:'Tether'},       {symbol:'usdc',name:'USD Coin'},
+  ];
+  const list = (Array.isArray(_cryptoData) && _cryptoData.length > 0) ? _cryptoData : fallbackCryptos;
+  for (const c of list) {
+    const sym = (c.symbol || '').toUpperCase();
+    if (!sym) continue;
+    out.push({
+      tipo:   'crypto',
+      ticker: sym,
+      nombre: c.name || sym,
+      market: 'CoinGecko · Top 20',
+      region: 'Global',
+      divisa: 'EUR',
+    });
+  }
+
+  _assetCatalog = out;
+  _assetCatalogByName = {};
+  for (const e of out) {
+    const key = _normalizeName(e.nombre);
+    if (!key) continue;
+    if (!_assetCatalogByName[key]) _assetCatalogByName[key] = [];
+    _assetCatalogByName[key].push(e);
+  }
+  return out;
+}
+
+function _invalidateAssetCatalog() { _assetCatalog = null; _assetCatalogByName = null; }
+
+function _searchAssetCatalog(query, max) {
+  if (!query) return [];
+  max = max || 8;
+  const cat = _buildAssetCatalog();
+  const q = _normalizeName(query);
+  const qUp = query.toUpperCase().trim();
+  if (!q && !qUp) return [];
+  const scored = [];
+  for (const e of cat) {
+    const tk = (e.ticker || '').toUpperCase();
+    const nameN = _normalizeName(e.nombre);
+    const isin  = (e.isin || '').toUpperCase();
+    let s = 0;
+    if (tk && tk === qUp) s = 200;
+    else if (tk && tk.startsWith(qUp)) s = 150;
+    else if (isin && isin === qUp) s = 180;
+    else if (isin && isin.startsWith(qUp)) s = 140;
+    else if (nameN === q) s = 130;
+    else if (nameN.startsWith(q)) s = 100;
+    else if (nameN.includes(q)) s = 70;
+    else if (tk && tk.includes(qUp)) s = 60;
+    if (s > 0) scored.push({ e, s });
+  }
+  scored.sort((a, b) => b.s - a.s);
+  return scored.slice(0, max).map(o => o.e);
+}
+
+function _findMarketAlternatives(entry) {
+  if (!entry || !entry.nombre) return [];
+  _buildAssetCatalog();
+  const key = _normalizeName(entry.nombre);
+  const group = _assetCatalogByName[key] || [];
+  return group.filter(e => e !== entry && (e.ticker !== entry.ticker || e.market !== entry.market));
+}
+
+// ── Autocomplete UI ─────────────────────────────────────────────
+function _acRender(dropdownId, entries, fieldKey) {
+  const dd = document.getElementById(dropdownId);
+  if (!dd) return;
+  if (!entries.length) { dd.style.display = 'none'; dd.innerHTML = ''; return; }
+  const TIPO_ICON = { accion:'📈', etf:'🧩', fondo:'📊', crypto:'₿', bono:'📜' };
+  const REG_FLAG  = { US:'🇺🇸', ES:'🇪🇸', DE:'🇩🇪', UK:'🇬🇧', JP:'🇯🇵', HK:'🇭🇰', EU:'🇪🇺', FR:'🇫🇷', LU:'🇱🇺', IE:'🇮🇪', Global:'🌍' };
+  dd.innerHTML = entries.map((e, i) => {
+    const tag = (e.ticker ? `<span class="ac-ticker">${e.ticker}</span>` : '') +
+                (e.isin   ? `<span class="ac-isin">${e.isin}</span>`     : '');
+    return `<div class="ac-item" data-idx="${i}" onmousedown="_acPickByIndex('${fieldKey}', ${i})">
+      <div class="ac-row1">
+        <span class="ac-icon">${TIPO_ICON[e.tipo] || '·'}</span>
+        ${tag}
+        <span class="ac-name">${e.nombre}</span>
+      </div>
+      <div class="ac-row2">
+        <span class="ac-flag">${REG_FLAG[e.region] || ''}</span>
+        <span>${e.market || ''}</span>
+        ${e.cat ? `<span class="ac-cat">${e.cat}</span>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+  dd._entries = entries;
+  dd.style.display = 'block';
+}
+
+function _acPickByIndex(fieldKey, idx) {
+  const dd = document.getElementById('acDropdown_' + fieldKey);
+  if (!dd || !dd._entries || !dd._entries[idx]) return;
+  _acApplyEntry(dd._entries[idx]);
+}
+
+function _acApplyEntry(entry) {
+  _acSelectedEntry = entry;
+  // Rellenar inputs principales
+  const tk = document.getElementById('activoTicker');
+  const nb = document.getElementById('activoNombre');
+  const is = document.getElementById('activoIsin');
+  const tp = document.getElementById('activoTipo');
+  const dv = document.getElementById('activoDivisa');
+  if (tk) tk.value = entry.ticker || '';
+  if (nb) nb.value = entry.nombre || '';
+  if (is) is.value = entry.isin   || '';
+  if (tp) tp.value = entry.tipo   || tp.value;
+  if (dv) dv.value = entry.divisa || dv.value;
+  // Cerrar dropdowns
+  _acCloseAll();
+  // Renderizar alternativas de mercado si las hay
+  _acRenderMarketAlts(entry);
+}
+
+function _acCloseAll() {
+  document.querySelectorAll('.ac-dropdown').forEach(d => { d.style.display = 'none'; });
+}
+
+function _acOnInput(fieldKey, value) {
+  const entries = _searchAssetCatalog(value, 8);
+  _acRender('acDropdown_' + fieldKey, entries, fieldKey);
+}
+
+function _acRenderMarketAlts(entry) {
+  const wrap = document.getElementById('activoMarketAlts');
+  if (!wrap) return;
+  const alts = _findMarketAlternatives(entry);
+  if (!alts.length) {
+    wrap.style.display = 'none';
+    wrap.innerHTML = '';
+    return;
+  }
+  const REG_FLAG = { US:'🇺🇸', ES:'🇪🇸', DE:'🇩🇪', UK:'🇬🇧', JP:'🇯🇵', HK:'🇭🇰', EU:'🇪🇺', FR:'🇫🇷', LU:'🇱🇺', IE:'🇮🇪', Global:'🌍' };
+  // Pill activa (entrada actual) + alternativas
+  const all = [entry, ...alts];
+  wrap.innerHTML = `
+    <div class="ac-alts-label">Disponible también en otros mercados — selecciona el de tu compra:</div>
+    <div class="ac-alts-pills">
+      ${all.map((a, i) => `
+        <button type="button"
+          class="ac-alt-pill${a === entry ? ' active' : ''}"
+          onclick='_acApplyAltByJson(${JSON.stringify(JSON.stringify(a))})'>
+          <span>${REG_FLAG[a.region] || ''}</span>
+          <span class="ac-alt-ticker">${a.ticker || a.isin || '—'}</span>
+          <span class="ac-alt-mkt">${a.market || ''}</span>
+        </button>
+      `).join('')}
+    </div>`;
+  wrap.style.display = 'block';
+}
+
+function _acApplyAltByJson(jsonStr) {
+  try { _acApplyEntry(JSON.parse(jsonStr)); } catch(_) {}
+}
+
+function _acReset() {
+  _acSelectedEntry = null;
+  _acCloseAll();
+  const alts = document.getElementById('activoMarketAlts');
+  if (alts) { alts.style.display = 'none'; alts.innerHTML = ''; }
+}
+
+// ════════════════════════════════════════════════════════════════
+// VER GRÁFICO DE UN ACTIVO DE CARTERA (v3.17.0)
+// ════════════════════════════════════════════════════════════════
+function openActivoChart(carteraId, activoId) {
+  if (!_session) { if (typeof showPromo === 'function') showPromo(); return; }
+  const cartera = _carteras.find(c => c.id === carteraId);
+  const activo  = cartera?.activos?.find(a => a.id === activoId);
+  if (!activo) { toast('Activo no encontrado', 'err'); return; }
+
+  // Fondos sin ticker → modal sintético basado en FONDOS_DATA
+  if (activo.tipo === 'fondo' && activo.isin) {
+    const f = (typeof FONDOS_DATA !== 'undefined') ? FONDOS_DATA.find(x => (x.isin || '').toUpperCase() === activo.isin.toUpperCase()) : null;
+    if (f) { _openFondoSyntheticChart(f, activo); return; }
+  }
+
+  // Crypto → convertir ticker a formato Yahoo (BTC → BTC-EUR)
+  if (activo.tipo === 'crypto') {
+    const sym = (activo.ticker || activo.nombre || '').toUpperCase().trim();
+    if (!sym) { toast('Sin ticker de crypto para mostrar gráfico', 'warn'); return; }
+    const yahooSym = sym.includes('-') ? sym : `${sym}-EUR`;
+    if (typeof openTickerChart === 'function') openTickerChart(yahooSym, activo.nombre || sym);
+    return;
+  }
+
+  // Resto (acción, ETF, bono, etc.) → usar ticker tal cual
+  const tk = (activo.ticker || '').trim();
+  if (!tk) {
+    toast('Este activo no tiene un ticker compatible para gráfico', 'warn');
+    return;
+  }
+  if (typeof openTickerChart === 'function') openTickerChart(tk, activo.nombre || tk);
+}
+
+// Chart sintético para fondos sin NAV en el portal — basado en rentabilidades
+// históricas del fondo (rYTD/r1y/r3y/r5y). Sirve para visualizar la trayectoria.
+function _openFondoSyntheticChart(f, activo) {
+  let m = document.getElementById('modalFondoChart');
+  if (!m) {
+    m = document.createElement('div');
+    m.id = 'modalFondoChart';
+    m.className = 'modal-overlay';
+    m.addEventListener('click', e => { if (e.target === m) _closeFondoSyntheticChart(); });
+    m.innerHTML = `<div class="modal" style="max-width:760px;padding:0;overflow:hidden">
+      <div style="padding:18px 22px 12px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
+        <div style="flex:1;min-width:0">
+          <div style="font-size:.7rem;color:var(--text3);text-transform:uppercase;letter-spacing:.06em">Fondo de inversión</div>
+          <div id="fcName" style="font-size:1.05rem;font-weight:700;color:var(--text);line-height:1.3;margin-top:2px"></div>
+          <div id="fcMeta" style="font-size:.74rem;color:var(--text2);margin-top:4px;display:flex;gap:8px;flex-wrap:wrap"></div>
+        </div>
+        <button class="modal-close" onclick="_closeFondoSyntheticChart()" style="position:relative;top:0;right:0">✕</button>
+      </div>
+      <div style="padding:14px 22px 6px;display:flex;gap:6px;flex-wrap:wrap" id="fcPeriods"></div>
+      <div style="padding:6px 22px 8px"><canvas id="fcCanvas" height="280" style="width:100%;display:block"></canvas></div>
+      <div id="fcReturn" style="padding:6px 22px 18px;font-size:.78rem;color:var(--text2);display:flex;gap:14px;flex-wrap:wrap"></div>
+      <div style="padding:10px 22px 18px;background:rgba(245,158,11,.04);border-top:1px solid var(--border);font-size:.7rem;color:var(--text3);line-height:1.5">
+        ⚠️ Gráfico sintético calculado a partir de las rentabilidades históricas del fondo (rYTD/r1y/r3y/r5y). No representa cotización diaria real — los fondos no publican NAV intradía en este portal.
+      </div>
+    </div>`;
+    document.body.appendChild(m);
+  }
+  document.getElementById('fcName').textContent = f.nombre;
+  const meta = document.getElementById('fcMeta');
+  meta.innerHTML = `
+    <span class="fondo-action-isin">${f.isin}</span>
+    <span>${f.gestora || ''}</span>
+    <span>·</span><span>${f.cat || ''}</span>
+    <span>·</span><span>TER ${(f.ter || 0).toFixed(2)}%</span>
+    <span>·</span><span>⭐ ${'★'.repeat(f.ms || 0)}</span>`;
+
+  const periods = [
+    { key:'1d',  label:'1D',  days:1   },
+    { key:'5d',  label:'5D',  days:5   },
+    { key:'1m',  label:'1M',  days:30  },
+    { key:'6m',  label:'6M',  days:180 },
+    { key:'1y', label:'1A',  days:365 },
+  ];
+  const pwrap = document.getElementById('fcPeriods');
+  pwrap.innerHTML = periods.map(p => `
+    <button class="fc-period-btn" data-period="${p.key}" onclick="_fcDrawPeriod('${f.isin}', ${p.days}, '${p.key}')">${p.label}</button>
+  `).join('');
+
+  // Default 6M
+  setTimeout(() => _fcDrawPeriod(f.isin, 180, '6m'), 30);
+
+  requestAnimationFrame(() => m.classList.add('show'));
+  document.body.style.overflow = 'hidden';
+}
+
+function _closeFondoSyntheticChart() {
+  const m = document.getElementById('modalFondoChart');
+  if (m) m.classList.remove('show');
+  document.body.style.overflow = '';
+}
+
+function _fcDrawPeriod(isin, days, key) {
+  const f = (typeof FONDOS_DATA !== 'undefined') ? FONDOS_DATA.find(x => (x.isin || '').toUpperCase() === isin.toUpperCase()) : null;
+  if (!f) return;
+  document.querySelectorAll('.fc-period-btn').forEach(b => b.classList.toggle('active', b.dataset.period === key));
+
+  // Tasa anualizada apropiada al período
+  const rateAnnual = days <= 180
+    ? (typeof f.r1y === 'number' && f.r1y ? f.r1y : (f.rYTD || 0)) / 100
+    : (typeof f.r1y === 'number' && f.r1y ? f.r1y : (f.r3y || f.r5y || 0)) / 100;
+  const periodReturn = Math.pow(1 + rateAnnual, days / 365) - 1;
+
+  // Genera ~60 puntos con interpolación suave + ruido determinista por ISIN
+  const n = Math.min(Math.max(Math.floor(days * 1.2), 30), 80);
+  const seed = isin.split('').reduce((s, c) => (s * 31 + c.charCodeAt(0)) & 0x7fffffff, 7);
+  let r = seed;
+  const noise = () => { r = (r * 1103515245 + 12345) & 0x7fffffff; return (r / 0x7fffffff - 0.5); };
+  const vol = Math.max((f.vol || 5) / 100, 0.02) * Math.sqrt(days / 365);
+  const baseStart = 100;
+  const baseEnd   = 100 * (1 + periodReturn);
+  const pts = [];
+  for (let i = 0; i <= n; i++) {
+    const t = i / n;
+    const trend = baseStart + (baseEnd - baseStart) * t;
+    const wobble = noise() * 100 * vol * (1 - Math.abs(t - 0.5) * 0.6);
+    pts.push(trend + wobble);
+  }
+  pts[0] = baseStart;
+  pts[pts.length - 1] = baseEnd;
+
+  _fcRenderCanvas(pts, periodReturn);
+
+  // Etiquetas
+  const ret = document.getElementById('fcReturn');
+  const pct = (periodReturn * 100);
+  const cls = pct >= 0 ? '#10B981' : '#EF4444';
+  const sign = pct >= 0 ? '+' : '';
+  const labelMap = { '1d':'1 día','5d':'5 días','1m':'1 mes','6m':'6 meses','1y':'1 año' };
+  ret.innerHTML = `
+    <span><b style="color:${cls}">${sign}${pct.toFixed(2)}%</b> · estimación ${labelMap[key] || ''}</span>
+    <span>·</span>
+    <span>YTD: <b>${(f.rYTD || 0).toFixed(2)}%</b></span>
+    <span>·</span>
+    <span>1A: <b>${(f.r1y || 0).toFixed(2)}%</b></span>
+    <span>·</span>
+    <span>Vol: <b>${(f.vol || 0).toFixed(2)}%</b></span>
+    <span>·</span>
+    <span>Sharpe: <b>${(f.sharpe || 0).toFixed(2)}</b></span>`;
+}
+
+function _fcRenderCanvas(pts, periodReturn) {
+  const canvas = document.getElementById('fcCanvas');
+  if (!canvas) return;
+  const dpr = window.devicePixelRatio || 1;
+  const W = canvas.clientWidth || 700;
+  const H = 280;
+  canvas.width = W * dpr;
+  canvas.height = H * dpr;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  ctx.clearRect(0, 0, W, H);
+
+  const padL = 44, padR = 12, padT = 12, padB = 28;
+  const cw = W - padL - padR;
+  const ch = H - padT - padB;
+
+  const minV = Math.min(...pts);
+  const maxV = Math.max(...pts);
+  const range = Math.max(maxV - minV, 0.001);
+  const xAt = i => padL + (i / (pts.length - 1)) * cw;
+  const yAt = v => padT + ch - ((v - minV) / range) * ch;
+
+  // Grid horizontal
+  ctx.strokeStyle = '#2a3050';
+  ctx.lineWidth = 1;
+  for (let g = 0; g <= 4; g++) {
+    const y = padT + (g / 4) * ch;
+    ctx.beginPath(); ctx.moveTo(padL, y); ctx.lineTo(W - padR, y); ctx.stroke();
+    const v = maxV - (g / 4) * range;
+    ctx.fillStyle = '#94a3b8'; ctx.font = '10px Inter, sans-serif';
+    ctx.textAlign = 'right'; ctx.fillText(v.toFixed(1), padL - 6, y + 3);
+  }
+
+  // Línea (color según signo del periodo)
+  const positive = periodReturn >= 0;
+  const stroke = positive ? '#10B981' : '#EF4444';
+  const fillTop = positive ? 'rgba(16,185,129,.18)' : 'rgba(239,68,68,.18)';
+
+  // Área
+  ctx.beginPath();
+  ctx.moveTo(xAt(0), padT + ch);
+  for (let i = 0; i < pts.length; i++) ctx.lineTo(xAt(i), yAt(pts[i]));
+  ctx.lineTo(xAt(pts.length - 1), padT + ch);
+  ctx.closePath();
+  const grad = ctx.createLinearGradient(0, padT, 0, padT + ch);
+  grad.addColorStop(0, fillTop);
+  grad.addColorStop(1, 'rgba(37,99,235,.0)');
+  ctx.fillStyle = grad; ctx.fill();
+
+  // Línea
+  ctx.beginPath();
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = stroke;
+  for (let i = 0; i < pts.length; i++) {
+    if (i === 0) ctx.moveTo(xAt(i), yAt(pts[i]));
+    else ctx.lineTo(xAt(i), yAt(pts[i]));
+  }
+  ctx.stroke();
+}
+
 function _drawDonut(canvas, segs, progress) {
   if (progress === undefined) progress = 1;
   const ctx = canvas.getContext('2d');
@@ -8481,6 +9057,13 @@ function openActivoModal(carteraId, activoId) {
     document.getElementById('activoAportacion').value         = '';
   }
   toggleAportacion();
+  // Resetea estado del autocomplete y oculta alternativas de mercado
+  if (typeof _acReset === 'function') _acReset();
+  // Pre-carga _cryptoData para mejorar el catálogo si aún no se cargó
+  if (typeof _cryptoData !== 'undefined' && (!Array.isArray(_cryptoData) || _cryptoData.length === 0)
+      && typeof loadCryptoMarket === 'function') {
+    loadCryptoMarket().then(() => _invalidateAssetCatalog()).catch(() => {});
+  }
   document.getElementById('modalActivo').classList.add('show');
   document.getElementById('activoTicker').focus();
 }
