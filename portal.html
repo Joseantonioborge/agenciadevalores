@@ -4472,7 +4472,7 @@ const INDEX_MAP = {
   '^IXIC':    { name: 'NASDAQ',                  region: 'US',     key: 'nasdaq'          },
   '^DJI':     { name: 'Dow Jones',               region: 'US',     key: 'dowjones'        },
   '^IBEX':    { name: 'IBEX 35',                 region: 'ES',     key: 'ibex35'          },
-  '^IGBM':    { name: 'Mercado Continuo (IGBM)', region: 'ES',     key: 'mercadocontinuo' },
+  'EWP':      { name: 'Mercado Continuo (EWP)',  region: 'ES',     key: 'mercadocontinuo' },
   '^GDAXI':   { name: 'DAX 40',                  region: 'DE',     key: 'dax40'           },
   '^FTSE':    { name: 'FTSE 100 (LSE)',          region: 'UK',     key: 'ftse100'         },
   '^N100':    { name: 'Euronext 100',            region: 'EU',     key: 'euronext100'     },
@@ -7083,8 +7083,8 @@ const CONSTITUENTS = {
       { ticker:'TSCO.L', name:'Tesco',                 weight:1.3, sector:'Consumo' },
     ]
   },
-  '^IGBM': {
-    label: 'Mercado Continuo Español (IGBM) — Top 20 componentes',
+  'EWP': {
+    label: 'Mercado Continuo Español (vía EWP) — Top 20 componentes',
     items: [
       { ticker:'ITX.MC',  name:'Inditex',           weight:14.5, sector:'Consumo' },
       { ticker:'IBE.MC',  name:'Iberdrola',         weight:13.2, sector:'Utilities' },

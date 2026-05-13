@@ -6,7 +6,7 @@ const INDICES = [
   { key: 'nasdaq',          symbol: '%5EIXIC',    name: 'NASDAQ',                  region: 'US' },
   { key: 'dowjones',        symbol: '%5EDJI',     name: 'Dow Jones',               region: 'US' },
   { key: 'ibex35',          symbol: '%5EIBEX',    name: 'IBEX 35',                 region: 'ES' },
-  { key: 'mercadocontinuo', symbol: '%5EIGBM',    name: 'Mercado Continuo (IGBM)', region: 'ES' },
+  { key: 'mercadocontinuo', symbol: 'EWP',        name: 'Mercado Continuo (EWP)',  region: 'ES' },
   { key: 'dax40',           symbol: '%5EGDAXI',   name: 'DAX 40',                  region: 'DE' },
   { key: 'ftse100',         symbol: '%5EFTSE',    name: 'FTSE 100 (LSE)',          region: 'UK' },
   { key: 'euronext100',     symbol: '%5EN100',    name: 'Euronext 100',            region: 'EU' },
