@@ -1647,6 +1647,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .fondos-flag-badge.es{background:rgba(220,38,38,.15);color:#fca5a5}
 .fondos-flag-badge.lu{background:rgba(37,99,235,.15);color:#93c5fd}
 .fondos-flag-badge.ie{background:rgba(5,150,105,.15);color:#6ee7b7}
+.fondos-flag-badge.fr{background:rgba(99,102,241,.15);color:#c7d2fe}
 .fondos-source-bar{display:flex;align-items:center;gap:8px;margin-bottom:12px;padding:8px 14px;background:var(--card);border:1px solid var(--border);border-radius:10px;flex-wrap:wrap;font-size:.74rem}
 .fondos-source-label{font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;font-size:.66rem}
 .fondos-source-link{color:var(--accent);text-decoration:none;font-weight:600;padding:2px 8px;border-radius:12px;background:rgba(37,99,235,.08);transition:background .15s}
@@ -2529,7 +2530,7 @@ body.tour-running #finbotBubble{z-index:5000!important}
 <nav>
   <div class="nav-logo">
     <img class="nav-logo-img" src="assets/logo-genz-transparent.png" alt="GenZ Invest">
-    <span class="nav-version">v3.13.3</span>
+    <span class="nav-version">v3.14.0</span>
   </div>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="showSection('Mercados')">Mercados</button>
@@ -2981,7 +2982,7 @@ body.tour-running #finbotBubble{z-index:5000!important}
           <option value="ter_asc">TER ↑</option>
           <option value="ms_desc">Rating ↓</option>
         </select>
-        <div class="fondos-count" id="fondosCount">125 fondos</div>
+        <div class="fondos-count" id="fondosCount">134 fondos</div>
       </div>
 
       <!-- Fuentes de datos -->
@@ -9129,6 +9130,18 @@ const FONDOS_DATA = [
   {id:123, nombre:'Capital Group New Perspective Fund B EUR',        isin:'LU1295551573', gestora:'Capital Group',   cat:'RV Global',       patM:32400, part:0, origen:'LU', rYTD:13.52,r1y:21.82,r3y:11.52,r5y:14.82,vol:14.80,sharpe:1.12, com:1.50, ter:1.72, ms:5},
   {id:124, nombre:'Comgest Growth Europe EUR Acc',                   isin:'IE0004766675', gestora:'Comgest',          cat:'RV Europa',       patM:6800,  part:0, origen:'IE', rYTD:9.82, r1y:16.52,r3y:8.82, r5y:10.52,vol:15.20,sharpe:0.82, com:1.20, ter:1.52, ms:5},
   {id:125, nombre:'Fundsmith Equity Fund T EUR Acc',                 isin:'LU0690375182', gestora:'Fundsmith',       cat:'RV Global',       patM:28400, part:0, origen:'LU', rYTD:11.52,r1y:18.52,r3y:9.52, r5y:14.18,vol:14.50,sharpe:1.05, com:0.90, ter:1.05, ms:5},
+
+  // ── FONDOS POPULARES 2025-2026 (v3.14.0) ─────────────────────────
+  // Selección de gestoras de referencia con fuerte demanda en España
+  {id:126, nombre:'Allianz Global Artificial Intelligence AT EUR',   isin:'LU1548497983', gestora:'Allianz GI',      cat:'RV Temático',     patM:6800,  part:0, origen:'LU', rYTD:17.52,r1y:29.85,r3y:11.82,r5y:21.52,vol:25.80,sharpe:0.95, com:1.80, ter:2.05, ms:4},
+  {id:127, nombre:'Carmignac Patrimoine A EUR Acc',                  isin:'FR0010135103', gestora:'Carmignac',       cat:'Mixto Moderado',  patM:5200,  part:0, origen:'FR', rYTD:3.18, r1y:6.42, r3y:1.12, r5y:2.18, vol:6.80, sharpe:0.55, com:1.50, ter:1.81, ms:2},
+  {id:128, nombre:'MFS Meridian European Value A1 EUR Acc',          isin:'LU0125951151', gestora:'MFS IM',          cat:'RV Europa',       patM:7800,  part:0, origen:'LU', rYTD:9.42, r1y:16.18,r3y:9.12, r5y:9.52, vol:14.20,sharpe:0.95, com:1.50, ter:1.81, ms:4},
+  {id:129, nombre:'Morgan Stanley INVF Global Brands A USD',         isin:'LU0119620416', gestora:'Morgan Stanley',  cat:'RV Global',       patM:22400, part:0, origen:'LU', rYTD:12.52,r1y:20.18,r3y:10.12,r5y:13.42,vol:14.50,sharpe:1.08, com:0.80, ter:1.43, ms:5},
+  {id:130, nombre:'Pictet-Robotics R EUR',                           isin:'LU1279334210', gestora:'Pictet AM',       cat:'RV Temático',     patM:5800,  part:0, origen:'LU', rYTD:14.18,r1y:24.52,r3y:8.42, r5y:14.18,vol:22.50,sharpe:0.78, com:1.60, ter:2.42, ms:3},
+  {id:131, nombre:'DWS Concept Kaldemorgen LC EUR',                  isin:'LU0599946893', gestora:'DWS',             cat:'Alternativo',     patM:9200,  part:0, origen:'LU', rYTD:5.12, r1y:9.42, r3y:5.18, r5y:6.42, vol:7.20, sharpe:1.10, com:1.05, ter:1.50, ms:5},
+  {id:132, nombre:'Nordea 1 Stable Return Fund BP EUR',              isin:'LU0227384020', gestora:'Nordea AM',       cat:'Mixto Defensivo', patM:3800,  part:0, origen:'LU', rYTD:3.18, r1y:6.18, r3y:2.85, r5y:3.12, vol:5.20, sharpe:0.85, com:1.50, ter:1.85, ms:3},
+  {id:133, nombre:'M&G (Lux) Optimal Income Fund A EUR Acc',         isin:'LU1670724097', gestora:'M&G Investments', cat:'Renta Fija',      patM:6200,  part:0, origen:'LU', rYTD:3.42, r1y:6.18, r3y:1.18, r5y:2.18, vol:5.20, sharpe:0.72, com:1.13, ter:1.40, ms:3},
+  {id:134, nombre:'Janus Henderson Horizon Global Tech Leaders A2 EUR',isin:'LU0572952462',gestora:'Janus Henderson', cat:'RV Temático',     patM:7200,  part:0, origen:'LU', rYTD:18.18,r1y:30.42,r3y:15.85,r5y:21.18,vol:24.20,sharpe:1.05, com:1.20, ter:1.95, ms:4},
 ];
 
 const FONDOS_COMPARE_COLORS = ['#2563EB','#10B981','#F59E0B','#EF4444','#8B5CF6'];
@@ -10026,6 +10039,7 @@ function _renderFondosTable() {
     'ES':{ flag:'🇪🇸', label:'ES', cls:'es', full:'España (CNMV)' },
     'LU':{ flag:'🇱🇺', label:'LU', cls:'lu', full:'Luxemburgo (CSSF)' },
     'IE':{ flag:'🇮🇪', label:'IE', cls:'ie', full:'Irlanda (CBI)' },
+    'FR':{ flag:'🇫🇷', label:'FR', cls:'fr', full:'Francia (AMF)' },
   };
   tbody.innerHTML = data.map(f => {
     const bg  = CAT_COLORS[f.cat] || '#1e293b';
