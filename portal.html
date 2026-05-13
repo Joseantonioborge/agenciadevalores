@@ -1352,6 +1352,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .cart-empty-sub{font-size:.85rem;margin-bottom:22px}
 .cart-loading{text-align:center;padding:40px;color:var(--text2);font-size:.9rem}
 .cart-spinner{width:26px;height:26px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 12px}
+.cart-card-btn.spinning{animation:spin .8s linear infinite;pointer-events:none;opacity:.7}
 
 /* Modales de carteras */
 .cart-color-picker{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
@@ -2549,7 +2550,7 @@ body.tour-running #finbotBubble{z-index:5000!important}
 <nav>
   <div class="nav-logo">
     <img class="nav-logo-img" src="assets/logo-genz-transparent.png" alt="GenZ Invest">
-    <span class="nav-version">v3.15.1</span>
+    <span class="nav-version">v3.16.0</span>
   </div>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="showSection('Mercados')">Mercados</button>
@@ -7899,6 +7900,11 @@ async function loadCarteras() {
   }
   _carterasLoaded = true;
   renderCarteras();
+  // Auto-actualiza precios actuales (crypto + fondos) tras la carga inicial.
+  // Silencioso: si falla o no hay cambios, no muestra nada al usuario.
+  if (typeof _autoRefreshAllCarterasPrecios === 'function') {
+    setTimeout(() => { _autoRefreshAllCarterasPrecios().catch(() => {}); }, 200);
+  }
 }
 
 function renderCarteras() {
@@ -8132,6 +8138,7 @@ function _renderCarteraCard(c) {
         <span class="cart-card-pct ${cls}">${sign}${calc.pct.toFixed(2)}%</span>
         <span class="cart-card-val">€${calc.actual.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
         <div class="cart-card-actions" onclick="event.stopPropagation()">
+          <button class="cart-card-btn" id="refreshBtn_${c.id}" onclick="refreshCarteraPrecios('${c.id}')" title="Actualizar precios (crypto: CoinGecko en vivo · fondos: estimación por rentabilidad)">🔄</button>
           <button class="cart-card-btn" onclick="openCarteraModal('${c.id}')" title="Editar cartera">✏️</button>
           <button class="cart-card-btn del" onclick="deleteCartera('${c.id}')" title="Eliminar cartera">🗑️</button>
         </div>
@@ -8159,6 +8166,169 @@ function toggleCarteraExpand(id) {
   if (!body) return;
   const open = body.classList.toggle('open');
   if (chevron) chevron.style.transform = open ? 'rotate(180deg)' : '';
+}
+
+// ── Actualización automática de precios (v3.16.0) ────────────────
+// Recoge precios actuales de las fuentes disponibles en el portal:
+//   - Crypto → _cryptoData (CoinGecko, en EUR)
+//   - Fondo  → FONDOS_DATA por ISIN; estima NAV aplicando la
+//              rentabilidad anualizada del fondo al periodo de tenencia
+// Devuelve el nuevo precioActual estimado o null si no se puede actualizar.
+function _estimateActivoPrice(activo) {
+  if (!activo || !activo.tipo) return null;
+
+  // ── CRYPTO ─────────────────────────────────────────────────────
+  if (activo.tipo === 'crypto') {
+    if (!Array.isArray(_cryptoData) || _cryptoData.length === 0) return null;
+    const tk = (activo.ticker || '').toLowerCase().trim();
+    const nm = (activo.nombre || '').toLowerCase().trim();
+    if (!tk && !nm) return null;
+    const match = _cryptoData.find(c =>
+      (tk && c.symbol && c.symbol.toLowerCase() === tk) ||
+      (nm && c.name   && c.name.toLowerCase()   === nm) ||
+      (nm && c.id     && c.id.toLowerCase()     === nm)
+    );
+    if (!match || typeof match.current_price !== 'number') return null;
+    return match.current_price;
+  }
+
+  // ── FONDO ──────────────────────────────────────────────────────
+  if (activo.tipo === 'fondo') {
+    if (!activo.isin || typeof FONDOS_DATA === 'undefined') return null;
+    const isin = activo.isin.toUpperCase().trim();
+    const f = FONDOS_DATA.find(x => (x.isin || '').toUpperCase() === isin);
+    if (!f) return null;
+    const pc = parseFloat(activo.precioCompra);
+    if (!isFinite(pc) || pc <= 0) return null;
+
+    // Tasa anualizada (mejor disponible): r1y > r3y > r5y > rYTD
+    const rate = (typeof f.r1y  === 'number' && f.r1y  !== 0 ? f.r1y  :
+                  typeof f.r3y  === 'number' && f.r3y  !== 0 ? f.r3y  :
+                  typeof f.r5y  === 'number' && f.r5y  !== 0 ? f.r5y  :
+                  typeof f.rYTD === 'number' ? f.rYTD : 0) / 100;
+
+    // Sin fecha de compra → aplica rentabilidad YTD acumulada
+    if (!activo.fechaCompra) {
+      const ytd = (typeof f.rYTD === 'number' ? f.rYTD : 0) / 100;
+      return +(pc * (1 + ytd)).toFixed(4);
+    }
+    const buyDate = new Date(activo.fechaCompra);
+    if (isNaN(buyDate.getTime())) return null;
+    const days = (Date.now() - buyDate.getTime()) / (1000 * 60 * 60 * 24);
+    if (!isFinite(days) || days < 0) return null;
+    const years = Math.max(days / 365, 1/365);
+    const factor = Math.pow(1 + rate, years);
+    return +(pc * factor).toFixed(4);
+  }
+
+  return null;
+}
+
+async function refreshCarteraPrecios(carteraId) {
+  const cartera = _carteras.find(c => c.id === carteraId);
+  if (!cartera || !cartera.activos || cartera.activos.length === 0) {
+    toast('La cartera no tiene activos para actualizar', 'warn');
+    return;
+  }
+  const btn = document.getElementById('refreshBtn_' + carteraId);
+  if (btn) { btn.classList.add('spinning'); btn.disabled = true; }
+
+  // Asegurar que _cryptoData esté cargado si la cartera tiene cryptos
+  const tieneCrypto = cartera.activos.some(a => a.tipo === 'crypto');
+  if (tieneCrypto && (!Array.isArray(_cryptoData) || _cryptoData.length === 0)) {
+    try { await loadCryptoMarket(); } catch(_) {}
+  }
+
+  // Construir activos actualizados
+  let nCrypto = 0, nFondo = 0, nSkip = 0;
+  const updActivos = cartera.activos.map(a => {
+    const nuevoPrecio = _estimateActivoPrice(a);
+    if (nuevoPrecio == null || !isFinite(nuevoPrecio) || nuevoPrecio <= 0) {
+      if (a.tipo === 'crypto' || a.tipo === 'fondo') nSkip++;
+      return a;
+    }
+    if (a.tipo === 'crypto') nCrypto++; else if (a.tipo === 'fondo') nFondo++;
+    return { ...a, precioActual: nuevoPrecio };
+  });
+
+  const total = nCrypto + nFondo;
+  if (total === 0) {
+    if (btn) { btn.classList.remove('spinning'); btn.disabled = false; }
+    toast('Ningún activo coincide con las fuentes de precio del portal', 'warn');
+    return;
+  }
+
+  const updCartera = { ...cartera, activos: updActivos };
+  try {
+    const res = await fetch(`${API_BASE}/carteras`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-session-token': apiKey() },
+      body: JSON.stringify({ username: _session.username, cartera: updCartera }),
+    });
+    if (!res.ok) throw new Error('Error ' + res.status);
+    const data = await res.json();
+    const idx = _carteras.findIndex(c => c.id === carteraId);
+    if (idx >= 0) _carteras[idx] = data.cartera;
+    renderCarteras();
+    // Reabrir la cartera tras el render
+    setTimeout(() => {
+      const body = document.getElementById('cartBody_' + carteraId);
+      const chev = document.getElementById('cartChevron_' + carteraId);
+      if (body) { body.classList.add('open'); if (chev) chev.style.transform = 'rotate(180deg)'; }
+    }, 30);
+    const parts = [];
+    if (nCrypto) parts.push(`${nCrypto} crypto`);
+    if (nFondo)  parts.push(`${nFondo} fondo${nFondo===1?'':'s'}`);
+    let msg = `✓ ${total} activo${total===1?'':'s'} actualizado${total===1?'':'s'} (${parts.join(' · ')})`;
+    if (nSkip) msg += ` · ${nSkip} sin datos`;
+    toast(msg, 'ok');
+  } catch (err) {
+    toast('⚠️ Error al actualizar precios: ' + (err.message || 'desconocido'), 'err');
+    if (btn) { btn.classList.remove('spinning'); btn.disabled = false; }
+  }
+}
+
+// Actualiza silenciosamente todas las carteras del inversor al abrir
+// la pestaña por primera vez. No interrumpe la UI si falla.
+async function _autoRefreshAllCarterasPrecios() {
+  if (!Array.isArray(_carteras) || _carteras.length === 0) return;
+  const tieneCrypto = _carteras.some(c => (c.activos || []).some(a => a.tipo === 'crypto'));
+  if (tieneCrypto && (!Array.isArray(_cryptoData) || _cryptoData.length === 0)) {
+    try { await loadCryptoMarket(); } catch(_) { return; }
+  }
+  let cambios = 0;
+  const updates = [];
+  for (const c of _carteras) {
+    const upd = (c.activos || []).map(a => {
+      const np = _estimateActivoPrice(a);
+      if (np != null && isFinite(np) && np > 0 && Math.abs(np - parseFloat(a.precioActual || 0)) > 0.0001) {
+        cambios++;
+        return { ...a, precioActual: np };
+      }
+      return a;
+    });
+    updates.push({ cartera: c, activos: upd });
+  }
+  if (cambios === 0) return;
+  // Persistir cada cartera modificada en paralelo
+  await Promise.all(updates
+    .filter(u => u.activos.some((a, i) => a !== u.cartera.activos[i]))
+    .map(async u => {
+      const updCartera = { ...u.cartera, activos: u.activos };
+      try {
+        const res = await fetch(`${API_BASE}/carteras`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'x-session-token': apiKey() },
+          body: JSON.stringify({ username: _session.username, cartera: updCartera }),
+        });
+        if (res.ok) {
+          const data = await res.json();
+          const idx = _carteras.findIndex(c => c.id === data.cartera.id);
+          if (idx >= 0) _carteras[idx] = data.cartera;
+        }
+      } catch(_) {}
+    }));
+  renderCarteras();
 }
 
 function _drawDonut(canvas, segs, progress) {
