@@ -453,33 +453,36 @@ main{padding-top:60px}
 }
 .news-filter:hover{border-color:var(--text3);color:var(--text)}
 .news-filter.active{background:var(--accent);border-color:var(--accent);color:#fff}
-.news-grid{display:flex;flex-direction:column;gap:12px}
+.news-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px}
 .news-card{
-  background:var(--bg2);border:1px solid var(--border);border-radius:12px;
-  padding:16px 18px;transition:border-color .2s;
+  background:var(--bg2);border:1px solid var(--border);border-radius:10px;
+  padding:11px 13px;transition:border-color .15s,transform .15s;
+  display:flex;flex-direction:column;
 }
-.news-card:hover{border-color:rgba(37,99,235,.4)}
-.news-card-top{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.news-card:hover{border-color:rgba(37,99,235,.45);transform:translateY(-1px)}
+.news-card-top{display:flex;align-items:center;gap:6px;margin-bottom:6px;flex-wrap:wrap}
 .news-badge{
-  font-size:.65rem;font-weight:700;padding:2px 8px;border-radius:10px;
-  white-space:nowrap;flex-shrink:0;
+  font-size:.6rem;font-weight:700;padding:1px 7px;border-radius:9px;
+  white-space:nowrap;flex-shrink:0;letter-spacing:.02em;
 }
 .news-badge.oportunidad{background:rgba(16,185,129,.15);color:var(--green);border:1px solid rgba(16,185,129,.3)}
 .news-badge.riesgo{background:rgba(239,68,68,.12);color:var(--red);border:1px solid rgba(239,68,68,.3)}
 .news-badge.tendencia{background:rgba(37,99,235,.12);color:var(--accent);border:1px solid rgba(37,99,235,.3)}
-.news-badge-icon{margin-right:3px}
-.news-card-title{font-size:.9rem;font-weight:600;color:var(--text);line-height:1.4;margin-bottom:6px}
-.news-card-summary{font-size:.8rem;color:var(--text2);line-height:1.55;
-  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.news-badge-icon{margin-right:2px}
+.news-card-title{font-size:.79rem;font-weight:600;color:var(--text);line-height:1.32;margin-bottom:4px;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.news-card-summary{font-size:.71rem;color:var(--text2);line-height:1.45;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;flex:1}
 .news-card-meta{
-  display:flex;align-items:center;gap:12px;margin-top:10px;
-  font-size:.72rem;color:var(--text3);
+  display:flex;align-items:center;gap:8px;margin-top:7px;padding-top:6px;border-top:1px solid var(--border);
+  font-size:.65rem;color:var(--text3);flex-wrap:wrap;
 }
 .news-card-meta .news-source{font-weight:500;color:var(--text2)}
 .news-card-meta .news-index{
-  background:var(--card);border:1px solid var(--border);border-radius:4px;
-  padding:1px 6px;font-size:.65rem;font-weight:600;color:var(--accent);
+  background:var(--card);border:1px solid var(--border);border-radius:3px;
+  padding:1px 5px;font-size:.6rem;font-weight:600;color:var(--accent);
 }
+@media(max-width:600px){.news-grid{grid-template-columns:1fr;gap:8px}.news-card{padding:10px 12px}}
 .news-loading{
   text-align:center;padding:40px;color:var(--text3);font-size:.85rem;
 }
@@ -1466,6 +1469,23 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .calc-summary-value.gold{color:#F59E0B}
 .calc-recalc-btn{width:100%;padding:11px;background:var(--accent);color:#fff;border:none;border-radius:9px;font-size:.9rem;font-weight:700;cursor:pointer;transition:.2s;font-family:var(--font);letter-spacing:.02em;margin-top:4px}
 .calc-recalc-btn:hover{background:var(--accent2);box-shadow:0 4px 14px rgba(37,99,235,.35)}
+
+/* Heatmap calculadora (v3.18.0) */
+.calc-heatmap-box{margin-top:0}
+.calc-heatmap{display:grid;grid-template-columns:64px repeat(6,1fr);gap:3px;font-family:var(--font)}
+.calc-hm-cell{padding:8px 4px;text-align:center;border-radius:5px;font-size:.7rem;line-height:1.2;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:48px;transition:transform .12s,box-shadow .12s;cursor:default;position:relative}
+.calc-hm-cell:hover{transform:scale(1.04);z-index:5;box-shadow:0 4px 12px rgba(0,0,0,.45)}
+.calc-hm-cell.current{outline:2px solid #fff;outline-offset:-2px;font-weight:800;z-index:4}
+.calc-hm-cell.current::before{content:'★';position:absolute;top:1px;right:3px;font-size:.6rem;color:#fff;opacity:.85}
+.calc-hm-axis{font-size:.65rem;color:var(--text3);font-weight:600;display:flex;align-items:center;justify-content:center;text-transform:uppercase;letter-spacing:.04em}
+.calc-hm-axis.row{justify-content:flex-end;padding-right:6px}
+.calc-hm-val{font-weight:700;font-family:monospace;color:#fff;font-size:.74rem;text-shadow:0 1px 2px rgba(0,0,0,.4)}
+.calc-hm-mult{font-size:.58rem;color:rgba(255,255,255,.85);margin-top:1px;font-weight:600}
+.calc-hm-leg-cell{display:inline-block;width:14px;height:14px;border-radius:3px;vertical-align:middle;margin:0 2px}
+.calc-hm-leg-low{background:#1e3a8a}
+.calc-hm-leg-mid{background:#10B981}
+.calc-hm-leg-high{background:#F59E0B}
+@media(max-width:700px){.calc-heatmap{grid-template-columns:48px repeat(6,1fr);gap:2px}.calc-hm-cell{font-size:.62rem;padding:6px 2px;min-height:42px}.calc-hm-val{font-size:.66rem}.calc-hm-mult{font-size:.54rem}}
 .calc-recalc-btn:active{transform:scale(.98)}
 .calc-plan-btn{
   width:100%;padding:11px;margin-top:10px;
@@ -2579,7 +2599,7 @@ body.tour-running #finbotBubble{z-index:5000!important}
 <nav>
   <div class="nav-logo">
     <img class="nav-logo-img" src="assets/logo-genz-transparent.png" alt="GenZ Invest">
-    <span class="nav-version">v3.17.0</span>
+    <span class="nav-version">v3.18.0</span>
   </div>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="showSection('Mercados')">Mercados</button>
@@ -2860,7 +2880,26 @@ body.tour-running #finbotBubble{z-index:5000!important}
                 <div class="calc-legend-item"><div class="calc-legend-dot" style="background:#F59E0B"></div><span data-i18n="intereses_leg">Intereses</span></div>
               </div>
             </div>
-            <canvas id="calcChart" height="180" style="width:100%;display:block"></canvas>
+            <canvas id="calcChart" height="340" style="width:100%;display:block"></canvas>
+          </div>
+
+          <!-- Heatmap interactivo: capital final por tasa × horizonte -->
+          <div class="calc-chart-box calc-heatmap-box">
+            <div class="calc-chart-header">
+              <div>
+                <div class="calc-chart-title">🔥 Mapa de calor — capital final por tasa × horizonte</div>
+                <div style="font-size:.68rem;color:var(--text3);margin-top:3px">Cada celda muestra el patrimonio final con tu capital y aportación actuales · 🟦 menor → 🟧 mayor</div>
+              </div>
+              <div class="calc-legend">
+                <span class="calc-hm-leg-cell calc-hm-leg-low"></span>
+                <span style="font-size:.68rem;color:var(--text3)">Bajo</span>
+                <span class="calc-hm-leg-cell calc-hm-leg-mid"></span>
+                <span style="font-size:.68rem;color:var(--text3)">Medio</span>
+                <span class="calc-hm-leg-cell calc-hm-leg-high"></span>
+                <span style="font-size:.68rem;color:var(--text3)">Alto</span>
+              </div>
+            </div>
+            <div id="calcHeatmap" class="calc-heatmap"></div>
           </div>
         </div>
       </div>
@@ -9257,6 +9296,69 @@ function calcIC() {
 
   // Dibujar gráfico — animado
   _animChart(700, p => _drawCalcChart(capital, aportacion, m, tasa, maxAnos, p));
+
+  // Heatmap interactivo: capital final por tasa × horizonte
+  // (tasa aquí ya es fracción 0.07 → multiplicar por 100 para mostrar como % en el heatmap)
+  _drawCalcHeatmap(capital, aportacion, m, tasa * 100, maxAnos);
+}
+
+// Heatmap HTML: filas = tasas, cols = horizontes, color por intensidad
+function _drawCalcHeatmap(capital, aportacion, m, currTasa, currAnos) {
+  const grid = document.getElementById('calcHeatmap');
+  if (!grid) return;
+  const tasas    = [3, 5, 7, 10, 15, 20];
+  const horizons = [5, 10, 15, 20, 25, 30];
+
+  // Calcula todos los totales para encontrar min/max
+  // (_calcIC_at espera tasa como fracción: 7% → 0.07)
+  const matrix = tasas.map(r => horizons.map(y => {
+    const { total, totalDepositado } = _calcIC_at(capital, aportacion, m, r / 100, y);
+    return { total, dep: totalDepositado, mult: totalDepositado > 0 ? total / totalDepositado : 1 };
+  }));
+  const allVals = matrix.flat().map(x => x.total);
+  const minV = Math.min(...allVals);
+  const maxV = Math.max(...allVals);
+  const range = Math.max(maxV - minV, 1);
+
+  // Color: interpola azul oscuro → verde → amber según percentil
+  const colorFor = pct => {
+    // 0 → #1e3a8a (azul), 0.5 → #10B981 (verde), 1 → #F59E0B (amber)
+    const c0 = [30, 58, 138], c1 = [16, 185, 129], c2 = [245, 158, 11];
+    const lerp = (a, b, t) => Math.round(a + (b - a) * t);
+    let r, g, b;
+    if (pct <= 0.5) {
+      const t = pct / 0.5;
+      r = lerp(c0[0], c1[0], t); g = lerp(c0[1], c1[1], t); b = lerp(c0[2], c1[2], t);
+    } else {
+      const t = (pct - 0.5) / 0.5;
+      r = lerp(c1[0], c2[0], t); g = lerp(c1[1], c2[1], t); b = lerp(c1[2], c2[2], t);
+    }
+    return `rgb(${r},${g},${b})`;
+  };
+
+  // Encuentra la celda más cercana al estado actual del usuario
+  const closestRateIdx = tasas.reduce((best, r, i) => Math.abs(r - currTasa) < Math.abs(tasas[best] - currTasa) ? i : best, 0);
+  const closestYearIdx = horizons.reduce((best, y, i) => Math.abs(y - currAnos) < Math.abs(horizons[best] - currAnos) ? i : best, 0);
+
+  // Cabecera (esquina vacía + horizontes)
+  let html = '<div class="calc-hm-axis"></div>';
+  for (const y of horizons) html += `<div class="calc-hm-axis">${y}a</div>`;
+
+  // Filas
+  for (let i = 0; i < tasas.length; i++) {
+    html += `<div class="calc-hm-axis row">${tasas[i]}%</div>`;
+    for (let j = 0; j < horizons.length; j++) {
+      const cell = matrix[i][j];
+      const pct = (cell.total - minV) / range;
+      const bg = colorFor(pct);
+      const isCurrent = (i === closestRateIdx && j === closestYearIdx);
+      html += `<div class="calc-hm-cell${isCurrent ? ' current' : ''}" style="background:${bg}" title="Tasa ${tasas[i]}% durante ${horizons[j]} años → ${_fmtCalc(cell.total)} (×${cell.mult.toFixed(1)} de lo depositado)">
+        <span class="calc-hm-val">${_fmtCalcShort(cell.total)}</span>
+        <span class="calc-hm-mult">×${cell.mult.toFixed(1)}</span>
+      </div>`;
+    }
+  }
+  grid.innerHTML = html;
 }
 
 function _drawCalcChart(capital, aportacion, m, tasa, maxAnos, progress) {
