@@ -1691,6 +1691,22 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .fondos-chip{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:20px;font-size:.72rem;font-weight:600;color:#fff;cursor:pointer}
 .fondos-chip-x{opacity:.7;font-size:.8rem}
 .fondos-chip:hover .fondos-chip-x{opacity:1}
+.fondos-cmp-actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:10px;margin-bottom:18px}
+.fondos-cmp-actions:empty{display:none}
+.fondo-action-card{background:var(--hover);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:8px;padding:11px 13px;display:flex;flex-direction:column;gap:8px}
+.fondo-action-name{font-size:.82rem;font-weight:700;color:var(--text);line-height:1.3}
+.fondo-action-meta{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:.66rem;color:var(--text3)}
+.fondo-action-isin{font-family:'SF Mono','Monaco','Cascadia Mono',Consolas,monospace;font-size:.66rem;color:var(--text2);background:rgba(255,255,255,.05);padding:1px 6px;border-radius:3px;letter-spacing:.5px}
+.fondo-action-cat{font-size:.62rem;font-weight:700;padding:1px 6px;border-radius:3px;text-transform:uppercase;letter-spacing:.04em}
+.fondo-action-btns{display:flex;gap:6px;margin-top:2px;flex-wrap:wrap}
+.fondo-action-btn{flex:1;min-width:130px;display:inline-flex;align-items:center;justify-content:center;gap:6px;font-size:.74rem;font-weight:600;padding:7px 10px;border:none;border-radius:6px;cursor:pointer;transition:transform .15s,filter .15s,box-shadow .15s;white-space:nowrap}
+.fondo-action-btn:hover{transform:translateY(-1px);filter:brightness(1.1)}
+.fondo-action-btn:active{transform:translateY(0)}
+.fondo-action-btn.buy{background:linear-gradient(135deg,#2563EB,#1d4ed8);color:#fff;box-shadow:0 2px 6px rgba(37,99,235,.25)}
+.fondo-action-btn.add{background:linear-gradient(135deg,#10B981,#059669);color:#fff;box-shadow:0 2px 6px rgba(16,185,129,.25)}
+.fb-fund-header{background:var(--hover);border-left:3px solid var(--accent);border-radius:8px;padding:12px 14px;margin-bottom:18px}
+.fb-fund-name{font-size:.95rem;font-weight:700;color:var(--text);margin-bottom:6px;line-height:1.3}
+.fb-fund-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:.74rem;color:var(--text2)}
 .fondos-cmp-body{display:grid;grid-template-columns:1fr 360px;gap:16px;align-items:start}
 .fondos-cmp-metrics{overflow-x:auto}
 .fondos-cmp-tbl{width:100%;border-collapse:collapse;font-size:.75rem}
@@ -2533,7 +2549,7 @@ body.tour-running #finbotBubble{z-index:5000!important}
 <nav>
   <div class="nav-logo">
     <img class="nav-logo-img" src="assets/logo-genz-transparent.png" alt="GenZ Invest">
-    <span class="nav-version">v3.14.1</span>
+    <span class="nav-version">v3.15.0</span>
   </div>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="showSection('Mercados')">Mercados</button>
@@ -2936,6 +2952,7 @@ body.tour-running #finbotBubble{z-index:5000!important}
           <button class="fondos-cmp-clear" onclick="fondosClearAll()">✕ Limpiar selección</button>
         </div>
         <div class="fondos-cmp-chips" id="fondosChips"></div>
+        <div class="fondos-cmp-actions" id="fondosCmpActions"></div>
         <div class="fondos-cmp-body">
           <div>
             <div style="font-size:.72rem;color:var(--text3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:10px">Rentabilidades comparadas (%)</div>
@@ -9630,6 +9647,16 @@ const CC_PROVIDERS = [
     url: 'https://myinvestor.es/inversion/carteras-automatizadas/',
   },
   {
+    name: 'Trade Republic', type: 'Broker Móvil · Comisión Plana 1 €',
+    badge: 'recommended', badgeLabel: 'Móvil',
+    minInversion: '1 €', comGestion: '0 %', comCustodia: '0 €',
+    comCompra: '1 €/operación', planAportacion: 'Sí · Desde 1 €/sem',
+    rebalanceo: 'Manual',
+    fondos: '2.500+ ETFs y fondos · iShares, Xtrackers, Amundi, Lyxor',
+    nota: 'Broker móvil con sede en Alemania (regulado BaFin). Comisión fija 1 € por operación. Plan de ahorro gratuito desde 1 €/semana. Ideal para aportaciones pequeñas y recurrentes (DCA).',
+    url: 'https://traderepublic.com/es-es',
+  },
+  {
     name: 'Indexa Capital', type: 'Robo-Advisor · Gestión Automatizada',
     badge: 'premium', badgeLabel: 'Premium',
     minInversion: '3.000 €', comGestion: '0.18 – 0.44 %', comCustodia: 'Incluida',
@@ -10147,6 +10174,30 @@ function _renderFondosCompare() {
       </span>`).join('');
   }
 
+  // Tarjetas de acción por fondo (Comprar / Añadir a mi cartera)
+  const actionsEl = document.getElementById('fondosCmpActions');
+  if (actionsEl) {
+    const DOM = { ES:'🇪🇸 España', LU:'🇱🇺 Luxemburgo', IE:'🇮🇪 Irlanda', FR:'🇫🇷 Francia' };
+    actionsEl.innerHTML = selected.map((f, i) => {
+      const bg  = (typeof CAT_COLORS !== 'undefined' && CAT_COLORS[f.cat]) || '#1e293b';
+      const txt = (typeof CAT_TEXT   !== 'undefined' && CAT_TEXT[f.cat])   || '#94a3b8';
+      const dom = DOM[f.origen || 'ES'] || '';
+      return `
+      <div class="fondo-action-card" style="border-left-color:${FONDOS_COMPARE_COLORS[i]}">
+        <div class="fondo-action-name" title="${f.nombre}">${f.nombre}</div>
+        <div class="fondo-action-meta">
+          <span class="fondo-action-isin">${f.isin}</span>
+          <span class="fondo-action-cat" style="background:${bg};color:${txt}">${f.cat}</span>
+          <span>${dom}</span>
+        </div>
+        <div class="fondo-action-btns">
+          <button class="fondo-action-btn buy" onclick="openFondoBrokersModal(${f.id})">🛒 Comprar fondo</button>
+          <button class="fondo-action-btn add" onclick="openFondoAddCarteraModal(${f.id})">＋ Añadir a mi cartera</button>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
   // Tabla de métricas
   const thead = document.getElementById('fondosCmpThead');
   const tbody = document.getElementById('fondosCmpTbody');
@@ -10188,6 +10239,218 @@ function _renderFondosCompare() {
 
   // Gráfico barras agrupadas — animado
   setTimeout(() => _animChart(700, p => _drawFondosCompareChart('fondosCmpChart', selected, p)), 30);
+}
+
+// ─── Comprar fondo / Añadir a cartera personal (v3.15.0) ──────────
+let _fondoActionId = null;
+
+function openFondoBrokersModal(fondoId) {
+  const f = FONDOS_DATA.find(x => x.id === fondoId);
+  if (!f) return;
+  _fondoActionId = fondoId;
+  let m = document.getElementById('modalFondoBrokers');
+  if (!m) {
+    m = document.createElement('div');
+    m.id = 'modalFondoBrokers';
+    m.className = 'modal-overlay';
+    m.addEventListener('click', e => { if (e.target === m) closeFondoBrokersModal(); });
+    m.innerHTML = `<div class="cc-modal">
+      <div class="cc-header">
+        <h3 id="fbModalTitle">🛒 Comprar fondo</h3>
+        <button class="cc-close" onclick="closeFondoBrokersModal()">✕</button>
+      </div>
+      <div class="cc-body">
+        <div id="fbModalContent"></div>
+      </div>
+    </div>`;
+    document.body.appendChild(m);
+  }
+  const content = document.getElementById('fbModalContent');
+  const DOM = { ES:'🇪🇸 España (CNMV)', LU:'🇱🇺 Luxemburgo (CSSF)', IE:'🇮🇪 Irlanda (CBI)', FR:'🇫🇷 Francia (AMF)' };
+  content.innerHTML = `
+    <div class="cc-section active">
+      <div class="fb-fund-header">
+        <div class="fb-fund-name">${f.nombre}</div>
+        <div class="fb-fund-meta">
+          <span class="fondo-action-isin">${f.isin}</span>
+          <span>${f.gestora}</span>
+          <span>·</span>
+          <span>${f.cat}</span>
+          <span>·</span>
+          <span>${DOM[f.origen||'ES']}</span>
+        </div>
+      </div>
+      <div class="cc-section-title">Dónde contratar este fondo</div>
+      <div class="cc-provider-grid">
+        ${CC_PROVIDERS.map(pv => `
+          <div class="cc-provider-card">
+            <span class="cc-pv-badge ${pv.badge}">${pv.badgeLabel}</span>
+            <div class="cc-pv-name">${pv.name}</div>
+            <div class="cc-pv-type">${pv.type}</div>
+            <div class="cc-pv-row"><span class="cc-pv-label">Inversión mínima</span><span class="cc-pv-val">${pv.minInversion}</span></div>
+            <div class="cc-pv-row"><span class="cc-pv-label">Com. Gestión</span><span class="cc-pv-val">${pv.comGestion}</span></div>
+            <div class="cc-pv-row"><span class="cc-pv-label">Custodia</span><span class="cc-pv-val">${pv.comCustodia}</span></div>
+            <div class="cc-pv-row"><span class="cc-pv-label">Com. Compra</span><span class="cc-pv-val">${pv.comCompra}</span></div>
+            <div class="cc-pv-row"><span class="cc-pv-label">Plan aportación</span><span class="cc-pv-val">${pv.planAportacion}</span></div>
+            <div class="cc-pv-row"><span class="cc-pv-label">Rebalanceo</span><span class="cc-pv-val">${pv.rebalanceo}</span></div>
+            <div class="cc-pv-row"><span class="cc-pv-label">Catálogo</span><span class="cc-pv-val" style="font-size:.7rem">${pv.fondos}</span></div>
+            <div style="margin-top:10px;padding-top:8px;border-top:1px solid var(--border);font-size:.72rem;color:var(--text2);line-height:1.5">${pv.nota}</div>
+            ${pv.url ? `<a class="cc-pv-cta" href="${pv.url}" target="_blank" rel="noopener noreferrer">Ir al broker <span style="font-size:.72rem">↗</span></a>` : ''}
+          </div>
+        `).join('')}
+      </div>
+      <p class="prop-disclaimer" style="margin-top:16px">⚠️ La disponibilidad del fondo <strong>${f.isin}</strong> depende del catálogo de cada bróker. Verifica en su buscador antes de abrir cuenta. Esta selección es informativa y no constituye recomendación de inversión personalizada.</p>
+    </div>`;
+  requestAnimationFrame(() => m.classList.add('show'));
+}
+
+function closeFondoBrokersModal() {
+  const m = document.getElementById('modalFondoBrokers');
+  if (m) m.classList.remove('show');
+}
+
+function openFondoAddCarteraModal(fondoId) {
+  const f = FONDOS_DATA.find(x => x.id === fondoId);
+  if (!f) return;
+  _fondoActionId = fondoId;
+  let m = document.getElementById('modalFondoAddCartera');
+  if (!m) {
+    m = document.createElement('div');
+    m.id = 'modalFondoAddCartera';
+    m.className = 'modal-overlay';
+    m.addEventListener('click', e => { if (e.target === m) closeFondoAddCarteraModal(); });
+    m.innerHTML = `<div class="modal" style="max-width:520px">
+      <button class="modal-close" onclick="closeFondoAddCarteraModal()">✕</button>
+      <h2 class="modal-title">＋ Añadir fondo a mi cartera</h2>
+      <p class="modal-sub" id="facSubtitle">Selecciona una cartera y los datos de tu compra</p>
+      <div id="facBody"></div>
+      <div class="cart-modal-msg" id="facMsg"></div>
+      <div class="cart-modal-footer">
+        <button class="cart-modal-cancel" onclick="closeFondoAddCarteraModal()">Cancelar</button>
+        <button class="cart-modal-save" id="facSaveBtn" onclick="submitFondoToCartera()">Añadir a cartera</button>
+      </div>
+    </div>`;
+    document.body.appendChild(m);
+  }
+  const body = document.getElementById('facBody');
+  const saveBtn = document.getElementById('facSaveBtn');
+  document.getElementById('facMsg').textContent = '';
+
+  if (!_carteras || _carteras.length === 0) {
+    body.innerHTML = `
+      <div style="background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.25);border-radius:8px;padding:14px;font-size:.82rem;color:var(--text2);line-height:1.5">
+        <strong style="color:#F59E0B">⚠️ Aún no tienes ninguna cartera.</strong><br>
+        Crea primero una cartera desde la pestaña <strong>Mis Inversiones</strong> y vuelve aquí para añadir el fondo.
+      </div>`;
+    saveBtn.style.display = 'none';
+  } else {
+    saveBtn.style.display = '';
+    const fechaHoy = new Date().toISOString().slice(0, 10);
+    body.innerHTML = `
+      <div style="background:var(--hover);border-left:3px solid var(--accent);border-radius:6px;padding:10px 12px;margin-bottom:14px">
+        <div style="font-size:.82rem;font-weight:700;color:var(--text)">${f.nombre}</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;font-size:.7rem;color:var(--text3)">
+          <span class="fondo-action-isin">${f.isin}</span>
+          <span>${f.gestora}</span>
+          <span>·</span>
+          <span>${f.cat}</span>
+        </div>
+      </div>
+      <div class="cart-field">
+        <label>Cartera de destino</label>
+        <select class="cart-input" id="facCartera">
+          ${_carteras.map(c => `<option value="${c.id}">${c.nombre} (${(c.activos||[]).length} activos)</option>`).join('')}
+        </select>
+      </div>
+      <div class="cart-input-grid">
+        <div class="cart-field">
+          <label>Cantidad (participaciones)</label>
+          <input class="cart-input" id="facCantidad" type="number" placeholder="10, 0.5…" min="0" step="any">
+        </div>
+        <div class="cart-field">
+          <label>Divisa</label>
+          <select class="cart-input" id="facDivisa">
+            <option value="EUR" selected>EUR €</option>
+            <option value="USD">USD $</option>
+            <option value="GBP">GBP £</option>
+          </select>
+        </div>
+      </div>
+      <div class="cart-input-grid">
+        <div class="cart-field">
+          <label>Precio compra (€/participación)</label>
+          <input class="cart-input" id="facPrecioCompra" type="number" placeholder="125.00" min="0" step="any">
+        </div>
+        <div class="cart-field">
+          <label>Precio actual (€/participación)</label>
+          <input class="cart-input" id="facPrecioActual" type="number" placeholder="125.00" min="0" step="any">
+        </div>
+      </div>
+      <div class="cart-field">
+        <label>Fecha de compra</label>
+        <input class="cart-input" id="facFecha" type="date" value="${fechaHoy}">
+      </div>`;
+  }
+  requestAnimationFrame(() => m.classList.add('show'));
+}
+
+function closeFondoAddCarteraModal() {
+  const m = document.getElementById('modalFondoAddCartera');
+  if (m) m.classList.remove('show');
+}
+
+async function submitFondoToCartera() {
+  const f = FONDOS_DATA.find(x => x.id === _fondoActionId);
+  if (!f) return;
+  const msgEl = document.getElementById('facMsg');
+  const carteraId = document.getElementById('facCartera')?.value;
+  const cantidad  = parseFloat(document.getElementById('facCantidad')?.value);
+  const divisa    = document.getElementById('facDivisa')?.value || 'EUR';
+  const pc        = parseFloat(document.getElementById('facPrecioCompra')?.value);
+  const paRaw     = document.getElementById('facPrecioActual')?.value;
+  const pa        = paRaw ? parseFloat(paRaw) : pc;
+  const fecha     = document.getElementById('facFecha')?.value || new Date().toISOString().slice(0, 10);
+
+  if (!carteraId) { msgEl.textContent = '⚠️ Selecciona una cartera'; return; }
+  if (isNaN(cantidad) || cantidad <= 0) { msgEl.textContent = '⚠️ Introduce una cantidad válida'; return; }
+  if (isNaN(pc) || pc <= 0) { msgEl.textContent = '⚠️ Introduce el precio de compra'; return; }
+  if (isNaN(pa) || pa <= 0) { msgEl.textContent = '⚠️ Precio actual inválido'; return; }
+
+  const cartera = _carteras.find(c => c.id === carteraId);
+  if (!cartera) { msgEl.textContent = '⚠️ Cartera no encontrada'; return; }
+
+  const activo = {
+    ticker: '',
+    nombre: f.nombre,
+    isin: f.isin,
+    tipo: 'fondo',
+    divisa,
+    cantidad,
+    fechaCompra: fecha,
+    precioCompra: pc,
+    precioActual: pa,
+    tipoCompra: 'puntual',
+    aportacion: 0,
+  };
+  const updCartera = { ...cartera, activos: [...(cartera.activos || []), activo] };
+
+  msgEl.textContent = 'Guardando…';
+  try {
+    const res = await fetch(`${API_BASE}/carteras`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-session-token': apiKey() },
+      body: JSON.stringify({ username: _session.username, cartera: updCartera }),
+    });
+    if (!res.ok) throw new Error('Error ' + res.status);
+    const data = await res.json();
+    const idx = _carteras.findIndex(c => c.id === carteraId);
+    if (idx >= 0) _carteras[idx] = data.cartera;
+    closeFondoAddCarteraModal();
+    if (typeof toast === 'function') toast(`✓ Fondo añadido a "${cartera.nombre}"`, 'ok');
+    if (typeof renderCarteras === 'function') renderCarteras();
+  } catch (err) {
+    msgEl.textContent = '⚠️ Error al guardar: ' + (err.message || 'desconocido');
+  }
 }
 
 function _drawFondosCompareChart(canvasId, selected, progress) {
