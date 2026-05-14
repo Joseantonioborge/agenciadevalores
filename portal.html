@@ -2622,7 +2622,7 @@ body.tour-running #finbotBubble{z-index:5000!important}
 <nav>
   <div class="nav-logo">
     <img class="nav-logo-img" src="assets/logo-genz-transparent.png" alt="GenZ Invest">
-    <span class="nav-version">v3.20.0</span>
+    <span class="nav-version">v3.21.0</span>
   </div>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="showSection('Mercados')">Mercados</button>
@@ -4672,6 +4672,65 @@ async function doLogin() {
   }
 }
 
+// ── Saludo de bienvenida en voz humana (v3.21.0) ─────────────────
+// Usa la Web Speech API del navegador (voces nativas del SO, sin coste,
+// sin latencia). El navegador permite la reproducción porque el contexto
+// de gesto del click "Entrar" todavía está activo.
+//
+// Opt-out: el usuario puede desactivarlo guardando en localStorage:
+//   localStorage.setItem('AV_WELCOME_VOICE', 'off')
+//
+// "Gen Zeta" se pronuncia bien en español castellano. La marca interna
+// es GenZ pero al hablar usamos la grafía fonética para que la voz
+// sintetizada lo lea correctamente.
+function speakWelcome(name, lang) {
+  try {
+    if (localStorage.getItem('AV_WELCOME_VOICE') === 'off') return;
+    if (!('speechSynthesis' in window)) return;
+    const synth = window.speechSynthesis;
+
+    // Construir el saludo localizado
+    const isEN = (lang || '').toLowerCase().startsWith('en');
+    const firstName = (name || '').toString().trim().split(/\s+/)[0] || '';
+    const text = isEN
+      ? (firstName ? `Welcome to Gen Zeta, ${firstName}` : 'Welcome to Gen Zeta')
+      : (firstName ? `Bienvenido a Gen Zeta, ${firstName}` : 'Bienvenido a Gen Zeta');
+
+    const utter = () => {
+      try {
+        synth.cancel();
+        const u = new SpeechSynthesisUtterance(text);
+        u.lang   = isEN ? 'en-US' : 'es-ES';
+        u.rate   = 0.96;
+        u.pitch  = 1.05;
+        u.volume = 0.9;
+        const voices = synth.getVoices() || [];
+        // Preferir voces naturales de calidad (macOS Mónica/Paulina, iOS Marisol,
+        // Windows Helena/Elena, Google "es-ES"). Fallback a cualquier voz "es".
+        const pickEs = voices.find(v => /^es/i.test(v.lang) && /(Mónica|Monica|Paulina|Marisol|Helena|Elena|Diego|Jorge)/i.test(v.name))
+                    || voices.find(v => v.lang === 'es-ES')
+                    || voices.find(v => /^es/i.test(v.lang));
+        const pickEn = voices.find(v => /(Samantha|Alex|Daniel|Karen|Moira)/i.test(v.name))
+                    || voices.find(v => v.lang === 'en-US')
+                    || voices.find(v => /^en/i.test(v.lang));
+        const pick = isEN ? pickEn : pickEs;
+        if (pick) u.voice = pick;
+        synth.speak(u);
+      } catch (_) { /* noop */ }
+    };
+
+    // Algunos navegadores (Chrome) cargan voces de forma asíncrona
+    if ((synth.getVoices() || []).length > 0) {
+      utter();
+    } else {
+      const onChange = () => { synth.removeEventListener('voiceschanged', onChange); utter(); };
+      synth.addEventListener('voiceschanged', onChange);
+      // Fallback: si voiceschanged no se dispara, intenta a los 600 ms
+      setTimeout(() => { if ((synth.getVoices() || []).length > 0) utter(); }, 600);
+    }
+  } catch (_) { /* noop · jamás debe romper el login */ }
+}
+
 function onLogin() {
   const u = _session;
   // Pill badge: avatar inicial + nombre
@@ -4700,6 +4759,8 @@ function onLogin() {
   // Activa vista personalizada si es inversor
   if (_marketData.length) renderMainSection(_marketData);
   toast('Bienvenido, ' + u.name, 'ok');
+  // Saludo de bienvenida en voz humana (Web Speech API · v3.21.0)
+  setTimeout(() => speakWelcome(u.name, u.lang || 'es'), 280);
   loadFavoritesFromServer();
   // Mostrar FinBot solo para inversores (no admin)
   if (u.role === 'investor') {
