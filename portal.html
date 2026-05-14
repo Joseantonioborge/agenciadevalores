@@ -2601,11 +2601,11 @@ body.tour-running #finbotBubble{z-index:5000!important}
 <nav>
   <div class="nav-logo">
     <img class="nav-logo-img" src="assets/logo-genz-transparent.png" alt="GenZ Invest">
-    <span class="nav-version">v3.19.0</span>
+    <span class="nav-version">v3.19.1</span>
   </div>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="showSection('Mercados')">Mercados</button>
-    <button class="nav-tab" onclick="showSection('Analisis')">Análisis</button>
+    <button class="nav-tab" onclick="showSection('Analisis')">Gráficas</button>
     <button class="nav-tab" id="tabAdmin" onclick="requireAuth('Admin')" style="display:none">Admin</button>
   </div>
   <div class="nav-right">
@@ -4661,6 +4661,19 @@ function onLogin() {
   if (u.role === 'admin') document.getElementById('tabAdmin').style.display = 'block';
   // Sincroniza el bottom nav móvil con el estado de sesión
   _mbnUpdateAuthState();
+  // Forzar landing en "Mercados" → "Mis Mercados" tras el login.
+  // Si el usuario abrió el modal desde "Gráficas", no queremos que se quede
+  // en esa sección porque pierde la vista del menú lateral del inversor.
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  const secMer = document.getElementById('secMercados');
+  if (secMer) secMer.classList.add('active');
+  const navMer = [...document.querySelectorAll('.nav-tab')].find(t => /^\s*Mercados\s*$/.test(t.textContent));
+  if (navMer) navMer.classList.add('active');
+  document.querySelectorAll('#mobileBottomNav .mbn-item[data-mbn]').forEach(b => {
+    b.classList.toggle('active', b.dataset.mbn === 'Mercados');
+  });
+  if (typeof switchInvTab === 'function') switchInvTab('mercados');
   // Activa vista personalizada si es inversor
   if (_marketData.length) renderMainSection(_marketData);
   toast('Bienvenido, ' + u.name, 'ok');
@@ -13371,7 +13384,7 @@ document.addEventListener('DOMContentLoaded', () => {
   </button>
   <button class="mbn-item" data-mbn="Analisis" onclick="showSection('Analisis')" type="button">
     <span class="mbn-icon">📈</span>
-    <span class="mbn-label">Análisis</span>
+    <span class="mbn-label">Gráficas</span>
   </button>
   <button class="mbn-item" id="mbnAdmin" data-mbn="Admin" onclick="showSection('Admin')" type="button" style="display:none">
     <span class="mbn-icon">🛡️</span>
