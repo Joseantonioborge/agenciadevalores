@@ -290,6 +290,60 @@ a:hover{text-decoration:underline}
 .ln-pro-month,.ln-pro-year{display:none}
 .ln-pro-month.show,.ln-pro-year.show{display:block}
 
+/* ── PLAN EMPRESARIAL — Agencias de Valores / Gestores ─────── */
+.ln-enterprise-card{
+  margin:32px auto 8px;max-width:980px;
+  background:linear-gradient(135deg,rgba(37,99,235,.05) 0%,rgba(16,185,129,.04) 100%);
+  border:1px solid rgba(37,99,235,.18);border-radius:16px;
+  padding:28px 32px;
+  display:grid;grid-template-columns:80px 1fr;gap:22px;align-items:center;
+  position:relative;overflow:hidden;
+}
+.ln-enterprise-card::before{
+  content:'';position:absolute;top:0;left:0;width:4px;height:100%;
+  background:linear-gradient(180deg,var(--accent),#10B981);
+}
+.ln-enterprise-icon{
+  font-size:3rem;line-height:1;text-align:center;
+  background:rgba(255,255,255,.6);border:1px solid var(--border);
+  border-radius:14px;width:80px;height:80px;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+.ln-enterprise-tag{
+  font-size:.7rem;font-weight:700;color:var(--accent);
+  text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;
+}
+.ln-enterprise-title{
+  font-size:1.25rem;font-weight:800;color:var(--text);
+  line-height:1.3;margin-bottom:8px;letter-spacing:-.2px;
+}
+.ln-enterprise-text{
+  font-size:.92rem;color:var(--text2);line-height:1.6;margin-bottom:16px;
+}
+.ln-enterprise-text strong{color:var(--text);font-weight:700}
+.ln-enterprise-cta{
+  display:inline-flex;align-items:center;gap:8px;
+  background:linear-gradient(135deg,var(--accent),#1d4ed8);color:#fff;
+  font-size:.92rem;font-weight:700;padding:11px 22px;
+  border-radius:10px;text-decoration:none;
+  box-shadow:0 4px 14px rgba(37,99,235,.28);
+  transition:transform .15s,box-shadow .15s,filter .15s;
+}
+.ln-enterprise-cta:hover{
+  transform:translateY(-1px);filter:brightness(1.08);
+  box-shadow:0 6px 18px rgba(37,99,235,.4);
+}
+.ln-enterprise-note{
+  font-size:.72rem;color:var(--text3);margin-top:8px;font-style:italic;
+}
+@media(max-width:640px){
+  .ln-enterprise-card{grid-template-columns:1fr;padding:22px 20px;text-align:center}
+  .ln-enterprise-icon{margin:0 auto;width:64px;height:64px;font-size:2.4rem}
+  .ln-enterprise-title{font-size:1.1rem}
+  .ln-enterprise-cta{width:100%;justify-content:center}
+}
+
 .ln-broker-pricing-title{
   font-size:1.05rem;font-weight:700;color:var(--text);
   text-align:center;margin-top:18px;margin-bottom:6px;letter-spacing:-.2px;
@@ -1135,6 +1189,26 @@ a:hover{text-decoration:underline}
             <li class="pro">FinBot IA — chatbot financiero 24/7 con Claude</li>
           </ul>
         </div>
+      </div>
+    </div>
+
+    <!-- ── Plan empresarial — Agencias de Valores / Gestores Patrimoniales ── -->
+    <!-- TODO: enlazar destinatario en el atributo `mailto:` cuando se defina el email corporativo -->
+    <div class="ln-enterprise-card">
+      <div class="ln-enterprise-icon">🏢</div>
+      <div>
+        <div class="ln-enterprise-tag">Plan empresarial</div>
+        <div class="ln-enterprise-title">¿Eres Agencia de Valores o Gestor de Patrimonios?</div>
+        <div class="ln-enterprise-text">
+          Si eres una <strong>Agencia de Valores</strong>, <strong>Gestor de Patrimonios</strong>,
+          EAFI, Family Office o entidad similar y quieres acceder a nuestra plataforma con
+          herramientas profesionales, contáctanos para un <strong>plan personalizado</strong>:
+          panel multi-cliente, integraciones API, white-label y soporte dedicado.
+        </div>
+        <a class="ln-enterprise-cta"
+           href="mailto:?subject=Plan%20empresarial%20GenZ%20Invest%20%E2%80%94%20Agencia%20de%20Valores%20%2F%20Gestor%20Patrimonial&amp;body=Hola%2C%0A%0AMe%20interesa%20conocer%20vuestro%20plan%20empresarial%20para%20Agencia%20de%20Valores%20%2F%20Gestor%20de%20Patrimonios.%0A%0ANombre%20de%20la%20entidad%3A%0APersona%20de%20contacto%3A%0ATel%C3%A9fono%3A%0AN%C2%BA%20aproximado%20de%20clientes%3A%0ANecesidades%20concretas%3A%0A%0AGracias.">
+          ✉️ Contactar para plan personalizado
+        </a>
       </div>
     </div>
 
