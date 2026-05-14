@@ -658,6 +658,27 @@ main{padding-top:60px}
 .period-tab:hover{color:var(--text);background:var(--card2)}
 .period-tab.active{color:var(--text);background:var(--accent)}
 
+/* ── Botón Actualizar (gráficos general + ticker modal · v3.20.0) ── */
+.chart-refresh-btn{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:5px 11px;border-radius:6px;cursor:pointer;
+  font-size:.76rem;font-weight:600;font-family:var(--font);
+  color:var(--text2);background:var(--bg2);border:1px solid var(--border);
+  transition:.15s;line-height:1;
+}
+.chart-refresh-btn:hover{
+  color:var(--text);border-color:#10B981;
+  background:rgba(16,185,129,.08);transform:translateY(-1px);
+}
+.chart-refresh-btn:active{transform:translateY(0)}
+.chart-refresh-btn:disabled{cursor:default;opacity:.55;transform:none}
+.chart-refresh-btn.spinning{pointer-events:none;color:#10B981;border-color:#10B981;background:rgba(16,185,129,.1)}
+.chart-refresh-btn.spinning > :first-child{display:inline-block;animation:spin .8s linear infinite}
+@media(max-width:600px){
+  .chart-refresh-lbl{display:none}
+  .chart-refresh-btn{padding:5px 9px}
+}
+
 /* ── Chart type toggle ── */
 .chart-controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
 .chart-type-toggle{
@@ -2601,7 +2622,7 @@ body.tour-running #finbotBubble{z-index:5000!important}
 <nav>
   <div class="nav-logo">
     <img class="nav-logo-img" src="assets/logo-genz-transparent.png" alt="GenZ Invest">
-    <span class="nav-version">v3.19.1</span>
+    <span class="nav-version">v3.20.0</span>
   </div>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="showSection('Mercados')">Mercados</button>
@@ -3562,6 +3583,7 @@ body.tour-running #finbotBubble{z-index:5000!important}
               <button class="period-tab" onclick="setPeriod('6mo')">6M</button>
               <button class="period-tab" onclick="setPeriod('1y')">1A</button>
             </div>
+            <button class="chart-refresh-btn" id="btnRefreshMainChart" onclick="refreshMainChart()" title="Actualizar datos del gráfico y precio">🔄 <span class="chart-refresh-lbl">Actualizar</span></button>
             <button class="tm-buy-btn tm-buy-btn-top" onclick="openBrokerCompareModal()" title="Comprar acciones del índice" data-i18n="buy_shares_short">💰 Comprar</button>
           </div>
         </div>
@@ -4203,6 +4225,7 @@ body.tour-running #finbotBubble{z-index:5000!important}
           <button class="period-tab" onclick="tmSetPeriod('6mo')">6M</button>
           <button class="period-tab" onclick="tmSetPeriod('1y')">1A</button>
         </div>
+        <button class="chart-refresh-btn" id="btnRefreshTm" onclick="refreshTmChart()" title="Actualizar datos del gráfico">🔄 <span class="chart-refresh-lbl">Actualizar</span></button>
         <button class="tm-buy-btn tm-buy-btn-top" onclick="openBrokerCompareModal()" title="Comprar acciones" data-i18n="buy_shares_short">💰 Comprar</button>
         <button class="ticker-modal-close" onclick="closeTickerChart()" title="Cerrar">✕</button>
       </div>
@@ -6311,6 +6334,26 @@ function setPeriod(period) {
   loadHistorical(_currentSymbol, period);
 }
 
+// Botón "Actualizar" del chart general (v3.20.0)
+// Recarga datos históricos del símbolo+período activos y refresca el feed
+// /api/market para que el precio y la variación de la cabecera reflejen
+// la última cotización (no se sirve de caché del cliente).
+async function refreshMainChart() {
+  const btn = document.getElementById('btnRefreshMainChart');
+  if (btn) { btn.classList.add('spinning'); btn.disabled = true; }
+  try {
+    await loadHistorical(_currentSymbol, _currentPeriod);
+    if (typeof loadMarketData === 'function') await loadMarketData();
+    if (typeof toast === 'function') toast('✓ Cotización actualizada', 'ok');
+  } catch (e) {
+    if (typeof toast === 'function') toast('⚠️ No se pudo actualizar el gráfico', 'err');
+  } finally {
+    setTimeout(() => {
+      if (btn) { btn.classList.remove('spinning'); btn.disabled = false; }
+    }, 350);
+  }
+}
+
 async function loadHistorical(symbol, period) {
   const info = INDEX_MAP[symbol];
   document.getElementById('chartSymbol').textContent = info?.name || symbol;
@@ -7741,6 +7784,23 @@ function tmSetPeriod(p) {
   _tmPeriod = p;
   _tmSyncPeriodUI();
   _tmLoadData();
+}
+
+// Botón "Actualizar" del modal de gráfico de un valor (v3.20.0)
+async function refreshTmChart() {
+  if (!_tmSymbol) return;
+  const btn = document.getElementById('btnRefreshTm');
+  if (btn) { btn.classList.add('spinning'); btn.disabled = true; }
+  try {
+    await _tmLoadData();
+    if (typeof toast === 'function') toast('✓ Cotización actualizada', 'ok');
+  } catch (e) {
+    if (typeof toast === 'function') toast('⚠️ No se pudo actualizar', 'err');
+  } finally {
+    setTimeout(() => {
+      if (btn) { btn.classList.remove('spinning'); btn.disabled = false; }
+    }, 350);
+  }
 }
 
 function _tmSyncPeriodUI() {
