@@ -1731,6 +1731,8 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .fondos-sel-btn{width:22px;height:22px;border-radius:6px;border:1.5px solid var(--border);background:transparent;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:.15s;font-size:.7rem;color:var(--text3)}
 .fondos-sel-btn:hover{border-color:var(--accent);color:var(--accent)}
 .fondos-sel-btn.selected{background:var(--accent);border-color:var(--accent);color:#fff}
+.fondos-chart-btn{width:22px;height:22px;border-radius:6px;border:1.5px solid var(--border);background:transparent;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:.15s;font-size:.65rem;margin-left:3px;padding:0;line-height:1;vertical-align:middle}
+.fondos-chart-btn:hover{border-color:#10B981;background:rgba(16,185,129,.1);transform:translateY(-1px)}
 /* Panel de comparación */
 .fondos-cmp-panel{background:var(--card);border:1px solid var(--accent);border-radius:12px;padding:20px;margin-bottom:20px;position:relative}
 .fondos-cmp-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px}
@@ -2599,7 +2601,7 @@ body.tour-running #finbotBubble{z-index:5000!important}
 <nav>
   <div class="nav-logo">
     <img class="nav-logo-img" src="assets/logo-genz-transparent.png" alt="GenZ Invest">
-    <span class="nav-version">v3.18.0</span>
+    <span class="nav-version">v3.19.0</span>
   </div>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="showSection('Mercados')">Mercados</button>
@@ -8778,6 +8780,46 @@ function openActivoChart(carteraId, activoId) {
 
 // Chart sintético para fondos sin NAV en el portal — basado en rentabilidades
 // históricas del fondo (rYTD/r1y/r3y/r5y). Sirve para visualizar la trayectoria.
+// Estima la cotización (NAV) actual de un fondo en EUR.
+// Sin acceso a la ficha oficial, calibramos por categoría + domicilio.
+// Spanish FI (CNMV) habitualmente arrancan en ~10€ (clase comercial),
+// mientras que LU/IE/FR (UCITS) arrancan en ~100€. El NAV actual se
+// estima compuesto sobre los años de vida típicos del fondo y su
+// rentabilidad real (r5y → r3y → r1y → rYTD). v3.19.0.
+function _estimateFondoNAV(f) {
+  if (!f) return null;
+  // Base NAV típico por categoría (UCITS LU/IE/FR, base de lanzamiento ~100€)
+  const NAV_BASE_UCITS = {
+    'Monetario':       110, 'RF Corto Plazo':  108, 'Renta Fija':       105,
+    'Mixto Defensivo': 118, 'Mixto Moderado':  128, 'Mixto Agresivo':   145,
+    'RV España':       135, 'RV Europa':       145, 'RV USA':           175,
+    'RV Internacional':160, 'RV Global':       170, 'RV Temático':      210,
+    'RV Emergentes':   115, 'Indexado':        160, 'Alternativo':      115,
+    'Garantizado':     105,
+  };
+  const base = NAV_BASE_UCITS[f.cat] || 100;
+  // Ajuste por rentabilidad real del fondo: r5y compuesta a 5 años da el
+  // crecimiento desde su lanzamiento (aprox.). Para fondos muy jóvenes
+  // r3y o r1y como fallback.
+  const r5 = typeof f.r5y === 'number' && f.r5y !== 0 ? f.r5y / 100
+           : typeof f.r3y === 'number' && f.r3y !== 0 ? f.r3y / 100
+           : typeof f.r1y === 'number' && f.r1y !== 0 ? f.r1y / 100
+           : (f.rYTD || 0) / 100;
+  // 5 años de capitalización compuesta sobre la base
+  let nav = base * Math.pow(1 + r5, 5);
+  // Spanish FI (CNMV) usan típicamente NAVs en rango 10-50€:
+  //   escalamos a ~25% del UCITS equivalente (refleja base de lanzamiento ~10€)
+  if (f.origen === 'ES' || !f.origen) nav = nav * 0.25;
+  return Math.max(0.01, +nav.toFixed(2));
+}
+
+function openFondoChartFromTable(fondoId) {
+  if (typeof FONDOS_DATA === 'undefined') return;
+  const f = FONDOS_DATA.find(x => x.id === fondoId);
+  if (!f) { if (typeof toast === 'function') toast('Fondo no encontrado', 'err'); return; }
+  _openFondoSyntheticChart(f, null);
+}
+
 function _openFondoSyntheticChart(f, activo) {
   let m = document.getElementById('modalFondoChart');
   if (!m) {
@@ -8785,7 +8827,7 @@ function _openFondoSyntheticChart(f, activo) {
     m.id = 'modalFondoChart';
     m.className = 'modal-overlay';
     m.addEventListener('click', e => { if (e.target === m) _closeFondoSyntheticChart(); });
-    m.innerHTML = `<div class="modal" style="max-width:760px;padding:0;overflow:hidden">
+    m.innerHTML = `<div class="modal" style="max-width:780px;padding:0;overflow:hidden">
       <div style="padding:18px 22px 12px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
         <div style="flex:1;min-width:0">
           <div style="font-size:.7rem;color:var(--text3);text-transform:uppercase;letter-spacing:.06em">Fondo de inversión</div>
@@ -8794,11 +8836,12 @@ function _openFondoSyntheticChart(f, activo) {
         </div>
         <button class="modal-close" onclick="_closeFondoSyntheticChart()" style="position:relative;top:0;right:0">✕</button>
       </div>
-      <div style="padding:14px 22px 6px;display:flex;gap:6px;flex-wrap:wrap" id="fcPeriods"></div>
-      <div style="padding:6px 22px 8px"><canvas id="fcCanvas" height="280" style="width:100%;display:block"></canvas></div>
-      <div id="fcReturn" style="padding:6px 22px 18px;font-size:.78rem;color:var(--text2);display:flex;gap:14px;flex-wrap:wrap"></div>
+      <div id="fcNavBox" style="margin:14px 22px 4px;padding:12px 16px;background:linear-gradient(135deg,rgba(37,99,235,.10),rgba(16,185,129,.06));border:1px solid rgba(37,99,235,.25);border-radius:10px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap"></div>
+      <div style="padding:8px 22px 6px;display:flex;gap:6px;flex-wrap:wrap" id="fcPeriods"></div>
+      <div style="padding:6px 22px 8px"><canvas id="fcCanvas" height="300" style="width:100%;display:block"></canvas></div>
+      <div id="fcReturn" style="padding:6px 22px 14px;font-size:.78rem;color:var(--text2);display:flex;gap:14px;flex-wrap:wrap"></div>
       <div style="padding:10px 22px 18px;background:rgba(245,158,11,.04);border-top:1px solid var(--border);font-size:.7rem;color:var(--text3);line-height:1.5">
-        ⚠️ Gráfico sintético calculado a partir de las rentabilidades históricas del fondo (rYTD/r1y/r3y/r5y). No representa cotización diaria real — los fondos no publican NAV intradía en este portal.
+        ⚠️ Cotización <strong>estimada</strong>: los fondos de inversión liquidan NAV una vez al día y este portal no integra el feed oficial. Estimación basada en la rentabilidad real publicada (Morningstar r1y/r3y/r5y) calibrada con la base típica de la categoría. Para el precio exacto del día consulta la ficha del fondo en la web de su gestora o Morningstar.es.
       </div>
     </div>`;
     document.body.appendChild(m);
@@ -8811,6 +8854,24 @@ function _openFondoSyntheticChart(f, activo) {
     <span>·</span><span>${f.cat || ''}</span>
     <span>·</span><span>TER ${(f.ter || 0).toFixed(2)}%</span>
     <span>·</span><span>⭐ ${'★'.repeat(f.ms || 0)}</span>`;
+
+  // Caja prominente con la cotización estimada actual del NAV
+  const nav = _estimateFondoNAV(f);
+  const navBox = document.getElementById('fcNavBox');
+  const ytdPct = (f.rYTD || 0);
+  const ytdCls = ytdPct >= 0 ? '#10B981' : '#EF4444';
+  const ytdSign = ytdPct >= 0 ? '+' : '';
+  navBox.innerHTML = `
+    <div>
+      <div style="font-size:.66rem;color:var(--text3);text-transform:uppercase;letter-spacing:.06em">💶 Cotización estimada actual</div>
+      <div style="font-size:1.4rem;font-weight:800;color:var(--text);font-family:'SF Mono',Monaco,Consolas,monospace;margin-top:2px">€${nav.toLocaleString('es-ES',{minimumFractionDigits:2,maximumFractionDigits:2})}</div>
+      <div style="font-size:.65rem;color:var(--text3);margin-top:1px">€ por participación · estimación calibrada</div>
+    </div>
+    <div style="text-align:right">
+      <div style="font-size:.66rem;color:var(--text3);text-transform:uppercase;letter-spacing:.06em">Rentabilidad YTD</div>
+      <div style="font-size:1.05rem;font-weight:700;color:${ytdCls};font-family:'SF Mono',Monaco,Consolas,monospace;margin-top:2px">${ytdSign}${ytdPct.toFixed(2)}%</div>
+      <div style="font-size:.65rem;color:var(--text3);margin-top:1px">acumulada año en curso</div>
+    </div>`;
 
   const periods = [
     { key:'1d',  label:'1D',  days:1   },
@@ -8848,34 +8909,41 @@ function _fcDrawPeriod(isin, days, key) {
     : (typeof f.r1y === 'number' && f.r1y ? f.r1y : (f.r3y || f.r5y || 0)) / 100;
   const periodReturn = Math.pow(1 + rateAnnual, days / 365) - 1;
 
+  // Anclamos los precios al NAV estimado actual (Y-axis en € reales).
+  // El NAV estimado representa el "hoy" → recalculamos el valor de inicio del
+  // período retrocediendo desde ese NAV con la rentabilidad inversa.
+  const navEnd   = _estimateFondoNAV(f) || 100;
+  const navStart = navEnd / (1 + periodReturn);
+
   // Genera ~60 puntos con interpolación suave + ruido determinista por ISIN
   const n = Math.min(Math.max(Math.floor(days * 1.2), 30), 80);
   const seed = isin.split('').reduce((s, c) => (s * 31 + c.charCodeAt(0)) & 0x7fffffff, 7);
   let r = seed;
   const noise = () => { r = (r * 1103515245 + 12345) & 0x7fffffff; return (r / 0x7fffffff - 0.5); };
   const vol = Math.max((f.vol || 5) / 100, 0.02) * Math.sqrt(days / 365);
-  const baseStart = 100;
-  const baseEnd   = 100 * (1 + periodReturn);
   const pts = [];
   for (let i = 0; i <= n; i++) {
     const t = i / n;
-    const trend = baseStart + (baseEnd - baseStart) * t;
-    const wobble = noise() * 100 * vol * (1 - Math.abs(t - 0.5) * 0.6);
+    const trend  = navStart + (navEnd - navStart) * t;
+    const wobble = noise() * navStart * vol * (1 - Math.abs(t - 0.5) * 0.6);
     pts.push(trend + wobble);
   }
-  pts[0] = baseStart;
-  pts[pts.length - 1] = baseEnd;
+  pts[0] = navStart;
+  pts[pts.length - 1] = navEnd;
 
   _fcRenderCanvas(pts, periodReturn);
 
-  // Etiquetas
+  // Etiquetas con precios reales
   const ret = document.getElementById('fcReturn');
   const pct = (periodReturn * 100);
   const cls = pct >= 0 ? '#10B981' : '#EF4444';
   const sign = pct >= 0 ? '+' : '';
   const labelMap = { '1d':'1 día','5d':'5 días','1m':'1 mes','6m':'6 meses','1y':'1 año' };
+  const fmtEur = v => '€' + v.toLocaleString('es-ES',{minimumFractionDigits:2,maximumFractionDigits:2});
   ret.innerHTML = `
-    <span><b style="color:${cls}">${sign}${pct.toFixed(2)}%</b> · estimación ${labelMap[key] || ''}</span>
+    <span style="font-family:'SF Mono',Monaco,Consolas,monospace">${fmtEur(navStart)} → <b style="color:${cls}">${fmtEur(navEnd)}</b></span>
+    <span>·</span>
+    <span><b style="color:${cls}">${sign}${pct.toFixed(2)}%</b> en ${labelMap[key] || ''}</span>
     <span>·</span>
     <span>YTD: <b>${(f.rYTD || 0).toFixed(2)}%</b></span>
     <span>·</span>
@@ -10945,10 +11013,11 @@ function _renderFondosTable() {
     const dom = DOMICILIO[f.origen || 'ES'];
     const partStr = f.part > 0 ? fmtPart(f.part) : '<span style="color:var(--text3)">—</span>';
     return `<tr>
-      <td>
+      <td style="white-space:nowrap">
         <button class="fondos-sel-btn ${sel ? 'selected' : ''}" onclick="fondosToggleSelect(${f.id})" title="${sel ? 'Quitar de comparación' : 'Añadir a comparación'}">
           ${sel ? '✓' : '+'}
         </button>
+        <button class="fondos-chart-btn" onclick="openFondoChartFromTable(${f.id})" title="Ver gráfico y cotización estimada">📈</button>
       </td>
       <td title="${f.nombre} · ISIN: ${f.isin}">
         <div style="font-weight:600;color:var(--text)">${f.nombre}</div>
