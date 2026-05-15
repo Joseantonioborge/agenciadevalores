@@ -1362,21 +1362,29 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .cart-kpi-sub{font-size:.7rem;color:var(--text3);margin-top:2px}
 .cart-kpi-up{color:var(--green)!important}.cart-kpi-down{color:var(--red)!important}.cart-kpi-flat{color:var(--text2)!important}
 
-.cart-charts-row{display:grid;grid-template-columns:260px 1fr;gap:12px;margin-bottom:16px}
-.cart-chart-box{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px}
+/* Distribución por tipo de activo + Rentabilidad por cartera (v3.22.1)
+   Antes el % se truncaba ("58." en vez de "58.4%") porque .cart-legend-pct
+   no tenía flex-shrink:0 y la columna izquierda (260px) se quedaba sin
+   espacio. Solucionado con grid responsive minmax + reservas de ancho
+   fijas para los porcentajes. */
+.cart-charts-row{display:grid;grid-template-columns:minmax(290px,1.05fr) 1.4fr;gap:12px;margin-bottom:16px}
+.cart-chart-box{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;min-width:0}
 .cart-chart-title{font-size:.72rem;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px}
-.cart-donut-wrap{display:flex;align-items:center;gap:14px}
-.cart-donut-legend{flex:1;display:flex;flex-direction:column;gap:6px}
-.cart-legend-item{display:flex;align-items:center;gap:8px;font-size:.78rem}
+.cart-donut-wrap{display:flex;align-items:center;gap:14px;min-width:0}
+.cart-donut-wrap canvas{flex-shrink:0}
+.cart-donut-legend{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px}
+.cart-legend-item{display:flex;align-items:center;gap:7px;font-size:.78rem;min-width:0}
 .cart-legend-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
-.cart-legend-pct{margin-left:auto;font-size:.72rem;color:var(--text3);font-family:monospace}
+.cart-legend-name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text)}
+.cart-legend-pct{flex-shrink:0;font-size:.74rem;color:var(--text2);font-family:monospace;min-width:48px;text-align:right;font-weight:600}
 .cart-empty-chart{font-size:.8rem;color:var(--text3);text-align:center;padding:24px 0}
 
 .cart-perf-list{display:flex;flex-direction:column;gap:10px}
-.cart-perf-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
-.cart-perf-name{font-size:.82rem;display:flex;align-items:center;gap:7px}
+.cart-perf-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;gap:8px;min-width:0}
+.cart-perf-name{font-size:.82rem;display:flex;align-items:center;gap:7px;flex:1;min-width:0;overflow:hidden}
+.cart-perf-name-text{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .cart-color-badge{width:9px;height:9px;border-radius:3px;flex-shrink:0}
-.cart-perf-pct{font-size:.78rem;font-weight:700;font-family:monospace;padding:2px 7px;border-radius:5px}
+.cart-perf-pct{flex-shrink:0;font-size:.78rem;font-weight:700;font-family:monospace;padding:2px 8px;border-radius:5px;white-space:nowrap;min-width:62px;text-align:center}
 .cart-perf-pct.up{color:var(--green);background:rgba(16,185,129,.12)}
 .cart-perf-pct.down{color:var(--red);background:rgba(239,68,68,.12)}
 .cart-perf-pct.flat{color:var(--text3);background:rgba(255,255,255,.06)}
@@ -2671,7 +2679,7 @@ body.tour-running #finbotBubble{z-index:5000!important}
 <nav>
   <div class="nav-logo">
     <img class="nav-logo-img" src="assets/logo-genz-transparent.png" alt="GenZ Invest">
-    <span class="nav-version">v3.22.0</span>
+    <span class="nav-version">v3.22.1</span>
   </div>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="showSection('Mercados')">Mercados</button>
@@ -8362,9 +8370,9 @@ function renderCarteras() {
             <canvas id="cartDonutCanvas" width="130" height="130"></canvas>
             <div class="cart-donut-legend">
               ${donutSegs.map(s => `
-                <div class="cart-legend-item">
+                <div class="cart-legend-item" title="${s.label} · ${s.pct.toFixed(1)}%">
                   <span class="cart-legend-dot" style="background:${s.color}"></span>
-                  <span>${s.label}</span>
+                  <span class="cart-legend-name">${s.label}</span>
                   <span class="cart-legend-pct">${s.pct.toFixed(1)}%</span>
                 </div>`).join('')}
             </div>
@@ -8381,9 +8389,9 @@ function renderCarteras() {
             return `
               <div class="cart-perf-item">
                 <div class="cart-perf-top">
-                  <div class="cart-perf-name">
+                  <div class="cart-perf-name" title="${c.nombre}">
                     <span class="cart-color-badge" style="background:${c.color}"></span>
-                    ${c.nombre}
+                    <span class="cart-perf-name-text">${c.nombre}</span>
                   </div>
                   <span class="cart-perf-pct ${cls}">${sign}${calc.pct.toFixed(2)}%</span>
                 </div>
