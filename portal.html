@@ -306,6 +306,139 @@ main{padding-top:60px}
 }
 .btn-cancel-sel:hover{color:var(--text1);border-color:var(--text3)}
 
+/* ── Favoritos — star button on constituent cards ── */
+.constituent-card{position:relative}
+.btn-star{
+  position:absolute;top:6px;right:6px;
+  background:none;border:none;cursor:pointer;
+  font-size:.85rem;line-height:1;padding:2px 3px;z-index:2;
+  color:var(--text3);opacity:.4;transition:color .15s,transform .15s,opacity .15s;
+}
+.btn-star:hover{color:var(--yellow);transform:scale(1.3);opacity:1}
+.btn-star.active{color:var(--yellow);opacity:1}
+
+/* ── Favoritos — top 3 markets featured ── */
+.fav-top3-row{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:12px;margin-bottom:12px;
+}
+.fav-top3-card{
+  position:relative;border-radius:14px;padding:18px 16px 14px;
+  cursor:pointer;transition:transform .18s,box-shadow .18s;overflow:hidden;
+}
+.fav-top3-card:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(0,0,0,.12)}
+.fav-top3-card.gold{background:linear-gradient(135deg,rgba(250,204,21,.18),rgba(245,158,11,.06));border:1px solid rgba(250,204,21,.45)}
+.fav-top3-card.silver{background:linear-gradient(135deg,rgba(148,163,184,.15),rgba(100,116,139,.05));border:1px solid rgba(148,163,184,.35)}
+.fav-top3-card.bronze{background:linear-gradient(135deg,rgba(194,65,12,.12),rgba(180,83,9,.05));border:1px solid rgba(180,83,9,.3)}
+.fav-top3-card.gold .fav-top3-medal-glow{
+  position:absolute;top:-20px;right:-20px;width:80px;height:80px;
+  background:radial-gradient(circle,rgba(250,204,21,.25),transparent 70%);pointer-events:none;
+}
+.fav-top3-medal{font-size:1.4rem;display:block;margin-bottom:6px}
+.fav-top3-name{font-size:.84rem;font-weight:700;margin-bottom:2px;color:var(--text)}
+.fav-top3-region{font-size:.66rem;color:var(--text3);margin-bottom:8px}
+.fav-top3-price{font-size:1.2rem;font-weight:700;margin-bottom:4px;font-variant-numeric:tabular-nums}
+.fav-top3-chg{font-size:.82rem;font-weight:600}
+.fav-top3-spark{margin-top:8px;height:36px}
+.fav-top3-mkt-badge{
+  font-size:.6rem;font-weight:600;padding:1px 6px;border-radius:4px;
+  display:inline-block;margin-top:4px;
+}
+.fav-top3-mkt-badge.open{background:rgba(16,185,129,.15);color:var(--green)}
+.fav-top3-mkt-badge.closed{background:rgba(100,116,139,.1);color:var(--text3)}
+
+/* ── Favoritos — rest of markets compact ── */
+.fav-rest-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(145px,1fr));
+  gap:8px;
+}
+.fav-rest-card{
+  background:var(--bg2);border:1px solid var(--border);border-radius:10px;
+  padding:10px 12px;cursor:pointer;transition:border-color .15s,transform .15s;
+  display:flex;flex-direction:column;gap:3px;position:relative;
+}
+.fav-rest-card:hover{border-color:rgba(37,99,235,.4);transform:translateY(-1px)}
+.fav-rest-name{font-size:.76rem;font-weight:600;color:var(--text)}
+.fav-rest-region{font-size:.63rem;color:var(--text3)}
+.fav-rest-price{font-size:.85rem;font-weight:700;margin-top:4px;font-variant-numeric:tabular-nums}
+.fav-rest-chg{font-size:.7rem;font-weight:600}
+
+/* ── Favoritos — stocks section ── */
+.fav-stocks-section{margin-top:30px}
+.fav-section-hdr{
+  display:flex;align-items:center;gap:12px;margin-bottom:14px;
+}
+.fav-section-label{
+  font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:1px;
+  color:var(--text3);white-space:nowrap;
+}
+.fav-section-line{flex:1;height:1px;background:var(--border)}
+.fav-section-count{
+  font-size:.65rem;background:var(--bg2);border:1px solid var(--border);
+  border-radius:10px;padding:1px 7px;color:var(--text3);white-space:nowrap;
+}
+
+/* grid de acciones favoritas */
+.fav-stocks-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(128px,1fr));
+  gap:9px;
+}
+.fav-stock-card{
+  background:var(--bg2);border:1px solid var(--border);border-radius:10px;
+  padding:11px 12px 10px;cursor:pointer;position:relative;
+  transition:border-color .15s,transform .15s,box-shadow .15s;
+  display:flex;flex-direction:column;gap:4px;
+}
+.fav-stock-card:hover{border-color:var(--accent);transform:translateY(-1px);box-shadow:0 4px 12px rgba(37,99,235,.1)}
+/* top 10: aura dorada */
+.fav-stock-card.top10{
+  border:1px solid rgba(250,204,21,.35);
+  background:linear-gradient(145deg,rgba(250,204,21,.05),var(--bg2));
+}
+.fav-stock-card.top10:hover{border-color:rgba(250,204,21,.65);box-shadow:0 4px 16px rgba(250,204,21,.14)}
+.fav-stock-rank{
+  position:absolute;top:6px;left:7px;
+  font-size:.6rem;font-weight:700;color:rgba(250,204,21,.8);
+}
+.fav-stock-ticker{
+  font-size:.7rem;font-weight:700;letter-spacing:.5px;font-family:monospace;
+  color:var(--accent);background:var(--card2);border-radius:4px;
+  padding:1px 5px;display:inline-block;
+}
+.fav-stock-name{font-size:.7rem;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
+.fav-stock-price{font-size:.9rem;font-weight:700;color:var(--text);font-variant-numeric:tabular-nums}
+.fav-stock-chg{font-size:.7rem;font-weight:600}
+.fav-stock-idx{font-size:.6rem;color:var(--text3);margin-top:1px}
+.fav-stock-del{
+  position:absolute;top:5px;right:5px;
+  background:none;border:none;cursor:pointer;font-size:.65rem;
+  color:var(--text3);padding:2px;opacity:0;transition:opacity .15s,color .15s;
+}
+.fav-stock-card:hover .fav-stock-del{opacity:.7}
+.fav-stock-del:hover{color:var(--red);opacity:1!important}
+
+/* empty state stocks */
+.fav-empty-stocks{
+  background:var(--bg2);border:1px dashed var(--border);border-radius:12px;
+  padding:28px 20px;text-align:center;
+}
+.fav-empty-stocks .fes-icon{font-size:1.7rem;margin-bottom:8px}
+.fav-empty-stocks p{font-size:.82rem;color:var(--text2);margin:0 0 4px}
+.fav-empty-stocks small{font-size:.75rem;color:var(--text3)}
+
+/* responsive Favoritos */
+@media(max-width:860px){
+  .fav-top3-row{grid-template-columns:1fr 1fr}
+  .fav-top3-card:last-child{display:none}
+}
+@media(max-width:600px){
+  .fav-top3-row{grid-template-columns:1fr}
+  .fav-top3-card:not(:first-child){display:none}
+  .fav-stocks-grid{grid-template-columns:repeat(auto-fill,minmax(105px,1fr))}
+}
+
 /* ── Investor Sidebar Nav ── */
 #investorDash{align-items:flex-start;gap:0;min-height:600px}
 #invSidebar{
@@ -2679,7 +2812,7 @@ body.tour-running #finbotBubble{z-index:5000!important}
 <nav>
   <div class="nav-logo">
     <img class="nav-logo-img" src="assets/SoyZ_fondo_oscuro.png" alt="SoyZ">
-    <span class="nav-version">v3.22.1</span>
+    <span class="nav-version">v3.23.0</span>
   </div>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="showSection('Mercados')">Mercados</button>
@@ -2817,14 +2950,14 @@ body.tour-running #finbotBubble{z-index:5000!important}
       <div class="inv-sidebar-header" onclick="toggleInvSidebar()">
         <span class="inv-sidebar-label">Menú Principal</span>
         <span class="inv-sidebar-mobile-active" id="invSidebarMobileActive">
-          <span class="ima-icon">📊</span>
-          <span class="ima-label">Mis Mercados</span>
+          <span class="ima-icon">⭐</span>
+          <span class="ima-label">Favoritos</span>
           <span class="ima-chevron">▾</span>
         </span>
         <button class="inv-sidebar-toggle" id="invSidebarToggle" title="Colapsar menú" onclick="event.stopPropagation();toggleInvSidebar()">☰</button>
       </div>
       <div class="inv-sidebar-nav">
-        <button class="inv-tab active" id="invTabMercados"    data-label="Mis Mercados"          onclick="switchInvTab('mercados')">    <span class="inv-tab-icon">📊</span><span class="inv-tab-label" data-i18n="tab_mercados">Mis Mercados</span></button>
+        <button class="inv-tab active" id="invTabMercados"    data-label="Favoritos"             onclick="switchInvTab('mercados')">    <span class="inv-tab-icon">⭐</span><span class="inv-tab-label" data-i18n="tab_mercados">Favoritos</span></button>
         <button class="inv-tab"        id="invTabCarteras"    data-label="Mis Inversiones"        onclick="switchInvTab('carteras')">    <span class="inv-tab-icon">💼</span><span class="inv-tab-label" data-i18n="tab_carteras">Mis Inversiones</span></button>
         <button class="inv-tab"        id="invTabAnalisis"    data-label="Análisis"               onclick="switchInvTab('analisis')">    <span class="inv-tab-icon">📰</span><span class="inv-tab-label" data-i18n="tab_analisis">Análisis</span></button>
         <button class="inv-tab"        id="invTabBloomberg"   data-label="Trading"                onclick="switchInvTab('bloomberg')">   <span class="inv-tab-icon">📈</span><span class="inv-tab-label" data-i18n="tab_bloomberg">Trading</span></button>
@@ -2860,9 +2993,9 @@ body.tour-running #finbotBubble{z-index:5000!important}
         <!-- Renderizado por renderInvestorDashboard() -->
       </div>
 
-      <!-- Grid de favoritos (vista normal) -->
-      <div class="indices-grid" id="favGrid" style="display:none">
-        <!-- Generado por renderInvestorDashboard() -->
+      <!-- Grid de favoritos (vista normal) — wrapper: top3 + rest inside -->
+      <div id="favGrid" style="display:none">
+        <!-- Generado por renderFavGrid() -->
       </div>
 
       <!-- Selector de mercados (vista configuración / edición) -->
@@ -2880,6 +3013,19 @@ body.tour-running #finbotBubble{z-index:5000!important}
           </button>
         </div>
       </div>
+
+      <!-- ── Sección Acciones Favoritas (nueva) ── -->
+      <div class="fav-stocks-section" id="invStockFavSection" style="display:none">
+        <div class="fav-section-hdr">
+          <span class="fav-section-label">📈 <span data-i18n="fav_acciones_title">Acciones Favoritas</span></span>
+          <div class="fav-section-line"></div>
+          <span class="fav-section-count" id="favStocksCount">0</span>
+        </div>
+        <div id="favStocksGrid">
+          <!-- Generado por renderFavStocksSection() -->
+        </div>
+      </div>
+
     </div><!-- /invMercadosContent -->
 
     <!-- ── Contenido: Análisis / Noticias ── -->
@@ -4336,7 +4482,7 @@ let _lang = 'es';
 
 const STRINGS = {
   es: {
-    tab_calculadora:'Calculadora de interés compuesto', tab_mercados:'Mis Mercados',
+    tab_calculadora:'Calculadora de interés compuesto', tab_mercados:'Favoritos',
     tab_carteras:'Mis Inversiones', tab_analisis:'Análisis',
     tab_bancos:'Entidades Financieras', tab_fondos:'Comparador de Fondos', tab_crypto:'Crypto', tab_bloomberg:'Trading', tab_propuestas:'Carteras',
     mi_portal:'Mi Portal', resumen_mercado:'RESUMEN DEL MERCADO', mi_watchlist:'MI WATCHLIST',
@@ -4344,7 +4490,9 @@ const STRINGS = {
     btn_actualizar:'Actualizar', cerrar_sesion:'Cerrar sesión',
     idioma_label:'IDIOMA / LANGUAGE', preferencias:'PREFERENCIAS',
     hola:'Hola, ', tu_resumen:'Tu resumen de mercado personalizado',
-    mis_mercados_title:'★ &nbsp;Mis Mercados', elige_mercados:'ELIGE TUS MERCADOS',
+    mis_mercados_title:'⭐ &nbsp;Mercados Favoritos', elige_mercados:'ELIGE TUS MERCADOS',
+    fav_acciones_title:'Acciones Favoritas', fav_acciones_empty:'Aún no tienes acciones favoritas',
+    fav_acciones_empty_hint:'Pulsa ☆ en cualquier acción del panel de Gráficas para añadirla aquí.',
     configura_dash:'Configura tu dashboard',
     selecciona_msg:'Selecciona los mercados que quieres seguir. Puedes cambiarlos en cualquier momento.',
     editar_sel:'✏️ Editar selección', guardar_cambios:'Guardar cambios',
@@ -4412,7 +4560,7 @@ const STRINGS = {
     bk_disclaimer:'⚠️ Datos orientativos basados en información pública de cada bróker. Verifica las comisiones actualizadas en su web antes de operar. Esta comparativa no constituye recomendación de compra.',
   },
   en: {
-    tab_calculadora:'Compound Interest Calculator', tab_mercados:'My Markets',
+    tab_calculadora:'Compound Interest Calculator', tab_mercados:'Favourites',
     tab_carteras:'My Investments', tab_analisis:'Analysis',
     tab_bancos:'Financial Entities', tab_fondos:'Fund Comparator', tab_crypto:'Crypto', tab_bloomberg:'Trading', tab_propuestas:'Portfolios',
     mi_portal:'My Profile', resumen_mercado:'MARKET SUMMARY', mi_watchlist:'MY WATCHLIST',
@@ -4420,7 +4568,9 @@ const STRINGS = {
     btn_actualizar:'Update', cerrar_sesion:'Log out',
     idioma_label:'IDIOMA / LANGUAGE', preferencias:'PREFERENCES',
     hola:'Hello, ', tu_resumen:'Your personalized market summary',
-    mis_mercados_title:'★ &nbsp;My Markets', elige_mercados:'CHOOSE YOUR MARKETS',
+    mis_mercados_title:'⭐ &nbsp;Favourite Markets', elige_mercados:'CHOOSE YOUR MARKETS',
+    fav_acciones_title:'Favourite Stocks', fav_acciones_empty:'No favourite stocks yet',
+    fav_acciones_empty_hint:'Click ☆ on any stock in the Charts section to add it here.',
     configura_dash:'Configure your dashboard',
     selecciona_msg:'Select the markets you want to follow. You can change them at any time.',
     editar_sel:'✏️ Edit selection', guardar_cambios:'Save changes',
@@ -4539,6 +4689,7 @@ function setLang(lang) {
 let _session = null;
 let _marketData = [];
 let _favorites = new Set(JSON.parse(localStorage.getItem('AV_FAVORITES') || '[]'));
+let _favAcciones = new Set(JSON.parse(localStorage.getItem('AV_STOCK_FAVS') || '[]')); // ticker|name|indexSymbol
 let _editingMarkets = false;   // true cuando el selector de mercados está abierto
 let _pendingFavs   = new Set(); // selección temporal durante la edición
 let _invTab        = 'mercados'; // 'mercados' | 'analisis' | 'carteras'
@@ -5542,7 +5693,7 @@ function renderInvestorDashboard(data) {
   }
 
   // ── Mostrar grid favoritos vs selector ────────────────────────
-  document.getElementById('favGrid').style.display       = showingSelector ? 'none' : 'grid';
+  document.getElementById('favGrid').style.display        = showingSelector ? 'none' : 'block';
   document.getElementById('marketSelector').style.display = showingSelector ? 'block' : 'none';
 
   if (showingSelector) {
@@ -5555,6 +5706,9 @@ function renderInvestorDashboard(data) {
   } else {
     renderFavGrid(data.filter(d => _favorites.has(d.key)));
   }
+
+  // ── Sección de acciones favoritas ─────────────────────────────
+  renderFavStocksSection();
 }
 
 function renderMarketSelector(data) {
@@ -5588,37 +5742,176 @@ function renderMarketSelector(data) {
 
 function renderFavGrid(favData) {
   const grid = document.getElementById('favGrid');
-  grid.innerHTML = favData.map(d => {
-    const up = d.changePct >= 0;
-    const changeClass = Math.abs(d.changePct) < 0.01 ? 'flat' : (up ? 'up' : 'dn');
-    const isOpen = d.marketState === 'REGULAR';
-    return `
-    <div class="index-card fav" onclick="openAnalysis('${d.symbol}')">
-      <button class="btn-fav active"
-        onclick="event.stopPropagation();toggleFavorite('${d.key}')"
-        title="Quitar de favoritos">★</button>
-      <span class="market-badge ${isOpen ? 'open' : 'closed'}">${isOpen ? t('abierto') : t('cerrado')}</span>
-      <div class="card-top">
-        <div><div class="card-name">${d.name}</div></div>
-        <span class="card-region">${d.region}</span>
-      </div>
-      <div class="card-price">${fmt(d.price)}</div>
-      <div class="card-change ${changeClass}">
-        ${up ? '▲' : '▼'} ${Math.abs(d.changePct).toFixed(2)}%
-        <span style="opacity:.7;font-size:.8em">(${up ? '+' : ''}${fmt(d.change)})</span>
-      </div>
-      <div class="card-meta">
-        <span><b>H</b> ${fmt(d.dayHigh)}</span>
-        <span><b>L</b> ${fmt(d.dayLow)}</span>
-        <span><b>Prev</b> ${fmt(d.prevClose)}</span>
-      </div>
-      <div class="card-sparkline"><canvas id="spark_inv_${d.key}" height="48"></canvas></div>
+  if (!favData.length) { grid.innerHTML = ''; return; }
+
+  // Ordenar por changePct descendente para medallas
+  const sorted = [...favData].sort((a, b) => b.changePct - a.changePct);
+  const medals = ['🥇','🥈','🥉'];
+  const medalClass = ['gold','silver','bronze'];
+  const top3 = sorted.slice(0, Math.min(3, sorted.length));
+  const rest  = sorted.slice(Math.min(3, sorted.length));
+
+  // ── Top 3 destacados ──────────────────────────────────────────
+  const top3Html = `
+    <div class="fav-top3-row">
+      ${top3.map((d, i) => {
+        const up  = d.changePct >= 0;
+        const isOpen = d.marketState === 'REGULAR';
+        return `
+        <div class="fav-top3-card ${medalClass[i]}" onclick="openAnalysis('${d.symbol}')">
+          <div class="fav-top3-medal-glow"></div>
+          <button class="btn-fav active" style="position:absolute;top:8px;right:10px;font-size:.9rem"
+            onclick="event.stopPropagation();toggleFavorite('${d.key}')"
+            title="Quitar de favoritos">★</button>
+          <span class="fav-top3-medal">${medals[i]}</span>
+          <div class="fav-top3-name">${d.name}</div>
+          <div class="fav-top3-region">${d.region}</div>
+          <div class="fav-top3-price">${fmt(d.price)}</div>
+          <div class="fav-top3-chg ${up ? 'up' : 'dn'}">
+            ${up ? '▲' : '▼'} ${Math.abs(d.changePct).toFixed(2)}%
+            <span style="opacity:.6;font-size:.85em"> (${up?'+':''}${fmt(d.change)})</span>
+          </div>
+          <div class="fav-top3-mkt-badge ${isOpen?'open':'closed'}">${isOpen ? t('abierto') : t('cerrado')}</div>
+          <div class="fav-top3-spark"><canvas id="spark_top3_${d.key}" height="36"></canvas></div>
+        </div>`;
+      }).join('')}
     </div>`;
-  }).join('');
-  favData.forEach(d => {
-    const cv = document.getElementById('spark_inv_' + d.key);
+
+  // ── Resto en grid compacto ─────────────────────────────────────
+  const restHtml = rest.length ? `
+    <div class="fav-rest-grid">
+      ${rest.map(d => {
+        const up = d.changePct >= 0;
+        return `
+        <div class="fav-rest-card" onclick="openAnalysis('${d.symbol}')">
+          <button class="btn-fav active" style="position:absolute;top:6px;right:6px;font-size:.8rem"
+            onclick="event.stopPropagation();toggleFavorite('${d.key}')"
+            title="Quitar de favoritos">★</button>
+          <div class="fav-rest-name" style="padding-right:18px">${d.name}</div>
+          <div class="fav-rest-region">${d.region}</div>
+          <div class="fav-rest-price">${fmt(d.price)}</div>
+          <div class="fav-rest-chg ${up?'up':'dn'}">${up?'▲':'▼'} ${Math.abs(d.changePct).toFixed(2)}%</div>
+        </div>`;
+      }).join('')}
+    </div>` : '';
+
+  grid.innerHTML = top3Html + restHtml;
+
+  // Sparklines para top 3
+  top3.forEach(d => {
+    const cv = document.getElementById('spark_top3_' + d.key);
     if (cv) drawSparkline(cv, d);
   });
+}
+
+// ── Stock favorites ───────────────────────────────────────────────
+function toggleStockFavorite(ticker, name, indexSymbol) {
+  const key = ticker;
+  if (_favAcciones.has(key)) {
+    _favAcciones.delete(key);
+    // Update star buttons across all constituent cards
+    document.querySelectorAll(`.btn-star[data-ticker="${ticker}"]`).forEach(b => {
+      b.classList.remove('active'); b.title = 'Añadir a favoritos'; b.textContent = '☆';
+    });
+  } else {
+    // Store ticker + name + index for display in Favoritos
+    _favAcciones.add(key);
+    // Also store metadata in a separate map
+    const meta = JSON.parse(localStorage.getItem('AV_STOCK_META') || '{}');
+    meta[ticker] = { name, indexSymbol };
+    localStorage.setItem('AV_STOCK_META', JSON.stringify(meta));
+    document.querySelectorAll(`.btn-star[data-ticker="${ticker}"]`).forEach(b => {
+      b.classList.add('active'); b.title = 'Quitar de favoritos'; b.textContent = '★';
+    });
+  }
+  localStorage.setItem('AV_STOCK_FAVS', JSON.stringify([..._favAcciones]));
+  // Re-render stock favs section if currently on Favoritos tab
+  if (_invTab === 'mercados') renderFavStocksSection();
+}
+
+function renderFavStocksSection() {
+  const section  = document.getElementById('invStockFavSection');
+  const container = document.getElementById('favStocksGrid');
+  const countEl  = document.getElementById('favStocksCount');
+  if (!section || !container) return;
+
+  const tickers = [..._favAcciones];
+  const meta    = JSON.parse(localStorage.getItem('AV_STOCK_META') || '{}');
+
+  // Always show the section (even empty) when not editing markets
+  section.style.display = _editingMarkets ? 'none' : 'block';
+  if (countEl) countEl.textContent = tickers.length;
+
+  if (tickers.length === 0) {
+    container.innerHTML = `
+      <div class="fav-empty-stocks">
+        <div class="fes-icon">☆</div>
+        <p>${t('fav_acciones_empty')}</p>
+        <small>${t('fav_acciones_empty_hint')}</small>
+      </div>`;
+    return;
+  }
+
+  // Top 10 get golden aura
+  const top10 = new Set(tickers.slice(0, 10));
+
+  container.innerHTML = `
+    <div class="fav-stocks-grid">
+      ${tickers.map((ticker, i) => {
+        const info = meta[ticker] || { name: ticker, indexSymbol: '' };
+        const isTop = top10.has(ticker);
+        const rank  = isTop ? i + 1 : null;
+        const safeName = (info.name || ticker).replace(/'/g, "\\'");
+        return `
+        <div class="fav-stock-card${isTop ? ' top10' : ''}"
+             onclick="openTickerChart('${ticker}','${safeName}')">
+          ${rank ? `<span class="fav-stock-rank">#${rank}</span>` : ''}
+          <button class="fav-stock-del"
+            onclick="event.stopPropagation();toggleStockFavorite('${ticker}','${safeName}','')"
+            title="Quitar de favoritos">✕</button>
+          <span class="fav-stock-ticker">${ticker}</span>
+          <div class="fav-stock-name">${info.name || ticker}</div>
+          <div class="fav-stock-price" id="fsPrice_${ticker.replace(/[^a-zA-Z0-9]/g,'-')}">—</div>
+          <div class="fav-stock-chg"   id="fsChg_${ticker.replace(/[^a-zA-Z0-9]/g,'-')}"></div>
+          <div class="fav-stock-idx">${_indexLabel(info.indexSymbol)}</div>
+        </div>`;
+      }).join('')}
+    </div>`;
+
+  // Load live quotes for favorite stocks
+  _loadFavStockQuotes(tickers);
+}
+
+function _indexLabel(sym) {
+  const map = {'^GSPC':'S&P 500','^IXIC':'NASDAQ-100','^DJI':'Dow Jones',
+    '^IBEX':'IBEX 35','^GDAXI':'DAX 40','^N225':'Nikkei','^HSI':'Hang Seng',
+    '^STOXX50E':'EuroStoxx','^FTSE':'FTSE 100'};
+  return map[sym] || sym || '';
+}
+
+async function _loadFavStockQuotes(tickers) {
+  if (!tickers.length) return;
+  try {
+    const res = await fetch(
+      `${API_BASE}/quotes?symbols=${encodeURIComponent(tickers.join(','))}`,
+      { signal: AbortSignal.timeout(10000) }
+    );
+    if (!res.ok) return;
+    const data = await res.json();
+    (data.quotes || []).forEach(q => {
+      const id = q.symbol.replace(/[^a-zA-Z0-9]/g, '-');
+      const pEl = document.getElementById('fsPrice_' + id);
+      const cEl = document.getElementById('fsChg_' + id);
+      if (pEl && q.price != null) {
+        pEl.textContent = q.price.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      }
+      if (cEl && q.changePct != null) {
+        const up = q.changePct >= 0;
+        cEl.textContent = `${up?'▲':'▼'} ${Math.abs(q.changePct).toFixed(2)}%`;
+        cEl.className = 'fav-stock-chg ' + (up ? 'up' : 'dn');
+      }
+    });
+  } catch(_) {}
 }
 
 // ── Funciones de edición de mercados ─────────────────────────────
@@ -7407,10 +7700,14 @@ function renderConstituents(symbol) {
     const label    = c.ticker.includes('.') ? c.ticker.split('.')[0] : c.ticker;
     const safeName = c.name.replace(/'/g, "\\'");
     const logoEl   = _tickerLogoEl(c.ticker, label);
+    const isFavStock = _favAcciones.has(c.ticker);
     return `
       <div class="constituent-card clickable" data-ticker="${c.ticker}"
            onclick="openTickerChart('${c.ticker}','${safeName}')"
            title="Ver gráfica de ${c.name}">
+        <button class="btn-star${isFavStock ? ' active' : ''}" data-ticker="${c.ticker}"
+          onclick="event.stopPropagation();toggleStockFavorite('${c.ticker}','${safeName}','${symbol}')"
+          title="${isFavStock ? 'Quitar de favoritos' : 'Añadir a favoritos'}">${isFavStock ? '★' : '☆'}</button>
         ${logoEl}
         <span class="c-ticker">${label}</span>
         <div class="c-info">
