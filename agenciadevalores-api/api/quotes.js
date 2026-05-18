@@ -89,11 +89,51 @@ async function quoteForTerm(term) {
   return { ...q, name: q.name || resolved.name, query: term };
 }
 
+// Sugerencias ligeras para autocompletado (no descarga cotizaciones completas)
+const SUGGEST_CACHE = {};
+const SUGGEST_TTL = 6 * 60 * 60 * 1000; // 6 h
+
+async function suggest(query) {
+  const key = query.toLowerCase().trim();
+  const now = Date.now();
+  if (SUGGEST_CACHE[key] && (now - SUGGEST_CACHE[key].ts) < SUGGEST_TTL) {
+    return SUGGEST_CACHE[key].data;
+  }
+  const url = `https://query1.finance.yahoo.com/v1/finance/search?q=${encodeURIComponent(query)}&quotesCount=10&newsCount=0&listsCount=0`;
+  const resp = await fetch(url, { headers: UA, signal: AbortSignal.timeout(6000) });
+  if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+  const json = await resp.json();
+  const items = (json?.quotes || [])
+    .filter(q => q.symbol && ['EQUITY', 'ETF', 'INDEX', 'MUTUALFUND'].includes(q.quoteType))
+    .slice(0, 8)
+    .map(q => ({
+      symbol:   q.symbol,
+      name:     q.shortname || q.longname || q.symbol,
+      exchange: q.exchDisp || q.exchange || '',
+      type:     q.quoteType,
+    }));
+  SUGGEST_CACHE[key] = { data: items, ts: now };
+  return items;
+}
+
 module.exports = async (req, res) => {
   if (req.method === 'OPTIONS') return res.status(200).end();
 
+  // Modo autocompletado: GET /api/quotes?q=air → sugerencias ligeras
+  const q = req.query.q;
+  if (q != null) {
+    const term = String(q).trim();
+    if (term.length < 1) return res.status(200).json({ suggestions: [] });
+    try {
+      const suggestions = await suggest(term);
+      return res.status(200).json({ suggestions, fetchedAt: new Date().toISOString() });
+    } catch (e) {
+      return res.status(200).json({ suggestions: [], error: e.message });
+    }
+  }
+
   const { symbols } = req.query;
-  if (!symbols) return res.status(400).json({ error: 'Parámetro symbols requerido (ej: AAPL,MSFT o "Airbus")' });
+  if (!symbols) return res.status(400).json({ error: 'Parámetro symbols o q requerido (ej: AAPL,MSFT o "Airbus")' });
 
   // Separa SOLO por coma/punto y coma para no romper nombres de varias palabras
   const list = symbols.split(/[,;]+/).map(s => s.trim()).filter(Boolean).slice(0, 30);
