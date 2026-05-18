@@ -2813,7 +2813,7 @@ body.tour-running #finbotBubble{z-index:5000!important}
 <nav>
   <div class="nav-logo">
     <img class="nav-logo-img" src="assets/SoyZ_fondo_oscuro.png" alt="SoyZ">
-    <span class="nav-version">v3.23.1</span>
+    <span class="nav-version">v3.23.2</span>
   </div>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="showSection('Mercados')">Mercados</button>
@@ -3805,7 +3805,7 @@ body.tour-running #finbotBubble{z-index:5000!important}
           <div class="constituents-header-right">
             <div class="quote-search-wrap" onclick="event.stopPropagation()">
               <input class="quote-search-input" id="quoteSearchInput" type="text"
-                     placeholder="Buscar ticker… AAPL, TSLA" data-i18n-ph="buscar_ticker_ph"
+                     placeholder="Buscar ticker o nombre… AAPL, Airbus" data-i18n-ph="buscar_ticker_ph"
                      onkeydown="if(event.key==='Enter')searchQuoteTicker()"
                      autocomplete="off" autocapitalize="characters" spellcheck="false">
               <button class="quote-search-btn" id="btnSearchQuote" onclick="event.stopPropagation();searchQuoteTicker()" title="Buscar cotización">
@@ -4503,7 +4503,7 @@ const STRINGS = {
     componentes_indice:'Componentes del Índice',
     clic_cargar:'Haz clic en "Cargar cotizaciones" para obtener precios en tiempo real.',
     btn_cargar_cot:'⚡ Cargar cotizaciones', btn_cargando:'⏳ Cargando...', btn_cargado:'✓ Actualizado',
-    buscar_ticker_ph:'Buscar ticker… AAPL, TSLA', resultados_busq:'🔍 Resultados de búsqueda',
+    buscar_ticker_ph:'Buscar ticker o nombre… AAPL, Airbus', resultados_busq:'🔍 Resultados de búsqueda',
     limpiar:'✕ Limpiar', buscado_badge:'Buscado', ver_grafica:'📈 Ver gráfica',
     cargando_noticias:'Cargando análisis de mercado...', error_noticias:'No se pudieron cargar las noticias en este momento.',
     reintentar:'Reintentar', sin_noticias:'📭 No hay noticias disponibles en este momento.',
@@ -4581,7 +4581,7 @@ const STRINGS = {
     componentes_indice:'Index Components',
     clic_cargar:'Click "Load Quotes" to get real-time prices.',
     btn_cargar_cot:'⚡ Load Quotes', btn_cargando:'⏳ Loading...', btn_cargado:'✓ Updated',
-    buscar_ticker_ph:'Search ticker… AAPL, TSLA', resultados_busq:'🔍 Search Results',
+    buscar_ticker_ph:'Search ticker or name… AAPL, Airbus', resultados_busq:'🔍 Search Results',
     limpiar:'✕ Clear', buscado_badge:'Searched', ver_grafica:'📈 View chart',
     cargando_noticias:'Loading market analysis...', error_noticias:'Could not load news at this time.',
     reintentar:'Retry', sin_noticias:'📭 No news available at this time.',
@@ -7775,8 +7775,9 @@ async function searchQuoteTicker() {
   const raw   = input?.value?.trim();
   if (!raw) { input?.focus(); return; }
 
-  // Soporta múltiples tickers separados por coma/espacio
-  const tickers = raw.toUpperCase().split(/[\s,;]+/).filter(Boolean).join(',');
+  // Soporta tickers o nombres de empresa (ej: "Airbus"), separados SOLO por coma/;
+  // No se divide por espacios para no romper nombres de varias palabras.
+  const tickers = raw.split(/[,;]+/).map(s => s.trim()).filter(Boolean).join(',');
 
   const btn = document.getElementById('btnSearchQuote');
   if (btn) btn.disabled = true;
