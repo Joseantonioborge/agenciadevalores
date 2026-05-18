@@ -1178,6 +1178,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .sq-result-card{position:relative}
 .sq-remove-btn{position:absolute;top:6px;right:6px;width:18px;height:18px;border-radius:50%;background:rgba(239,68,68,.15);border:none;color:var(--red);font-size:.65rem;cursor:pointer;display:none;align-items:center;justify-content:center;line-height:1;padding:0}
 .sq-result-card:hover .sq-remove-btn{display:flex}
+.sq-result-card .btn-star{right:28px;top:7px}
 .sq-badge{display:inline-block;font-size:.58rem;font-weight:700;color:var(--accent);background:rgba(37,99,235,.12);border:1px solid rgba(37,99,235,.25);border-radius:3px;padding:1px 5px;margin-top:2px;text-transform:uppercase}
 .chevron{transition:transform .2s;font-size:.75rem;color:var(--text3)}
 .chevron.open{transform:rotate(180deg)}
@@ -2812,7 +2813,7 @@ body.tour-running #finbotBubble{z-index:5000!important}
 <nav>
   <div class="nav-logo">
     <img class="nav-logo-img" src="assets/SoyZ_fondo_oscuro.png" alt="SoyZ">
-    <span class="nav-version">v3.23.0</span>
+    <span class="nav-version">v3.23.1</span>
   </div>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="showSection('Mercados')">Mercados</button>
@@ -5883,10 +5884,11 @@ function renderFavStocksSection() {
 }
 
 function _indexLabel(sym) {
+  if (!sym) return _lang === 'en' ? '🔎 Search' : '🔎 Búsqueda';
   const map = {'^GSPC':'S&P 500','^IXIC':'NASDAQ-100','^DJI':'Dow Jones',
     '^IBEX':'IBEX 35','^GDAXI':'DAX 40','^N225':'Nikkei','^HSI':'Hang Seng',
     '^STOXX50E':'EuroStoxx','^FTSE':'FTSE 100'};
-  return map[sym] || sym || '';
+  return map[sym] || sym;
 }
 
 async function _loadFavStockQuotes(tickers) {
@@ -7846,12 +7848,16 @@ function _addSearchResultCard(q) {
     return;
   }
 
+  const isFavStock = _favAcciones.has(ticker);
   const card = document.createElement('div');
   card.className = 'constituent-card clickable sq-result-card';
   card.id = 'sqr-' + id;
   card.title = t('ver_grafica') + ' ' + name;
   card.setAttribute('onclick', `openTickerChart('${ticker}','${safeName}')`);
   card.innerHTML = `
+    <button class="btn-star${isFavStock ? ' active' : ''}" data-ticker="${ticker}"
+      onclick="event.stopPropagation();toggleStockFavorite('${ticker}','${safeName}','')"
+      title="${isFavStock ? 'Quitar de favoritos' : 'Añadir a favoritos'}">${isFavStock ? '★' : '☆'}</button>
     ${logoEl}
     <span class="c-ticker">${label}</span>
     <div class="c-info">
